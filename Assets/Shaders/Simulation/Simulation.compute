@@ -1,0 +1,23 @@
+﻿#define GROUPSIZE 128
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+#include "Assets/Shaders/Simulation/Structs.cginc"
+
+int unitBufferSize;
+RWStructuredBuffer<Unit> inUnitBuffer;
+RWStructuredBuffer<Unit> outUnitBuffer;
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+#pragma kernel ProcessFirepowerData
+
+[numthreads(GROUPSIZE,1,1)]
+void ProcessFirepowerData(uint3 id : SV_DispatchThreadID)
+{
+    int index = int(id.x);
+    if( index < unitBufferSize )
+    {
+        outUnitBuffer[index] = inUnitBuffer[index];
+    }
+}
