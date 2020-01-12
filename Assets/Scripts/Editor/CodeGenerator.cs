@@ -8,6 +8,7 @@ public class CodeGenerator
     public const string ComputeShaderStructsPath = "Assets/Shaders/Simulation/Structs.cginc";
     public const string CSharpStructsPath = "Assets/Scripts/Simulation/Structs.cs";
     public const string CSharpStructsNamespace = "Simulation";
+    public const string CSharpComponentsPath = "Assets/Scripts/Demo/";
     
     [MenuItem("Code/Generate structs and components %g")]
     static void Generate()
@@ -107,7 +108,7 @@ public class CodeGenerator
         text += "\n";
         text += "namespace Structs\n";
         text += "{\n";
-        text += "\n\n";
+        text += "\n";
 
         foreach (var structSrc in structSrcs)
         {
@@ -118,6 +119,7 @@ public class CodeGenerator
             text += "{\n";
 
             var fields = SplitFields( structBody );
+            int stride = 0;
             foreach (var field in fields)
             {
                 var fieldType = field.Key;
@@ -127,35 +129,44 @@ public class CodeGenerator
                 if (fieldType == "float")
                 {
                     text += "float";
+                    stride += sizeof(float);
                 }
                 else if (fieldType == "int")
                 {
                     text += "int";
+                    stride += sizeof(int);
                 }
                 else if (fieldType == "float2")
                 {
                     text += "Vector2";
+                    stride += sizeof(float) * 2;
                 }
                 else if (fieldType == "int2")
                 {
                     text += "Vector2Int";
+                    stride += sizeof(int) * 2;
                 }
                 else if (fieldType == "float3")
                 {
                     text += "Vector3";
+                    stride += sizeof(float) * 3;
                 }
                 else if (fieldType == "int3")
                 {
                     text += "Vector3Int";
+                    stride += sizeof(int) * 3;
                 }
                 text += " " + field.Value + ";\n";
             }
             
+            text += "\n";
+            text += "    public const int Stride = " + stride.ToString() + ";\n";
+            
             text += "};\n";
-            text += "\n\n";
+            text += "\n";
         }
         
-        text += "\n\n";
+        text += "\n";
         text += "}\n";
         
         System.IO.File.WriteAllText( CSharpStructsPath, text, Encoding.Default);
