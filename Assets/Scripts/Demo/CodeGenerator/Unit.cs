@@ -7,6 +7,7 @@ namespace Demo
     {
         public UnitData unitDataID;
         public Unit carrierUnitID;
+        public int team;
         public int ready;
         public int wounded;
         public int level;

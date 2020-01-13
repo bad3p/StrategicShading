@@ -28,6 +28,7 @@ public struct Unit
 {
     public int unitDataID;
     public int carrierUnitID;
+    public int team;
     public int ready;
     public int wounded;
     public int level;
@@ -41,15 +42,16 @@ public struct Unit
     public Vector3 ext;
     public Vector3 vel;
 
-    public const int Stride = 80;
+    public const int Stride = 84;
 };
 
 public struct Group
 {
+    public int team;
     public int hqID;
     public Vector3Int subID;
 
-    public const int Stride = 16;
+    public const int Stride = 20;
 };
 
 

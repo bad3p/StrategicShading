@@ -20,6 +20,7 @@ struct Unit
 {
     int unitDataID;
     int carrierUnitID;
+    int team;
     int ready;
     int wounded;
     int level;
@@ -36,6 +37,7 @@ struct Unit
 
 struct Group
 {
+    int team;
     int hqID;
     int3 subID;
 };
