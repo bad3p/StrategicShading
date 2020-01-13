@@ -56,6 +56,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Demo\CodeGenerator\FirearmsData.cs" />
+     <Compile Include="Assets\Scripts\Demo\CodeGenerator\Group.cs" />
+     <Compile Include="Assets\Scripts\Demo\CodeGenerator\Unit.cs" />
+     <Compile Include="Assets\Scripts\Demo\CodeGenerator\UnitData.cs" />
+     <Compile Include="Assets\Scripts\Demo\DemoUI.cs" />
      <Compile Include="Assets\Scripts\Simulation\Structs.cs" />
      <None Include="Assets\Shaders\Simulation\Structs.cginc" />
      <None Include="Assets\Shaders\Simulation\Simulation.compute" />

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Structs
+namespace Simulation
 {
 
 public struct FirearmsData

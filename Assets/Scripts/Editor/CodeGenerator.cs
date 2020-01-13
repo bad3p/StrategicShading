@@ -8,7 +8,8 @@ public class CodeGenerator
     public const string ComputeShaderStructsPath = "Assets/Shaders/Simulation/Structs.cginc";
     public const string CSharpStructsPath = "Assets/Scripts/Simulation/Structs.cs";
     public const string CSharpStructsNamespace = "Simulation";
-    public const string CSharpComponentsPath = "Assets/Scripts/Demo/";
+    public const string CSharpComponentsPath = "Assets/Scripts/Demo/CodeGenerator/";
+    public const string CSharpComponentNamespace = "Demo";
     
     [MenuItem("Code/Generate structs and components %g")]
     static void Generate()
@@ -17,6 +18,7 @@ public class CodeGenerator
 
         var structSrcs = SplitStructs(src);
         GenerateCSharpStructs( structSrcs );
+        GenerateCSharpComponents( structSrcs );
     }
 
     static int IndexOfSpaceOrTab(string str)
@@ -106,7 +108,7 @@ public class CodeGenerator
 
         text += "using UnityEngine;\n";
         text += "\n";
-        text += "namespace Structs\n";
+        text += "namespace " + CSharpStructsNamespace + "\n";
         text += "{\n";
         text += "\n";
 
@@ -220,5 +222,92 @@ public class CodeGenerator
         }
         
         return result;
+    }
+    
+    static void GenerateCSharpComponents(List<KeyValuePair<string,string>> structSrcs)
+    {
+        var componentNames = new List<string>();
+        foreach (var structSrc in structSrcs)
+        {
+            componentNames.Add( structSrc.Key );
+        }
+        
+        foreach (var structSrc in structSrcs)
+        {
+            var structName = structSrc.Key;
+            var structBody = structSrc.Value;
+            var fields = SplitFields( structBody );
+            
+            string text = "";
+            
+            text += "using UnityEngine;\n";
+            text += "\n";
+            text += "namespace " + CSharpComponentNamespace + "\n";
+            text += "{\n";
+            text += "\n";
+            text += "    public class " + structName + " : MonoBehaviour\n";
+            text += "    {\n";
+            foreach (var field in fields)
+            {
+                var fieldType = field.Key;
+                var fieldName = field.Value;
+
+                string referenceType = "";
+                if (fieldName.Length > 2)
+                {
+                    var fieldNameEnd = fieldName.Substring(fieldName.Length - 2, 2).ToLower();
+                    if (fieldNameEnd == "id")
+                    {
+                        foreach (var componentName in componentNames)
+                        {
+                            if (fieldName.ToLower().Contains(componentName.ToLower()))
+                            {
+                                referenceType = componentName;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                text += "        public ";
+                if (referenceType.Length != 0)
+                {
+                    text += referenceType;    
+                }
+                else if (fieldType == "float")
+                {
+                    text += "float";
+                }
+                else if (fieldType == "int")
+                {
+                    text += "int";
+                }
+                else if (fieldType == "float2")
+                {
+                    text += "Vector2";
+                }
+                else if (fieldType == "int2")
+                {
+                    text += "Vector2Int";
+                }
+                else if (fieldType == "float3")
+                {
+                    text += "Vector3";
+                }
+                else if (fieldType == "int3")
+                {
+                    text += "Vector3Int";
+                }
+                text += " " + field.Value + ";\n";
+            }
+            text += "    }\n";
+            text += "\n";
+            text += "\n";
+            text += "}\n";
+        
+            System.IO.File.WriteAllText( CSharpComponentsPath + structName + ".cs", text, Encoding.Default);
+        }
+        
+        AssetDatabase.Refresh();
     }
 }
