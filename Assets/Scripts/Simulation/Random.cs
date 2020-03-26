@@ -44,8 +44,8 @@ public partial class Simulation
             u2 = lcgRange( 0.0f, 1.0f, lcgIndex );
         }
     
-        float z0 = (float)(Math.Sqrt(-2.0f * Math.Log(u1)) * Math.Cos(FLOAT_2PI * u2));
-        float z1 = (float)(Math.Sqrt(-2.0f * Math.Log(u1)) * Math.Sin(FLOAT_2PI * u2));
+        float z0 = sqrt(-2.0f * log(u1)) * cos(FLOAT_2PI * u2);
+        float z1 = sqrt(-2.0f * log(u1)) * sin(FLOAT_2PI * u2);
 	
         return z0 * sigma + mu;
     } 
