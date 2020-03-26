@@ -1,6 +1,6 @@
 ﻿using Types;
 
-namespace Simulation
+namespace Structs
 {
     public struct FirearmsData
     {

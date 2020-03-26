@@ -4,6 +4,7 @@
 
 #include "Assets/Shaders/Simulation/Structs.compute"
 #include "Assets/Shaders/Simulation/Uniforms.compute"
+#include "Assets/Shaders/Simulation/Random.compute"
 
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -23,5 +24,6 @@ void GenerateRandomNumbers(uint3 id : SV_DispatchThreadID)
         int x = index - y * _outRenderTextureWidth;
         int2 xy = int2( x, y );    
         _outRenderTexture[xy] = lcgRange( 0.0, 1.0, lcgIndex(index) );
+        //_outRenderTexture[xy] = abs( lcgBoxMuller( 0.0, 0.25, lcgIndex(index) ) );
     }
 }

@@ -5,37 +5,21 @@
 #include "Assets/Shaders/Simulation/Structs.compute"
 
 // ********************************************************************************
+// shared
+
+#define FLOAT_EPSILON 1.19e-07
+#define DOUBLE_EPSILON 2.22e-16
+
+#define FLOAT_PI 3.1415927
+#define DOUBLE_PI 3.1415926535897931
+
+#define FLOAT_2PI 2*3.1415927
+#define DOUBLE_2PI 2*3.1415926535897931
+
+// ********************************************************************************
 // linear congruential generator
 
 int _lcgCount;
 RWStructuredBuffer<int> _lcgState;
-
-#define RAND_MAX_32 ((1U << 31) - 1)
-#define RAND_MAX ((1U << 15) - 1)
-
-int lcgIndex(int threadIndex)
-{
-    return threadIndex % _lcgCount;
-}
-
-int lcg(int lcgIndex)
-{
-    int result = 0;
-    int prev = 1;
-    int next = 1;
-
-    while( result != prev )
-    {
-        prev = _lcgState[lcgIndex];
-        next = ((prev * 214013 + 2531011) & RAND_MAX_32) >> 16;        
-        InterlockedCompareExchange( _lcgState[lcgIndex], prev, next, result );
-    }
-    return next; 
-}
-
-float lcgRange(float min, float max, int lcgIndex)
-{
-    return min + (max - min) * float( lcg( lcgIndex ) ) / RAND_MAX; 
-} 
 
 #endif

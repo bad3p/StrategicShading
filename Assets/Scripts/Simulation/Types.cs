@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 namespace Types
 {
@@ -65,5 +63,13 @@ namespace Types
         public int y;
         public int z;
         public int w;
+    };
+
+    public class RWStructuredBuffer<T> : List<T>
+    {
+    };
+
+    public class RWTexture2D<T> : Dictionary<int2, T>
+    {
     };
 }

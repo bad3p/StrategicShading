@@ -1,0 +1,52 @@
+﻿
+#ifndef _RANDOM_COMPUTE_INCLUDED
+#define _RANDOM_COMPUTE_INCLUDED
+
+#include "Assets/Shaders/Simulation/Uniforms.compute"
+
+#define RAND_MAX_32 ((1U << 31) - 1)
+#define RAND_MAX ((1U << 15) - 1)
+
+int lcgIndex(int threadIndex)
+{
+    return threadIndex % _lcgCount;
+}
+
+int lcg(int lcgIndex)
+{
+    int result = 0;
+    int prev = 1;
+    int next = 1;
+
+    while( result != prev )
+    {
+        prev = _lcgState[lcgIndex];
+        next = ((prev * 214013 + 2531011) & RAND_MAX_32) >> 16;        
+        InterlockedCompareExchange( _lcgState[lcgIndex], prev, next, result );
+    }
+    return next; 
+}
+
+float lcgRange(float min, float max, int lcgIndex)
+{
+    return min + (max - min) * float( lcg( lcgIndex ) ) / RAND_MAX; 
+}
+
+float lcgBoxMuller(float mu, float sigma, int lcgIndex)
+{
+    float u1 = 0.0;
+    float u2 = 0.0;
+    
+    while( u1 <= FLOAT_EPSILON )
+    {
+        u1 = lcgRange( 0.0, 1.0, lcgIndex );
+        u2 = lcgRange( 0.0, 1.0, lcgIndex );
+    }
+    
+    float z0 = sqrt(-2.0 * log(u1)) * cos(FLOAT_2PI * u2);
+	float z1 = sqrt(-2.0 * log(u1)) * sin(FLOAT_2PI * u2);
+	
+	return z0 * sigma + mu;
+} 
+
+#endif

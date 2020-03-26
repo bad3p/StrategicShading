@@ -57,8 +57,11 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\DemoUI.cs" />
+     <Compile Include="Assets\Scripts\Simulation\Random.cs" />
      <Compile Include="Assets\Scripts\Simulation\Structs.cs" />
      <Compile Include="Assets\Scripts\Simulation\Types.cs" />
+     <Compile Include="Assets\Scripts\Simulation\Uniforms.cs" />
+     <None Include="Assets\Shaders\Simulation\Random.compute" />
      <None Include="Assets\Shaders\Simulation\Uniforms.compute" />
      <None Include="Assets\Shaders\Simulation\Simulation.compute" />
      <None Include="Assets\Shaders\Simulation\Structs.compute" />
