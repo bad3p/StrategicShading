@@ -542,8 +542,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1846025843}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc8ff60ecaa698d439c40647a2608bf9, type: 3}
+  m_Script: {fileID: 11500000, guid: 0884eef30b788e34abed1513fb84a99d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MapImage: {fileID: 509909307}
-  MapScene: {fileID: 102900000, guid: 94f1a59b0f7d383488be7cf2560b20d9, type: 3}
+  SimulationComputeShader: {fileID: 7200000, guid: e954c0cb90889d7429ce4086108dde36,
+    type: 3}

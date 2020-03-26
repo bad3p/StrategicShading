@@ -1,8 +1,12 @@
 ﻿
+#ifndef _STRUCTS_COMPUTE_INCLUDED
+#define _STRUCTS_COMPUTE_INCLUDED
+
 struct FirearmsData
 {
-    int3 distance;
-    int3 firepower;    
+    float spread;
+    float3 distance;
+    float3 firepower;
 };
 
 struct UnitData
@@ -20,24 +24,26 @@ struct Unit
 {
     int unitDataID;
     int carrierUnitID;
-    int team;
+    int teamID;
     int ready;
     int wounded;
-    int level;
     int experience;
     int morale;
     int fitness;
     int ammo;
     int primaryFirearms;
     int secondaryFirearms;
-    float3 pos;
+    double3 pos;
+    float3 dir;
     float3 ext;
     float3 vel;
 };
 
 struct Group
 {
-    int team;
+    int teamID;
     int hqID;
-    int3 subID;
+    int4 subID;
 };
+
+#endif

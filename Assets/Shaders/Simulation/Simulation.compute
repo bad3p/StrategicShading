@@ -1,23 +1,27 @@
-﻿#define GROUPSIZE 128
+﻿#define GROUPSIZE 256
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-#include "Assets/Shaders/Simulation/Structs.cginc"
-
-int unitBufferSize;
-RWStructuredBuffer<Unit> inUnitBuffer;
-RWStructuredBuffer<Unit> outUnitBuffer;
+#include "Assets/Shaders/Simulation/Structs.compute"
+#include "Assets/Shaders/Simulation/Uniforms.compute"
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-#pragma kernel ProcessFirepowerData
+#pragma kernel GenerateRandomNumbers
+
+int _outRenderTextureWidth;
+int _outRenderTextureHeight;
+RWTexture2D<float> _outRenderTexture;
 
 [numthreads(GROUPSIZE,1,1)]
-void ProcessFirepowerData(uint3 id : SV_DispatchThreadID)
+void GenerateRandomNumbers(uint3 id : SV_DispatchThreadID)
 {
     int index = int(id.x);
-    if( index < unitBufferSize )
+    if( index < _outRenderTextureWidth * _outRenderTextureHeight )    
     {
-        outUnitBuffer[index] = inUnitBuffer[index];
+        int y = index / _outRenderTextureWidth;
+        int x = index - y * _outRenderTextureWidth;
+        int2 xy = int2( x, y );    
+        _outRenderTexture[xy] = lcgRange( 0.0, 1.0, lcgIndex(index) );
     }
 }
