@@ -271,6 +271,98 @@ namespace Types
         public static implicit operator int4(float4 a) => new int4( (int)a.x, (int)a.y, (int)a.z, (int)a.w );
         public static implicit operator int4(double4 a) => new int4( (int)a.x, (int)a.y, (int)a.z, (int)a.w );        
     };
+    
+    public struct uint2
+    {
+        public uint x;
+        public uint y;
+        
+        public uint2(uint _x, uint _y)
+        {
+            x = _x;
+            y = _y;
+        }
+
+        public static uint2 operator +(uint2 a) => a;
+        public static uint2 operator -(uint2 a) => new uint2(a.x, a.y);
+
+        public static uint2 operator +(uint2 a, uint2 b) => new uint2( a.x+b.x, a.y+b.y );
+
+        public static uint2 operator -(uint2 a, uint2 b) => a + (-b);
+
+        public static uint2 operator *(uint2 a, uint b) => new uint2( a.x*b, a.y*b );
+        public static uint2 operator *(uint2 a, uint2 b) => new uint2( a.x*b.x, a.y*b.y );
+
+        public static uint2 operator /(uint2 a, uint b) => new uint2( a.x/b, a.y/b );
+        public static uint2 operator /(uint2 a, uint2 b) => new uint2( a.x/b.x, a.y/b.y );
+        
+        public static implicit operator uint2(float2 a) => new uint2( (uint)a.x, (uint)a.y );
+        public static implicit operator uint2(double2 a) => new uint2( (uint)a.x, (uint)a.y );
+    };
+    
+    public struct uint3
+    {
+        public uint x;
+        public uint y;
+        public uint z;
+        
+        public uint3(uint _x, uint _y, uint _z)
+        {
+            x = _x;
+            y = _y;
+            z = _z;
+        }
+
+        public static uint3 operator +(uint3 a) => a;
+        public static uint3 operator -(uint3 a) => new uint3(a.x, a.y, a.z);
+
+        public static uint3 operator +(uint3 a, uint3 b) => new uint3( a.x+b.x, a.y+b.y, a.z+b.z );
+
+        public static uint3 operator -(uint3 a, uint3 b) => a + (-b);
+
+        public static uint3 operator *(uint3 a, uint b) => new uint3( a.x*b, a.y*b, a.z*b );
+        public static uint3 operator *(uint3 a, uint3 b) => new uint3( a.x*b.x, a.y*b.y, a.z*b.z );
+
+        public static uint3 operator /(uint3 a, uint b) => new uint3( a.x/b, a.y/b, a.z/b );
+        public static uint3 operator /(uint3 a, uint3 b) => new uint3( a.x/b.x, a.y/b.y, a.z/b.z );
+        
+        public static implicit operator uint3(float3 a) => new uint3( (uint)a.x, (uint)a.y, (uint)a.z );
+        public static implicit operator uint3(double3 a) => new uint3( (uint)a.x, (uint)a.y, (uint)a.z );
+    };
+    
+    public struct uint4
+    {
+        public uint x;
+        public uint y;
+        public uint z;
+        public uint w;
+        
+        public uint4(uint _x, uint _y, uint _z, uint _w)
+        {
+            x = _x;
+            y = _y;
+            z = _z;
+            w = _w;
+        }
+
+        public static uint4 operator +(uint4 a) => a;
+        public static uint4 operator -(uint4 a) => new uint4(a.x, a.y, a.z, a.w);
+
+        public static uint4 operator +(uint4 a, uint4 b) => new uint4( a.x+b.x, a.y+b.y, a.z+b.z, a.w+b.w );
+
+        public static uint4 operator -(uint4 a, uint4 b) => a + (-b);
+
+        public static uint4 operator *(uint4 a, uint b) => new uint4( a.x*b, a.y*b, a.z*b, a.w*b );
+        public static uint4 operator *(uint4 a, uint4 b) => new uint4( a.x*b.x, a.y*b.y, a.z*b.z, a.w*b.w );
+
+        public static uint4 operator /(uint4 a, uint b) => new uint4( a.x/b, a.y/b, a.z/b, a.w/b );
+        public static uint4 operator /(uint4 a, uint4 b) => new uint4( a.x/b.x, a.y/b.y, a.z/b.z, a.w/b.w );
+        
+        public static implicit operator uint4(float4 a) => new uint4( (uint)a.x, (uint)a.y, (uint)a.z, (uint)a.w );
+        public static implicit operator uint4(double4 a) => new uint4( (uint)a.x, (uint)a.y, (uint)a.z, (uint)a.w );        
+    };
+
+    public delegate void ComputeShaderKernel(uint3 id);
 
     public class RWStructuredBuffer<T> : List<T>
     {

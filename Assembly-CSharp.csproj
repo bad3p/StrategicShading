@@ -57,8 +57,10 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\DemoUI.cs" />
+     <Compile Include="Assets\Scripts\Simulation\ComputeShaderEmulator.cs" />
      <Compile Include="Assets\Scripts\Simulation\FloatIntrinsics.cs" />
      <Compile Include="Assets\Scripts\Simulation\Random.cs" />
+     <Compile Include="Assets\Scripts\Simulation\Simulation.cs" />
      <Compile Include="Assets\Scripts\Simulation\Structs.cs" />
      <Compile Include="Assets\Scripts\Simulation\Types.cs" />
      <Compile Include="Assets\Scripts\Simulation\Uniforms.cs" />

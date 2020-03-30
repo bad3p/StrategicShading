@@ -7,12 +7,12 @@ public partial class Simulation
     public const int RAND_MAX_32 = (int)((1U << 31) - 1);
     public const int RAND_MAX = (int)((1U << 15) - 1);
 
-    int lcgIndex(int threadIndex)
+    public static int lcgIndex(int threadIndex)
     {
         return threadIndex % _lcgCount;
     }
 
-    int lcg(int lcgIndex)
+    public static int lcg(int lcgIndex)
     {
         int result = 0;
         int prev = 1;
@@ -28,13 +28,14 @@ public partial class Simulation
         return next; 
     }
 
-    float lcgRange(float min, float max, int lcgIndex)
+    public static float lcgRange(float min, float max, int lcgIndex)
     {
         return min + (max - min) * ((float)( lcg( lcgIndex ) )) / RAND_MAX; 
     }
 
-    float lcgBoxMuller(float mu, float sigma, int lcgIndex)
+    public static float lcgBoxMuller(float mu, float sigma, int lcgIndex)
     {
+        /*
         float u1 = 0.0f;
         float u2 = 0.0f;
     
@@ -48,5 +49,11 @@ public partial class Simulation
         float z1 = sqrt(-2.0f * log(u1)) * sin(FLOAT_2PI * u2);
 	
         return z0 * sigma + mu;
+        */
+
+        return lerp(
+            -lcgRange(0.0f, 1.0f, lcgIndex) * lcgRange(0.0f, 1.0f, lcgIndex),
+            lcgRange(0.0f, 1.0f, lcgIndex) * lcgRange(0.0f, 1.0f, lcgIndex),
+            0.5f );
     } 
 }

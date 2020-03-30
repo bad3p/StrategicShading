@@ -12,6 +12,6 @@ public partial class Simulation
     public const float FLOAT_2PI = 2*3.1415927f;
     public const double DOUBLE_2PI = 2*3.1415926535897931;
 
-    public int _lcgCount;
-    public RWStructuredBuffer<int> _lcgState;    
+    public static int _lcgCount;
+    public static RWStructuredBuffer<int> _lcgState;    
 }
