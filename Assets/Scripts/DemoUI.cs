@@ -61,17 +61,35 @@ public class DemoUI : MonoBehaviour
 
     void TestRng()
     {
+        Random.InitState( (int)DateTime.Now.Ticks );
+        
         Simulation._outRenderTextureWidth = 128;
         Simulation._outRenderTextureHeight = 128;
         Simulation._outRenderTexture = new Types.RWTexture2D<float>();
-        Simulation._lcgCount = 1;
-        Simulation._lcgState = new Types.RWStructuredBuffer<int>() { 23642 };
+
+        Simulation._rngMax = 100000;
+        Simulation._rngCount = 1;
+        Simulation._rngStateLength = 55;
+        Simulation._rngState = new Types.RWStructuredBuffer<int>();
+
+        for (int rngIndex = 0; rngIndex < Simulation._rngCount; rngIndex++)
+        {
+            // position
+            Simulation._rngState.Add(0);
+            // state
+            for (int stateIndex = 0; stateIndex < Simulation._rngStateLength; stateIndex++)
+            {
+                Simulation._rngState.Add(Random.Range(0, Simulation._rngMax));
+            }
+        }
+        
+        
         Simulation.Dispatch( Simulation.GenerateRandomNumbers, 128, 128, 1, 1 );
 
         const float HistogramMin = -1.0f;
         const float HistogramMax = 1.0f;
         const float HistogramRange = (HistogramMax - HistogramMin);
-        int[] histogram = new int[20];
+        int[] histogram = new int[21];
         float slotRange = HistogramRange / histogram.Length;
 
         for (int x = 0; x < Simulation._outRenderTextureWidth; x++)
@@ -97,8 +115,9 @@ public class DemoUI : MonoBehaviour
         string s = "";
         for (int i = 0; i < histogram.Length; i++)
         {
-            s += "[" + (HistogramMin + i * slotRange).ToString("F3") + " ... " +
-                 (HistogramMin + (i + 1) * slotRange).ToString("F3") + "] = " + histogram[i].ToString() + "\n";
+            //s += "[" + (HistogramMin + i * slotRange).ToString("F3") + " ... " +
+            //     (HistogramMin + (i + 1) * slotRange).ToString("F3") + "] = " + histogram[i].ToString() + "\n";
+            s += histogram[i].ToString() + "\n";
         }
         Debug.Log(s);
     }

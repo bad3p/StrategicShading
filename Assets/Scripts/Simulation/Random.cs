@@ -4,33 +4,48 @@ using Structs;
 
 public partial class Simulation
 {
-    public const int RAND_MAX_32 = (int)((1U << 31) - 1);
-    public const int RAND_MAX = (int)((1U << 15) - 1);
-
-    public static int lcgIndex(int threadIndex)
+    public static int rngIndex(int threadIndex)
     {
-        return threadIndex % _lcgCount;
+        return threadIndex % _rngCount;
+    }
+    
+    public static int mod(int n) 
+    {
+        return ((n % _rngMax) + _rngMax) % _rngMax;
     }
 
-    public static int lcg(int lcgIndex)
+    public static int rng(int rngIndex)
     {
         int result = 0;
-        int prev = 1;
-        int next = 1;
+        int prevPos = 1;
+        int nextPos = 0;
+        int exchangedPos = 0;
 
-        while( result != prev )
+        while( prevPos != exchangedPos )
         {
-            prev = _lcgState[lcgIndex];
-            next = ((prev * 214013 + 2531011) & RAND_MAX_32) >> 16;
-            _lcgState[lcgIndex] = next;
-            result = prev;
+            prevPos = _rngState[rngIndex*(_rngStateLength+1)];
+            nextPos = (prevPos + 1) % _rngStateLength;
+            
+            // InterlockedCompareExchange( _rngState[rngIndex*(_rngStateLength+1)], prevPos, nextPos, exchangedPos );
+            _rngState[rngIndex * (_rngStateLength+1)] = nextPos;
+            exchangedPos = prevPos;
+
+            if (exchangedPos == prevPos)
+            {
+                // int temp = mod(state[(pos + 1) % 55] - state[(pos + 32) % 55]);
+                int p0 = rngIndex * (_rngStateLength+1) + 1; 
+                int p1 = (prevPos + 1) % _rngStateLength;
+                int p2 = (prevPos + _rngStateLength / 2 + _rngStateLength / 11) % _rngStateLength;
+                result = mod( _rngState[p0+p1] - _rngState[p0+p2] );
+                _rngState[p0 + prevPos] = result;
+            }
         }
-        return next; 
+        return result; 
     }
 
-    public static float lcgRange(float min, float max, int lcgIndex)
+    public static float rngRange(float min, float max, int rngIndex)
     {
-        return min + (max - min) * ((float)( lcg( lcgIndex ) )) / RAND_MAX; 
+        return min + (max - min) * ((float)( rng( rngIndex ) )) / _rngMax; 
     }
 
     public static float lcgBoxMuller(float mu, float sigma, int lcgIndex)
@@ -51,9 +66,7 @@ public partial class Simulation
         return z0 * sigma + mu;
         */
 
-        return lerp(
-            -lcgRange(0.0f, 1.0f, lcgIndex) * lcgRange(0.0f, 1.0f, lcgIndex),
-            lcgRange(0.0f, 1.0f, lcgIndex) * lcgRange(0.0f, 1.0f, lcgIndex),
-            0.5f );
+        return rngRange(0.0f, 1.0f, lcgIndex);
+        return rngRange(0.0f, 1.0f, lcgIndex) * rngRange(-1.0f, 1.0f, lcgIndex);
     } 
 }

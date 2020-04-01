@@ -14,9 +14,8 @@ public partial class Simulation
         {
             int y = index / _outRenderTextureWidth;
             int x = index - y * _outRenderTextureWidth;
-            int2 xy = new int2( x, y );    
-            //_outRenderTexture[xy] = lcgRange( 0.0f, 1.0f, lcgIndex(index) );
-            _outRenderTexture[xy] = lcgBoxMuller( 0.0f, 1.0f, lcgIndex(index) );
+            int2 xy = new int2( x, y );
+            _outRenderTexture[xy] = rngRange(0.0f, 1.0f, rngIndex(index)) * rngRange( -1.0f, 1.0f, rngIndex(index) );
         }
     }
 }
