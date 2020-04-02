@@ -4,49 +4,53 @@
 
 #include "Assets/Shaders/Simulation/Uniforms.compute"
 
-#define RAND_MAX_32 ((1U << 31) - 1)
-#define RAND_MAX ((1U << 15) - 1)
-
-int lcgIndex(int threadIndex)
+int rngIndex(int threadIndex)
 {
-    return threadIndex % _lcgCount;
+    return threadIndex % _rngCount;
 }
 
-int lcg(int lcgIndex)
+int rngMod(int n) 
+{
+    return ((n % _rngMax) + _rngMax) % _rngMax;
+}
+
+int rng(int rngIndex)
 {
     int result = 0;
-    int prev = 1;
-    int next = 1;
+    int prevPos = 1;
+    int nextPos = 0;
+    int exchangedPos = 0;
+    
+    int rngOffset = rngIndex*(_rngStateLength+1);
 
-    while( result != prev )
+    [allow_uav_condition]
+    while( prevPos != exchangedPos )
     {
-        prev = _lcgState[lcgIndex];
-        next = ((prev * 214013 + 2531011) & RAND_MAX_32) >> 16;        
-        InterlockedCompareExchange( _lcgState[lcgIndex], prev, next, result );
+        prevPos = _rngState[rngOffset];
+        nextPos = (prevPos + 1) % _rngStateLength;
+        
+        InterlockedCompareExchange( _rngState[rngOffset], prevPos, nextPos, exchangedPos );
+
+        if (exchangedPos == prevPos)
+        {
+            int p0 = rngOffset + 1; 
+            int p1 = (prevPos + 1) % _rngStateLength;
+            int p2 = (prevPos + _rngStateLength / 2 + _rngStateLength / 11) % _rngStateLength;
+            result = rngMod( _rngState[p0+p1] - _rngState[p0+p2] );
+            _rngState[p0 + prevPos] = result;
+        }
     }
-    return next; 
+    return result; 
 }
 
-float lcgRange(float min, float max, int lcgIndex)
+float rngRange(float min, float max, int rngIndex)
 {
-    return min + (max - min) * float( lcg( lcgIndex ) ) / RAND_MAX; 
+    return min + (max - min) * ((float)( rng( rngIndex ) )) / _rngMax; 
 }
 
-float lcgBoxMuller(float mu, float sigma, int lcgIndex)
+float rngNormal(int rngIndex)
 {
-    float u1 = 0.0;
-    float u2 = 0.0;
-    
-    while( u1 <= FLOAT_EPSILON )
-    {
-        u1 = lcgRange( 0.0, 1.0, lcgIndex );
-        u2 = lcgRange( 0.0, 1.0, lcgIndex );
-    }
-    
-    float z0 = sqrt(-2.0 * log(u1)) * cos(FLOAT_2PI * u2);
-	float z1 = sqrt(-2.0 * log(u1)) * sin(FLOAT_2PI * u2);
-	
-	return z0 * sigma + mu;
-} 
+    return rngRange(0.0f, 1.0f, rngIndex) * rngRange( -1.0f, 1.0f, rngIndex );
+}
 
 #endif

@@ -23,7 +23,7 @@ void GenerateRandomNumbers(uint3 id : SV_DispatchThreadID)
         int y = index / _outRenderTextureWidth;
         int x = index - y * _outRenderTextureWidth;
         int2 xy = int2( x, y );    
-        _outRenderTexture[xy] = lcgRange( 0.0, 1.0, lcgIndex(index) );
-        //_outRenderTexture[xy] = abs( lcgBoxMuller( 0.0, 0.25, lcgIndex(index) ) );
+        //_outRenderTexture[xy] = rngRange( 0.0, 1.0, rngIndex(index) );
+        _outRenderTexture[xy] = 0.5 * ( 1.0 + rngNormal( rngIndex(index) ) );
     }
 }

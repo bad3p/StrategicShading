@@ -14,49 +14,40 @@ public class DemoUI : MonoBehaviour
     
     private Material      _mapImageMaterial = null;
     private RenderTexture _renderTexture = null;
-    private ComputeBuffer _lcgState = null;
     
+    private int _rngMax;
+    private int _rngCount;
+    private int _rngStateLength;
+    private ComputeBuffer _rngState = null;
+
     void Awake()
     {
         _mapImageMaterial = new Material( Shader.Find("Unlit/Texture") );
         MapImage.material = _mapImageMaterial;
         MapImage.SetMaterialDirty();
         
-        _renderTexture = new RenderTexture( 256, 128, 0, RenderTextureFormat.RFloat );		
+        _renderTexture = new RenderTexture( 4096, 2048, 0, RenderTextureFormat.RFloat );		
         _renderTexture.enableRandomWrite = true;
         _renderTexture.filterMode = FilterMode.Point;
         _renderTexture.Create();
 
-        const int LCGCount = 256;
-        int[] lcgState = new int[LCGCount];
-        for (int i = 0; i < LCGCount; i++)
+        _rngMax = 1000000;
+        _rngCount = 256;
+        _rngStateLength = 55;
+        int[] rngStateData = new int[_rngCount*(_rngStateLength+1)];
+        for (int i = 0; i < _rngCount; i++)
         {
-            while (true)
+            rngStateData[i * (_rngStateLength + 1)] = 0;
+            for (int j = 0; j < _rngStateLength; j++)
             {
-                int state = Random.Range(0, int.MaxValue);
-                
-                bool found = false;
-                for (int j = 0; j < i; j++)
-                {
-                    if (lcgState[j] == state)
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found)
-                {
-                    lcgState[i] = state;
-                    break;
-                }
+                rngStateData[i * (_rngStateLength + 1) + j + 1] = Random.Range( 0, _rngMax );
             }
         }
         
-        _lcgState = new ComputeBuffer( LCGCount, sizeof(int) );
-        _lcgState.SetData( lcgState );
+        _rngState = new ComputeBuffer( _rngCount*(_rngStateLength+1), sizeof(int) );
+        _rngState.SetData( rngStateData );
 
-        TestRng();
+        // TestRng();
     }
 
     void TestRng()
@@ -115,8 +106,6 @@ public class DemoUI : MonoBehaviour
         string s = "";
         for (int i = 0; i < histogram.Length; i++)
         {
-            //s += "[" + (HistogramMin + i * slotRange).ToString("F3") + " ... " +
-            //     (HistogramMin + (i + 1) * slotRange).ToString("F3") + "] = " + histogram[i].ToString() + "\n";
             s += histogram[i].ToString() + "\n";
         }
         Debug.Log(s);
@@ -127,11 +116,13 @@ public class DemoUI : MonoBehaviour
         const int GroupSize = 256;
         
         int generateRandomNumbers = SimulationComputeShader.FindKernel("GenerateRandomNumbers");
-        SimulationComputeShader.SetBuffer(generateRandomNumbers, "_lcgState", _lcgState);
-        SimulationComputeShader.SetTexture(generateRandomNumbers, "_outRenderTexture", _renderTexture);
         SimulationComputeShader.SetInt("_outRenderTextureWidth", _renderTexture.width);
         SimulationComputeShader.SetInt("_outRenderTextureHeight", _renderTexture.height);
-        SimulationComputeShader.SetInt("_lcgCount", _lcgState.count);
+        SimulationComputeShader.SetInt("_rngMax", _rngMax);
+        SimulationComputeShader.SetInt("_rngCount", _rngCount);
+        SimulationComputeShader.SetInt("_rngStateLength", _rngStateLength);
+        SimulationComputeShader.SetBuffer(generateRandomNumbers, "_rngState", _rngState);
+        SimulationComputeShader.SetTexture(generateRandomNumbers, "_outRenderTexture", _renderTexture);
         SimulationComputeShader.Dispatch(generateRandomNumbers, ((_renderTexture.width * _renderTexture.height ) / GroupSize) + 1, 1, 1);
         
         _mapImageMaterial.mainTexture = _renderTexture;

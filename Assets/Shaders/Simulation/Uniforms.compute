@@ -17,9 +17,11 @@
 #define DOUBLE_2PI 2*3.1415926535897931
 
 // ********************************************************************************
-// linear congruential generator
+// Knuth's subtractive RNG
 
-int _lcgCount;
-RWStructuredBuffer<int> _lcgState;
+int _rngMax;
+int _rngCount;
+int _rngStateLength;
+RWStructuredBuffer<int> _rngState;
 
 #endif
