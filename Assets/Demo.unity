@@ -446,6 +446,7 @@ GameObject:
   - component: {fileID: 1846025845}
   - component: {fileID: 1846025844}
   - component: {fileID: 1846025848}
+  - component: {fileID: 1846025849}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -546,5 +547,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MapImage: {fileID: 509909307}
-  SimulationComputeShader: {fileID: 7200000, guid: e954c0cb90889d7429ce4086108dde36,
-    type: 3}
+--- !u!114 &1846025849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1846025843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35fc43110c4acf84588c2ebd65831511, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ComputeShader: {fileID: 7200000, guid: e954c0cb90889d7429ce4086108dde36, type: 3}
+  RngSeedFromTimer: 0
+  RngSeed: 0
+  RngMaxUniform: 1000000
+  RngCount: 256
+  RngStateLength: 55

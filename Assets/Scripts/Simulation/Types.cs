@@ -368,7 +368,33 @@ namespace Types
     {
     };
 
-    public class RWTexture2D<T> : Dictionary<int2, T>
+    public class RWTexture2D<T>
     {
+        private int _width;
+        private int _height;
+        private T[] _pixels;
+        
+        public RWTexture2D(int width, int height)
+        {
+            _width = width;
+            _height = height;
+            _pixels = new T[width*height];
+        }
+        
+        public int width
+        {
+            get => _width;
+        }
+        
+        public int height
+        {
+            get => _height;
+        }
+        
+        public T this[int2 key]
+        {
+            get { return _pixels[key.y * _width + key.x]; }
+            set { _pixels[key.y * _width + key.x] = value; }
+        }
     };
 }
