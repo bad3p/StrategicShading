@@ -58,9 +58,9 @@ public class ComputeShaderEngine : MonoBehaviour
         const int GroupSizeY = 8;
         const int GroupSizeZ = 8;
 
-        const int OutBufferSizeX = 32;
-        const int OutBufferSizeY = 32;
-        const int OutBufferSizeZ = 32;
+        const int OutBufferSizeX = 64;
+        const int OutBufferSizeY = 64;
+        const int OutBufferSizeZ = 64;
 
         int3[] outBufferData = new int3[OutBufferSizeX * OutBufferSizeY * OutBufferSizeZ];
         ComputeBuffer outBuffer = new ComputeBuffer(OutBufferSizeX * OutBufferSizeY * OutBufferSizeZ, sizeof(int) * 3);
@@ -83,6 +83,7 @@ public class ComputeShaderEngine : MonoBehaviour
         }
         Simulation.Dispatch(Simulation.GenerateThreadIDs, (OutBufferSizeX / GroupSizeX) + 1, (OutBufferSizeY / GroupSizeY) + 1, (OutBufferSizeZ / GroupSizeZ) + 1);
         
+        /**/
         using (var writer = new System.IO.StreamWriter("out.txt"))
         {
             string s = "";
@@ -94,6 +95,7 @@ public class ComputeShaderEngine : MonoBehaviour
                 writer.WriteLine(s);
             }
         }
+        
     }
     #endregion
 
