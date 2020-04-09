@@ -8,6 +8,29 @@
 
 //////////////////////////////////////////////////////////////////////////////////////
 
+#pragma kernel GenerateThreadIDs
+
+int _outBufferSizeX;
+int _outBufferSizeY;
+int _outBufferSizeZ;
+RWStructuredBuffer<int3> _outBuffer;
+
+[numthreads(8,8,8)]
+void GenerateThreadIDs(uint3 id : SV_DispatchThreadID)
+{
+    int index = int(id.z) * _outBufferSizeX *_outBufferSizeY + int(id.y) * _outBufferSizeX + int(id.x);
+    if( index < _outBufferSizeX * _outBufferSizeY * _outBufferSizeZ )    
+    {
+        //_outBuffer[index] = int3(id);
+        int temp;
+        InterlockedAdd( _outBuffer[index].x, int(id.x) );
+        InterlockedAdd( _outBuffer[index].y, int(id.y) );
+        InterlockedAdd( _outBuffer[index].z, int(id.z) );  
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+
 #pragma kernel GenerateRandomNumbers
 
 int _outRenderTextureWidth;

@@ -1,42 +1,57 @@
-﻿using System.Net.Sockets;
-using Types;
+﻿using Types;
 using UnityEngine;
+
 
 public partial class Simulation
 {
-    public static void Dispatch(ComputeShaderKernel kernel, uint threadGroupSize, uint threadGroupsX, uint threadGroupsY, uint threadGroupsZ)
+    public static void Dispatch(ComputeShaderKernel kernel, uint threadGroupsX, uint threadGroupsY, uint threadGroupsZ)
     {
-        uint3 idrange = new uint3(
-            threadGroupsX <= 1 ? 1 : threadGroupsX * threadGroupSize,
-            threadGroupsY <= 1 ? 1 : threadGroupsY * threadGroupSize,
-            threadGroupsZ <= 1 ? 1 : threadGroupsZ * threadGroupSize
-        );  
-        
-        uint3 id = new uint3();
-        while (true)
-        {
-            kernel(id);
+        uint3 numThreads = new uint3();
+        numThreads.x = 1;
+        numThreads.y = 1;
+        numThreads.z = 1;
 
-            id.x++;
-            if (id.x >= idrange.x)
+        bool hadNumThreads = kernel.Method.GetCustomAttributes(typeof(NumThreads), true).Length > 0;
+        if (hadNumThreads)
+        {
+            NumThreads numThreadsAttribute = (NumThreads) kernel.Method.GetCustomAttributes(typeof(NumThreads), true)[0];
+            if (numThreadsAttribute != null)
             {
-                id.y++;
-                if (id.y >= idrange.y)
+                numThreads.x = (uint)(numThreadsAttribute.x);
+                numThreads.y = (uint)(numThreadsAttribute.y);
+                numThreads.z = (uint)(numThreadsAttribute.z);
+            }
+        }
+        
+        Debug.Log( "[ComputeShaderEmulator] running kernel " + kernel.Method.Name + " numThreads[" + numThreads.x + "," + numThreads.y + "," + numThreads.z + "]" );
+        
+        uint3 threadId = new uint3();
+        uint3 groupId = new uint3();
+
+        for (uint groupX = 0; groupX < threadGroupsX; groupX++)
+        {
+            for (uint groupY = 0; groupY < threadGroupsY; groupY++)
+            {
+                for (uint groupZ = 0; groupZ < threadGroupsZ; groupZ++)
                 {
-                    id.z++;
-                    if (id.z >= idrange.z)
+                    groupId.x = groupX;
+                    groupId.y = groupY;
+                    groupId.z = groupZ;
+                    
+                    for (uint threadX = 0; threadX < numThreads.x; threadX++)
                     {
-                        break;
+                        for (uint threadY = 0; threadY < numThreads.y; threadY++)
+                        {
+                            for (uint threadZ = 0; threadZ < numThreads.z; threadZ++)
+                            {
+                                threadId.x = groupId.x * numThreads.x + threadX;
+                                threadId.y = groupId.y * numThreads.y + threadY;
+                                threadId.z = groupId.z * numThreads.z + threadZ;
+                                
+                                kernel(threadId);
+                            }
+                        }
                     }
-                    else
-                    {
-                        id.y = 0;
-                        id.x = 0;
-                    }
-                }
-                else
-                {
-                    id.x = 0;
                 }
             }
         }

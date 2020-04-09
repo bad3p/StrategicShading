@@ -51,12 +51,57 @@ public class ComputeShaderEngine : MonoBehaviour
         Simulation._rngState = new RWStructuredBuffer<int>();
         Simulation._rngState.AddRange( rngStateData );
     }
+
+    void TestThreadGroupIDs()
+    {
+        const int GroupSizeX = 8;
+        const int GroupSizeY = 8;
+        const int GroupSizeZ = 8;
+
+        const int OutBufferSizeX = 32;
+        const int OutBufferSizeY = 32;
+        const int OutBufferSizeZ = 32;
+
+        int3[] outBufferData = new int3[OutBufferSizeX * OutBufferSizeY * OutBufferSizeZ];
+        ComputeBuffer outBuffer = new ComputeBuffer(OutBufferSizeX * OutBufferSizeY * OutBufferSizeZ, sizeof(int) * 3);
+        
+        int kernel = ComputeShader.FindKernel("GenerateThreadIDs");
+        ComputeShader.SetInt("_outBufferSizeX", OutBufferSizeX);
+        ComputeShader.SetInt("_outBufferSizeY", OutBufferSizeY);
+        ComputeShader.SetInt("_outBufferSizeZ", OutBufferSizeZ);
+        ComputeShader.SetBuffer(kernel,"_outBuffer", outBuffer);
+        ComputeShader.Dispatch(kernel, (OutBufferSizeX / GroupSizeX) + 1, (OutBufferSizeY / GroupSizeY) + 1, (OutBufferSizeZ / GroupSizeZ) + 1);
+        outBuffer.GetData(outBufferData);
+        
+        Simulation._outBufferSizeX = OutBufferSizeX;
+        Simulation._outBufferSizeY = OutBufferSizeY;
+        Simulation._outBufferSizeZ = OutBufferSizeZ;
+        Simulation._outBuffer = new RWStructuredBuffer<int3>();
+        for (int i = 0; i < OutBufferSizeX * OutBufferSizeY * OutBufferSizeZ; i++)
+        {
+            Simulation._outBuffer.Add(new int3());
+        }
+        Simulation.Dispatch(Simulation.GenerateThreadIDs, (OutBufferSizeX / GroupSizeX) + 1, (OutBufferSizeY / GroupSizeY) + 1, (OutBufferSizeZ / GroupSizeZ) + 1);
+        
+        using (var writer = new System.IO.StreamWriter("out.txt"))
+        {
+            string s = "";
+            for (int i = 0; i < outBufferData.Length; i++)
+            {
+                s = i.ToString("D6") + " = " + 
+                    outBufferData[i].x.ToString("D3") + " " + outBufferData[i].y.ToString("D3") + " " + outBufferData[i].z.ToString("D3") + "   " + 
+                    Simulation._outBuffer[i].x.ToString("D3") + " " + Simulation._outBuffer[i].y.ToString("D3") + " " + Simulation._outBuffer[i].z.ToString("D3");
+                writer.WriteLine(s);
+            }
+        }
+    }
     #endregion
 
     #region MonoBehaviour
     void Awake()
     {
         InitRng();
+        TestThreadGroupIDs();
     }
     
     void OnDestroy()
@@ -82,7 +127,7 @@ public class ComputeShaderEngine : MonoBehaviour
         Simulation._outRenderTexture = renderTexture;
         
         ComputeShaderKernel kernel = Simulation.GenerateRandomNumbers;
-        Simulation.Dispatch( kernel, GPUGroupSize, (uint)((renderTexture.width * renderTexture.height ) / GPUGroupSize) + 1, 1, 1 );
+        Simulation.Dispatch( kernel, (uint)((renderTexture.width * renderTexture.height ) / GPUGroupSize) + 1, 1, 1 );
     }
     #endregion
     

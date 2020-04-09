@@ -397,4 +397,41 @@ namespace Types
             set { _pixels[key.y * _width + key.x] = value; }
         }
     };
+    
+    [System.AttributeUsage(System.AttributeTargets.Method)]  
+    public class NumThreads : System.Attribute  
+    {  
+        private int _x;
+        private int _y;
+        private int _z;
+        
+        public int x
+        {
+            get => _x;
+        }
+        
+        public int y
+        {
+            get => _y;
+        }
+        
+        public int z
+        {
+            get => _z;
+        }
+  
+        public NumThreads()
+        {
+            _x = 1;
+            _y = 1;
+            _z = 1;
+        }
+        
+        public NumThreads(int x, int y, int z)
+        {
+            _x = x;
+            _y = y;
+            _z = z;
+        }  
+    } 
 }
