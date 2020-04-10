@@ -1,7 +1,7 @@
 ﻿using Types;
 using UnityEngine;
 
-public partial class Simulation
+public partial class ComputeShaderEmulator
 {
     public static float abs(float v)
     {

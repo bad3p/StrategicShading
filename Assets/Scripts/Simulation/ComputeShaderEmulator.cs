@@ -7,8 +7,9 @@ using UnityEngine;
 using System.Runtime.InteropServices;
 #endif
 
-public partial class Simulation
+public partial class ComputeShaderEmulator
 {
+    #region Performance
     #if UNITY_EDITOR_WIN
     [DllImport("Kernel32.dll")]
     private static extern bool QueryPerformanceCounter(out long lpPerformanceCount);
@@ -35,6 +36,17 @@ public partial class Simulation
             return 0.0;
         #endif
     }
+    #endregion
+
+    #region Multithreading
+    private static int _numCPUThreads = 1;
+
+    public static int NumCPUThreads
+    {
+        get { return _numCPUThreads; }
+        set { _numCPUThreads = Mathf.Max( 1, value ); }
+    }
+    #endregion
     
     public static void Dispatch(ComputeShaderKernel kernel, uint threadGroupsX, uint threadGroupsY, uint threadGroupsZ)
     {
@@ -53,10 +65,8 @@ public partial class Simulation
         }
 
         double t0 = Timestamp();
-
-        const int numCPUThreads = 2;
         
-        if (numCPUThreads == 1)
+        if (NumCPUThreads == 1)
         {
             uint3 threadId = new uint3();
             uint3 groupId = new uint3();
@@ -109,7 +119,7 @@ public partial class Simulation
                                           groupId.y * (uint) (threadGroupsX) +
                                           groupId.x;
 
-                            if (waveId % numCPUThreads == cpuThreadId)
+                            if (waveId % NumCPUThreads == cpuThreadId)
                             {
                                 for (uint threadZ = 0; threadZ < numThreads.z; threadZ++)
                                 {
@@ -130,14 +140,14 @@ public partial class Simulation
                 }    
             };
 
-            Thread[] threads = new Thread[numCPUThreads];
-            for (int i = 0; i < numCPUThreads; i++)
+            Thread[] threads = new Thread[NumCPUThreads];
+            for (int i = 0; i < NumCPUThreads; i++)
             {
                 int cpuThreadId = i; // copying "i" makes it a good closure
                 threads[i] = new Thread(() => ThreadFunc(cpuThreadId));
                 threads[i].Start();
             }
-            for (int i = 0; i < numCPUThreads; i++)
+            for (int i = 0; i < NumCPUThreads; i++)
             {
                 threads[i].Join();
             }
@@ -145,6 +155,6 @@ public partial class Simulation
 
         double t1 = Timestamp();
         
-        Debug.Log( "[ComputeShaderEmulator] running kernel " + kernel.Method.Name + " numThreads[" + numThreads.x + "," + numThreads.y + "," + numThreads.z + "] time " + (t1-t0).ToString("F6") + "sec." );
+        Debug.Log( "[ComputeShaderEmulator] executed kernel " + kernel.Method.Name + " numThreads[" + numThreads.x + "," + numThreads.y + "," + numThreads.z + "] time " + (t1-t0).ToString("F6") + "sec." );
     }
 }

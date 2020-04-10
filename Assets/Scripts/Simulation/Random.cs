@@ -2,7 +2,7 @@
 using Types;
 using Structs;
 
-public partial class Simulation
+public partial class ComputeShaderEmulator
 {
     public static int rngIndex(int threadIndex)
     {

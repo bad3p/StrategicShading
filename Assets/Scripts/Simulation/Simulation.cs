@@ -1,7 +1,7 @@
 ﻿using Types;
 using Structs;
 
-public partial class Simulation
+public partial class ComputeShaderEmulator
 {
     public static int _outBufferSizeX;
     public static int _outBufferSizeY;

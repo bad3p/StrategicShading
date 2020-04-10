@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 namespace Types
 {
@@ -366,6 +367,17 @@ namespace Types
 
     public class RWStructuredBuffer<T> : List<T>
     {
+        public RWStructuredBuffer() : base()
+        {
+            
+        }
+        public RWStructuredBuffer(int length, T defaultValue) : base()
+        {
+            for (int i = 0; i < length; i++)
+            {
+                Add( defaultValue );       
+            }
+        }
     };
 
     public class RWTexture2D<T>

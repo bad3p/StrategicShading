@@ -5,6 +5,9 @@ public class ComputeShaderEngine : MonoBehaviour
 {
     const int GPUGroupSize = 256;
     
+    [Header("CPU Emulation")]
+    public int NumCPUThreads = 1;
+    
     [Header("Resources")]
     public ComputeShader ComputeShader;
 
@@ -45,11 +48,11 @@ public class ComputeShaderEngine : MonoBehaviour
         ComputeShader.SetInt( "_rngCount", RngCount);
         ComputeShader.SetInt( "_rngStateLength", RngStateLength);
 
-        Simulation._rngMax = RngMaxUniform;
-        Simulation._rngCount = RngCount;
-        Simulation._rngStateLength = RngStateLength;
-        Simulation._rngState = new RWStructuredBuffer<int>();
-        Simulation._rngState.AddRange( rngStateData );
+        ComputeShaderEmulator._rngMax = RngMaxUniform;
+        ComputeShaderEmulator._rngCount = RngCount;
+        ComputeShaderEmulator._rngStateLength = RngStateLength;
+        ComputeShaderEmulator._rngState = new RWStructuredBuffer<int>();
+        ComputeShaderEmulator._rngState.AddRange( rngStateData );
     }
 
     void TestThreadGroupIDs()
@@ -73,17 +76,13 @@ public class ComputeShaderEngine : MonoBehaviour
         ComputeShader.Dispatch(kernel, (OutBufferSizeX / GroupSizeX) + 1, (OutBufferSizeY / GroupSizeY) + 1, (OutBufferSizeZ / GroupSizeZ) + 1);
         outBuffer.GetData(outBufferData);
         
-        Simulation._outBufferSizeX = OutBufferSizeX;
-        Simulation._outBufferSizeY = OutBufferSizeY;
-        Simulation._outBufferSizeZ = OutBufferSizeZ;
-        Simulation._outBuffer = new RWStructuredBuffer<int3>();
-        for (int i = 0; i < OutBufferSizeX * OutBufferSizeY * OutBufferSizeZ; i++)
-        {
-            Simulation._outBuffer.Add(new int3());
-        }
-        Simulation.Dispatch(Simulation.GenerateThreadIDs, (OutBufferSizeX / GroupSizeX) + 1, (OutBufferSizeY / GroupSizeY) + 1, (OutBufferSizeZ / GroupSizeZ) + 1);
+        ComputeShaderEmulator._outBufferSizeX = OutBufferSizeX;
+        ComputeShaderEmulator._outBufferSizeY = OutBufferSizeY;
+        ComputeShaderEmulator._outBufferSizeZ = OutBufferSizeZ;
+        ComputeShaderEmulator._outBuffer = new RWStructuredBuffer<int3>( OutBufferSizeX * OutBufferSizeY * OutBufferSizeZ, new int3() );
+        ComputeShaderEmulator.Dispatch(ComputeShaderEmulator.GenerateThreadIDs, (OutBufferSizeX / GroupSizeX) + 1, (OutBufferSizeY / GroupSizeY) + 1, (OutBufferSizeZ / GroupSizeZ) + 1);
         
-        /**/
+        /*
         using (var writer = new System.IO.StreamWriter("out.txt"))
         {
             string s = "";
@@ -91,17 +90,19 @@ public class ComputeShaderEngine : MonoBehaviour
             {
                 s = i.ToString("D6") + " = " + 
                     outBufferData[i].x.ToString("D3") + " " + outBufferData[i].y.ToString("D3") + " " + outBufferData[i].z.ToString("D3") + "   " + 
-                    Simulation._outBuffer[i].x.ToString("D3") + " " + Simulation._outBuffer[i].y.ToString("D3") + " " + Simulation._outBuffer[i].z.ToString("D3");
+                    ComputeShaderEmulator._outBuffer[i].x.ToString("D3") + " " + ComputeShaderEmulator._outBuffer[i].y.ToString("D3") + " " + ComputeShaderEmulator._outBuffer[i].z.ToString("D3");
                 writer.WriteLine(s);
             }
         }
-        
+        */
     }
     #endregion
 
     #region MonoBehaviour
     void Awake()
     {
+        ComputeShaderEmulator.NumCPUThreads = NumCPUThreads;
+        
         InitRng();
         TestThreadGroupIDs();
     }
@@ -124,12 +125,12 @@ public class ComputeShaderEngine : MonoBehaviour
     }
     public void GenerateRandomNumbers(RWTexture2D<float> renderTexture)
     {
-        Simulation._outRenderTextureWidth = renderTexture.width;
-        Simulation._outRenderTextureHeight = renderTexture.height;
-        Simulation._outRenderTexture = renderTexture;
+        ComputeShaderEmulator._outRenderTextureWidth = renderTexture.width;
+        ComputeShaderEmulator._outRenderTextureHeight = renderTexture.height;
+        ComputeShaderEmulator._outRenderTexture = renderTexture;
         
-        ComputeShaderKernel kernel = Simulation.GenerateRandomNumbers;
-        Simulation.Dispatch( kernel, (uint)((renderTexture.width * renderTexture.height ) / GPUGroupSize) + 1, 1, 1 );
+        ComputeShaderKernel kernel = ComputeShaderEmulator.GenerateRandomNumbers;
+        ComputeShaderEmulator.Dispatch( kernel, (uint)((renderTexture.width * renderTexture.height ) / GPUGroupSize) + 1, 1, 1 );
     }
     #endregion
     
@@ -138,28 +139,28 @@ public class ComputeShaderEngine : MonoBehaviour
     {
         Random.InitState( (int)DateTime.Now.Ticks );
         
-        Simulation._outRenderTextureWidth = 128;
-        Simulation._outRenderTextureHeight = 128;
-        Simulation._outRenderTexture = new Types.RWTexture2D<float>();
+        ComputeShaderEmulator._outRenderTextureWidth = 128;
+        ComputeShaderEmulator._outRenderTextureHeight = 128;
+        ComputeShaderEmulator._outRenderTexture = new Types.RWTexture2D<float>();
 
-        Simulation._rngMax = 100000;
-        Simulation._rngCount = 1;
-        Simulation._rngStateLength = 55;
-        Simulation._rngState = new Types.RWStructuredBuffer<int>();
+        ComputeShaderEmulator._rngMax = 100000;
+        ComputeShaderEmulator._rngCount = 1;
+        ComputeShaderEmulator._rngStateLength = 55;
+        ComputeShaderEmulator._rngState = new Types.RWStructuredBuffer<int>();
 
-        for (int rngIndex = 0; rngIndex < Simulation._rngCount; rngIndex++)
+        for (int rngIndex = 0; rngIndex < ComputeShaderEmulator._rngCount; rngIndex++)
         {
             // position
-            Simulation._rngState.Add(0);
+            ComputeShaderEmulator._rngState.Add(0);
             // state
-            for (int stateIndex = 0; stateIndex < Simulation._rngStateLength; stateIndex++)
+            for (int stateIndex = 0; stateIndex < ComputeShaderEmulator._rngStateLength; stateIndex++)
             {
-                Simulation._rngState.Add(Random.Range(0, Simulation._rngMax));
+                ComputeShaderEmulator._rngState.Add(Random.Range(0, ComputeShaderEmulator._rngMax));
             }
         }
         
         
-        Simulation.Dispatch( Simulation.GenerateRandomNumbers, 128, 128, 1, 1 );
+        ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.GenerateRandomNumbers, 128, 128, 1, 1 );
 
         const float HistogramMin = -1.0f;
         const float HistogramMax = 1.0f;
@@ -167,14 +168,14 @@ public class ComputeShaderEngine : MonoBehaviour
         int[] histogram = new int[21];
         float slotRange = HistogramRange / histogram.Length;
 
-        for (int x = 0; x < Simulation._outRenderTextureWidth; x++)
+        for (int x = 0; x < ComputeShaderEmulator._outRenderTextureWidth; x++)
         {
-            for (int y = 0; y < Simulation._outRenderTextureWidth; y++)
+            for (int y = 0; y < ComputeShaderEmulator._outRenderTextureWidth; y++)
             {
                 Types.int2 xy = new Types.int2(x, y);
-                if (Simulation._outRenderTexture.ContainsKey(xy))
+                if (ComputeShaderEmulator._outRenderTexture.ContainsKey(xy))
                 {
-                    float value = Simulation._outRenderTexture[xy];
+                    float value = ComputeShaderEmulator._outRenderTexture[xy];
 
                     for (int i = 0; i < histogram.Length; i++)
                     {

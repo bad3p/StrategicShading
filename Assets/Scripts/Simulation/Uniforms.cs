@@ -1,7 +1,7 @@
 ﻿using Types;
 using Structs;
 
-public partial class Simulation
+public partial class ComputeShaderEmulator
 {
     public const float FLOAT_EPSILON = 1.19e-07f;
     public const double DOUBLE_EPSILON = .22e-16;
