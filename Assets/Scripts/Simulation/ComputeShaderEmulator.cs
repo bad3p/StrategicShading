@@ -143,7 +143,7 @@ public partial class ComputeShaderEmulator
             Thread[] threads = new Thread[NumCPUThreads];
             for (int i = 0; i < NumCPUThreads; i++)
             {
-                int cpuThreadId = i; // copying "i" makes it a good closure
+                int cpuThreadId = i; // closuring "i" to "cpuThreadId"
                 threads[i] = new Thread(() => ThreadFunc(cpuThreadId));
                 threads[i].Start();
             }

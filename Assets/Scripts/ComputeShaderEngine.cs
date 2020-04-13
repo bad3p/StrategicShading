@@ -57,13 +57,13 @@ public class ComputeShaderEngine : MonoBehaviour
 
     void TestThreadGroupIDs()
     {
-        const int GroupSizeX = 8;
+        const int GroupSizeX = 16;
         const int GroupSizeY = 8;
-        const int GroupSizeZ = 8;
+        const int GroupSizeZ = 4;
 
-        const int OutBufferSizeX = 64;
-        const int OutBufferSizeY = 64;
-        const int OutBufferSizeZ = 64;
+        const int OutBufferSizeX = 32;
+        const int OutBufferSizeY = 32;
+        const int OutBufferSizeZ = 32;
 
         int3[] outBufferData = new int3[OutBufferSizeX * OutBufferSizeY * OutBufferSizeZ];
         ComputeBuffer outBuffer = new ComputeBuffer(OutBufferSizeX * OutBufferSizeY * OutBufferSizeZ, sizeof(int) * 3);
@@ -82,7 +82,7 @@ public class ComputeShaderEngine : MonoBehaviour
         ComputeShaderEmulator._outBuffer = new RWStructuredBuffer<int3>( OutBufferSizeX * OutBufferSizeY * OutBufferSizeZ, new int3() );
         ComputeShaderEmulator.Dispatch(ComputeShaderEmulator.GenerateThreadIDs, (OutBufferSizeX / GroupSizeX) + 1, (OutBufferSizeY / GroupSizeY) + 1, (OutBufferSizeZ / GroupSizeZ) + 1);
         
-        /*
+        /**/
         using (var writer = new System.IO.StreamWriter("out.txt"))
         {
             string s = "";
@@ -94,7 +94,7 @@ public class ComputeShaderEngine : MonoBehaviour
                 writer.WriteLine(s);
             }
         }
-        */
+        
     }
     #endregion
 

@@ -8,7 +8,7 @@ public partial class ComputeShaderEmulator
     public static int _outBufferSizeZ;
     public static RWStructuredBuffer<int3> _outBuffer;
 
-    [NumThreads(8,8,8)] 
+    [NumThreads(16,8,4)] 
     static public void GenerateThreadIDs(uint3 id)
     {
         int index = (int)(id.z) * _outBufferSizeX *_outBufferSizeY + (int)(id.y) * _outBufferSizeX + (int)(id.x);

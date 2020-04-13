@@ -15,7 +15,7 @@ int _outBufferSizeY;
 int _outBufferSizeZ;
 RWStructuredBuffer<int3> _outBuffer;
 
-[numthreads(8,8,8)]
+[numthreads(16,8,4)]
 void GenerateThreadIDs(uint3 id : SV_DispatchThreadID)
 {
     int index = int(id.z) * _outBufferSizeX *_outBufferSizeY + int(id.y) * _outBufferSizeX + int(id.x);
