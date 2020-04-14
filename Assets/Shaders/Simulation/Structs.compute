@@ -43,7 +43,6 @@ struct Group
 {
     int teamID;
     int hqID;
-    int4 subID;
 };
 
 #endif

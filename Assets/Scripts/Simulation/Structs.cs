@@ -1,48 +1,69 @@
-﻿using Types;
+﻿using System;
+using Types;
 
 namespace Structs
 {
+    [Serializable]
     public struct FirearmsData
     {
         public float spread;
-        public float3 distance;
-        public float3 firepower;
+        public float recoilTime;
+        public float reloadingTime; 
+        public int maxClipAmmo;
     };
 
-    public struct UnitData
+    [Serializable]
+    public struct InfantryData
     {
-        public int type;
-        public int maxPersonnel;
-        public int maxAmmo;
-        public int maxPrimaryFirearms;
-        public int maxSecondaryFirearms;
-        public int primaryFirearmsDataID;
-        public int secondaryFirearmsDataID;
+        public int firearmsDataID;
+        public int maxBeltAmmo;
+        public float maxMorale;
+        public float moraleRecoveryRate;
+        public float moraleSpreadPenalty;
+        public float maxFitness;
+        public float fitnessRecoveryRate;
+        public float fitnessSpreadPenalty;
+        public float4 movementVel;
+        public float4 movementCost;
+    };
+    
+    [Serializable]
+    public struct Entity
+    {
+        public int typeID;
+        public int instanceID;
+        public double3 worldPos;
+        public float4 worldRot;
+        public float3 extent;
     };
 
+    [Serializable]
+    public struct Infantry
+    {
+        public int entityID;
+        public int infantryDataID;
+        public float morale;
+        public float fitness;
+        public int clipAmmo;
+        public int beltAmmo;
+        public int firearmsActionID;
+        public float firearmsActionTime;
+    };
+
+    [Serializable]
     public struct Unit
     {
-        public int unitDataID;
-        public int carrierUnitID;
-        public int teamID;
-        public int ready;
-        public int wounded;
-        public int experience;
-        public int morale;
-        public int fitness;
-        public int ammo;
-        public int primaryFirearms;
-        public int secondaryFirearms;
-        public double3 pos;
-        public float3 dir;
-        public float3 ext;
-        public float3 vel;
+        public int entityID;
+        public int parentUnitID;
+        public int subTypeID;
+        public int subArrayID;
     };
-
-    public struct Group
+    
+    [Serializable]
+    public struct Array
     {
-        public int teamID;
-        public int hqID;
-        public int4 subID;
-    };    
+        public int capacity;
+        public int count;
+        public int offset;
+    };
 }

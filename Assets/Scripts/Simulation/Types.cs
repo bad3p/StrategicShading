@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using UnityEngine.EventSystems;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Types
 {
+    [Serializable]    
     public struct float2
     {
         public float x;
@@ -31,6 +32,7 @@ namespace Types
         public static implicit operator float2(int2 a) => new float2( a.x, a.y );
     };
     
+    [Serializable]
     public struct float3
     {
         public float x;
@@ -61,6 +63,7 @@ namespace Types
         public static implicit operator float3(int3 a) => new float3( a.x, a.y, a.z );
     };
     
+    [Serializable]
     public struct float4
     {
         public float x;
@@ -93,6 +96,7 @@ namespace Types
         public static implicit operator float4(int4 a) => new float4( a.x, a.y, a.z, a.w );
     };
     
+    [Serializable]
     public struct double2
     {
         public double x;
@@ -121,6 +125,7 @@ namespace Types
         public static implicit operator double2(int2 a) => new double2( a.x, a.y );
     };
     
+    [Serializable]
     public struct double3
     {
         public double x;
@@ -151,6 +156,7 @@ namespace Types
         public static implicit operator double3(int3 a) => new double3( a.x, a.y, a.z );
     };
     
+    [Serializable]
     public struct double4
     {
         public double x;
@@ -183,6 +189,7 @@ namespace Types
         public static implicit operator double4(int4 a) => new double4( a.x, a.y, a.z, a.w );        
     };
     
+    [Serializable]
     public struct int2
     {
         public int x;
@@ -211,6 +218,7 @@ namespace Types
         public static implicit operator int2(double2 a) => new int2( (int)a.x, (int)a.y );
     };
     
+    [Serializable]
     public struct int3
     {
         public int x;
@@ -241,6 +249,7 @@ namespace Types
         public static implicit operator int3(double3 a) => new int3( (int)a.x, (int)a.y, (int)a.z );
     };
     
+    [Serializable]
     public struct int4
     {
         public int x;
@@ -273,6 +282,7 @@ namespace Types
         public static implicit operator int4(double4 a) => new int4( (int)a.x, (int)a.y, (int)a.z, (int)a.w );        
     };
     
+    [Serializable]
     public struct uint2
     {
         public uint x;
@@ -301,6 +311,7 @@ namespace Types
         public static implicit operator uint2(double2 a) => new uint2( (uint)a.x, (uint)a.y );
     };
     
+    [Serializable]
     public struct uint3
     {
         public uint x;
@@ -331,6 +342,7 @@ namespace Types
         public static implicit operator uint3(double3 a) => new uint3( (uint)a.x, (uint)a.y, (uint)a.z );
     };
     
+    [Serializable]
     public struct uint4
     {
         public uint x;
@@ -445,5 +457,5 @@ namespace Types
             _y = y;
             _z = z;
         }  
-    } 
+    }
 }
