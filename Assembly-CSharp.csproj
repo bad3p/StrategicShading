@@ -61,6 +61,7 @@
      <Compile Include="Assets\Scripts\Data\GenericEntity.cs" />
      <Compile Include="Assets\Scripts\Data\InfantryDataProvider.cs" />
      <Compile Include="Assets\Scripts\Data\InfantryEntity.cs" />
+     <Compile Include="Assets\Scripts\Data\MathUtils.cs" />
      <Compile Include="Assets\Scripts\Data\UnitEntity.cs" />
      <Compile Include="Assets\Scripts\DemoUI.cs" />
      <Compile Include="Assets\Scripts\Simulation\ComputeShaderEmulator.cs" />

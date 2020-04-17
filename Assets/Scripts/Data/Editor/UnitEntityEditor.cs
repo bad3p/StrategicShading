@@ -1,5 +1,6 @@
 ﻿using Types;
 using UnityEditor;
+using UnityEngine;
 
 [CustomEditor(typeof(UnitEntity))]
 [CanEditMultipleObjects]
@@ -13,6 +14,11 @@ public class UnitEntityEditor : Editor
         unitEntity.SynchronizeWithChildren();
         
         serializedObject.ApplyModifiedProperties();
+
+        if (GUILayout.Button("Synchronize hierarchy"))
+        {
+            unitEntity.SynchronizeSubHierarchy();
+        }
 
         DrawDefaultInspector();
     }
