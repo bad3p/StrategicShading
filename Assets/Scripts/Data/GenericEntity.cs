@@ -56,6 +56,14 @@ public class GenericEntity : MonoBehaviour
 
         int childCount = t.childCount;
 
+        if (childCount == 0)
+        {
+            entity.worldPos = t.position;
+            entity.worldRot = t.rotation;
+            entity.extent = new float3( 0, 0, 0 );
+            return;
+        }
+
         float3 pos = new float3( 0, 0, 0 );
         float3 forward = new float3( 0, 0, 0 );
         int numChildEntities = 0;
@@ -119,7 +127,7 @@ public class GenericEntity : MonoBehaviour
         entity.worldPos += entityToWorldMatrix.ToMatrix4x4().MultiplyVector( (entityInf + (entitySup - entityInf) * 0.5f).ToVector3() );
         entity.extent = (entitySup - entityInf) * 0.5f;
 
-        if (updateParent)
+        if (updateParent && t.parent)
         {
             UnitEntity parentUnitEntity = t.parent.GetComponent<UnitEntity>();
             if (parentUnitEntity)
@@ -131,6 +139,11 @@ public class GenericEntity : MonoBehaviour
 
     void OnDrawGizmos()
     {
+        if (ComputeShaderEmulator.length(entity.worldRot) <= ComputeShaderEmulator.FLOAT_EPSILON)
+        {
+            return;
+        }
+        
         Gizmos.matrix = Matrix4x4.TRS( entity.worldPos.ToVector3(), entity.worldRot.ToQuaternion(), entity.extent.ToVector3() * 2.0f );
         Gizmos.color = Color.white;
         Gizmos.DrawWireCube(Vector3.zero, Vector3.one);

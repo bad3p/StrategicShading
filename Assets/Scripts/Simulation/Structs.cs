@@ -42,6 +42,8 @@ namespace Structs
     {
         public int entityID;
         public int infantryDataID;
+        public int parentEntityID;
+        public int nextEntityID;
         public float morale;
         public float fitness;
         public int clipAmmo;
@@ -54,16 +56,8 @@ namespace Structs
     public struct Unit
     {
         public int entityID;
-        public int parentUnitID;
-        public int subTypeID;
-        public int subArrayID;
-    };
-    
-    [Serializable]
-    public struct Array
-    {
-        public int capacity;
-        public int count;
-        public int offset;
+        public int parentEntityID;
+        public int nextEntityID;
+        public int firstChildEntityID;
     };
 }
