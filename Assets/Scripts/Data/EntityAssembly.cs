@@ -18,6 +18,7 @@ public class EntityAssembly : MonoBehaviour
     private Dictionary<PersonnelProxy, uint> _personnelProxyToEntityId = new Dictionary<PersonnelProxy, uint>();
     
     private List<Structs.Firearms> _firearmsBuffer = new List<Structs.Firearms>() { new Structs.Firearms() };
+    private Dictionary<FirearmsProxy, uint> _firearmsProxyToEntityId = new Dictionary<FirearmsProxy, uint>();
     
     #region Generics
     public uint GetProxyId<P>(P proxy, Dictionary<P,uint> proxyToId)
@@ -186,6 +187,33 @@ public class EntityAssembly : MonoBehaviour
     public void SetPersonnel(uint personnelId, Structs.Personnel p)
     {
         SetStruct<PersonnelProxy,Structs.Personnel>(personnelId, p, _personnelBuffer);
+    }
+    #endregion
+    
+    #region Firearms
+    public uint GetFirearmsId(FirearmsProxy firearmsProxy)
+    {
+        return GetProxyId( firearmsProxy, _firearmsProxyToEntityId );
+    }
+    
+    public FirearmsProxy GetFirearmsProxy(uint firearmsId)
+    {
+        return GetProxy( firearmsId, _firearmsProxyToEntityId );
+    }
+    
+    public uint RegisterFirearmsProxy(FirearmsProxy firearmsProxy)
+    {
+        return RegisterProxy( firearmsProxy, _firearmsBuffer, _firearmsProxyToEntityId );
+    }
+    
+    public Structs.Firearms GetFirearms(uint firearmsId)
+    {
+        return GetStruct<FirearmsProxy,Structs.Firearms>(firearmsId, _firearmsBuffer);
+    }
+    
+    public void SetFirearms(uint firearmsId, Structs.Firearms f)
+    {
+        SetStruct<FirearmsProxy,Structs.Firearms>(firearmsId, f, _firearmsBuffer);
     }
     #endregion
 }

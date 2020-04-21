@@ -59,6 +59,7 @@
      <Compile Include="Assets\Scripts\ComputeShaderEngine.cs" />
      <Compile Include="Assets\Scripts\Data\EntityAssembly.cs" />
      <Compile Include="Assets\Scripts\Data\EntityProxy.cs" />
+     <Compile Include="Assets\Scripts\Data\FirearmsProxy.cs" />
      <Compile Include="Assets\Scripts\Data\HierarchyProxy.cs" />
      <Compile Include="Assets\Scripts\Data\PersonnelProxy.cs" />
      <Compile Include="Assets\Scripts\Data\TransformProxy.cs" />

@@ -226,6 +226,7 @@ GameObject:
   - component: {fileID: 115422636}
   - component: {fileID: 115422635}
   - component: {fileID: 115422638}
+  - component: {fileID: 115422639}
   m_Layer: 0
   m_Name: BlueInfantrySquad (3)
   m_TagString: Untagged
@@ -300,6 +301,30 @@ MonoBehaviour:
   Count: 12
   Wounded: 0
   Killed: 0
+--- !u!114 &115422639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115422633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ammo: 30
+  Distance:
+    x: 50
+    y: 125
+    z: 250
+    w: 500
+  Firepower:
+    x: 97
+    y: 63
+    z: 31
+    w: 11
+  Timeout: 0
 --- !u!1 &117113804
 GameObject:
   m_ObjectHideFlags: 0
@@ -1458,6 +1483,7 @@ GameObject:
   - component: {fileID: 854208698}
   - component: {fileID: 854208697}
   - component: {fileID: 854208700}
+  - component: {fileID: 854208701}
   m_Layer: 0
   m_Name: BlueInfantrySquad (2)
   m_TagString: Untagged
@@ -1532,6 +1558,30 @@ MonoBehaviour:
   Count: 12
   Wounded: 0
   Killed: 0
+--- !u!114 &854208701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854208695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ammo: 30
+  Distance:
+    x: 50
+    y: 125
+    z: 250
+    w: 500
+  Firepower:
+    x: 97
+    y: 63
+    z: 31
+    w: 11
+  Timeout: 0
 --- !u!1 &925101042
 GameObject:
   m_ObjectHideFlags: 0
@@ -1824,6 +1874,7 @@ GameObject:
   - component: {fileID: 1025601185}
   - component: {fileID: 1025601186}
   - component: {fileID: 1025601187}
+  - component: {fileID: 1025601188}
   m_Layer: 0
   m_Name: RedInfantrySquad (1)
   m_TagString: Untagged
@@ -1898,6 +1949,30 @@ MonoBehaviour:
   Count: 12
   Wounded: 0
   Killed: 0
+--- !u!114 &1025601188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025601182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ammo: 30
+  Distance:
+    x: 50
+    y: 125
+    z: 250
+    w: 500
+  Firepower:
+    x: 97
+    y: 63
+    z: 31
+    w: 11
+  Timeout: 0
 --- !u!1 &1110142094
 GameObject:
   m_ObjectHideFlags: 0
@@ -3220,6 +3295,7 @@ GameObject:
   - component: {fileID: 1895606205}
   - component: {fileID: 1895606206}
   - component: {fileID: 1895606207}
+  - component: {fileID: 1895606208}
   m_Layer: 0
   m_Name: BlueInfantrySquad (1)
   m_TagString: Untagged
@@ -3294,6 +3370,30 @@ MonoBehaviour:
   Count: 12
   Wounded: 0
   Killed: 0
+--- !u!114 &1895606208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1895606202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ammo: 30
+  Distance:
+    x: 50
+    y: 125
+    z: 250
+    w: 500
+  Firepower:
+    x: 97
+    y: 63
+    z: 31
+    w: 11
+  Timeout: 0
 --- !u!1 &1897142788
 GameObject:
   m_ObjectHideFlags: 0
@@ -3307,6 +3407,7 @@ GameObject:
   - component: {fileID: 1897142791}
   - component: {fileID: 1897142790}
   - component: {fileID: 1897142793}
+  - component: {fileID: 1897142794}
   m_Layer: 0
   m_Name: RedInfantrySquad (2)
   m_TagString: Untagged
@@ -3381,6 +3482,30 @@ MonoBehaviour:
   Count: 12
   Wounded: 0
   Killed: 0
+--- !u!114 &1897142794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897142788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ammo: 30
+  Distance:
+    x: 50
+    y: 125
+    z: 250
+    w: 500
+  Firepower:
+    x: 97
+    y: 63
+    z: 31
+    w: 11
+  Timeout: 0
 --- !u!1 &1898030549
 GameObject:
   m_ObjectHideFlags: 0
@@ -3952,6 +4077,7 @@ GameObject:
   - component: {fileID: 2100194438}
   - component: {fileID: 2100194437}
   - component: {fileID: 2100194440}
+  - component: {fileID: 2100194441}
   m_Layer: 0
   m_Name: RedInfantrySquad (3)
   m_TagString: Untagged
@@ -4026,3 +4152,27 @@ MonoBehaviour:
   Count: 12
   Wounded: 0
   Killed: 0
+--- !u!114 &2100194441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100194435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ammo: 30
+  Distance:
+    x: 50
+    y: 125
+    z: 250
+    w: 500
+  Firepower:
+    x: 97
+    y: 63
+    z: 31
+    w: 11
+  Timeout: 0

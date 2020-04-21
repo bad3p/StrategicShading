@@ -54,7 +54,7 @@ public class EntityProxyEditor : Editor
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("?");
+            EditorGUILayout.LabelField( entityProxy.firearmsId.ToString() );
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();

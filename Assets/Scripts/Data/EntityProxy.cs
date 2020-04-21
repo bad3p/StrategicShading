@@ -144,4 +144,39 @@ public class EntityProxy : MonoBehaviour
             }
         }
     }
+    
+    public uint firearmsId
+    {
+        get
+        {
+            if (!_isInitialized)
+            {
+                Awake();
+            }
+            if (_entityAssembly)
+            {
+                uint thisEntityId = _entityAssembly.GetEntityId(this);
+                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
+                return entity.firearmsId;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        set
+        {
+            if (!_isInitialized)
+            {
+                Awake();
+            }
+            if (_entityAssembly)
+            {
+                uint thisEntityId = _entityAssembly.GetEntityId(this);
+                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
+                entity.firearmsId = value;
+                _entityAssembly.SetEntity(thisEntityId, entity);
+            }
+        }
+    }
 }

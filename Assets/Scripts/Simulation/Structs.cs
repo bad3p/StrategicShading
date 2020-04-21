@@ -41,7 +41,8 @@ namespace Structs
     {
         public uint entityId;
         public uint ammo;
-        public uint state;
-        public float stateTime;
+        public float4 distance;
+        public float4 firepower;
+        public float timeout;
     };
 }
