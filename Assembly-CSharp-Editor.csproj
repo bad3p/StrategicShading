@@ -56,8 +56,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Data\Editor\InfantryEntityEditor.cs" />
-     <Compile Include="Assets\Scripts\Data\Editor\UnitEntityEditor.cs" />
+     <Compile Include="Assets\Scripts\Data\Editor\EntityProxyEditor.cs" />
+     <Compile Include="Assets\Scripts\Data\Editor\HierarchyProxyEditor.cs" />
+     <Compile Include="Assets\Scripts\Data\Editor\PersonnelProxyEditor.cs" />
+     <Compile Include="Assets\Scripts\Data\Editor\TransformProxyEditor.cs" />
  <Reference Include="UnityEditor.TestRunner">
  <HintPath>D:/Personal/StrategicShading/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>
  </Reference>

@@ -57,12 +57,11 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\ComputeShaderEngine.cs" />
-     <Compile Include="Assets\Scripts\Data\FirearmsDataProvider.cs" />
-     <Compile Include="Assets\Scripts\Data\GenericEntity.cs" />
-     <Compile Include="Assets\Scripts\Data\InfantryDataProvider.cs" />
-     <Compile Include="Assets\Scripts\Data\InfantryEntity.cs" />
-     <Compile Include="Assets\Scripts\Data\MathUtils.cs" />
-     <Compile Include="Assets\Scripts\Data\UnitEntity.cs" />
+     <Compile Include="Assets\Scripts\Data\EntityAssembly.cs" />
+     <Compile Include="Assets\Scripts\Data\EntityProxy.cs" />
+     <Compile Include="Assets\Scripts\Data\HierarchyProxy.cs" />
+     <Compile Include="Assets\Scripts\Data\PersonnelProxy.cs" />
+     <Compile Include="Assets\Scripts\Data\TransformProxy.cs" />
      <Compile Include="Assets\Scripts\DemoUI.cs" />
      <Compile Include="Assets\Scripts\Simulation\ComputeShaderEmulator.cs" />
      <Compile Include="Assets\Scripts\Simulation\FloatIntrinsics.cs" />
