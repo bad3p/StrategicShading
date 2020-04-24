@@ -1,6 +1,7 @@
 ﻿
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 
 [CustomEditor(typeof(FirearmsProxy))]
 public class FirearmsProxyEditor : Editor
@@ -76,5 +77,11 @@ public class FirearmsProxyEditor : Editor
         EditorGUILayout.EndVertical();
         
         EditorGUILayout.EndHorizontal();
+        
+        if (GUI.changed)
+        {
+            EditorUtility.SetDirty(firearmsProxy);
+            EditorSceneManager.MarkSceneDirty(firearmsProxy.gameObject.scene);
+        }
     }
 }

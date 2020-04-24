@@ -1,6 +1,7 @@
 ﻿
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 
 [CustomEditor(typeof(PersonnelProxy))]
 public class PersonnelProxyEditor : Editor
@@ -88,5 +89,11 @@ public class PersonnelProxyEditor : Editor
         EditorGUILayout.EndVertical();
         
         EditorGUILayout.EndHorizontal();
+        
+        if (GUI.changed)
+        {
+            EditorUtility.SetDirty(personnelProxy);
+            EditorSceneManager.MarkSceneDirty(personnelProxy.gameObject.scene);
+        }
     }
 }

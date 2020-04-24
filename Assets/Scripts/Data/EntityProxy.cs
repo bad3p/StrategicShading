@@ -4,6 +4,8 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class EntityProxy : MonoBehaviour
 {
+    public uint TeamId = 0;
+    
     private EntityAssembly _entityAssembly;
     private bool _isInitialized = false;
     
@@ -16,9 +18,32 @@ public class EntityProxy : MonoBehaviour
             if (thisEntityId == 0)
             {
                 thisEntityId = _entityAssembly.RegisterEntityProxy(this);
+                teamId = TeamId;
             }
         }
         _isInitialized = true;
+    }
+    
+    public Color GetTeamColor()
+    {
+        switch (teamId)
+        {
+            case 0: 
+                return Color.black;
+                break;
+            case 1: 
+                return Color.red;
+                break;
+            case 2:
+                return Color.blue;
+                break;
+            case 3:
+                return Color.Lerp( Color.green, Color.black, 0.125f );
+                break;
+            default:
+                return Color.white;
+                break;
+        }
     }
 
     public uint entityId
@@ -36,6 +61,41 @@ public class EntityProxy : MonoBehaviour
             else
             {
                 return 0;
+            }
+        }
+    }
+    
+    public uint teamId
+    {
+        get
+        {
+            if (!_isInitialized)
+            {
+                Awake();
+            }
+            if (_entityAssembly)
+            {
+                uint thisEntityId = _entityAssembly.GetEntityId(this);
+                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
+                return entity.teamId;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        set
+        {
+            if (!_isInitialized)
+            {
+                Awake();
+            }
+            if (_entityAssembly)
+            {
+                uint thisEntityId = _entityAssembly.GetEntityId(this);
+                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
+                entity.teamId = value;
+                _entityAssembly.SetEntity(thisEntityId, entity);
             }
         }
     }

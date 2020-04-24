@@ -5,6 +5,7 @@ namespace Structs
 {
     public struct Entity
     {
+        public uint teamId;
         public uint transformId;
         public uint hierarchyId;
         public uint personnelId;

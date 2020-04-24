@@ -1,5 +1,6 @@
 ﻿
 using Types;
+using UnityEditor;
 using UnityEngine;
 
 [ExecuteInEditMode]
@@ -31,6 +32,20 @@ public class TransformProxy : MonoBehaviour
     void OnDestroy()
     {
         _entityProxy.transformId = 0;
+    }
+    
+    void OnDrawGizmos()
+    {
+        if (!_entityProxy)
+        {
+            Awake();
+        }
+        if (_entityAssembly)
+        {
+            Gizmos.color = _entityProxy.GetTeamColor();
+            Gizmos.matrix = Matrix4x4.Translate(position.ToVector3()) * Matrix4x4.Rotate(rotation.ToQuaternion());
+            Gizmos.DrawWireCube(Vector3.zero, scale.ToVector3());
+        }
     }
     
     public uint entityId

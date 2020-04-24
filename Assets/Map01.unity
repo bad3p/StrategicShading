@@ -120,6 +120,119 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &50754640
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 50754641}
+  - component: {fileID: 50754646}
+  - component: {fileID: 50754645}
+  - component: {fileID: 50754644}
+  - component: {fileID: 50754643}
+  - component: {fileID: 50754642}
+  m_Layer: 0
+  m_Name: RedInfantryPlatoonHQ (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &50754641
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50754640}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -25, y: 1, z: 20}
+  m_LocalScale: {x: 7.54632, y: 2, z: 8.02}
+  m_Children: []
+  m_Father: {fileID: 1676357862}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &50754642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50754640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ammo: 30
+  Distance:
+    x: 50
+    y: 125
+    z: 250
+    w: 500
+  Firepower:
+    x: 97
+    y: 63
+    z: 31
+    w: 11
+  Timeout: 0
+--- !u!114 &50754643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50754640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Morale: 600
+  Fitness: 14400
+  Count: 6
+  Wounded: 0
+  Killed: 0
+--- !u!114 &50754644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50754640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &50754645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50754640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc162d967a96e44b890e8e097bab1f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &50754646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50754640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e550dd1eef262a47937a68ed99434d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TeamId: 1
 --- !u!1 &103197989
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,13 +354,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 115422633}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 50, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: -0.13052624, z: 0, w: 0.9914449}
+  m_LocalPosition: {x: 50.17, y: 1, z: 3.29}
+  m_LocalScale: {x: 24, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 402623724}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -15, z: 0}
 --- !u!114 &115422635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284,6 +397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e550dd1eef262a47937a68ed99434d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TeamId: 2
 --- !u!114 &115422638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,7 +410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Morale: 600
+  Morale: 603
   Fitness: 14400
   Count: 12
   Wounded: 0
@@ -322,7 +436,7 @@ MonoBehaviour:
   Firepower:
     x: 97
     y: 63
-    z: 31
+    z: 30
     w: 11
   Timeout: 0
 --- !u!1 &117113804
@@ -1018,6 +1132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e550dd1eef262a47937a68ed99434d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TeamId: 2
 --- !u!4 &402623724
 Transform:
   m_ObjectHideFlags: 0
@@ -1032,6 +1147,7 @@ Transform:
   - {fileID: 1895606204}
   - {fileID: 854208696}
   - {fileID: 115422634}
+  - {fileID: 909305569}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1499,8 +1615,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 854208695}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 25, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 25, y: 1, z: 0}
+  m_LocalScale: {x: 24, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 402623724}
   m_RootOrder: 1
@@ -1541,6 +1657,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e550dd1eef262a47937a68ed99434d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TeamId: 2
 --- !u!114 &854208700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1553,7 +1670,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Morale: 600
+  Morale: 602
   Fitness: 14400
   Count: 12
   Wounded: 0
@@ -1578,10 +1695,123 @@ MonoBehaviour:
     w: 500
   Firepower:
     x: 97
+    y: 62
+    z: 31
+    w: 11
+  Timeout: 0
+--- !u!1 &909305568
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 909305569}
+  - component: {fileID: 909305574}
+  - component: {fileID: 909305573}
+  - component: {fileID: 909305572}
+  - component: {fileID: 909305571}
+  - component: {fileID: 909305570}
+  m_Layer: 0
+  m_Name: BlueInfantryPlatoonHQ (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &909305569
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909305568}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 25, y: 1, z: 20}
+  m_LocalScale: {x: 5, y: 2, z: 8}
+  m_Children: []
+  m_Father: {fileID: 402623724}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &909305570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909305568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ammo: 30
+  Distance:
+    x: 50
+    y: 125
+    z: 250
+    w: 500
+  Firepower:
+    x: 96
     y: 63
     z: 31
     w: 11
   Timeout: 0
+--- !u!114 &909305571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909305568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Morale: 601
+  Fitness: 14400
+  Count: 6
+  Wounded: 0
+  Killed: 0
+--- !u!114 &909305572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909305568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &909305573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909305568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc162d967a96e44b890e8e097bab1f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &909305574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909305568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e550dd1eef262a47937a68ed99434d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TeamId: 2
 --- !u!1 &925101042
 GameObject:
   m_ObjectHideFlags: 0
@@ -1894,6 +2124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e550dd1eef262a47937a68ed99434d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TeamId: 1
 --- !u!4 &1025601184
 Transform:
   m_ObjectHideFlags: 0
@@ -1901,13 +2132,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1025601182}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: -0.13052624, z: 0, w: 0.9914449}
+  m_LocalPosition: {x: 1.24, y: 1, z: 3.62}
+  m_LocalScale: {x: 24, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 1676357862}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -15, z: 0}
 --- !u!114 &1025601185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2895,6 +3126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e550dd1eef262a47937a68ed99434d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TeamId: 1
 --- !u!4 &1676357862
 Transform:
   m_ObjectHideFlags: 0
@@ -2909,6 +3141,7 @@ Transform:
   - {fileID: 1025601184}
   - {fileID: 1897142789}
   - {fileID: 2100194436}
+  - {fileID: 50754641}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3315,6 +3548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e550dd1eef262a47937a68ed99434d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TeamId: 2
 --- !u!4 &1895606204
 Transform:
   m_ObjectHideFlags: 0
@@ -3322,13 +3556,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1895606202}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0.13052616, z: 0, w: 0.9914449}
+  m_LocalPosition: {x: -0.22, y: 1, z: 3.37}
+  m_LocalScale: {x: 24, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 402623724}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 15, z: 0}
 --- !u!114 &1895606205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3365,7 +3599,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Morale: 600
+  Morale: 601
   Fitness: 14400
   Count: 12
   Wounded: 0
@@ -3389,7 +3623,7 @@ MonoBehaviour:
     z: 250
     w: 500
   Firepower:
-    x: 97
+    x: 96
     y: 63
     z: 31
     w: 11
@@ -3423,8 +3657,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1897142788}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -25, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -25, y: 1, z: 0}
+  m_LocalScale: {x: 24, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 1676357862}
   m_RootOrder: 1
@@ -3465,6 +3699,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e550dd1eef262a47937a68ed99434d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TeamId: 1
 --- !u!114 &1897142793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3494,7 +3729,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Ammo: 30
+  Ammo: 31
   Distance:
     x: 50
     y: 125
@@ -4092,13 +4327,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2100194435}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -50, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0.13052616, z: 0, w: 0.9914449}
+  m_LocalPosition: {x: -50.72, y: 1, z: 3.41}
+  m_LocalScale: {x: 24, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 1676357862}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 15, z: 0}
 --- !u!114 &2100194437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4135,6 +4370,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e550dd1eef262a47937a68ed99434d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TeamId: 1
 --- !u!114 &2100194440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4147,7 +4383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Morale: 600
+  Morale: 606
   Fitness: 14400
   Count: 12
   Wounded: 0

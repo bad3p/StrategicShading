@@ -1,6 +1,7 @@
 ﻿
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 
 [CustomEditor(typeof(EntityProxy))]
 public class EntityProxyEditor : Editor
@@ -15,6 +16,10 @@ public class EntityProxyEditor : Editor
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("entityId");
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("teamId");
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
@@ -42,6 +47,14 @@ public class EntityProxyEditor : Editor
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
+            entityProxy.TeamId = (uint)EditorGUILayout.IntField( (int)entityProxy.TeamId );
+            if (entityProxy.teamId != entityProxy.TeamId)
+            {
+                entityProxy.teamId = entityProxy.TeamId;
+            }
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField( entityProxy.transformId.ToString() );
             EditorGUILayout.EndHorizontal();
             
@@ -60,5 +73,11 @@ public class EntityProxyEditor : Editor
         EditorGUILayout.EndVertical();
         
         EditorGUILayout.EndHorizontal();
+        
+        if (GUI.changed)
+        {
+            EditorUtility.SetDirty(entityProxy);
+            EditorSceneManager.MarkSceneDirty(entityProxy.gameObject.scene);
+        }
     }
 }
