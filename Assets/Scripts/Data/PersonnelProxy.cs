@@ -54,6 +54,13 @@ public class PersonnelProxy : MonoBehaviour
             TransformProxy transformProxy = GetComponent<TransformProxy>();
             if (transformProxy)
             {
+                const float DistanceThreshold = 100.0f;
+                
+                if (Vector3.Distance(transformProxy.position.ToVector3(), Camera.current.transform.position) > DistanceThreshold)
+                {
+                    return;
+                }
+                
                 Gizmos.matrix = Matrix4x4.Translate(transformProxy.position.ToVector3()) * Matrix4x4.Rotate(transformProxy.rotation.ToQuaternion());
 
                 float3 scale = transformProxy.scale;
