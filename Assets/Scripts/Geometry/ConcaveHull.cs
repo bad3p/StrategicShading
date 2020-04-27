@@ -247,10 +247,6 @@ public static class ConcaveHull
                         isIntersected = SegmentIntersection(currentPoint, pointCloud[nearestPointIndices[i]], hull[jPrev], hull[j], out ip);
                         if (isIntersected)
                         {
-                            isIntersected = isIntersected && !AlmostEqual(currentPoint, ip);
-                        }
-                        if (isIntersected)
-                        {
                             break;
                         }
                     }
