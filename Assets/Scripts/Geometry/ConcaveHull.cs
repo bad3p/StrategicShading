@@ -322,7 +322,7 @@ public static class ConcaveHull
         return -1;
     }
     
-    public static List<float2> KNearestHull(List<float2> pointCloud, int k, ref bool result, ref int kMax, int n = int.MaxValue)
+    public static List<float2> KNearestHull(List<float2> pointCloud, int k, ref bool result, int n = int.MaxValue)
     {
         k = Mathf.Max(k, 3);
         
@@ -344,7 +344,6 @@ public static class ConcaveHull
         }
 
         k = Mathf.Min(k, pointCloud.Count - 1);
-        kMax = Mathf.Max(kMax, k);
 
         int firstPointIndex = GetStartPointIndex(pointCloud);
         float2 firstPoint = pointCloud[firstPointIndex];
@@ -360,6 +359,11 @@ public static class ConcaveHull
         result = false;
         while ( pointCloud.Count > k && n > 0 )
         {
+            if (n == 1)
+            {
+                n = n * 2 - 1;
+            }
+            
             int kk = k;
             while (kk < pointCloud.Count)
             {
@@ -370,13 +374,14 @@ public static class ConcaveHull
                     currentPoint = pointCloud[nextHullPointIndex];
                     hull.Add(currentPoint);
                     pointCloud.RemoveAt(nextHullPointIndex);
-                    break;    
+                    break;
                 }
                 kk++;
             }
 
             if( kk == pointCloud.Count )
             {
+                result = true;
                 break;
             }
 

@@ -19,7 +19,7 @@ public class KNearestHull : MonoBehaviour
         List<float2> concaveHull = new List<float2>();
 
         int k = K;
-        int kMax = 3;
+        int kMax = k;
         while (!result )
         {
             pointCloud.Clear();
@@ -36,17 +36,18 @@ public class KNearestHull : MonoBehaviour
                 break;
             }
             
-            concaveHull = ConcaveHull.KNearestHull(pointCloud, k, ref result, ref kMax, N);
+            concaveHull = ConcaveHull.KNearestHull(pointCloud, k, ref result, N);
             if (!result)
             {
                 k++;
+                kMax++;
             }
         }
 
-        if (kMax > K)
+        /*if (kMax > K)
         {
             K = kMax;
-        }
+        }*/
 
         for (int i = 1; i < concaveHull.Count; i++)
         {

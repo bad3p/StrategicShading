@@ -42,15 +42,17 @@ public class TransformProxy : MonoBehaviour
         }
         if (_entityAssembly)
         {
-            const float DistanceThreshold = 100.0f;
+            const float SolidDistanceThreshold = 150.0f;
+            const float WireDistanceThreshold = 75.0f;
             
             Gizmos.color = _entityProxy.GetTeamColor();
             Gizmos.matrix = Matrix4x4.Translate(position.ToVector3()) * Matrix4x4.Rotate(rotation.ToQuaternion());
-            if (Vector3.Distance(position.ToVector3(), Camera.current.transform.position) < DistanceThreshold)
+            float distance = Vector3.Distance(position.ToVector3(), Camera.current.transform.position);
+            if (distance < WireDistanceThreshold)
             {
                 Gizmos.DrawWireCube(Vector3.zero, scale.ToVector3());
             }
-            else
+            else if(distance < SolidDistanceThreshold)
             {
                 Gizmos.DrawCube(Vector3.zero, scale.ToVector3());
             }
