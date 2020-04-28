@@ -173,23 +173,39 @@ public static class ConcaveHull
         }
     }
 
-    public static List<float2> KNearestPoints(float2 pPrev, float2 p, List<float2> pointCloud, int k)
+    public static uint CrossingNumber(float2 point, List<float2> hull)
     {
-        List<float2> result = new List<float2>();
-        
-        int[] nearestPointIndices = new int[k];
-        float[] nearestPointDistances = new float[k];
-
-        GetNearestPointIndices(p, pointCloud, ref nearestPointIndices, ref nearestPointDistances);
-
-        SortPointsByAngle(pPrev, p, pointCloud, ref nearestPointIndices, ref nearestPointDistances);
-
-        for (int i = 0; i < nearestPointIndices.Length; i++)
+        if (hull.Count < 2)
         {
-            result.Add( pointCloud[nearestPointIndices[i]]);
+            return 0;
         }
 
-        return result;
+        uint crossingNumber = 0;
+        
+        for( int i=0; i<hull.Count; i++ )
+        {
+            int iPlusOne = i+1;
+            if( i == hull.Count-1 ) iPlusOne = 0;
+
+            float2 pi = hull[i];
+            float2 piPlusOne = hull[iPlusOne];
+
+            float edgeDistanceY = ( piPlusOne.y - pi.y );
+            float edgeDistanceX = ( piPlusOne.x - pi.x );
+
+            if( ( ( pi.y <= point.y ) && ( piPlusOne.y > point.y) ) || 
+                ( ( pi.y > point.y ) && ( piPlusOne.y <= point.y) ) ) 
+            {
+                float vt = ( point.y - pi.y ) / edgeDistanceY;
+
+                if( point.x < pi.x + vt * edgeDistanceX )
+                {
+                    crossingNumber++;
+                }
+            }
+        }
+
+        return crossingNumber;
     }
     
     public static List<float2> KNearestHull(List<float2> pointCloud, int k, int n = int.MaxValue)
@@ -268,6 +284,21 @@ public static class ConcaveHull
                 break;
             }
 
+            bool allPointsInsideHull = true;
+            for (int i = 0; i < pointCloud.Count; i++)
+            {
+                uint crossingNumber = CrossingNumber(pointCloud[i], hull);
+                if ( (crossingNumber & 1) == 0 )
+                {
+                    allPointsInsideHull = false;
+                    break;
+                }
+            }
+
+            if (allPointsInsideHull)
+            {
+                break;
+            }
             n--;
         }
         

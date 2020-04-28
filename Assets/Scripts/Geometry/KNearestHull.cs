@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Types;
+using UnityEditor;
 
 public class KNearestHull : MonoBehaviour
 {
@@ -32,6 +33,13 @@ public class KNearestHull : MonoBehaviour
                 new Vector3( concaveHull[iPrev].x, 0, concaveHull[iPrev].y ),
                 new Vector3( concaveHull[i].x, 0, concaveHull[i].y )
             );
+        }
+
+        for (int j = 0; j < pointCloud.Count; j++)
+        {
+            uint crossingNumber = ConcaveHull.CrossingNumber(pointCloud[j], concaveHull);
+
+            Handles.Label( new Vector3(pointCloud[j].x,0,pointCloud[j].y), crossingNumber.ToString() );
         }
     }
 }
