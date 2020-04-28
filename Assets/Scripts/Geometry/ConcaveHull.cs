@@ -17,15 +17,8 @@ public static class ConcaveHull
         }
         return result;
     }
-
-    private static bool AlmostEqual(float2 a, float2 b)
-    {
-        float2 ab = b - a;
-        float abLength = Mathf.Sqrt(ab.x * ab.x + ab.y * ab.y);
-        return abLength <= Mathf.Epsilon;
-    }
     
-    private static void GetNearestPointIndices(float2 p, List<float2> pointCloud, ref int[] nearestPointIndices, ref float[] nearestPointDistances)
+    private static void GetNearestPointIndices(float2 p, List<float2> pointCloud, int k, ref int[] nearestPointIndices, ref float[] nearestPointDistances)
     {
         int nearestPointCount = 0;
         for (int i = 0; i < pointCloud.Count; i++)
@@ -39,16 +32,16 @@ public static class ConcaveHull
             {
                 if (nearestPointDistances[j] > distance)
                 {
-                    if (j < nearestPointDistances.Length - 1)
+                    if (j < k - 1)
                     {
-                        System.Array.Copy(nearestPointIndices, j, nearestPointIndices, j + 1, nearestPointIndices.Length - j - 1);
-                        System.Array.Copy(nearestPointDistances, j, nearestPointDistances, j + 1, nearestPointDistances.Length - j - 1);
+                        System.Array.Copy(nearestPointIndices, j, nearestPointIndices, j + 1, k - j - 1);
+                        System.Array.Copy(nearestPointDistances, j, nearestPointDistances, j + 1, k - j - 1);
                     }
 
                     nearestPointIndices[j] = i;
                     nearestPointDistances[j] = distance;
 
-                    if (nearestPointCount < nearestPointIndices.Length)
+                    if (nearestPointCount < k )
                     {
                         nearestPointCount++;
                     }
@@ -58,7 +51,7 @@ public static class ConcaveHull
                 }
             }
 
-            if (!found && nearestPointCount < nearestPointIndices.Length)
+            if (!found && nearestPointCount < k)
             {
                 nearestPointIndices[nearestPointCount] = i;
                 nearestPointDistances[nearestPointCount] = distance;
@@ -67,7 +60,7 @@ public static class ConcaveHull
         }
     }
     
-    public static float GetAngle(float2 v1, float2 v2)
+    public static float SignedAngle(float2 v1, float2 v2)
     {
         float v1SqrMagnitude = v1.x * v1.x + v1.y * v1.y;
         float v2SqrMagnitude = v2.x * v2.x + v2.y * v2.y;
@@ -85,7 +78,7 @@ public static class ConcaveHull
         return angle * Mathf.Sign( crossv1v2 );
     }
 
-    private static void SortPointsByAngle(float2 pPrev, float2 p, List<float2> pointCloud, ref int[] nearestPointIndices, ref float[] nearestPointAngles)
+    private static void SortPointsByAngle(float2 pPrev, float2 p, List<float2> pointCloud, int k, ref int[] nearestPointIndices, ref float[] nearestPointAngles)
     {
         float2 v0 = pPrev - p;
         float v0Mag = Mathf.Sqrt(v0.x * v0.x + v0.y * v0.y);
@@ -94,7 +87,7 @@ public static class ConcaveHull
             v0 *= 1.0f / v0Mag;
         }
 
-        for (int i = 0; i < nearestPointIndices.Length; i++)
+        for (int i = 0; i < k; i++)
         {
             float2 pNext = pointCloud[nearestPointIndices[i]];
             float2 v1 = pNext - p;
@@ -104,14 +97,14 @@ public static class ConcaveHull
                 v1 *= 1.0f / v1Mag;
             }
 
-            nearestPointAngles[i] = GetAngle(v1, v0);
+            nearestPointAngles[i] = SignedAngle(v1, v0);
             nearestPointAngles[i] = (nearestPointAngles[i] < 0) ? (360 + nearestPointAngles[i]) : nearestPointAngles[i];
         }
 
-        for (int i = 0; i < nearestPointIndices.Length - 1; i++)
+        for (int i = 0; i < k - 1; i++)
         {
             int maxIndex = i;
-            for (int j = i + 1; j < nearestPointIndices.Length; j++)
+            for (int j = i + 1; j < k; j++)
             {
                 if (nearestPointAngles[maxIndex] < nearestPointAngles[j])
                 {
@@ -153,39 +146,48 @@ public static class ConcaveHull
         else
         {
             point = new float2((b2 * c1 - b1 * c2) / delta, (a1 * c2 - a2 * c1) / delta);
-            
+
             float infx = Mathf.Max(Mathf.Min(s1.x, e1.x), Mathf.Min(s2.x, e2.x));
             float infy = Mathf.Max(Mathf.Min(s1.y, e1.y), Mathf.Min(s2.y, e2.y));
             float supx = Mathf.Min(Mathf.Max(s1.x, e1.x), Mathf.Max(s2.x, e2.x));
             float supy = Mathf.Min(Mathf.Max(s1.y, e1.y), Mathf.Max(s2.y, e2.y));
             
-            if ( point.x >= infx && 
-                 point.x <= supx && 
-                 point.y >= infy && 
-                 point.y <= supy )
+            if (infx == supx && infy == supy)
             {
-                return true;
+                float2 d = point - new float2(infx, infy);
+                float dmag = Mathf.Sqrt(d.x * d.x + d.y * d.y);
+                return dmag <= Mathf.Epsilon;
+            }
+            else if (infx == supx)
+            {
+                return point.y >= infy && point.y <= supy;
+            }
+            else if (infy == supy)
+            {
+                return point.x >= infx && point.x <= supx;
             }
             else
             {
-                return false;
+                return point.x >= infx && point.x <= supx && point.y >= infy && point.y <= supy;
             }
         }
     }
 
     public static uint CrossingNumber(float2 point, List<float2> hull)
     {
-        if (hull.Count < 2)
+        int hullPointCount = hull.Count;
+        
+        if (hullPointCount < 2)
         {
             return 0;
         }
 
         uint crossingNumber = 0;
         
-        for( int i=0; i<hull.Count; i++ )
+        for( int i=0; i<hullPointCount; i++ )
         {
             int iPlusOne = i+1;
-            if( i == hull.Count-1 ) iPlusOne = 0;
+            if( i == hullPointCount-1 ) iPlusOne = 0;
 
             float2 pi = hull[i];
             float2 piPlusOne = hull[iPlusOne];
@@ -207,8 +209,38 @@ public static class ConcaveHull
 
         return crossingNumber;
     }
+
+    private static int FindNextHullPointIndex(float2 currentPoint, float2 previousPoint, List<float2> pointCloud, List<float2> hull, int k, ref int[] nearestPointIndices, ref float[] nearestPointDistances)
+    {
+        GetNearestPointIndices( currentPoint, pointCloud, k, ref nearestPointIndices, ref nearestPointDistances );
+        SortPointsByAngle( previousPoint, currentPoint, pointCloud, k, ref nearestPointIndices, ref nearestPointDistances );
+
+        float2 ip = new float2(0,0);
+        for (int i = 0; i < k; i++)
+        {
+            bool isIntersected = false;
+            if (hull.Count > 1)
+            {
+                for (int j = 1; j < hull.Count-1; j++)
+                {
+                    int jPrev = (j - 1);
+                    isIntersected = SegmentIntersection(currentPoint, pointCloud[nearestPointIndices[i]], hull[jPrev], hull[j], out ip);
+                    if (isIntersected)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            if (!isIntersected)
+            {
+                return nearestPointIndices[i];
+            }
+        }
+        return -1;
+    }
     
-    public static List<float2> KNearestHull(List<float2> pointCloud, int k, int n = int.MaxValue)
+    public static List<float2> KNearestHull(List<float2> pointCloud, int k, ref bool result, int n = int.MaxValue)
     {
         k = Mathf.Max(k, 3);
         
@@ -216,10 +248,13 @@ public static class ConcaveHull
 
         if (pointCloud.Count < 3)
         {
+            result = false;
             return hull;
         }
+        
         if (pointCloud.Count == 3)
         {
+            result = true;
             hull.AddRange(pointCloud);
             return hull;
         }
@@ -234,52 +269,34 @@ public static class ConcaveHull
         float2 previousPoint = firstPoint - new float2(1.0f, 0.0f);
         pointCloud.RemoveAt( firstPointIndex );
 
-        int[] nearestPointIndices = new int[k];
-        float[] nearestPointDistances = new float[k];
-        float2 ip = new float2(0,0);
-        bool isIdling = true;
-        
-        while ( ( !AlmostEqual(firstPoint,currentPoint) || isIdling ) && pointCloud.Count > k && n > 0)
-        {
-            isIdling = false;
+        int[] nearestPointIndices = new int[pointCloud.Count];
+        float[] nearestPointDistances = new float[pointCloud.Count];
 
+        result = false;
+        while ( pointCloud.Count > k && n > 0 )
+        {
+            // debugging purpose: break at last step
             if (n == 1)
             {
                 n = (n+1) / 2 ;
             }
-            
-            GetNearestPointIndices( currentPoint, pointCloud, ref nearestPointIndices, ref nearestPointDistances );
-            SortPointsByAngle( previousPoint, currentPoint, pointCloud, ref nearestPointIndices, ref nearestPointDistances );
 
-            bool found = false;
-            for (int i = 0; i < nearestPointIndices.Length; i++)
+            int kk = k;
+            while (kk < pointCloud.Count)
             {
-                bool isIntersected = false;
-                if (hull.Count > 1)
-                {
-                    for (int j = 1; j < hull.Count-1; j++)
-                    {
-                        int jPrev = (j - 1);
-                        isIntersected = SegmentIntersection(currentPoint, pointCloud[nearestPointIndices[i]], hull[jPrev], hull[j], out ip);
-                        if (isIntersected)
-                        {
-                            break;
-                        }
-                    }
-                }
-
-                if (!isIntersected)
+                int nextHullPointIndex = FindNextHullPointIndex(currentPoint, previousPoint, pointCloud, hull, kk, ref nearestPointIndices, ref nearestPointDistances);
+                if (nextHullPointIndex != -1)
                 {
                     previousPoint = currentPoint;
-                    currentPoint = pointCloud[nearestPointIndices[i]];
+                    currentPoint = pointCloud[nextHullPointIndex];
                     hull.Add(currentPoint);
-                    pointCloud.RemoveAt(nearestPointIndices[i]);
-                    found = true;
-                    break;
+                    pointCloud.RemoveAt(nextHullPointIndex);
+                    break;    
                 }
+                kk++;
             }
 
-            if (!found)
+            if( kk == pointCloud.Count )
             {
                 break;
             }
@@ -297,8 +314,10 @@ public static class ConcaveHull
 
             if (allPointsInsideHull)
             {
+                result = true;
                 break;
             }
+            
             n--;
         }
         

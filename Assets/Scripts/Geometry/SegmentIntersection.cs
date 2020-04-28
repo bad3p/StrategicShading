@@ -35,17 +35,24 @@ public class SegmentIntersection : MonoBehaviour
             float infy = Mathf.Max(Mathf.Min(s1.y, e1.y), Mathf.Min(s2.y, e2.y));
             float supx = Mathf.Min(Mathf.Max(s1.x, e1.x), Mathf.Max(s2.x, e2.x));
             float supy = Mathf.Min(Mathf.Max(s1.y, e1.y), Mathf.Max(s2.y, e2.y));
-            
-            if ( point.x >= infx && 
-                 point.x <= supx && 
-                 point.y >= infy && 
-                 point.y <= supy )
+
+            if (infx == supx && infy == supy)
             {
-                return true;
+                float2 d = point - new float2(infx, infy);
+                float dmag = Mathf.Sqrt(d.x * d.x + d.y * d.y);
+                return dmag <= Mathf.Epsilon;
+            }
+            else if (infx == supx)
+            {
+                return point.y >= infy && point.y <= supy;
+            }
+            else if (infy == supy)
+            {
+                return point.x >= infx && point.x <= supx;
             }
             else
             {
-                return false;
+                return point.x >= infx && point.x <= supx && point.y >= infy && point.y <= supy;
             }
         }
     }

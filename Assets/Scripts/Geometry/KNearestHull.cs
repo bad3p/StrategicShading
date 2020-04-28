@@ -14,15 +14,33 @@ public class KNearestHull : MonoBehaviour
         Transform[] pointTransforms = GetComponentsInChildren<Transform>();
 
         List<float2> pointCloud = new List<float2>(); 
-        foreach (var pointTransform in pointTransforms)
+        
+        bool result = false;
+        List<float2> concaveHull = new List<float2>();
+
+        int k = K;
+        while (!result )
         {
-            if (pointTransform != this.transform)
+            pointCloud.Clear();
+            foreach (var pointTransform in pointTransforms)
             {
-                pointCloud.Add(new float2(pointTransform.position.x, pointTransform.position.z));
+                if (pointTransform != this.transform)
+                {
+                    pointCloud.Add(new float2(pointTransform.position.x, pointTransform.position.z));
+                }
+            }
+
+            if (k == pointCloud.Count)
+            {
+                break;
+            }
+            
+            concaveHull = ConcaveHull.KNearestHull(pointCloud, k, ref result, N);
+            if (!result)
+            {
+                k++;
             }
         }
-
-        List<float2> concaveHull = ConcaveHull.KNearestHull(pointCloud, K, N);
 
         for (int i = 1; i < concaveHull.Count; i++)
         {
