@@ -53,11 +53,13 @@ public class KNearestHull : MonoBehaviour
             );
         }
 
+        /*
         for (int j = 0; j < pointCloud.Count; j++)
         {
             uint crossingNumber = ConcaveHull.CrossingNumber(pointCloud[j], concaveHull);
 
             Handles.Label( new Vector3(pointCloud[j].x,0,pointCloud[j].y), crossingNumber.ToString() );
         }
+        */
     }
 }
