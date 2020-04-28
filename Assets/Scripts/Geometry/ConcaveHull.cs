@@ -322,7 +322,7 @@ public static class ConcaveHull
         return -1;
     }
     
-    public static List<float2> KNearestHull(List<float2> pointCloud, int k, ref bool result, int n = int.MaxValue)
+    public static List<float2> KNearestHull(List<float2> pointCloud, int k, ref bool result, ref int kMax, int n = int.MaxValue)
     {
         k = Mathf.Max(k, 3);
         
@@ -344,12 +344,13 @@ public static class ConcaveHull
         }
 
         k = Mathf.Min(k, pointCloud.Count - 1);
+        kMax = Mathf.Max(kMax, k);
 
         int firstPointIndex = GetStartPointIndex(pointCloud);
         float2 firstPoint = pointCloud[firstPointIndex];
         hull.Add(firstPoint);
 
-        float2 currentPoint = firstPoint;
+        float2 currentPoint = pointCloud[firstPointIndex];
         float2 previousPoint = firstPoint - new float2(1.0f, 0.0f);
         pointCloud.RemoveAt( firstPointIndex );
 
@@ -392,8 +393,42 @@ public static class ConcaveHull
 
             if (allPointsInsideHull)
             {
-                result = true;
-                break;
+                if (pointCloud.Count > k && hull.Count > 1 )
+                {
+                    GetNearestPointIndices( hull[0], pointCloud, k, ref nearestPointIndices, ref nearestPointDistances );
+
+                    int nearestPointIndex = 0; 
+                    float2 nearestPoint = pointCloud[nearestPointIndices[nearestPointIndex]];
+                    float2 nearestVector = nearestPoint - hull[0];
+                    float nearestDistance = Mathf.Sqrt( nearestVector.x * nearestVector.x + nearestVector.y * nearestVector.y );
+
+                    for (int i = 1; i < k; i++)
+                    {
+                        float2 neighbourPoint = pointCloud[nearestPointIndices[i]];
+                        float2 neighbourVector = neighbourPoint - hull[0];
+                        float neighbourDistance = Mathf.Sqrt( neighbourVector.x * neighbourVector.x + neighbourVector.y * neighbourVector.y );
+                        if (neighbourDistance < nearestDistance)
+                        {
+                            nearestPointIndex = i; 
+                            nearestPoint = neighbourPoint;
+                            nearestVector = neighbourVector;
+                            nearestDistance = neighbourDistance;        
+                        }
+                    }
+
+                    float2 closingVector = hull[0] - hull[hull.Count - 1];
+                    float closingDistance = Mathf.Sqrt( closingVector.x * closingVector.x + closingVector.y * closingVector.y );
+                    if (closingDistance <= nearestDistance * 2)
+                    {
+                        result = true;
+                        break;    
+                    }
+                }
+                else
+                {
+                    result = true;
+                    break;
+                }
             }
             
             n--;
