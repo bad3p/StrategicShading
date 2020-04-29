@@ -199,7 +199,48 @@ public class HierarchyProxy : MonoBehaviour
             }
         }
     }
-    
+
+    public uint rank
+    {
+        get
+        {
+            if (!_entityProxy)
+            {
+                Awake();
+            }
+            if (_entityAssembly)
+            {
+                if (firstChildEntityId == 0)
+                {
+                    return 0;
+                }
+                else
+                {
+                    uint maxChildRank = 0; 
+                    
+                    EntityProxy childEntityProxy =  _entityAssembly.GetEntityProxy(firstChildEntityId);
+                    HierarchyProxy childHierarchyProxy = _entityAssembly.GetHierarchyProxy(childEntityProxy.hierarchyId);
+                    uint childRank = childHierarchyProxy.rank;
+                    maxChildRank = maxChildRank < childRank ? childRank : maxChildRank;
+
+                    while (childHierarchyProxy.nextSiblingEntityId > 0)
+                    {
+                        childEntityProxy =  _entityAssembly.GetEntityProxy(childHierarchyProxy.nextSiblingEntityId);
+                        childHierarchyProxy = _entityAssembly.GetHierarchyProxy(childEntityProxy.hierarchyId);
+                        childRank = childHierarchyProxy.rank;
+                        maxChildRank = maxChildRank < childRank ? childRank : maxChildRank;
+                    }
+
+                    return maxChildRank + 1;
+                }
+            }
+            else
+            {
+                return 0;
+            }
+        }
+    }
+
     public uint parentEntityId
     {
         get

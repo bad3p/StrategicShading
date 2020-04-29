@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Types;
 using UnityEngine;
 
-public static class ConcaveHull
+public static partial class Geometry
 {
     private static void CleanupDuplicatePoints(List<float2> pointCloud)
     {

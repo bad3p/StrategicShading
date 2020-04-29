@@ -13,7 +13,7 @@ public class EntityProxy : MonoBehaviour
 
     private int _concaveHullFrame = 0;
     private List<float2> _pointCloud = new List<float2>();
-    private List<float2> _concaveHull = new List<float2>();
+    private List<float2> _hull = new List<float2>();
     
     void Awake()
     {
@@ -43,16 +43,11 @@ public class EntityProxy : MonoBehaviour
             if (transformId == 0)
             {
                 Gizmos.color = GetTeamColor();
-                for (int i = 0; i < _pointCloud.Count; i++)
+                for (int i1 = 0; i1 < _hull.Count; i1++)
                 {
-                    Vector3 v = new Vector3(_pointCloud[i].x, 0, _pointCloud[i].y);
-                    Gizmos.DrawSphere(v, 0.5f);
-                }
-                for (int i1 = 0; i1 < _concaveHull.Count; i1++)
-                {
-                    int i0 = (i1 == 0) ? _concaveHull.Count - 1 : i1 - 1;
-                    Vector3 v0 = new Vector3(_concaveHull[i0].x, 0, _concaveHull[i0].y);
-                    Vector3 v1 = new Vector3(_concaveHull[i1].x, 0, _concaveHull[i1].y);
+                    int i0 = (i1 == 0) ? _hull.Count - 1 : i1 - 1;
+                    Vector3 v0 = new Vector3(_hull[i0].x, 0, _hull[i0].y);
+                    Vector3 v1 = new Vector3(_hull[i1].x, 0, _hull[i1].y);
                     Gizmos.DrawLine(v0, v1);
                 }
             }
@@ -64,7 +59,7 @@ public class EntityProxy : MonoBehaviour
         if (!_entityAssembly)
         {
             _pointCloud.Clear();
-            _concaveHull.Clear();
+            _hull.Clear();
             return;
         }
         if (_concaveHullFrame != Time.frameCount)
@@ -96,8 +91,8 @@ public class EntityProxy : MonoBehaviour
                 vertex = entityMatrix.MultiplyPoint(vertex);
                 _pointCloud.Add( new float2(vertex.x, vertex.z) );
 
-                _concaveHull.Clear();
-                _concaveHull.AddRange( _pointCloud );
+                _hull.Clear();
+                _hull.AddRange( _pointCloud );
             }
             else if (hierarchyId > 0)
             {
@@ -108,7 +103,7 @@ public class EntityProxy : MonoBehaviour
                 {
                     EntityProxy childEntityProxy = _entityAssembly.GetEntityProxy(childEntityId);
                     childEntityProxy.UpdateConcaveHull();
-                    _pointCloud.AddRange( childEntityProxy._concaveHull );
+                    _pointCloud.AddRange( childEntityProxy._hull );
                     
                     uint childHierarchyId = childEntityProxy.hierarchyId;
                     if (childHierarchyId > 0)
@@ -121,11 +116,16 @@ public class EntityProxy : MonoBehaviour
                         break;
                     }
                 }
-                
-                bool result = false;
-                var temp = new List<float2>();
-                temp.AddRange(_pointCloud);
-                _concaveHull = ConcaveHull.KNearestHull(temp, Mathf.Min(temp.Count,5), ref result);
+
+                if (hierarchyProxy.rank <= 1)
+                {
+                    _hull = Geometry.ConvexHull(_pointCloud);    
+                }
+                else
+                {
+                    bool result = false;
+                    _hull = Geometry.KNearestHull(_pointCloud, Mathf.Min(_pointCloud.Count, 5), ref result);
+                }
             }
         }
     }
