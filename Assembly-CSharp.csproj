@@ -64,11 +64,9 @@
      <Compile Include="Assets\Scripts\Data\PersonnelProxy.cs" />
      <Compile Include="Assets\Scripts\Data\TransformProxy.cs" />
      <Compile Include="Assets\Scripts\DemoUI.cs" />
-     <Compile Include="Assets\Scripts\Geometry\Angle2D.cs" />
      <Compile Include="Assets\Scripts\Geometry\ConcaveHull.cs" />
      <Compile Include="Assets\Scripts\Geometry\ConvexHull.cs" />
-     <Compile Include="Assets\Scripts\Geometry\GeometryTest.cs" />
-     <Compile Include="Assets\Scripts\Geometry\SegmentIntersection.cs" />
+     <Compile Include="Assets\Scripts\Geometry\HullHierarchy.cs" />
      <Compile Include="Assets\Scripts\Simulation\ComputeShaderEmulator.cs" />
      <Compile Include="Assets\Scripts\Simulation\FloatIntrinsics.cs" />
      <Compile Include="Assets\Scripts\Simulation\Random.cs" />

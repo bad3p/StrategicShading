@@ -73,11 +73,38 @@ public class EntityProxyEditor : Editor
         EditorGUILayout.EndVertical();
         
         EditorGUILayout.EndHorizontal();
+
+        if (entityProxy.transformId == 0 && entityProxy.hierarchyId > 0 && entityProxy.transform.hasChanged)
+        {
+            UpdateTransforms(entityProxy);
+        }
         
         if (GUI.changed)
         {
             EditorUtility.SetDirty(entityProxy);
             EditorSceneManager.MarkSceneDirty(entityProxy.gameObject.scene);
+        }
+    }
+
+    static void UpdateTransforms(EntityProxy entityProxy)
+    {
+        if (entityProxy.transformId > 0)
+        {
+            TransformProxy transformProxy = entityProxy.GetComponent<TransformProxy>();
+            transformProxy.position = transformProxy.transform.position;
+            transformProxy.rotation = transformProxy.transform.rotation;
+            transformProxy.scale = transformProxy.transform.localScale;
+        }
+
+        int childCount = entityProxy.transform.childCount;
+        for (int i = 0; i < childCount; i++)
+        {
+            Transform childTransform = entityProxy.transform.GetChild(i);
+            EntityProxy childEntityProxy = childTransform.GetComponent<EntityProxy>();
+            if (childEntityProxy)
+            {
+                UpdateTransforms(childEntityProxy);
+            }
         }
     }
 }

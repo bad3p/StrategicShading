@@ -48,6 +48,7 @@ public class TransformProxy : MonoBehaviour
             Gizmos.color = _entityProxy.GetTeamColor();
             Gizmos.matrix = Matrix4x4.Translate(position.ToVector3()) * Matrix4x4.Rotate(rotation.ToQuaternion());
             float distance = Vector3.Distance(position.ToVector3(), Camera.current.transform.position);
+            
             if (distance < WireDistanceThreshold)
             {
                 Gizmos.DrawWireCube(Vector3.zero, scale.ToVector3());

@@ -38,7 +38,7 @@ public class EntityProxy : MonoBehaviour
         }
         if (_entityAssembly)
         {
-            UpdateConcaveHull();
+            UpdateConvexHull();
 
             if (transformId == 0)
             {
@@ -54,7 +54,7 @@ public class EntityProxy : MonoBehaviour
         }
     }
 
-    void UpdateConcaveHull()
+    void UpdateConvexHull()
     {
         if (!_entityAssembly)
         {
@@ -102,7 +102,7 @@ public class EntityProxy : MonoBehaviour
                 while (childEntityId > 0)
                 {
                     EntityProxy childEntityProxy = _entityAssembly.GetEntityProxy(childEntityId);
-                    childEntityProxy.UpdateConcaveHull();
+                    childEntityProxy.UpdateConvexHull();
                     _pointCloud.AddRange( childEntityProxy._hull );
                     
                     uint childHierarchyId = childEntityProxy.hierarchyId;
@@ -117,15 +117,7 @@ public class EntityProxy : MonoBehaviour
                     }
                 }
 
-                if (hierarchyProxy.rank <= 1)
-                {
-                    _hull = Geometry.ConvexHull(_pointCloud);    
-                }
-                else
-                {
-                    bool result = false;
-                    _hull = Geometry.KNearestHull(_pointCloud, Mathf.Min(_pointCloud.Count, 5), ref result);
-                }
+                _hull = Geometry.ConvexHull( _pointCloud );
             }
         }
     }
