@@ -10,6 +10,26 @@ public class TransformProxy : MonoBehaviour
     private EntityAssembly _entityAssembly;
     private EntityProxy _entityProxy;
     
+    private static AnimationCurve _solidAlpha = new AnimationCurve
+    (
+        new Keyframe[]
+        {
+            new Keyframe(75.0f, 0.0f),
+            new Keyframe(100.0f, 1.0f),
+            new Keyframe(125.0f, 1.0f),
+            new Keyframe(150.0f, 0.0f)
+        }
+    );
+            
+    private static AnimationCurve _wireAlpha = new AnimationCurve
+    (
+        new Keyframe[]
+        {
+            new Keyframe(75.0f, 1.0f),
+            new Keyframe(100.0f, 0.0f),
+        }
+    );
+    
     void Awake()
     {
         _entityProxy = GetComponent<EntityProxy>();
@@ -42,18 +62,25 @@ public class TransformProxy : MonoBehaviour
         }
         if (_entityAssembly)
         {
-            const float SolidDistanceThreshold = 150.0f;
-            const float WireDistanceThreshold = 75.0f;
+            Color teamColor = _entityProxy.GetTeamColor();
+            Color solidColor = teamColor;
+            Color wireColor = teamColor;
             
-            Gizmos.color = _entityProxy.GetTeamColor();
-            Gizmos.matrix = Matrix4x4.Translate(position.ToVector3()) * Matrix4x4.Rotate(rotation.ToQuaternion());
             float distance = Vector3.Distance(position.ToVector3(), Camera.current.transform.position);
+
+            solidColor.a = _solidAlpha.Evaluate(distance);
+            wireColor.a = _wireAlpha.Evaluate(distance);
             
-            if (distance < WireDistanceThreshold)
+            Gizmos.matrix = Matrix4x4.Translate(position.ToVector3()) * Matrix4x4.Rotate(rotation.ToQuaternion());
+            
+            Gizmos.color = wireColor;
+            if (wireColor.a > 0)
             {
                 Gizmos.DrawWireCube(Vector3.zero, scale.ToVector3());
             }
-            else if(distance < SolidDistanceThreshold)
+            
+            Gizmos.color = solidColor;
+            if(solidColor.a > 0)
             {
                 Gizmos.DrawCube(Vector3.zero, scale.ToVector3());
             }

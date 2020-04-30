@@ -831,6 +831,119 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 175275715}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &192036526
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 192036527}
+  - component: {fileID: 192036532}
+  - component: {fileID: 192036531}
+  - component: {fileID: 192036530}
+  - component: {fileID: 192036529}
+  - component: {fileID: 192036528}
+  m_Layer: 0
+  m_Name: RedInfantrySquad (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &192036527
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 192036526}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -25, y: 1, z: 0}
+  m_LocalScale: {x: 24, y: 2, z: 2}
+  m_Children: []
+  m_Father: {fileID: 2132332596}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &192036528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 192036526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ammo: 31
+  Distance:
+    x: 50
+    y: 125
+    z: 250
+    w: 500
+  Firepower:
+    x: 97
+    y: 63
+    z: 31
+    w: 11
+  Timeout: 0
+--- !u!114 &192036529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 192036526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Morale: 600
+  Fitness: 14400
+  Count: 12
+  Wounded: 0
+  Killed: 0
+--- !u!114 &192036530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 192036526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &192036531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 192036526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc162d967a96e44b890e8e097bab1f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &192036532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 192036526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e550dd1eef262a47937a68ed99434d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TeamId: 1
 --- !u!1 &216891075
 GameObject:
   m_ObjectHideFlags: 0
@@ -1017,6 +1130,119 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 247843852}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &314359920
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 314359921}
+  - component: {fileID: 314359926}
+  - component: {fileID: 314359925}
+  - component: {fileID: 314359924}
+  - component: {fileID: 314359923}
+  - component: {fileID: 314359922}
+  m_Layer: 0
+  m_Name: RedInfantryCompanyHQ (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &314359921
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314359920}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.8, y: 1, z: 52.4}
+  m_LocalScale: {x: 9.152932, y: 2, z: 8.02}
+  m_Children: []
+  m_Father: {fileID: 1223553439}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &314359922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314359920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ammo: 30
+  Distance:
+    x: 50
+    y: 125
+    z: 250
+    w: 500
+  Firepower:
+    x: 97
+    y: 63
+    z: 31
+    w: 11
+  Timeout: 0
+--- !u!114 &314359923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314359920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Morale: 600
+  Fitness: 14400
+  Count: 8
+  Wounded: 0
+  Killed: 0
+--- !u!114 &314359924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314359920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &314359925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314359920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc162d967a96e44b890e8e097bab1f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &314359926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314359920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e550dd1eef262a47937a68ed99434d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TeamId: 1
 --- !u!1 &342539617
 GameObject:
   m_ObjectHideFlags: 0
@@ -1407,8 +1633,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 478929603}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -23.699997, y: 0, z: -4.4953656}
+  m_LocalRotation: {x: -0, y: 0.13338359, z: -0, w: 0.9910645}
+  m_LocalPosition: {x: 4.1, y: 0, z: -40.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 914104306}
@@ -1417,7 +1643,7 @@ Transform:
   - {fileID: 2062252043}
   m_Father: {fileID: 1223553439}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 15.330001, z: 0}
 --- !u!1 &559942083
 GameObject:
   m_ObjectHideFlags: 0
@@ -2846,9 +3072,124 @@ Transform:
   m_Children:
   - {fileID: 1676357862}
   - {fileID: 478929606}
+  - {fileID: 2132332596}
+  - {fileID: 314359921}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1238937536
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1238937537}
+  - component: {fileID: 1238937542}
+  - component: {fileID: 1238937541}
+  - component: {fileID: 1238937540}
+  - component: {fileID: 1238937539}
+  - component: {fileID: 1238937538}
+  m_Layer: 0
+  m_Name: RedInfantrySquad (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1238937537
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1238937536}
+  m_LocalRotation: {x: 0, y: 0.13052616, z: 0, w: 0.9914449}
+  m_LocalPosition: {x: -50.72, y: 1, z: 3.41}
+  m_LocalScale: {x: 24, y: 2, z: 2}
+  m_Children: []
+  m_Father: {fileID: 2132332596}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 15, z: 0}
+--- !u!114 &1238937538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1238937536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ammo: 30
+  Distance:
+    x: 50
+    y: 125
+    z: 250
+    w: 500
+  Firepower:
+    x: 97
+    y: 63
+    z: 31
+    w: 11
+  Timeout: 0
+--- !u!114 &1238937539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1238937536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Morale: 606
+  Fitness: 14400
+  Count: 12
+  Wounded: 0
+  Killed: 0
+--- !u!114 &1238937540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1238937536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1238937541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1238937536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc162d967a96e44b890e8e097bab1f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1238937542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1238937536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e550dd1eef262a47937a68ed99434d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TeamId: 1
 --- !u!1 &1392305122
 GameObject:
   m_ObjectHideFlags: 0
@@ -3593,8 +3934,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1676357859}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 74.3, y: 0, z: -4.4953656}
+  m_LocalRotation: {x: -0, y: -0.1749825, z: -0, w: 0.9845716}
+  m_LocalPosition: {x: 91.3, y: 0, z: -21.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1025601184}
@@ -3603,7 +3944,7 @@ Transform:
   - {fileID: 50754641}
   m_Father: {fileID: 1223553439}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -20.155, z: 0}
 --- !u!1 &1731904580
 GameObject:
   m_ObjectHideFlags: 0
@@ -4386,6 +4727,119 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1929846180}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1940057460
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1940057461}
+  - component: {fileID: 1940057466}
+  - component: {fileID: 1940057465}
+  - component: {fileID: 1940057464}
+  - component: {fileID: 1940057463}
+  - component: {fileID: 1940057462}
+  m_Layer: 0
+  m_Name: RedInfantryPlatoonHQ (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1940057461
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1940057460}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -25, y: 1, z: 20}
+  m_LocalScale: {x: 7.54632, y: 2, z: 8.02}
+  m_Children: []
+  m_Father: {fileID: 2132332596}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1940057462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1940057460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ammo: 30
+  Distance:
+    x: 50
+    y: 125
+    z: 250
+    w: 500
+  Firepower:
+    x: 97
+    y: 63
+    z: 31
+    w: 11
+  Timeout: 0
+--- !u!114 &1940057463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1940057460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Morale: 600
+  Fitness: 14400
+  Count: 6
+  Wounded: 0
+  Killed: 0
+--- !u!114 &1940057464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1940057460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1940057465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1940057460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc162d967a96e44b890e8e097bab1f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1940057466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1940057460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e550dd1eef262a47937a68ed99434d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TeamId: 1
 --- !u!1 &1973633929
 GameObject:
   m_ObjectHideFlags: 0
@@ -4479,6 +4933,119 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1973633929}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2004039718
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2004039719}
+  - component: {fileID: 2004039724}
+  - component: {fileID: 2004039723}
+  - component: {fileID: 2004039722}
+  - component: {fileID: 2004039721}
+  - component: {fileID: 2004039720}
+  m_Layer: 0
+  m_Name: RedInfantrySquad (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2004039719
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2004039718}
+  m_LocalRotation: {x: 0, y: -0.13052624, z: 0, w: 0.9914449}
+  m_LocalPosition: {x: 1.24, y: 1, z: 3.62}
+  m_LocalScale: {x: 24, y: 2, z: 2}
+  m_Children: []
+  m_Father: {fileID: 2132332596}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -15, z: 0}
+--- !u!114 &2004039720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2004039718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ammo: 30
+  Distance:
+    x: 50
+    y: 125
+    z: 250
+    w: 500
+  Firepower:
+    x: 97
+    y: 63
+    z: 31
+    w: 11
+  Timeout: 0
+--- !u!114 &2004039721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2004039718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Morale: 600
+  Fitness: 14400
+  Count: 12
+  Wounded: 0
+  Killed: 0
+--- !u!114 &2004039722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2004039718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2004039723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2004039718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc162d967a96e44b890e8e097bab1f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2004039724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2004039718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e550dd1eef262a47937a68ed99434d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TeamId: 1
 --- !u!1 &2006245100
 GameObject:
   m_ObjectHideFlags: 0
@@ -4984,3 +5551,64 @@ MonoBehaviour:
     z: 31
     w: 11
   Timeout: 0
+--- !u!1 &2132332595
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2132332596}
+  - component: {fileID: 2132332598}
+  - component: {fileID: 2132332597}
+  m_Layer: 0
+  m_Name: RedInfantryPlatoon (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2132332596
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132332595}
+  m_LocalRotation: {x: -0.000000003812991, y: 0.38644272, z: 0.000000032871668, w: 0.92231345}
+  m_LocalPosition: {x: -80.2, y: 0, z: -3.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2004039719}
+  - {fileID: 192036527}
+  - {fileID: 1238937537}
+  - {fileID: 1940057461}
+  m_Father: {fileID: 1223553439}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 45.467003, z: 0}
+--- !u!114 &2132332597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132332595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2132332598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132332595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e550dd1eef262a47937a68ed99434d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TeamId: 1

@@ -14,7 +14,10 @@ public class EntityProxy : MonoBehaviour
     private int _concaveHullFrame = 0;
     private List<float2> _pointCloud = new List<float2>();
     private List<float2> _hull = new List<float2>();
-    
+    private int _hullHash = 0;
+    private int _meshHash = 0;
+    private Mesh _mesh = null;
+
     void Awake()
     {
         _entityAssembly = FindObjectOfType<EntityAssembly>();
@@ -42,7 +45,33 @@ public class EntityProxy : MonoBehaviour
 
             if (transformId == 0)
             {
-                Gizmos.color = GetTeamColor();
+                UpdateMesh();
+
+                Color teamColor = GetTeamColor();
+                Color solidColor = teamColor;
+                Color wireColor = teamColor;
+
+                float distance = Vector3.Distance(_mesh.bounds.center, Camera.current.transform.position);
+                float size = _mesh.bounds.extents.magnitude;
+
+                AnimationCurve solidAlpha = new AnimationCurve
+                (
+                    new Keyframe[]
+                    {
+                        new Keyframe( size, 0.0f ),
+                        new Keyframe( size * 2, 1.0f )
+                    }
+                );
+
+                solidColor.a = solidAlpha.Evaluate(distance);
+
+                if (solidColor.a > 0)
+                {
+                    Gizmos.color = solidColor;
+                    Gizmos.DrawMesh(_mesh);
+                }
+
+                Gizmos.color = wireColor;
                 for (int i1 = 0; i1 < _hull.Count; i1++)
                 {
                     int i0 = (i1 == 0) ? _hull.Count - 1 : i1 - 1;
@@ -50,7 +79,105 @@ public class EntityProxy : MonoBehaviour
                     Vector3 v1 = new Vector3(_hull[i1].x, 0, _hull[i1].y);
                     Gizmos.DrawLine(v0, v1);
                 }
+                
             }
+        }
+    }
+    
+    private float TriangleArea(float2 v0, float2 v1, float2 v2)
+    {
+        return Mathf.Abs( 0.5f * ( v0.x*v1.y - v1.x*v0.y + v1.x*v2.y - v2.x*v1.y + v2.x*v0.y - v0.x*v2.y ) );
+    }
+
+    void UpdateMesh()
+    {
+        if (_hullHash != _meshHash)
+        {
+            if (_mesh == null)
+            {
+                _mesh = new Mesh();
+            }
+
+            Vector3[] vertices = new Vector3[_hull.Count];
+            Vector3[] normals = new Vector3[_hull.Count];
+            for (int i = 0; i < _hull.Count; i++)
+            {
+                vertices[i].Set( _hull[i].x, 0.0f, _hull[i].y );
+                normals[i].Set( 0, 1, 0 );
+            }
+            _mesh.vertices = vertices;
+            _mesh.normals = normals;
+            
+            List<int> indices = new List<int>();
+            for (int i = 0; i < _hull.Count; i++)
+            {
+                indices.Add( i );
+            }
+
+            List<int> triangulation = new List<int>();
+
+            while (indices.Count > 3)
+            {
+                int earIndex = -1;
+                float triangleArea = float.MaxValue;
+
+                for (int i = 0; i < indices.Count; i++)
+                {
+                    int prevIndex = ( i == 0 ) ? indices.Count-1 : i - 1;
+                    int nextIndex = ( i == indices.Count-1 ) ? 0 : i + 1;
+
+                    float2 e1 = _hull[indices[i]] - _hull[indices[prevIndex]];
+                    float e1mag = Mathf.Sqrt(e1.x * e1.x + e1.y * e1.y);
+                    if (e1mag > 0)
+                    {
+                        e1 = e1 * 1.0f / e1mag;
+                    }
+                    
+                    float2 e2 = _hull[indices[nextIndex]] - _hull[indices[i]];
+                    float e2mag = Mathf.Sqrt(e2.x * e2.x + e2.y * e2.y);
+                    if (e2mag > 0)
+                    {
+                        e2 = e2 * 1.0f / e2mag;
+                    }
+                    
+                    float e1e2dot = (e1.x*e2.x + e1.y*e2.y);
+                    
+                    if( e1e2dot >= 0.9959f )
+                    {
+                        continue;
+                    }
+                    
+                    float area = TriangleArea( _hull[indices[prevIndex]], _hull[indices[i]], _hull[indices[nextIndex]] );
+                    if( area < triangleArea )
+                    {
+                        earIndex = i;
+                        triangleArea = area;
+                    }
+                }
+                
+                if( earIndex == -1 )
+                {
+                    break;
+                }
+                
+                int leftIndex = ( earIndex == 0 ) ? indices.Count-1 : earIndex - 1;
+                int rightIndex = ( earIndex == indices.Count-1 ) ? 0 : earIndex + 1;
+                
+                triangulation.Add( indices[rightIndex] );
+                triangulation.Add( indices[earIndex] );
+                triangulation.Add( indices[leftIndex] );
+                
+                
+                indices.RemoveAt( earIndex );
+            }
+            if( indices.Count == 3 )
+            {
+                triangulation.Add( indices[2] );
+                triangulation.Add( indices[1] );
+                triangulation.Add( indices[0] );
+            }
+
+            _mesh.triangles = triangulation.ToArray();
         }
     }
 
@@ -118,6 +245,17 @@ public class EntityProxy : MonoBehaviour
                 }
 
                 _hull = Geometry.ConvexHull( _pointCloud );
+
+                _hullHash = 17;
+                unchecked
+                {
+                    for (int i = 0; i < _hull.Count; i++)
+                    {
+                        float2 p = _hull[i];
+                        _hullHash = _hullHash * 23 + p.x.GetHashCode();
+                        _hullHash = _hullHash * 23 + p.y.GetHashCode();
+                    }
+                }
             }
         }
     }
