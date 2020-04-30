@@ -47,39 +47,42 @@ public class EntityProxy : MonoBehaviour
             {
                 UpdateMesh();
 
-                Color teamColor = GetTeamColor();
-                Color solidColor = teamColor;
-                Color wireColor = teamColor;
+                if (_mesh)
+                {
 
-                float distance = Vector3.Distance(_mesh.bounds.center, Camera.current.transform.position);
-                float size = _mesh.bounds.extents.magnitude;
+                    Color teamColor = GetTeamColor();
+                    Color solidColor = teamColor;
+                    Color wireColor = teamColor;
 
-                AnimationCurve solidAlpha = new AnimationCurve
-                (
-                    new Keyframe[]
+                    float distance = Vector3.Distance(_mesh.bounds.center, Camera.current.transform.position);
+                    float size = _mesh.bounds.extents.magnitude;
+
+                    AnimationCurve solidAlpha = new AnimationCurve
+                    (
+                        new Keyframe[]
+                        {
+                            new Keyframe(size, 0.0f),
+                            new Keyframe(size * 2, 1.0f)
+                        }
+                    );
+
+                    solidColor.a = solidAlpha.Evaluate(distance);
+
+                    if (solidColor.a > 0)
                     {
-                        new Keyframe( size, 0.0f ),
-                        new Keyframe( size * 2, 1.0f )
+                        Gizmos.color = solidColor;
+                        Gizmos.DrawMesh(_mesh);
                     }
-                );
 
-                solidColor.a = solidAlpha.Evaluate(distance);
-
-                if (solidColor.a > 0)
-                {
-                    Gizmos.color = solidColor;
-                    Gizmos.DrawMesh(_mesh);
+                    Gizmos.color = wireColor;
+                    for (int i1 = 0; i1 < _hull.Count; i1++)
+                    {
+                        int i0 = (i1 == 0) ? _hull.Count - 1 : i1 - 1;
+                        Vector3 v0 = new Vector3(_hull[i0].x, 0, _hull[i0].y);
+                        Vector3 v1 = new Vector3(_hull[i1].x, 0, _hull[i1].y);
+                        Gizmos.DrawLine(v0, v1);
+                    }
                 }
-
-                Gizmos.color = wireColor;
-                for (int i1 = 0; i1 < _hull.Count; i1++)
-                {
-                    int i0 = (i1 == 0) ? _hull.Count - 1 : i1 - 1;
-                    Vector3 v0 = new Vector3(_hull[i0].x, 0, _hull[i0].y);
-                    Vector3 v1 = new Vector3(_hull[i1].x, 0, _hull[i1].y);
-                    Gizmos.DrawLine(v0, v1);
-                }
-                
             }
         }
     }
@@ -98,6 +101,12 @@ public class EntityProxy : MonoBehaviour
                 _mesh = new Mesh();
             }
 
+            if (_hull.Count == 0)
+            {
+                _mesh = null;
+                return;
+            }
+
             Vector3[] vertices = new Vector3[_hull.Count];
             Vector3[] normals = new Vector3[_hull.Count];
             for (int i = 0; i < _hull.Count; i++)
@@ -105,6 +114,8 @@ public class EntityProxy : MonoBehaviour
                 vertices[i].Set( _hull[i].x, 0.0f, _hull[i].y );
                 normals[i].Set( 0, 1, 0 );
             }
+
+            _mesh.triangles = new int[0];
             _mesh.vertices = vertices;
             _mesh.normals = normals;
             
@@ -244,7 +255,14 @@ public class EntityProxy : MonoBehaviour
                     }
                 }
 
-                _hull = Geometry.ConvexHull( _pointCloud );
+                if (_pointCloud.Count > 0)
+                {
+                    _hull = Geometry.ConvexHull(_pointCloud);
+                }
+                else
+                {
+                    _hull.Clear();
+                }
 
                 _hullHash = 17;
                 unchecked
