@@ -97,6 +97,8 @@ public class EntityProxy : MonoBehaviour
     {
         if (_hullHash != _meshHash)
         {
+            _meshHash = _hullHash;
+            
             if (_mesh == null)
             {
                 _mesh = new Mesh();
