@@ -5,7 +5,7 @@ using UnityEngine;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(EntityProxy))]
-public class TransformProxy : MonoBehaviour
+public class TransformProxy : ComponentProxy
 {
     private EntityAssembly _entityAssembly;
     private EntityProxy _entityProxy;
@@ -30,7 +30,7 @@ public class TransformProxy : MonoBehaviour
         }
     );
     
-    void Awake()
+    protected override void Awake()
     {
         _entityProxy = GetComponent<EntityProxy>();
         _entityAssembly = FindObjectOfType<EntityAssembly>();

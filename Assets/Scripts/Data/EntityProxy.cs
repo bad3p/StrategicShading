@@ -29,6 +29,12 @@ public class EntityProxy : MonoBehaviour
                 thisEntityId = _entityAssembly.RegisterEntityProxy(this);
                 teamId = TeamId;
             }
+
+            ComponentProxy[] componentProxies = GetComponents<ComponentProxy>();
+            for (int i = 0; i < componentProxies.Length; i++)
+            {
+                componentProxies[i].AwakeImmediate();
+            }
         }
         _isInitialized = true;
     }
@@ -85,11 +91,6 @@ public class EntityProxy : MonoBehaviour
                 }
             }
         }
-    }
-    
-    private float TriangleArea(float2 v0, float2 v1, float2 v2)
-    {
-        return Mathf.Abs( 0.5f * ( v0.x*v1.y - v1.x*v0.y + v1.x*v2.y - v2.x*v1.y + v2.x*v0.y - v0.x*v2.y ) );
     }
 
     void UpdateMesh()
@@ -158,7 +159,7 @@ public class EntityProxy : MonoBehaviour
                         continue;
                     }
                     
-                    float area = TriangleArea( _hull[indices[prevIndex]], _hull[indices[i]], _hull[indices[nextIndex]] );
+                    float area = Geometry.TriangleArea( _hull[indices[prevIndex]], _hull[indices[i]], _hull[indices[nextIndex]] );
                     if( area < triangleArea )
                     {
                         earIndex = i;

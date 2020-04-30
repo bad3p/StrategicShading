@@ -4,7 +4,7 @@ using UnityEngine;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(FirearmsProxy))]
-public class FirearmsProxy : MonoBehaviour
+public class FirearmsProxy : ComponentProxy
 {
     public uint Ammo = 30;
     public float4 Distance = new float4( 50, 125, 250, 500 );
@@ -14,7 +14,7 @@ public class FirearmsProxy : MonoBehaviour
     private EntityAssembly _entityAssembly;
     private EntityProxy _entityProxy;
     
-    void Awake()
+    protected override void Awake()
     {
         _entityProxy = GetComponent<EntityProxy>();
         _entityAssembly = FindObjectOfType<EntityAssembly>();

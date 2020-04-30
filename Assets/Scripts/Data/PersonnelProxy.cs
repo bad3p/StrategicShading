@@ -4,7 +4,7 @@ using UnityEngine;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(PersonnelProxy))]
-public class PersonnelProxy : MonoBehaviour
+public class PersonnelProxy : ComponentProxy
 {
     public float Morale = 600.0f;
     public float Fitness = 14400.0f;
@@ -15,7 +15,7 @@ public class PersonnelProxy : MonoBehaviour
     private EntityAssembly _entityAssembly;
     private EntityProxy _entityProxy;
     
-    void Awake()
+    protected override void Awake()
     {
         _entityProxy = GetComponent<EntityProxy>();
         _entityAssembly = FindObjectOfType<EntityAssembly>();

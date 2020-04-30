@@ -4,12 +4,12 @@ using UnityEngine;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(EntityProxy))]
-public class HierarchyProxy : MonoBehaviour
+public class HierarchyProxy : ComponentProxy
 {
     private EntityAssembly _entityAssembly;
     private EntityProxy _entityProxy;
     
-    void Awake()
+    protected override void Awake()
     {
         _entityProxy = GetComponent<EntityProxy>();
         _entityAssembly = FindObjectOfType<EntityAssembly>();

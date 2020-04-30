@@ -6,11 +6,6 @@ using UnityEngine;
 
 public static partial class Geometry
 {
-    private static bool CCW(float2 a, float2 b, float2 c) 
-    {
-        return ((b.x - a.x) * (c.y - a.y)) > ((b.y - a.y) * (c.x - a.x));
-    }
-    
     public static List<float2> ConvexHull(List<float2> pointCloud)
     {
         CleanupDuplicatePoints(pointCloud);
