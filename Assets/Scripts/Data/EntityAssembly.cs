@@ -20,6 +20,9 @@ public class EntityAssembly : MonoBehaviour
     private List<Structs.Firearms> _firearmsBuffer = new List<Structs.Firearms>() { new Structs.Firearms() };
     private Dictionary<FirearmsProxy, uint> _firearmsProxyToEntityId = new Dictionary<FirearmsProxy, uint>();
     
+    private List<Structs.Action> _actionBuffer = new List<Structs.Action>() { new Structs.Action() };
+    private Dictionary<ActionProxy, uint> _actionProxyToEntityId = new Dictionary<ActionProxy, uint>();
+    
     #region Generics
     public uint GetProxyId<P>(P proxy, Dictionary<P,uint> proxyToId)
     {
@@ -79,6 +82,37 @@ public class EntityAssembly : MonoBehaviour
         {
             Debug.LogError("[EntityAssembly] SetEntity<" + typeof(P).Name + "," + typeof(S).Name + ">() failed, invalid proxiId: " + proxyId + "!");
         }
+    }
+    #endregion
+    
+    #region Buffers
+    public List<Structs.Entity> entityBuffer
+    {
+        get { return _entityBuffer; }
+    }
+
+    public List<Structs.Transform> transformBuffer
+    {
+        get { return _transformBuffer;  }
+    }
+
+    public List<Structs.Hierarchy> hierarchyBuffer
+    {
+        get { return _hierarchyBuffer; }
+    }
+    public List<Structs.Personnel> personnelBuffer
+    {
+        get { return _personnelBuffer;  }
+    }
+
+    public List<Structs.Firearms> firearmsBuffer
+    {
+        get { return _firearmsBuffer; }
+    }
+
+    public List<Structs.Action> actionBuffer
+    {
+        get { return _actionBuffer;  }
     }
     #endregion
     
@@ -214,6 +248,33 @@ public class EntityAssembly : MonoBehaviour
     public void SetFirearms(uint firearmsId, Structs.Firearms f)
     {
         SetStruct<FirearmsProxy,Structs.Firearms>(firearmsId, f, _firearmsBuffer);
+    }
+    #endregion
+    
+    #region Action
+    public uint GetActionId(ActionProxy actionProxy)
+    {
+        return GetProxyId( actionProxy, _actionProxyToEntityId );
+    }
+    
+    public ActionProxy GetActionProxy(uint actionId)
+    {
+        return GetProxy( actionId, _actionProxyToEntityId );
+    }
+    
+    public uint RegisterActionProxy(ActionProxy actionProxy)
+    {
+        return RegisterProxy( actionProxy, _actionBuffer, _actionProxyToEntityId );
+    }
+    
+    public Structs.Action GetAction(uint actionId)
+    {
+        return GetStruct<ActionProxy,Structs.Action>(actionId, _actionBuffer);
+    }
+    
+    public void SetAction(uint actionId, Structs.Action a)
+    {
+        SetStruct<ActionProxy,Structs.Action>(actionId, a, _actionBuffer);
     }
     #endregion
 }

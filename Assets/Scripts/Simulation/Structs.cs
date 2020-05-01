@@ -10,6 +10,7 @@ namespace Structs
         public uint hierarchyId;
         public uint personnelId;
         public uint firearmsId;
+        public uint actionId;
     };
 
     public struct Transform
@@ -44,6 +45,16 @@ namespace Structs
         public uint ammo;
         public float4 distance;
         public float4 firepower;
-        public float timeout;
+        public uint stateId;
+        public float stateTimeout;
+    };
+    
+    public struct Action
+    {
+        public uint entityId;
+        public uint actionId;
+        public uint targetEntityId;
+        public double3 targetPosition;
+        public float actionTimeout;
     };
 }

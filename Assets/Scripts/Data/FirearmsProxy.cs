@@ -3,13 +3,14 @@ using Types;
 using UnityEngine;
 
 [ExecuteInEditMode]
-[RequireComponent(typeof(FirearmsProxy))]
+[RequireComponent(typeof(EntityProxy))]
 public class FirearmsProxy : ComponentProxy
 {
     public uint Ammo = 30;
     public float4 Distance = new float4( 50, 125, 250, 500 );
     public float4 Firepower= new float4( 99, 66, 33, 13 );
-    public float Timeout = 0;
+    public uint StateID = 0;
+    public float StateTimeout = 0.0f;
     
     private EntityAssembly _entityAssembly;
     private EntityProxy _entityProxy;
@@ -29,7 +30,8 @@ public class FirearmsProxy : ComponentProxy
                 ammo = Ammo;
                 distance = Distance;
                 firepower = Firepower;
-                timeout = Timeout;
+                stateId = StateID;
+                stateTimeout = StateTimeout;
             }
         }    
     }
@@ -147,7 +149,7 @@ public class FirearmsProxy : ComponentProxy
         }
     }
     
-    public float timeout
+    public uint stateId
     {
         get
         {
@@ -155,7 +157,7 @@ public class FirearmsProxy : ComponentProxy
             {
                 uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
                 Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
-                return thisFirearms.timeout;
+                return thisFirearms.stateId;
             }
             else
             {
@@ -168,7 +170,34 @@ public class FirearmsProxy : ComponentProxy
             {
                 uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
                 Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
-                thisFirearms.timeout = value;
+                thisFirearms.stateId = value;
+                _entityAssembly.SetFirearms(thisFirearmsId, thisFirearms);
+            }
+        }
+    }
+    
+    public float stateTimeout
+    {
+        get
+        {
+            if (_entityAssembly)
+            {
+                uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
+                Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
+                return thisFirearms.stateTimeout;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        set
+        {
+            if (_entityAssembly)
+            {
+                uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
+                Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
+                thisFirearms.stateTimeout = value;
                 _entityAssembly.SetFirearms(thisFirearmsId, thisFirearms);
             }
         }

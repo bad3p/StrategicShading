@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\ComputeShaderEngine.cs" />
+     <Compile Include="Assets\Scripts\Data\ActionProxy.cs" />
      <Compile Include="Assets\Scripts\Data\ComponentProxy.cs" />
      <Compile Include="Assets\Scripts\Data\EntityAssembly.cs" />
      <Compile Include="Assets\Scripts\Data\EntityProxy.cs" />
