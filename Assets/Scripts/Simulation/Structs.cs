@@ -52,9 +52,11 @@ namespace Structs
     public struct Action
     {
         public uint entityId;
-        public uint actionId;
-        public uint targetEntityId;
-        public double3 targetPosition;
-        public float actionTimeout;
+        public uint moveTargetEntityId;
+        public double3 moveTargetVector;
+        public float moveTargetValue;
+        public uint attackTargetEntityId;
+        public float3 attackTargetVector;
+        public float attackTargetValue;
     };
 }

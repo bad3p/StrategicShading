@@ -6,6 +6,16 @@ using UnityEditor.SceneManagement;
 [CustomEditor(typeof(EntityProxy))]
 public class EntityProxyEditor : Editor
 {
+    void OnSceneGUI()
+    {
+        EntityProxy entityProxy = target as EntityProxy;
+        if (entityProxy.mesh)
+        {
+            float distance = Vector3.Distance(entityProxy.mesh.bounds.center, Camera.current.transform.position);
+            Handles.Label( entityProxy.mesh.bounds.center, distance.ToString("F3"));
+        }
+    }
+
     public override void OnInspectorGUI()
     {
         EntityProxy entityProxy = target as EntityProxy;

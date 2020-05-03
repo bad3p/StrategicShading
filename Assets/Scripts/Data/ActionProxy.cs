@@ -1,4 +1,5 @@
 ﻿
+using System;
 using Types;
 using UnityEngine;
 
@@ -6,10 +7,12 @@ using UnityEngine;
 [RequireComponent(typeof(EntityProxy))]
 public class ActionProxy : ComponentProxy
 {
-    public uint ActionID = 0;
-    public uint TargetEntityID = 0;
-    public double3 TargetPosition = new double3(0,0,0);
-    public float ActionTimeout = 0;
+    public uint MoveTargetEntityID = 0;
+    public double3 MoveTargetVector = new double3(0,0,0);
+    public float MoveTargetValue = 0;
+    public uint AttackTargetEntityID = 0;
+    public float3 AttackTargetVector = new float3(0,0,0);
+    public float AttackTargetValue = 0;
     
     private EntityAssembly _entityAssembly;
     private EntityProxy _entityProxy;
@@ -26,17 +29,43 @@ public class ActionProxy : ComponentProxy
                 thisActionId = _entityAssembly.RegisterActionProxy(this);
                 _entityProxy.actionId = thisActionId;
                 entityId = _entityProxy.entityId;
-                actionId = ActionID;
-                targetEntityId = TargetEntityID;
-                targetPosition = TargetPosition;
-                actionTimeout = ActionTimeout;            
+                moveTargetEntityId = MoveTargetEntityID;
+                moveTargetVector = MoveTargetVector;
+                moveTargetValue = MoveTargetValue;
+                attackTargetEntityId = AttackTargetEntityID;
+                attackTargetVector = AttackTargetVector;
+                attackTargetValue = AttackTargetValue;
             }
         }    
     }
 
     void OnDestroy()
     {
-        _entityProxy.firearmsId = 0;
+        _entityProxy.actionId = 0;
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if (!_entityProxy)
+        {
+            Awake();
+        }
+        if (_entityAssembly)
+        {
+            float2 hullCenter2D = _entityProxy.hullCenter;
+            float3 hullCenter = new float3( hullCenter2D.x, 0, hullCenter2D.y );
+
+            Gizmos.color = _entityProxy.GetTeamColor();
+            if (moveTargetEntityId == 0)
+            {
+                float3 pos = moveTargetVector.ToVector3();
+                Gizmos.DrawLine( hullCenter.ToVector3(), pos.ToVector3() );
+            }
+            else
+            {
+                
+            }
+        }
     }
     
     public uint entityId
@@ -66,7 +95,7 @@ public class ActionProxy : ComponentProxy
         }
     }
 
-    public uint actionId
+    public uint moveTargetEntityId
     {
         get
         {
@@ -74,7 +103,7 @@ public class ActionProxy : ComponentProxy
             {
                 uint thisActionId = _entityAssembly.GetActionId(this);
                 Structs.Action thisAction = _entityAssembly.GetAction(thisActionId);
-                return thisAction.actionId;
+                return thisAction.moveTargetEntityId;
             }
             else
             {
@@ -87,13 +116,13 @@ public class ActionProxy : ComponentProxy
             {
                 uint thisActionId = _entityAssembly.GetActionId(this);
                 Structs.Action thisAction = _entityAssembly.GetAction(thisActionId);
-                thisAction.actionId = value;
+                thisAction.moveTargetEntityId = value;
                 _entityAssembly.SetAction(thisActionId, thisAction);
             }
         }
     }
     
-    public uint targetEntityId
+    public double3 moveTargetVector
     {
         get
         {
@@ -101,34 +130,7 @@ public class ActionProxy : ComponentProxy
             {
                 uint thisActionId = _entityAssembly.GetActionId(this);
                 Structs.Action thisAction = _entityAssembly.GetAction(thisActionId);
-                return thisAction.targetEntityId;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-        set
-        {
-            if (_entityAssembly)
-            {
-                uint thisActionId = _entityAssembly.GetActionId(this);
-                Structs.Action thisAction = _entityAssembly.GetAction(thisActionId);
-                thisAction.targetEntityId = value;
-                _entityAssembly.SetAction(thisActionId, thisAction);
-            }
-        }
-    }
-    
-    public double3 targetPosition
-    {
-        get
-        {
-            if (_entityAssembly)
-            {
-                uint thisActionId = _entityAssembly.GetActionId(this);
-                Structs.Action thisAction = _entityAssembly.GetAction(thisActionId);
-                return thisAction.targetPosition;
+                return thisAction.moveTargetVector;
             }
             else
             {
@@ -141,13 +143,13 @@ public class ActionProxy : ComponentProxy
             {
                 uint thisActionId = _entityAssembly.GetActionId(this);
                 Structs.Action thisAction = _entityAssembly.GetAction(thisActionId);
-                thisAction.targetPosition = value;
+                thisAction.moveTargetVector = value;
                 _entityAssembly.SetAction(thisActionId, thisAction);
             }
         }
     }
     
-    public float actionTimeout
+    public float moveTargetValue
     {
         get
         {
@@ -155,7 +157,7 @@ public class ActionProxy : ComponentProxy
             {
                 uint thisActionId = _entityAssembly.GetActionId(this);
                 Structs.Action thisAction = _entityAssembly.GetAction(thisActionId);
-                return thisAction.actionTimeout;
+                return thisAction.moveTargetValue;
             }
             else
             {
@@ -168,7 +170,88 @@ public class ActionProxy : ComponentProxy
             {
                 uint thisActionId = _entityAssembly.GetActionId(this);
                 Structs.Action thisAction = _entityAssembly.GetAction(thisActionId);
-                thisAction.actionTimeout = value;
+                thisAction.moveTargetValue = value;
+                _entityAssembly.SetAction(thisActionId, thisAction);
+            }
+        }
+    }
+    
+    public uint attackTargetEntityId
+    {
+        get
+        {
+            if (_entityAssembly)
+            {
+                uint thisActionId = _entityAssembly.GetActionId(this);
+                Structs.Action thisAction = _entityAssembly.GetAction(thisActionId);
+                return thisAction.attackTargetEntityId;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        set
+        {
+            if (_entityAssembly)
+            {
+                uint thisActionId = _entityAssembly.GetActionId(this);
+                Structs.Action thisAction = _entityAssembly.GetAction(thisActionId);
+                thisAction.attackTargetEntityId = value;
+                _entityAssembly.SetAction(thisActionId, thisAction);
+            }
+        }
+    }
+    
+    public float3 attackTargetVector
+    {
+        get
+        {
+            if (_entityAssembly)
+            {
+                uint thisActionId = _entityAssembly.GetActionId(this);
+                Structs.Action thisAction = _entityAssembly.GetAction(thisActionId);
+                return thisAction.attackTargetVector;
+            }
+            else
+            {
+                return new double3(0,0,0);
+            }
+        }
+        set
+        {
+            if (_entityAssembly)
+            {
+                uint thisActionId = _entityAssembly.GetActionId(this);
+                Structs.Action thisAction = _entityAssembly.GetAction(thisActionId);
+                thisAction.attackTargetVector = value;
+                _entityAssembly.SetAction(thisActionId, thisAction);
+            }
+        }
+    }
+    
+    public float attackTargetValue
+    {
+        get
+        {
+            if (_entityAssembly)
+            {
+                uint thisActionId = _entityAssembly.GetActionId(this);
+                Structs.Action thisAction = _entityAssembly.GetAction(thisActionId);
+                return thisAction.attackTargetValue;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        set
+        {
+            if (_entityAssembly)
+            {
+                uint thisActionId = _entityAssembly.GetActionId(this);
+                Structs.Action thisAction = _entityAssembly.GetAction(thisActionId);
+                thisAction.attackTargetValue = value;
                 _entityAssembly.SetAction(thisActionId, thisAction);
             }
         }

@@ -55,7 +55,6 @@ public class EntityProxy : MonoBehaviour
 
                 if (_mesh)
                 {
-
                     Color teamColor = GetTeamColor();
                     Color solidColor = teamColor;
                     Color wireColor = teamColor;
@@ -277,6 +276,33 @@ public class EntityProxy : MonoBehaviour
                         _hullHash = _hullHash * 23 + p.y.GetHashCode();
                     }
                 }
+            }
+        }
+    }
+
+    public Mesh mesh
+    {
+        get { return _mesh; }
+    }
+
+    public float2 hullCenter
+    {
+        get
+        {
+            if (_hull.Count > 0)
+            {
+                float2 hullCenter = _hull[0];
+                for (int i = 1; i < _hull.Count; i++)
+                {
+                    hullCenter += _hull[i];
+                }
+
+                hullCenter *= 1.0f / _hull.Count;
+                return hullCenter;
+            }
+            else
+            {
+                return new float2(0,0);
             }
         }
     }

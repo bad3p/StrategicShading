@@ -9,6 +9,10 @@ public class ActionProxyEditor : Editor
     public override void OnInspectorGUI()
     {
         ActionProxy actionProxy = target as ActionProxy;
+        if (!actionProxy)
+        {
+            return;
+        }
 
         EditorGUILayout.BeginHorizontal();
         
@@ -19,19 +23,27 @@ public class ActionProxyEditor : Editor
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("actionId");
+            EditorGUILayout.LabelField("moveTargetEntityId");
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("targetEntityId");
+            EditorGUILayout.LabelField("moveTargetVector");
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("targetPosition");
+            EditorGUILayout.LabelField("moveTargetValue");
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("actionTimeout");
+            EditorGUILayout.LabelField("attackTargetEntityId");
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("attackTargetVector");
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("attackTargetValue");
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();
@@ -43,34 +55,50 @@ public class ActionProxyEditor : Editor
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            actionProxy.ActionID = (uint)EditorGUILayout.IntField((int)actionProxy.ActionID);
-            if (actionProxy.actionId != actionProxy.ActionID)
+            actionProxy.MoveTargetEntityID = (uint)EditorGUILayout.IntField((int)actionProxy.MoveTargetEntityID);
+            if (actionProxy.moveTargetEntityId != actionProxy.MoveTargetEntityID)
             {
-                actionProxy.actionId = actionProxy.ActionID;
-            }
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            actionProxy.TargetEntityID = (uint)EditorGUILayout.IntField((int)actionProxy.TargetEntityID);
-            if (actionProxy.targetEntityId != actionProxy.TargetEntityID)
-            {
-                actionProxy.targetEntityId = actionProxy.TargetEntityID;
+                actionProxy.moveTargetEntityId = actionProxy.MoveTargetEntityID;
             }
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
-            actionProxy.TargetPosition = EditorGUILayout.Vector3Field("",actionProxy.TargetPosition.ToVector3());
-            if (ComputeShaderEmulator.length(actionProxy.TargetPosition - actionProxy.targetPosition) > Mathf.Epsilon)
+            actionProxy.MoveTargetVector = EditorGUILayout.Vector3Field("",actionProxy.MoveTargetVector.ToVector3());
+            if (ComputeShaderEmulator.length(actionProxy.MoveTargetVector - actionProxy.moveTargetVector) > Mathf.Epsilon)
             {
-                actionProxy.targetPosition = actionProxy.TargetPosition;
+                actionProxy.moveTargetVector = actionProxy.MoveTargetVector;
             }
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            actionProxy.ActionTimeout = (uint)EditorGUILayout.FloatField( actionProxy.ActionTimeout );
-            if (actionProxy.actionTimeout != actionProxy.ActionTimeout)
+            actionProxy.MoveTargetValue = EditorGUILayout.FloatField( actionProxy.MoveTargetValue );
+            if (Mathf.Abs(actionProxy.moveTargetValue - actionProxy.MoveTargetValue) > Mathf.Epsilon)
             {
-                actionProxy.actionTimeout = actionProxy.ActionTimeout;
+                actionProxy.moveTargetValue = actionProxy.MoveTargetValue;
+            }
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            actionProxy.AttackTargetEntityID = (uint)EditorGUILayout.IntField((int)actionProxy.AttackTargetEntityID);
+            if (actionProxy.attackTargetEntityId != actionProxy.AttackTargetEntityID)
+            {
+                actionProxy.attackTargetEntityId = actionProxy.AttackTargetEntityID;
+            }
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            actionProxy.AttackTargetVector = EditorGUILayout.Vector3Field("",actionProxy.AttackTargetVector.ToVector3());
+            if (ComputeShaderEmulator.length(actionProxy.AttackTargetVector - actionProxy.attackTargetVector) > Mathf.Epsilon)
+            {
+                actionProxy.attackTargetVector = actionProxy.AttackTargetVector;
+            }
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            actionProxy.AttackTargetValue = EditorGUILayout.FloatField( actionProxy.AttackTargetValue );
+            if (Mathf.Abs(actionProxy.attackTargetValue - actionProxy.AttackTargetValue) > Mathf.Epsilon)
+            {
+                actionProxy.attackTargetValue = actionProxy.AttackTargetValue;
             }
             EditorGUILayout.EndHorizontal();
         }
