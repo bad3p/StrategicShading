@@ -67,7 +67,7 @@ public class EntityAssemblyEditor : Editor
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(entityAssembly.actionBuffer.Count.ToString());
+            EditorGUILayout.LabelField(entityAssembly.movementBuffer.Count.ToString());
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();

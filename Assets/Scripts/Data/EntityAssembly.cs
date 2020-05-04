@@ -20,8 +20,8 @@ public class EntityAssembly : MonoBehaviour
     private List<Structs.Firearms> _firearmsBuffer = new List<Structs.Firearms>() { new Structs.Firearms() };
     private Dictionary<FirearmsProxy, uint> _firearmsProxyToEntityId = new Dictionary<FirearmsProxy, uint>();
     
-    private List<Structs.Action> _actionBuffer = new List<Structs.Action>() { new Structs.Action() };
-    private Dictionary<ActionProxy, uint> _actionProxyToEntityId = new Dictionary<ActionProxy, uint>();
+    private List<Structs.Movement> _movementBuffer = new List<Structs.Movement>() { new Structs.Movement() };
+    private Dictionary<MovementProxy, uint> _movementProxyToEntityId = new Dictionary<MovementProxy, uint>();
     
     #region Generics
     public uint GetProxyId<P>(P proxy, Dictionary<P,uint> proxyToId)
@@ -110,9 +110,9 @@ public class EntityAssembly : MonoBehaviour
         get { return _firearmsBuffer; }
     }
 
-    public List<Structs.Action> actionBuffer
+    public List<Structs.Movement> movementBuffer
     {
-        get { return _actionBuffer;  }
+        get { return _movementBuffer;  }
     }
     #endregion
     
@@ -252,29 +252,29 @@ public class EntityAssembly : MonoBehaviour
     #endregion
     
     #region Action
-    public uint GetActionId(ActionProxy actionProxy)
+    public uint GetMovementId(MovementProxy movementProxy)
     {
-        return GetProxyId( actionProxy, _actionProxyToEntityId );
+        return GetProxyId( movementProxy, _movementProxyToEntityId );
     }
     
-    public ActionProxy GetActionProxy(uint actionId)
+    public MovementProxy GetMovementProxy(uint movementId)
     {
-        return GetProxy( actionId, _actionProxyToEntityId );
+        return GetProxy( movementId, _movementProxyToEntityId );
     }
     
-    public uint RegisterActionProxy(ActionProxy actionProxy)
+    public uint RegisterMovementProxy(MovementProxy movementProxy)
     {
-        return RegisterProxy( actionProxy, _actionBuffer, _actionProxyToEntityId );
+        return RegisterProxy( movementProxy, _movementBuffer, _movementProxyToEntityId );
     }
     
-    public Structs.Action GetAction(uint actionId)
+    public Structs.Movement GetMovement(uint movementId)
     {
-        return GetStruct<ActionProxy,Structs.Action>(actionId, _actionBuffer);
+        return GetStruct<MovementProxy,Structs.Movement>(movementId, _movementBuffer);
     }
     
-    public void SetAction(uint actionId, Structs.Action a)
+    public void SetMovement(uint movementId, Structs.Movement m)
     {
-        SetStruct<ActionProxy,Structs.Action>(actionId, a, _actionBuffer);
+        SetStruct<MovementProxy,Structs.Movement>(movementId, m, _movementBuffer);
     }
     #endregion
 }

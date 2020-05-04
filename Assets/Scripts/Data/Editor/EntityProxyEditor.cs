@@ -85,7 +85,7 @@ public class EntityProxyEditor : Editor
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField( entityProxy.actionId.ToString() );
+            EditorGUILayout.LabelField( entityProxy.movementId.ToString() );
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();

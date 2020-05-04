@@ -523,7 +523,7 @@ public class EntityProxy : MonoBehaviour
         }
     }
     
-    public uint actionId
+    public uint movementId
     {
         get
         {
@@ -535,7 +535,7 @@ public class EntityProxy : MonoBehaviour
             {
                 uint thisEntityId = _entityAssembly.GetEntityId(this);
                 Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
-                return entity.actionId;
+                return entity.movementId;
             }
             else
             {
@@ -552,7 +552,7 @@ public class EntityProxy : MonoBehaviour
             {
                 uint thisEntityId = _entityAssembly.GetEntityId(this);
                 Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
-                entity.actionId = value;
+                entity.movementId = value;
                 _entityAssembly.SetEntity(thisEntityId, entity);
             }
         }

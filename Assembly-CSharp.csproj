@@ -57,12 +57,12 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\ComputeShaderEngine.cs" />
-     <Compile Include="Assets\Scripts\Data\ActionProxy.cs" />
      <Compile Include="Assets\Scripts\Data\ComponentProxy.cs" />
      <Compile Include="Assets\Scripts\Data\EntityAssembly.cs" />
      <Compile Include="Assets\Scripts\Data\EntityProxy.cs" />
      <Compile Include="Assets\Scripts\Data\FirearmsProxy.cs" />
      <Compile Include="Assets\Scripts\Data\HierarchyProxy.cs" />
+     <Compile Include="Assets\Scripts\Data\MovementProxy.cs" />
      <Compile Include="Assets\Scripts\Data\PersonnelProxy.cs" />
      <Compile Include="Assets\Scripts\Data\TransformProxy.cs" />
      <Compile Include="Assets\Scripts\DemoUI.cs" />
