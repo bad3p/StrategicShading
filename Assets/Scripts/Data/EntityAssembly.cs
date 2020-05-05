@@ -23,6 +23,9 @@ public class EntityAssembly : MonoBehaviour
     private List<Structs.Movement> _movementBuffer = new List<Structs.Movement>() { new Structs.Movement() };
     private Dictionary<MovementProxy, uint> _movementProxyToEntityId = new Dictionary<MovementProxy, uint>();
     
+    private List<Structs.Firepower> _firepowerBuffer = new List<Structs.Firepower>() { new Structs.Firepower() };
+    private Dictionary<FirepowerProxy, uint> _firepowerProxyToEntityId = new Dictionary<FirepowerProxy, uint>();
+    
     #region Generics
     public uint GetProxyId<P>(P proxy, Dictionary<P,uint> proxyToId)
     {
@@ -251,7 +254,7 @@ public class EntityAssembly : MonoBehaviour
     }
     #endregion
     
-    #region Action
+    #region Movement
     public uint GetMovementId(MovementProxy movementProxy)
     {
         return GetProxyId( movementProxy, _movementProxyToEntityId );
@@ -275,6 +278,33 @@ public class EntityAssembly : MonoBehaviour
     public void SetMovement(uint movementId, Structs.Movement m)
     {
         SetStruct<MovementProxy,Structs.Movement>(movementId, m, _movementBuffer);
+    }
+    #endregion
+    
+    #region Firepower
+    public uint GetFirepowerId(FirepowerProxy firepowerProxy)
+    {
+        return GetProxyId( firepowerProxy, _firepowerProxyToEntityId );
+    }
+    
+    public FirepowerProxy GetFirepowerProxy(uint firepowerId)
+    {
+        return GetProxy( firepowerId, _firepowerProxyToEntityId );
+    }
+    
+    public uint RegisterFirepowerProxy(FirepowerProxy firepowerProxy)
+    {
+        return RegisterProxy( firepowerProxy, _firepowerBuffer, _firepowerProxyToEntityId );
+    }
+    
+    public Structs.Firepower GetFirepower(uint firepowerId)
+    {
+        return GetStruct<FirepowerProxy,Structs.Firepower>(firepowerId, _firepowerBuffer);
+    }
+    
+    public void SetFirepower(uint firepowerId, Structs.Firepower f)
+    {
+        SetStruct<FirepowerProxy,Structs.Firepower>(firepowerId, f, _firepowerBuffer);
     }
     #endregion
 }

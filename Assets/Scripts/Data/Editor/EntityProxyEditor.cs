@@ -49,7 +49,11 @@ public class EntityProxyEditor : Editor
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("actionId");
+            EditorGUILayout.LabelField("movementId");
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("firepowerId");
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();
@@ -86,6 +90,10 @@ public class EntityProxyEditor : Editor
             
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField( entityProxy.movementId.ToString() );
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField( entityProxy.firepowerId.ToString() );
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();

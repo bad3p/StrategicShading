@@ -11,7 +11,7 @@ public class EntityProxy : MonoBehaviour
     private EntityAssembly _entityAssembly;
     private bool _isInitialized = false;
 
-    private int _concaveHullFrame = 0;
+    private int _hullFrame = 0;
     private List<float2> _pointCloud = new List<float2>();
     private List<float2> _hull = new List<float2>();
     private int _hullHash = 0;
@@ -202,9 +202,9 @@ public class EntityProxy : MonoBehaviour
             _hull.Clear();
             return;
         }
-        if (_concaveHullFrame != Time.frameCount)
+        if (_hullFrame != Time.frameCount)
         {
-            _concaveHullFrame = Time.frameCount;
+            _hullFrame = Time.frameCount;
             
             _pointCloud.Clear();
             
@@ -553,6 +553,41 @@ public class EntityProxy : MonoBehaviour
                 uint thisEntityId = _entityAssembly.GetEntityId(this);
                 Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
                 entity.movementId = value;
+                _entityAssembly.SetEntity(thisEntityId, entity);
+            }
+        }
+    }
+    
+    public uint firepowerId
+    {
+        get
+        {
+            if (!_isInitialized)
+            {
+                Awake();
+            }
+            if (_entityAssembly)
+            {
+                uint thisEntityId = _entityAssembly.GetEntityId(this);
+                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
+                return entity.firepowerId;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        set
+        {
+            if (!_isInitialized)
+            {
+                Awake();
+            }
+            if (_entityAssembly)
+            {
+                uint thisEntityId = _entityAssembly.GetEntityId(this);
+                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
+                entity.firepowerId = value;
                 _entityAssembly.SetEntity(thisEntityId, entity);
             }
         }

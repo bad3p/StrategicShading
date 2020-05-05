@@ -11,6 +11,7 @@ namespace Structs
         public uint personnelId;
         public uint firearmsId;
         public uint movementId;
+        public uint firepowerId;
     };
 
     public struct Transform
@@ -55,5 +56,12 @@ namespace Structs
         public uint targetEntityId;
         public double3 targetPosition;
         public float targetVelocity;
+    };
+    
+    public struct Firepower
+    {
+        public uint entityId;
+        public uint targetEntityId;
+        public uint ammunitionBudget;
     };
 }

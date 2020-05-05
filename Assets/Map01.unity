@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 50754643}
   - component: {fileID: 50754642}
   - component: {fileID: 50754647}
+  - component: {fileID: 50754648}
   m_Layer: 0
   m_Name: RedInfantryPlatoonHQ (1)
   m_TagString: Untagged
@@ -253,6 +254,20 @@ MonoBehaviour:
     y: 0
     z: -15
   TargetVelocity: 3
+--- !u!114 &50754648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50754640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &103197989
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,6 +376,7 @@ GameObject:
   - component: {fileID: 115422638}
   - component: {fileID: 115422639}
   - component: {fileID: 115422640}
+  - component: {fileID: 115422641}
   m_Layer: 0
   m_Name: BlueInfantrySquad (3)
   m_TagString: Untagged
@@ -479,6 +495,20 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 3
+--- !u!114 &115422641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115422633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &117113804
 GameObject:
   m_ObjectHideFlags: 0
@@ -680,6 +710,7 @@ GameObject:
   - component: {fileID: 151175072}
   - component: {fileID: 151175071}
   - component: {fileID: 151175076}
+  - component: {fileID: 151175077}
   m_Layer: 0
   m_Name: RedInfantrySquad (1)
   m_TagString: Untagged
@@ -798,6 +829,20 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 3
+--- !u!114 &151175077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151175069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &175275715
 GameObject:
   m_ObjectHideFlags: 0
@@ -999,6 +1044,7 @@ GameObject:
   - component: {fileID: 233739603}
   - component: {fileID: 233739602}
   - component: {fileID: 233739607}
+  - component: {fileID: 233739608}
   m_Layer: 0
   m_Name: BlueInfantryPlatoonHQ (1)
   m_TagString: Untagged
@@ -1117,6 +1163,20 @@ MonoBehaviour:
     y: 0
     z: -15
   TargetVelocity: 3
+--- !u!114 &233739608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 233739600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &247843852
 GameObject:
   m_ObjectHideFlags: 0
@@ -1225,6 +1285,7 @@ GameObject:
   - component: {fileID: 314359923}
   - component: {fileID: 314359922}
   - component: {fileID: 314359927}
+  - component: {fileID: 314359928}
   m_Layer: 0
   m_Name: RedInfantryCompanyHQ (2)
   m_TagString: Untagged
@@ -1343,6 +1404,20 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 0
+--- !u!114 &314359928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314359920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &328934425
 GameObject:
   m_ObjectHideFlags: 0
@@ -1358,6 +1433,7 @@ GameObject:
   - component: {fileID: 328934428}
   - component: {fileID: 328934427}
   - component: {fileID: 328934432}
+  - component: {fileID: 328934433}
   m_Layer: 0
   m_Name: RedInfantrySquad (3)
   m_TagString: Untagged
@@ -1476,6 +1552,20 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 3
+--- !u!114 &328934433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328934425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &342539617
 GameObject:
   m_ObjectHideFlags: 0
@@ -1677,6 +1767,7 @@ GameObject:
   - component: {fileID: 393084468}
   - component: {fileID: 393084467}
   - component: {fileID: 393084472}
+  - component: {fileID: 393084473}
   m_Layer: 0
   m_Name: RedInfantrySquad (1)
   m_TagString: Untagged
@@ -1795,6 +1886,20 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 3
+--- !u!114 &393084473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 393084465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &402623721
 GameObject:
   m_ObjectHideFlags: 0
@@ -2396,6 +2501,7 @@ GameObject:
   - component: {fileID: 764241034}
   - component: {fileID: 764241033}
   - component: {fileID: 764241038}
+  - component: {fileID: 764241039}
   m_Layer: 0
   m_Name: BlueInfantrySquad (3)
   m_TagString: Untagged
@@ -2514,6 +2620,20 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 3
+--- !u!114 &764241039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 764241031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &851641392
 GameObject:
   m_ObjectHideFlags: 0
@@ -2622,6 +2742,7 @@ GameObject:
   - component: {fileID: 851973191}
   - component: {fileID: 851973190}
   - component: {fileID: 851973195}
+  - component: {fileID: 851973196}
   m_Layer: 0
   m_Name: BlueInfantrySquad (1)
   m_TagString: Untagged
@@ -2740,6 +2861,20 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 3
+--- !u!114 &851973196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 851973188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &854208695
 GameObject:
   m_ObjectHideFlags: 0
@@ -2755,6 +2890,7 @@ GameObject:
   - component: {fileID: 854208700}
   - component: {fileID: 854208701}
   - component: {fileID: 854208702}
+  - component: {fileID: 854208703}
   m_Layer: 0
   m_Name: BlueInfantrySquad (2)
   m_TagString: Untagged
@@ -2873,6 +3009,20 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 3
+--- !u!114 &854208703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854208695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &909305568
 GameObject:
   m_ObjectHideFlags: 0
@@ -2888,6 +3038,7 @@ GameObject:
   - component: {fileID: 909305571}
   - component: {fileID: 909305570}
   - component: {fileID: 909305575}
+  - component: {fileID: 909305576}
   m_Layer: 0
   m_Name: BlueInfantryPlatoonHQ (1)
   m_TagString: Untagged
@@ -3006,6 +3157,20 @@ MonoBehaviour:
     y: 0
     z: -15
   TargetVelocity: 3
+--- !u!114 &909305576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909305568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &925101042
 GameObject:
   m_ObjectHideFlags: 0
@@ -3300,6 +3465,7 @@ GameObject:
   - component: {fileID: 1025601187}
   - component: {fileID: 1025601188}
   - component: {fileID: 1025601189}
+  - component: {fileID: 1025601190}
   m_Layer: 0
   m_Name: RedInfantrySquad (1)
   m_TagString: Untagged
@@ -3418,6 +3584,20 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 3
+--- !u!114 &1025601190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025601182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &1110142094
 GameObject:
   m_ObjectHideFlags: 0
@@ -3526,6 +3706,7 @@ GameObject:
   - component: {fileID: 1125837776}
   - component: {fileID: 1125837775}
   - component: {fileID: 1125837780}
+  - component: {fileID: 1125837781}
   m_Layer: 0
   m_Name: BlueInfantryCompanyHQ (1)
   m_TagString: Untagged
@@ -3644,6 +3825,20 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 0
+--- !u!114 &1125837781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125837773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &1196519417
 GameObject:
   m_ObjectHideFlags: 0
@@ -3752,6 +3947,7 @@ GameObject:
   - component: {fileID: 1206637758}
   - component: {fileID: 1206637757}
   - component: {fileID: 1206637762}
+  - component: {fileID: 1206637763}
   m_Layer: 0
   m_Name: RedInfantrySquad (3)
   m_TagString: Untagged
@@ -3870,6 +4066,20 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 3
+--- !u!114 &1206637763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1206637755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &1223553436
 GameObject:
   m_ObjectHideFlags: 0
@@ -3946,6 +4156,7 @@ GameObject:
   - component: {fileID: 1280435809}
   - component: {fileID: 1280435808}
   - component: {fileID: 1280435813}
+  - component: {fileID: 1280435814}
   m_Layer: 0
   m_Name: RedInfantrySquad (2)
   m_TagString: Untagged
@@ -4064,6 +4275,20 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 3
+--- !u!114 &1280435814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280435806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &1326488264
 GameObject:
   m_ObjectHideFlags: 0
@@ -4079,6 +4304,7 @@ GameObject:
   - component: {fileID: 1326488267}
   - component: {fileID: 1326488266}
   - component: {fileID: 1326488271}
+  - component: {fileID: 1326488272}
   m_Layer: 0
   m_Name: BlueInfantrySquad (3)
   m_TagString: Untagged
@@ -4197,6 +4423,20 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 3
+--- !u!114 &1326488272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326488264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &1353007926
 GameObject:
   m_ObjectHideFlags: 0
@@ -4212,6 +4452,7 @@ GameObject:
   - component: {fileID: 1353007929}
   - component: {fileID: 1353007928}
   - component: {fileID: 1353007933}
+  - component: {fileID: 1353007934}
   m_Layer: 0
   m_Name: RedInfantrySquad (2)
   m_TagString: Untagged
@@ -4330,6 +4571,20 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 3
+--- !u!114 &1353007934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353007926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &1392305122
 GameObject:
   m_ObjectHideFlags: 0
@@ -4624,6 +4879,7 @@ GameObject:
   - component: {fileID: 1533655324}
   - component: {fileID: 1533655323}
   - component: {fileID: 1533655328}
+  - component: {fileID: 1533655329}
   m_Layer: 0
   m_Name: RedInfantryPlatoonHQ (1)
   m_TagString: Untagged
@@ -4742,6 +4998,20 @@ MonoBehaviour:
     y: 0
     z: -15
   TargetVelocity: 3
+--- !u!114 &1533655329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1533655321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &1581406513
 GameObject:
   m_ObjectHideFlags: 0
@@ -4893,6 +5163,7 @@ GameObject:
   - component: {fileID: 1600146586}
   - component: {fileID: 1600146585}
   - component: {fileID: 1600146590}
+  - component: {fileID: 1600146591}
   m_Layer: 0
   m_Name: BlueInfantryPlatoonHQ (1)
   m_TagString: Untagged
@@ -5011,6 +5282,20 @@ MonoBehaviour:
     y: 0
     z: -15
   TargetVelocity: 3
+--- !u!114 &1600146591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1600146583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &1625177858
 GameObject:
   m_ObjectHideFlags: 0
@@ -5518,6 +5803,7 @@ GameObject:
   - component: {fileID: 1733321049}
   - component: {fileID: 1733321048}
   - component: {fileID: 1733321053}
+  - component: {fileID: 1733321054}
   m_Layer: 0
   m_Name: BlueInfantrySquad (2)
   m_TagString: Untagged
@@ -5636,6 +5922,20 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 3
+--- !u!114 &1733321054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1733321046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &1743379592
 GameObject:
   m_ObjectHideFlags: 0
@@ -5930,6 +6230,7 @@ GameObject:
   - component: {fileID: 1785249257}
   - component: {fileID: 1785249256}
   - component: {fileID: 1785249261}
+  - component: {fileID: 1785249262}
   m_Layer: 0
   m_Name: RedInfantryPlatoonHQ (1)
   m_TagString: Untagged
@@ -6048,6 +6349,20 @@ MonoBehaviour:
     y: 0
     z: -15
   TargetVelocity: 3
+--- !u!114 &1785249262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1785249254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &1895606202
 GameObject:
   m_ObjectHideFlags: 0
@@ -6063,6 +6378,7 @@ GameObject:
   - component: {fileID: 1895606207}
   - component: {fileID: 1895606208}
   - component: {fileID: 1895606209}
+  - component: {fileID: 1895606210}
   m_Layer: 0
   m_Name: BlueInfantrySquad (1)
   m_TagString: Untagged
@@ -6181,6 +6497,20 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 3
+--- !u!114 &1895606210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1895606202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &1897142788
 GameObject:
   m_ObjectHideFlags: 0
@@ -6196,6 +6526,7 @@ GameObject:
   - component: {fileID: 1897142793}
   - component: {fileID: 1897142794}
   - component: {fileID: 1897142795}
+  - component: {fileID: 1897142796}
   m_Layer: 0
   m_Name: RedInfantrySquad (2)
   m_TagString: Untagged
@@ -6314,6 +6645,20 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 3
+--- !u!114 &1897142796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897142788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &1898030549
 GameObject:
   m_ObjectHideFlags: 0
@@ -6515,6 +6860,7 @@ GameObject:
   - component: {fileID: 1972453585}
   - component: {fileID: 1972453584}
   - component: {fileID: 1972453589}
+  - component: {fileID: 1972453590}
   m_Layer: 0
   m_Name: BlueInfantrySquad (1)
   m_TagString: Untagged
@@ -6633,6 +6979,20 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 3
+--- !u!114 &1972453590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1972453582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &1973633929
 GameObject:
   m_ObjectHideFlags: 0
@@ -6741,6 +7101,7 @@ GameObject:
   - component: {fileID: 1977465361}
   - component: {fileID: 1977465360}
   - component: {fileID: 1977465365}
+  - component: {fileID: 1977465366}
   m_Layer: 0
   m_Name: BlueInfantrySquad (2)
   m_TagString: Untagged
@@ -6859,6 +7220,20 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 3
+--- !u!114 &1977465366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1977465358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
 --- !u!1 &2006245100
 GameObject:
   m_ObjectHideFlags: 0
@@ -7214,6 +7589,7 @@ GameObject:
   - component: {fileID: 2100194440}
   - component: {fileID: 2100194441}
   - component: {fileID: 2100194442}
+  - component: {fileID: 2100194443}
   m_Layer: 0
   m_Name: RedInfantrySquad (3)
   m_TagString: Untagged
@@ -7332,3 +7708,17 @@ MonoBehaviour:
     y: 0
     z: 0
   TargetVelocity: 3
+--- !u!114 &2100194443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100194435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
