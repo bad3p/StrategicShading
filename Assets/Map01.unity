@@ -247,12 +247,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
+  TargetEntityID: 31
   TargetPosition:
     x: 0
     y: 0
-    z: 0
-  TargetVelocity: 0
+    z: -15
+  TargetVelocity: 3
 --- !u!1 &103197989
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,12 +473,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
+  TargetEntityID: 30
   TargetPosition:
-    x: 0
+    x: 30
     y: 0
     z: 0
-  TargetVelocity: 0
+  TargetVelocity: 3
 --- !u!1 &117113804
 GameObject:
   m_ObjectHideFlags: 0
@@ -792,12 +792,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
+  TargetEntityID: 23
   TargetPosition:
-    x: 0
+    x: -31
     y: 0
     z: 0
-  TargetVelocity: 0
+  TargetVelocity: 3
 --- !u!1 &175275715
 GameObject:
   m_ObjectHideFlags: 0
@@ -1111,12 +1111,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
+  TargetEntityID: 32
   TargetPosition:
     x: 0
     y: 0
-    z: 0
-  TargetVelocity: 0
+    z: -15
+  TargetVelocity: 3
 --- !u!1 &247843852
 GameObject:
   m_ObjectHideFlags: 0
@@ -1470,12 +1470,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
+  TargetEntityID: 23
   TargetPosition:
-    x: 0
+    x: 31
     y: 0
     z: 0
-  TargetVelocity: 0
+  TargetVelocity: 3
 --- !u!1 &342539617
 GameObject:
   m_ObjectHideFlags: 0
@@ -1789,12 +1789,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
+  TargetEntityID: 25
   TargetPosition:
-    x: 0
+    x: -31
     y: 0
     z: 0
-  TargetVelocity: 0
+  TargetVelocity: 3
 --- !u!1 &402623721
 GameObject:
   m_ObjectHideFlags: 0
@@ -1806,7 +1806,6 @@ GameObject:
   - component: {fileID: 402623724}
   - component: {fileID: 402623723}
   - component: {fileID: 402623722}
-  - component: {fileID: 402623725}
   m_Layer: 0
   m_Name: BlueInfantryPlatoon (1)
   m_TagString: Untagged
@@ -1857,24 +1856,6 @@ Transform:
   m_Father: {fileID: 527236169}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &402623725
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 402623721}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  TargetPosition:
-    x: 0
-    y: 0
-    z: 0
-  TargetVelocity: 0
 --- !u!1 &459451355
 GameObject:
   m_ObjectHideFlags: 0
@@ -1979,7 +1960,6 @@ GameObject:
   - component: {fileID: 527236169}
   - component: {fileID: 527236168}
   - component: {fileID: 527236167}
-  - component: {fileID: 527236170}
   m_Layer: 0
   m_Name: BlueInfantryCompany (1)
   m_TagString: Untagged
@@ -2030,24 +2010,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
---- !u!114 &527236170
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 527236166}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  TargetPosition:
-    x: 0
-    y: 0
-    z: 0
-  TargetVelocity: 0
 --- !u!1 &547916292
 GameObject:
   m_ObjectHideFlags: 0
@@ -2059,7 +2021,6 @@ GameObject:
   - component: {fileID: 547916293}
   - component: {fileID: 547916295}
   - component: {fileID: 547916294}
-  - component: {fileID: 547916296}
   m_Layer: 0
   m_Name: BlueInfantryPlatoon (2)
   m_TagString: Untagged
@@ -2110,24 +2071,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TeamId: 2
---- !u!114 &547916296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 547916292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  TargetPosition:
-    x: 0
-    y: 0
-    z: 0
-  TargetVelocity: 0
 --- !u!1 &558114734
 GameObject:
   m_ObjectHideFlags: 0
@@ -2139,7 +2082,6 @@ GameObject:
   - component: {fileID: 558114735}
   - component: {fileID: 558114737}
   - component: {fileID: 558114736}
-  - component: {fileID: 558114738}
   m_Layer: 0
   m_Name: RedInfantryPlatoon (2)
   m_TagString: Untagged
@@ -2190,24 +2132,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TeamId: 1
---- !u!114 &558114738
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 558114734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  TargetPosition:
-    x: 0
-    y: 0
-    z: 0
-  TargetVelocity: 0
 --- !u!1 &559942083
 GameObject:
   m_ObjectHideFlags: 0
@@ -2584,12 +2508,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
+  TargetEntityID: 32
   TargetPosition:
-    x: 0
+    x: 30
     y: 0
     z: 0
-  TargetVelocity: 0
+  TargetVelocity: 3
 --- !u!1 &851641392
 GameObject:
   m_ObjectHideFlags: 0
@@ -2815,7 +2739,7 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
-  TargetVelocity: 0
+  TargetVelocity: 3
 --- !u!1 &854208695
 GameObject:
   m_ObjectHideFlags: 0
@@ -2943,12 +2867,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
+  TargetEntityID: 30
   TargetPosition:
-    x: 0
+    x: -30
     y: 0
     z: 0
-  TargetVelocity: 0
+  TargetVelocity: 3
 --- !u!1 &909305568
 GameObject:
   m_ObjectHideFlags: 0
@@ -3076,12 +3000,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
+  TargetEntityID: 30
   TargetPosition:
     x: 0
     y: 0
-    z: 0
-  TargetVelocity: 0
+    z: -15
+  TargetVelocity: 3
 --- !u!1 &925101042
 GameObject:
   m_ObjectHideFlags: 0
@@ -3488,12 +3412,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
+  TargetEntityID: 31
   TargetPosition:
-    x: 0
+    x: -31
     y: 0
     z: 0
-  TargetVelocity: 0
+  TargetVelocity: 3
 --- !u!1 &1110142094
 GameObject:
   m_ObjectHideFlags: 0
@@ -3940,12 +3864,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
+  TargetEntityID: 25
   TargetPosition:
-    x: 0
+    x: 31
     y: 0
     z: 0
-  TargetVelocity: 0
+  TargetVelocity: 3
 --- !u!1 &1223553436
 GameObject:
   m_ObjectHideFlags: 0
@@ -3957,7 +3881,6 @@ GameObject:
   - component: {fileID: 1223553439}
   - component: {fileID: 1223553438}
   - component: {fileID: 1223553437}
-  - component: {fileID: 1223553440}
   m_Layer: 0
   m_Name: RedInfantryCompany (1)
   m_TagString: Untagged
@@ -4008,24 +3931,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1223553440
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1223553436}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  TargetPosition:
-    x: 0
-    y: 0
-    z: 0
-  TargetVelocity: 0
 --- !u!1 &1280435806
 GameObject:
   m_ObjectHideFlags: 0
@@ -4158,7 +4063,7 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
-  TargetVelocity: 0
+  TargetVelocity: 3
 --- !u!1 &1326488264
 GameObject:
   m_ObjectHideFlags: 0
@@ -4286,12 +4191,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
+  TargetEntityID: 17
   TargetPosition:
-    x: 0
+    x: 30
     y: 0
     z: 0
-  TargetVelocity: 0
+  TargetVelocity: 3
 --- !u!1 &1353007926
 GameObject:
   m_ObjectHideFlags: 0
@@ -4421,10 +4326,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TargetEntityID: 0
   TargetPosition:
-    x: 0
+    x: 100
     y: 0
     z: 0
-  TargetVelocity: 0
+  TargetVelocity: 3
 --- !u!1 &1392305122
 GameObject:
   m_ObjectHideFlags: 0
@@ -4831,12 +4736,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
+  TargetEntityID: 23
   TargetPosition:
     x: 0
     y: 0
-    z: 0
-  TargetVelocity: 0
+    z: -15
+  TargetVelocity: 3
 --- !u!1 &1581406513
 GameObject:
   m_ObjectHideFlags: 0
@@ -5100,12 +5005,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
+  TargetEntityID: 17
   TargetPosition:
     x: 0
     y: 0
-    z: 0
-  TargetVelocity: 0
+    z: -15
+  TargetVelocity: 3
 --- !u!1 &1625177858
 GameObject:
   m_ObjectHideFlags: 0
@@ -5396,7 +5301,6 @@ GameObject:
   - component: {fileID: 1676357862}
   - component: {fileID: 1676357861}
   - component: {fileID: 1676357860}
-  - component: {fileID: 1676357863}
   m_Layer: 0
   m_Name: RedInfantryPlatoon (1)
   m_TagString: Untagged
@@ -5447,24 +5351,6 @@ Transform:
   m_Father: {fileID: 1223553439}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1676357863
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1676357859}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  TargetPosition:
-    x: 0
-    y: 0
-    z: 0
-  TargetVelocity: 0
 --- !u!1 &1722545572
 GameObject:
   m_ObjectHideFlags: 0
@@ -5476,7 +5362,6 @@ GameObject:
   - component: {fileID: 1722545573}
   - component: {fileID: 1722545575}
   - component: {fileID: 1722545574}
-  - component: {fileID: 1722545576}
   m_Layer: 0
   m_Name: BlueInfantryPlatoon (3)
   m_TagString: Untagged
@@ -5527,24 +5412,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TeamId: 2
---- !u!114 &1722545576
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1722545572}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  TargetPosition:
-    x: 0
-    y: 0
-    z: 0
-  TargetVelocity: 0
 --- !u!1 &1731904580
 GameObject:
   m_ObjectHideFlags: 0
@@ -5763,12 +5630,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
+  TargetEntityID: 32
   TargetPosition:
-    x: 0
+    x: -30
     y: 0
     z: 0
-  TargetVelocity: 0
+  TargetVelocity: 3
 --- !u!1 &1743379592
 GameObject:
   m_ObjectHideFlags: 0
@@ -6175,12 +6042,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
+  TargetEntityID: 25
   TargetPosition:
     x: 0
     y: 0
-    z: 0
-  TargetVelocity: 0
+    z: -15
+  TargetVelocity: 3
 --- !u!1 &1895606202
 GameObject:
   m_ObjectHideFlags: 0
@@ -6310,10 +6177,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TargetEntityID: 0
   TargetPosition:
-    x: 0
+    x: 100
     y: 0
     z: 0
-  TargetVelocity: 0
+  TargetVelocity: 3
 --- !u!1 &1897142788
 GameObject:
   m_ObjectHideFlags: 0
@@ -6443,10 +6310,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TargetEntityID: 0
   TargetPosition:
-    x: 0
+    x: -100
     y: 0
     z: 0
-  TargetVelocity: 0
+  TargetVelocity: 3
 --- !u!1 &1898030549
 GameObject:
   m_ObjectHideFlags: 0
@@ -6762,10 +6629,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TargetEntityID: 0
   TargetPosition:
-    x: 0
+    x: -100
     y: 0
     z: 0
-  TargetVelocity: 0
+  TargetVelocity: 3
 --- !u!1 &1973633929
 GameObject:
   m_ObjectHideFlags: 0
@@ -6986,12 +6853,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
+  TargetEntityID: 17
   TargetPosition:
-    x: 0
+    x: -30
     y: 0
     z: 0
-  TargetVelocity: 0
+  TargetVelocity: 3
 --- !u!1 &2006245100
 GameObject:
   m_ObjectHideFlags: 0
@@ -7189,7 +7056,6 @@ GameObject:
   - component: {fileID: 2022059468}
   - component: {fileID: 2022059470}
   - component: {fileID: 2022059469}
-  - component: {fileID: 2022059471}
   m_Layer: 0
   m_Name: RedInfantryPlatoon (3)
   m_TagString: Untagged
@@ -7240,24 +7106,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TeamId: 1
---- !u!114 &2022059471
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2022059467}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  TargetPosition:
-    x: 0
-    y: 0
-    z: 0
-  TargetVelocity: 0
 --- !u!1 &2096923918
 GameObject:
   m_ObjectHideFlags: 0
@@ -7478,9 +7326,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
+  TargetEntityID: 31
   TargetPosition:
-    x: 0
+    x: 31
     y: 0
     z: 0
-  TargetVelocity: 0
+  TargetVelocity: 3

@@ -1,6 +1,7 @@
 ﻿
 using System;
 using Types;
+using UnityEditor;
 using UnityEngine;
 
 [ExecuteInEditMode]
@@ -46,18 +47,37 @@ public class MovementProxy : ComponentProxy
         }
         if (_entityAssembly)
         {
-            float2 hullCenter2D = _entityProxy.hullCenter;
-            float3 hullCenter = new float3( hullCenter2D.x, 0, hullCenter2D.y );
-
             Gizmos.color = _entityProxy.GetTeamColor();
-            if (targetEntityId == 0)
+            if (targetVelocity > 0 && _entityProxy.transformId > 0)
             {
-                float3 pos = targetPosition.ToVector3();
-                Gizmos.DrawLine( hullCenter.ToVector3(), pos.ToVector3() );
-            }
-            else
-            {
-                
+                TransformProxy transformProxy = _entityAssembly.GetTransformProxy(_entityProxy.transformId);
+                if (transformProxy)
+                {
+                    if (targetEntityId == 0)
+                    {
+                        Gizmos.DrawLine( transformProxy.position.ToVector3(), targetPosition.ToVector3() );
+                    }
+                    else
+                    {
+                        EntityProxy targetEntityProxy = _entityAssembly.GetEntityProxy(targetEntityId);
+                        if (targetEntityProxy.transformId > 0)
+                        {
+                            TransformProxy targetTransformProxy = _entityAssembly.GetTransformProxy(targetEntityProxy.transformId);
+
+                            float4 targetRotation = targetTransformProxy.rotation;
+                            float3 targetX = ComputeShaderEmulator.rotate(new float3(1, 0, 0), targetRotation);
+                            float3 targetY = ComputeShaderEmulator.rotate(new float3(0, 1, 0), targetRotation);
+                            float3 targetZ = ComputeShaderEmulator.rotate(new float3(0, 0, 1), targetRotation);
+
+                            float3 targetOffset = targetX * (float)targetPosition.x +
+                                                  targetY * (float)targetPosition.y +
+                                                  targetZ * (float)targetPosition.z;
+
+                            double3 absolutePosition = targetTransformProxy.position + new double3( targetOffset.x, targetOffset.y, targetOffset.z );
+                            Gizmos.DrawLine( transformProxy.position.ToVector3(), absolutePosition.ToVector3() );
+                        }
+                    }
+                }
             }
         }
     }
