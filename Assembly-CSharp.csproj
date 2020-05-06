@@ -58,6 +58,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\AI\BehaviourTreeNode.cs" />
      <Compile Include="Assets\Scripts\AI\BehaviourTreeRoot.cs" />
+     <Compile Include="Assets\Scripts\AI\LoopUntilSuccess.cs" />
      <Compile Include="Assets\Scripts\AI\Selector.cs" />
      <Compile Include="Assets\Scripts\AI\Sequence.cs" />
      <Compile Include="Assets\Scripts\AI\WaitForChance.cs" />

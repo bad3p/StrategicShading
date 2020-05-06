@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BehaviourTreeRoot : BehaviourTreeNode
 {
-    private BehaviourTreeNode _childBehaviourTreeNode = null;
+    private BehaviourTreeNode _childNode = null;
     
     #region MonoBehaviour
     void Start()
@@ -13,10 +13,10 @@ public class BehaviourTreeRoot : BehaviourTreeNode
         switch (status)
         {
             case Status.Failure:
-                Debug.Log( "[BehaviourTree] " + name + " failed while initiating." );
+                Debug.Log( "[BehaviourTree] \"" + name + "\" failed while initiating." );
                 break;
             case Status.Success:
-                Debug.Log( "[BehaviourTree] " + name + " succeeded while initiating." );
+                Debug.Log( "[BehaviourTree] \"" + name + "\" succeeded while initiating." );
                 break;
             default:
                 break;
@@ -31,10 +31,10 @@ public class BehaviourTreeRoot : BehaviourTreeNode
             switch (status)
             {
                 case Status.Failure:
-                    Debug.Log( "[BehaviourTree] " + name + " failed." );
+                    Debug.Log( "[BehaviourTree] \"" + name + "\" failed." );
                     break;
                 case Status.Success:
-                    Debug.Log( "[BehaviourTree] " + name + " succeeded." );
+                    Debug.Log( "[BehaviourTree] \"" + name + "\" succeeded." );
                     break;
                 default:
                     break;
@@ -54,20 +54,20 @@ public class BehaviourTreeRoot : BehaviourTreeNode
             BehaviourTreeNode childBehaviourTreeNode = childTransform.GetComponent<BehaviourTreeNode>();
             if (childBehaviourTreeNode)
             {
-                _childBehaviourTreeNode = childBehaviourTreeNode;
+                _childNode = childBehaviourTreeNode;
                 break;
             }
         }
 
-        if (!_childBehaviourTreeNode)
+        if (!_childNode)
         {
             Debug.LogError( "[BehaviourTreeRoot] \"" + name + "\" failed to locate child BehaviourTreeNode!" );
             status = Status.Failure;
         }
         else
         {
-            _childBehaviourTreeNode.Initiate();
-            status = _childBehaviourTreeNode.status;
+            _childNode.Initiate();
+            status = _childNode.status;
         }
     }
 
@@ -75,8 +75,8 @@ public class BehaviourTreeRoot : BehaviourTreeNode
     {
         if (status == Status.Running)
         {
-            _childBehaviourTreeNode.Run();
-            status = _childBehaviourTreeNode.status;
+            _childNode.Run();
+            status = _childNode.status;
         }
     }
     #endregion

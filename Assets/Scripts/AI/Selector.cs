@@ -70,7 +70,7 @@ public class Selector : BehaviourTreeNode
                 switch (status)
                 {
                     case Status.Success:
-                        Debug.Log( "[Selector] " + name + " succeeded." );
+                        Debug.Log( "[Selector] \"" + name + "\" succeeded." );
                         break;
                     case Status.Failure:
                         _childNodeIndex++;
@@ -89,7 +89,7 @@ public class Selector : BehaviourTreeNode
                         }
                         if (status == Status.Failure && _childNodeIndex == _childNodeCount)
                         {
-                            Debug.Log( "[Selector] " + name + " failed." );
+                            Debug.Log( "[Selector] \"" + name + "\" failed." );
                         }
                         break;
                     default:

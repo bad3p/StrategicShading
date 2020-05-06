@@ -66,11 +66,11 @@ public class Sequence : BehaviourTreeNode
                         }
                         else
                         {
-                            Debug.Log( "[Sequence] " + name + " secceeded." );
+                            Debug.Log( "[Sequence] \"" + name + "\" secceeded." );
                         }
                         break;
                     case Status.Failure:
-                        Debug.Log( "[Sequence] " + name + " failed." );
+                        Debug.Log( "[Sequence] \"" + name + "\" failed." );
                         break;
                     default:
                         break;

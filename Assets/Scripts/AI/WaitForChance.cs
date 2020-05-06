@@ -26,14 +26,12 @@ public class WaitForChance : BehaviourTreeNode
                 float dice = Random.Range(0.0f, 1.0f);
                 if (dice >= SuccessThreshold)
                 {
-                    Debug.Log("[WaitForChance] " + name + " succeeded with dice " + dice.ToString("F5") +
-                              " and threshold " + SuccessThreshold.ToString("F5"));
+                    Debug.Log("[WaitForChance] \"" + name + "\" succeeded with dice " + dice.ToString("F5") + " and threshold " + SuccessThreshold.ToString("F5"));
                     status = Status.Success;
                 }
                 else
                 {
-                    Debug.Log("[WaitForChance] " + name + " failed with dice " + dice.ToString("F5") +
-                              " and threshold " + SuccessThreshold.ToString("F5"));
+                    Debug.Log("[WaitForChance] \"" + name + "\" failed with dice " + dice.ToString("F5") + " and threshold " + SuccessThreshold.ToString("F5"));
                     status = Status.Failure;
                 }
             }
