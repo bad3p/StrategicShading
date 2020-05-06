@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 
 public abstract class BehaviourTreeNode : MonoBehaviour
@@ -11,9 +10,18 @@ public abstract class BehaviourTreeNode : MonoBehaviour
         Failure
     }
     
+    #region Binding
+    private uint _entityId = 0;
+
+    public uint entityId
+    {
+        get { return _entityId; }
+        protected set { _entityId = value; }
+    }
+    #endregion
+    
     #region Status
     private Status _status = Status.Running;
-
     public Status status
     {
         get { return _status; }
@@ -22,7 +30,7 @@ public abstract class BehaviourTreeNode : MonoBehaviour
     #endregion
     
     #region Abstraction
-    public abstract void Initiate();
+    public abstract void Initiate(BehaviourTreeNode parentNode);
     public abstract void Run();
     #endregion
 }

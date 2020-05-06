@@ -1,15 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 
 public class BehaviourTree : BehaviourTreeNode
 {
+    public EntityProxy EntityProxy;   
+    
     private BehaviourTreeNode _childNode = null;
     
     #region MonoBehaviour
     void Start()
     {
-        Initiate();
+        Initiate( null as BehaviourTreeNode );
         switch (status)
         {
             case Status.Failure:
@@ -44,8 +45,20 @@ public class BehaviourTree : BehaviourTreeNode
     #endregion
     
     #region BehaviourTreeNode
-    public override void Initiate()
+    public override void Initiate(BehaviourTreeNode parentNode)
     {
+        if (parentNode != null)
+        {
+            Debug.LogError( "[BehaviourTree] \"" + name + "\" inconsistent Initiate() argument!" );
+            status = Status.Failure;
+            return;
+        }
+        
+        if (EntityProxy)
+        {
+            entityId = EntityProxy.entityId;
+        }
+
         Transform thisTransform = this.transform;
         int thisChildCount = thisTransform.childCount;
         for (int i = 0; i < thisChildCount; i++)
@@ -66,7 +79,7 @@ public class BehaviourTree : BehaviourTreeNode
         }
         else
         {
-            _childNode.Initiate();
+            _childNode.Initiate( this );
             status = _childNode.status;
         }
     }

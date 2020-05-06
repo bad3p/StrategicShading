@@ -2,6 +2,10 @@
 using Types;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 [ExecuteInEditMode]
 [RequireComponent(typeof(EntityProxy))]
 public class HierarchyProxy : ComponentProxy
@@ -46,11 +50,18 @@ public class HierarchyProxy : ComponentProxy
 
     void OnDestroy()
     {
+#if UNITY_EDITOR
+        if( EditorApplication.isPlayingOrWillChangePlaymode )
+        {
+            return;
+        }
+#endif
+        
         if (!_entityProxy)
         {
             Awake();
         }
-        
+
         if (parentEntityId != 0)
         {
             EntityProxy oldParentEntityProxy = _entityAssembly.GetEntityProxy(parentEntityId);

@@ -2,6 +2,10 @@
 using Types;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 [ExecuteInEditMode]
 [RequireComponent(typeof(PersonnelProxy))]
 public class PersonnelProxy : ComponentProxy
@@ -38,6 +42,12 @@ public class PersonnelProxy : ComponentProxy
 
     void OnDestroy()
     {
+#if UNITY_EDITOR
+        if( EditorApplication.isPlayingOrWillChangePlaymode )
+        {
+            return;
+        }
+#endif        
         _entityProxy.personnelId = 0;
     }
     

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 
 public class WaitForChance : BehaviourTreeNode
@@ -10,8 +9,9 @@ public class WaitForChance : BehaviourTreeNode
     private float _timeout = 0; 
     
     #region BehaviourTreeNode
-    public override void Initiate()
+    public override void Initiate(BehaviourTreeNode parentNode)
     {
+        entityId = parentNode.entityId;
         _timeout = Timeout;
         status = Status.Running;
     }

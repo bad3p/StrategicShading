@@ -2,6 +2,10 @@
 using Types;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 [ExecuteInEditMode]
 [RequireComponent(typeof(EntityProxy))]
 public class FirearmsProxy : ComponentProxy
@@ -38,6 +42,12 @@ public class FirearmsProxy : ComponentProxy
 
     void OnDestroy()
     {
+#if UNITY_EDITOR
+        if( EditorApplication.isPlayingOrWillChangePlaymode )
+        {
+            return;
+        }
+#endif        
         _entityProxy.firearmsId = 0;
     }
     

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 
 public class Sequence : BehaviourTreeNode
@@ -9,8 +8,10 @@ public class Sequence : BehaviourTreeNode
     private BehaviourTreeNode[] _childNodes = new BehaviourTreeNode[0]; 
     
     #region BehaviourTreeNode
-    public override void Initiate()
+    public override void Initiate(BehaviourTreeNode parentNode)
     {
+        entityId = parentNode.entityId;
+        
         Transform thisTransform = this.transform;
         int thisChildCount = thisTransform.childCount;
         
@@ -37,7 +38,7 @@ public class Sequence : BehaviourTreeNode
         else
         {
             _childNodeIndex = 0;
-            _childNodes[_childNodeIndex].Initiate();
+            _childNodes[_childNodeIndex].Initiate( this );
             status = _childNodes[_childNodeIndex].status;
 
             if (status == Status.Failure && _childNodeIndex == _childNodeCount)
@@ -61,7 +62,7 @@ public class Sequence : BehaviourTreeNode
                         _childNodeIndex++;
                         if(_childNodeIndex < _childNodeCount)
                         {
-                            _childNodes[_childNodeIndex].Initiate();
+                            _childNodes[_childNodeIndex].Initiate( this );
                             status = _childNodes[_childNodeIndex].status;
                         }
                         else

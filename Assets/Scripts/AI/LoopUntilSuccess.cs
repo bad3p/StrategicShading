@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 
 public class LoopUntilSuccess : BehaviourTreeNode
@@ -7,8 +6,10 @@ public class LoopUntilSuccess : BehaviourTreeNode
     private BehaviourTreeNode _childNode = null; 
     
     #region BehaviourTreeNode
-    public override void Initiate()
+    public override void Initiate(BehaviourTreeNode parentNode)
     {
+        entityId = parentNode.entityId;
+        
         Transform thisTransform = this.transform;
         int thisChildCount = thisTransform.childCount;
         for (int i = 0; i < thisChildCount; i++)
@@ -29,7 +30,7 @@ public class LoopUntilSuccess : BehaviourTreeNode
         }
         else
         {
-            _childNode.Initiate();
+            _childNode.Initiate( this );
             status = Status.Running;
         }
     }
@@ -44,7 +45,7 @@ public class LoopUntilSuccess : BehaviourTreeNode
                 _childNode.Run();
                 break;
             case Status.Failure:
-                _childNode.Initiate();
+                _childNode.Initiate( this );
                 break;
             default:
                 status = Status.Success;

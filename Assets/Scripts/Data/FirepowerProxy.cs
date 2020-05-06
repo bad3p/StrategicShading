@@ -1,8 +1,10 @@
 ﻿
-using System;
 using Types;
-using UnityEditor;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(EntityProxy))]
@@ -34,6 +36,12 @@ public class FirepowerProxy : ComponentProxy
 
     void OnDestroy()
     {
+#if UNITY_EDITOR
+        if( EditorApplication.isPlayingOrWillChangePlaymode )
+        {
+            return;
+        }
+#endif        
         _entityProxy.firepowerId = 0;
     }
 

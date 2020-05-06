@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 
 public class Selector : BehaviourTreeNode
@@ -9,8 +8,10 @@ public class Selector : BehaviourTreeNode
     private BehaviourTreeNode[] _childNodes = new BehaviourTreeNode[0]; 
     
     #region BehaviourTreeNode
-    public override void Initiate()
+    public override void Initiate(BehaviourTreeNode parentNode)
     {
+        entityId = parentNode.entityId;
+        
         Transform thisTransform = this.transform;
         int thisChildCount = thisTransform.childCount;
         
@@ -40,7 +41,7 @@ public class Selector : BehaviourTreeNode
 
             while (_childNodeIndex < _childNodeCount)
             {
-                _childNodes[_childNodeIndex].Initiate();
+                _childNodes[_childNodeIndex].Initiate( this );
                 status = _childNodes[_childNodeIndex].status;
                 if( status == Status.Failure )
                 {
@@ -76,7 +77,7 @@ public class Selector : BehaviourTreeNode
                         _childNodeIndex++;
                         while (_childNodeIndex < _childNodeCount)
                         {
-                            _childNodes[_childNodeIndex].Initiate();
+                            _childNodes[_childNodeIndex].Initiate( this );
                             status = _childNodes[_childNodeIndex].status;
                             if( status == Status.Failure )
                             {
