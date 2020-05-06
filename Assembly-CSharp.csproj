@@ -56,6 +56,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\AI\BehaviourTreeNode.cs" />
+     <Compile Include="Assets\Scripts\AI\BehaviourTreeRoot.cs" />
+     <Compile Include="Assets\Scripts\AI\Selector.cs" />
+     <Compile Include="Assets\Scripts\AI\Sequence.cs" />
+     <Compile Include="Assets\Scripts\AI\WaitForChance.cs" />
      <Compile Include="Assets\Scripts\ComputeShaderEngine.cs" />
      <Compile Include="Assets\Scripts\Data\ComponentProxy.cs" />
      <Compile Include="Assets\Scripts\Data\EntityAssembly.cs" />
