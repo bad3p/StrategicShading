@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BehaviourTreeRoot : BehaviourTreeNode
+public class BehaviourTree : BehaviourTreeNode
 {
     private BehaviourTreeNode _childNode = null;
     
@@ -61,7 +61,7 @@ public class BehaviourTreeRoot : BehaviourTreeNode
 
         if (!_childNode)
         {
-            Debug.LogError( "[BehaviourTreeRoot] \"" + name + "\" failed to locate child BehaviourTreeNode!" );
+            Debug.LogError( "[BehaviourTree] \"" + name + "\" failed to locate child BehaviourTreeNode!" );
             status = Status.Failure;
         }
         else
