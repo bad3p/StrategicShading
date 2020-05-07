@@ -15,6 +15,11 @@ namespace Types
             x = _x;
             y = _y;
         }
+        
+        public float2 xx { get => new float2(x,x); }
+        public float2 yy { get => new float2(y,y); }
+        public float2 xy { get => new float2(x,y); set { x = value.x; y = value.y; } }
+        public float2 yx { get => new float2(y,x); set { y = value.x; x = value.y; } }
 
         public static float2 operator +(float2 a) => a;
         public static float2 operator -(float2 a) => new float2(-a.x, -a.y);
@@ -51,6 +56,46 @@ namespace Types
             y = _y;
             z = _z;
         }
+        
+        public float2 xx { get => new float2(x,x); }
+        public float2 yy { get => new float2(y,y); }
+        public float2 zz { get => new float2(z,z); }
+        
+        public float2 xy { get => new float2(x,y); set { x = value.x; y = value.y; } }
+        public float2 xz { get => new float2(x,z); set { x = value.x; z = value.y; } }
+        public float2 yx { get => new float2(y,x); set { y = value.x; x = value.y; } }
+        public float2 yz { get => new float2(y,z); set { y = value.x; z = value.y; } }
+        public float2 zy { get => new float2(z,y); set { z = value.x; y = value.y; } }
+        public float2 zx { get => new float2(z,x); set { z = value.x; x = value.y; } }
+        
+        public float3 xxx { get => new float3(x,x,x); }
+        public float3 xxy { get => new float3(x,x,y); }
+        public float3 xxz { get => new float3(x,x,z); }
+        public float3 xyx { get => new float3(x,y,x); }
+        public float3 xyy { get => new float3(x,y,y); }
+        public float3 xzx { get => new float3(x,z,x); }
+        public float3 xzz { get => new float3(x,z,z); }
+        public float3 yxx { get => new float3(y,x,x); }
+        public float3 yxy { get => new float3(y,x,y); }
+        public float3 yyx { get => new float3(y,y,x); }
+        public float3 yyy { get => new float3(y,y,y); }
+        public float3 yyz { get => new float3(y,y,z); }
+        public float3 yzy { get => new float3(y,z,y); }
+        public float3 yzz { get => new float3(y,z,z); }
+        public float3 zxx { get => new float3(z,x,x); }
+        public float3 zxz { get => new float3(z,x,z); }
+        public float3 zyy { get => new float3(z,y,y); }
+        public float3 zyz { get => new float3(z,y,z); }
+        public float3 zzx { get => new float3(z,z,x); }
+        public float3 zzy { get => new float3(z,z,y); }
+        public float3 zzz { get => new float3(z,z,z); }
+
+        public float3 xyz { get => new float3(x,y,z); set { x = value.x; y = value.y; z = value.z; } }
+        public float3 xzy { get => new float3(x,z,y); set { x = value.x; z = value.y; y = value.z; } }
+        public float3 yxz { get => new float3(y,x,z); set { y = value.x; x = value.y; z = value.z; } }
+        public float3 yzx { get => new float3(y,z,x); set { y = value.x; z = value.y; x = value.z; } }
+        public float3 zxy { get => new float3(z,x,y); set { z = value.x; x = value.y; y = value.z; } }
+        public float3 zyx { get => new float3(z,y,x); set { z = value.x; y = value.y; x = value.z; } }
 
         public static float3 operator +(float3 a) => a;
         public static float3 operator -(float3 a) => new float3(-a.x, -a.y, -a.z);
@@ -89,6 +134,345 @@ namespace Types
             z = _z;
             w = _w;
         }
+        
+        public float2 xx { get => new float2(x,x); }
+        public float2 xy { get => new float2(x,y); set { x = value.x; y = value.y; } }
+        public float2 xz { get => new float2(x,z); set { x = value.x; z = value.y; } }
+        public float2 xw { get => new float2(x,w); set { x = value.x; w = value.y; } }
+        public float2 yx { get => new float2(y,x); set { y = value.x; x = value.y; } }
+        public float2 yy { get => new float2(y,y); }
+        public float2 yz { get => new float2(y,z); set { y = value.x; z = value.y; } }
+        public float2 yw { get => new float2(y,w); set { y = value.x; w = value.y; } }
+        public float2 zx { get => new float2(z,x); set { z = value.x; x = value.y; } }
+        public float2 zy { get => new float2(z,y); set { z = value.x; y = value.y; } }
+        public float2 zz { get => new float2(z,z); }
+        public float2 zw { get => new float2(z,w); set { z = value.x; w = value.y; } }
+        public float2 wx { get => new float2(w,x); set { w = value.x; x = value.y; } }
+        public float2 wy { get => new float2(w,y); set { w = value.x; y = value.y; } }
+        public float2 wz { get => new float2(w,z); set { w = value.x; z = value.y; } }
+        public float2 ww { get => new float2(w,w); }
+        
+        public float3 xxx { get => new float3(x,x,x); }
+        public float3 xxy { get => new float3(x,x,y); }
+        public float3 xxz { get => new float3(x,x,z); }
+        public float3 xxw { get => new float3(x,x,w); }
+        public float3 xyx { get => new float3(x,y,x); }
+        public float3 xyy { get => new float3(x,y,y); }
+        public float3 xyz { get => new float3(x,y,z); set { x = value.x; y = value.y; z = value.z; } }
+        public float3 xyw { get => new float3(x,y,w); set { x = value.x; y = value.y; w = value.z; } }
+        public float3 xzx { get => new float3(x,z,x); }
+        public float3 xzy { get => new float3(x,z,y); set { x = value.x; z = value.y; y = value.z; } }
+        public float3 xzz { get => new float3(x,z,z); }
+        public float3 xzw { get => new float3(x,z,w); set { x = value.x; z = value.y; w = value.z; } }
+        public float3 xwx { get => new float3(x,w,x); }
+        public float3 xwy { get => new float3(x,w,y); set { x = value.x; w = value.y; y = value.z; } }
+        public float3 xwz { get => new float3(x,w,z); set { x = value.x; w = value.y; z = value.z; } }
+        public float3 xww { get => new float3(x,w,w); }
+        public float3 yxx { get => new float3(y,x,x); }
+        public float3 yxy { get => new float3(y,x,y); }
+        public float3 yxz { get => new float3(y,x,z); set { y = value.x; x = value.y; z = value.z; } }
+        public float3 yxw { get => new float3(y,x,w); set { y = value.x; x = value.y; w = value.z; } }
+        public float3 yyx { get => new float3(y,y,x); }
+        public float3 yyy { get => new float3(y,y,y); }
+        public float3 yyz { get => new float3(y,y,z); }
+        public float3 yyw { get => new float3(y,y,w); }
+        public float3 yzx { get => new float3(y,z,x); set { y = value.x; z = value.y; x = value.z; } }
+        public float3 yzy { get => new float3(y,z,y); }
+        public float3 yzz { get => new float3(y,z,z); }
+        public float3 yzw { get => new float3(y,z,w); set { y = value.x; z = value.y; w = value.z; } }
+        public float3 ywx { get => new float3(y,w,x); set { y = value.x; w = value.y; x = value.z; } }
+        public float3 ywy { get => new float3(y,w,y); }
+        public float3 ywz { get => new float3(y,w,z); set { y = value.x; w = value.y; z = value.z; } }
+        public float3 yww { get => new float3(y,w,w); }
+        public float3 zxx { get => new float3(z,x,x); }
+        public float3 zxy { get => new float3(z,x,y); set { z = value.x; x = value.y; y = value.z; } }
+        public float3 zxz { get => new float3(z,x,z); }
+        public float3 zxw { get => new float3(z,x,w); set { z = value.x; x = value.y; w = value.z; } }
+        public float3 zyx { get => new float3(z,y,x); set { z = value.x; y = value.y; x = value.z; } }
+        public float3 zyy { get => new float3(z,y,y); }
+        public float3 zyz { get => new float3(z,y,z); }
+        public float3 zyw { get => new float3(z,y,w); set { z = value.x; y = value.y; w = value.z; } }
+        public float3 zzx { get => new float3(z,z,x); }
+        public float3 zzy { get => new float3(z,z,y); }
+        public float3 zzz { get => new float3(z,z,z); }
+        public float3 zzw { get => new float3(z,z,w); }
+        public float3 zwx { get => new float3(z,w,x); set { z = value.x; w = value.y; x = value.z; } }
+        public float3 zwy { get => new float3(z,w,y); set { z = value.x; w = value.y; y = value.z; } }
+        public float3 zwz { get => new float3(z,w,z); }
+        public float3 zww { get => new float3(z,w,w); }
+        public float3 wxx { get => new float3(w,x,x); }
+        public float3 wxy { get => new float3(w,x,y); set { w = value.x; x = value.y; y = value.z; } }
+        public float3 wxz { get => new float3(w,x,z); set { w = value.x; x = value.y; z = value.z; } }
+        public float3 wxw { get => new float3(w,x,w); }
+        public float3 wyx { get => new float3(w,y,x); set { w = value.x; y = value.y; x = value.z; } }
+        public float3 wyy { get => new float3(w,y,y); }
+        public float3 wyz { get => new float3(w,y,z); set { w = value.x; y = value.y; z = value.z; } }
+        public float3 wyw { get => new float3(w,y,w); }
+        public float3 wzx { get => new float3(w,z,x); set { w = value.x; z = value.y; x = value.z; } }
+        public float3 wzy { get => new float3(w,z,y); set { w = value.x; z = value.y; y = value.z; } }
+        public float3 wzz { get => new float3(w,z,z); }
+        public float3 wzw { get => new float3(w,z,w); }
+        public float3 wwx { get => new float3(w,w,x); }
+        public float3 wwy { get => new float3(w,w,y); }
+        public float3 wwz { get => new float3(w,w,z); }
+        public float3 www { get => new float3(w,w,w); }
+        
+        public float4 xxxx { get => new float4(x,x,x,x); }
+        public float4 xxxy { get => new float4(x,x,x,y); }
+        public float4 xxxz { get => new float4(x,x,x,z); }
+        public float4 xxxw { get => new float4(x,x,x,w); }
+        public float4 xxyx { get => new float4(x,x,y,x); }
+        public float4 xxyy { get => new float4(x,x,y,y); }
+        public float4 xxyz { get => new float4(x,x,y,z); }
+        public float4 xxyw { get => new float4(x,x,y,w); }
+        public float4 xxzx { get => new float4(x,x,z,x); }
+        public float4 xxzy { get => new float4(x,x,z,y); }
+        public float4 xxzz { get => new float4(x,x,z,z); }
+        public float4 xxzw { get => new float4(x,x,z,w); }
+        public float4 xxwx { get => new float4(x,x,w,x); }
+        public float4 xxwy { get => new float4(x,x,w,y); }
+        public float4 xxwz { get => new float4(x,x,w,z); }
+        public float4 xxww { get => new float4(x,x,w,w); }
+        public float4 xyxx { get => new float4(x,y,x,x); }
+        public float4 xyxy { get => new float4(x,y,x,y); }
+        public float4 xyxz { get => new float4(x,y,x,z); }
+        public float4 xyxw { get => new float4(x,y,x,w); }
+        public float4 xyyx { get => new float4(x,y,y,x); }
+        public float4 xyyy { get => new float4(x,y,y,y); }
+        public float4 xyyz { get => new float4(x,y,y,z); }
+        public float4 xyyw { get => new float4(x,y,y,w); }
+        public float4 xyzx { get => new float4(x,y,z,x); }
+        public float4 xyzy { get => new float4(x,y,z,y); }
+        public float4 xyzz { get => new float4(x,y,z,z); }
+        public float4 xyzw { get => new float4(x,y,z,w); set { x = value.x; y = value.y; z = value.z; w = value.w; } }
+        public float4 xywx { get => new float4(x,y,w,x); }
+        public float4 xywy { get => new float4(x,y,w,y); }
+        public float4 xywz { get => new float4(x,y,w,z); set { x = value.x; y = value.y; w = value.z; z = value.w; } }
+        public float4 xyww { get => new float4(x,y,w,w); }
+        public float4 xzxx { get => new float4(x,z,x,x); }
+        public float4 xzxy { get => new float4(x,z,x,y); }
+        public float4 xzxz { get => new float4(x,z,x,z); }
+        public float4 xzxw { get => new float4(x,z,x,w); }
+        public float4 xzyx { get => new float4(x,z,y,x); }
+        public float4 xzyy { get => new float4(x,z,y,y); }
+        public float4 xzyz { get => new float4(x,z,y,z); }
+        public float4 xzyw { get => new float4(x,z,y,w); set { x = value.x; z = value.y; y = value.z; w = value.w; } }
+        public float4 xzzx { get => new float4(x,z,z,x); }
+        public float4 xzzy { get => new float4(x,z,z,y); }
+        public float4 xzzz { get => new float4(x,z,z,z); }
+        public float4 xzzw { get => new float4(x,z,z,w); }
+        public float4 xzwx { get => new float4(x,z,w,x); }
+        public float4 xzwy { get => new float4(x,z,w,y); set { x = value.x; z = value.y; w = value.z; y = value.w; } }
+        public float4 xzwz { get => new float4(x,z,w,z); }
+        public float4 xzww { get => new float4(x,z,w,w); }
+        public float4 xwxx { get => new float4(x,w,x,x); }
+        public float4 xwxy { get => new float4(x,w,x,y); }
+        public float4 xwxz { get => new float4(x,w,x,z); }
+        public float4 xwxw { get => new float4(x,w,x,w); }
+        public float4 xwyx { get => new float4(x,w,y,x); }
+        public float4 xwyy { get => new float4(x,w,y,y); }
+        public float4 xwyz { get => new float4(x,w,y,z); set { x = value.x; w = value.y; y = value.z; z = value.w; } }
+        public float4 xwyw { get => new float4(x,w,y,w); }
+        public float4 xwzx { get => new float4(x,w,z,x); }
+        public float4 xwzy { get => new float4(x,w,z,y); set { x = value.x; w = value.y; z = value.z; y = value.w; } }
+        public float4 xwzz { get => new float4(x,w,z,z); }
+        public float4 xwzw { get => new float4(x,w,z,w); }
+        public float4 xwwx { get => new float4(x,w,w,x); }
+        public float4 xwwy { get => new float4(x,w,w,y); }
+        public float4 xwwz { get => new float4(x,w,w,z); }
+        public float4 xwww { get => new float4(x,w,w,w); }
+        public float4 yxxx { get => new float4(y,x,x,x); }
+        public float4 yxxy { get => new float4(y,x,x,y); }
+        public float4 yxxz { get => new float4(y,x,x,z); }
+        public float4 yxxw { get => new float4(y,x,x,w); }
+        public float4 yxyx { get => new float4(y,x,y,x); }
+        public float4 yxyy { get => new float4(y,x,y,y); }
+        public float4 yxyz { get => new float4(y,x,y,z); }
+        public float4 yxyw { get => new float4(y,x,y,w); }
+        public float4 yxzx { get => new float4(y,x,z,x); }
+        public float4 yxzy { get => new float4(y,x,z,y); }
+        public float4 yxzz { get => new float4(y,x,z,z); }
+        public float4 yxzw { get => new float4(y,x,z,w); set { y = value.x; x = value.y; z = value.z; w = value.w; } }
+        public float4 yxwx { get => new float4(y,x,w,x); }
+        public float4 yxwy { get => new float4(y,x,w,y); }
+        public float4 yxwz { get => new float4(y,x,w,z); set { y = value.x; x = value.y; w = value.z; z = value.w; } }
+        public float4 yxww { get => new float4(y,x,w,w); }
+        public float4 yyxx { get => new float4(y,y,x,x); }
+        public float4 yyxy { get => new float4(y,y,x,y); }
+        public float4 yyxz { get => new float4(y,y,x,z); }
+        public float4 yyxw { get => new float4(y,y,x,w); }
+        public float4 yyyx { get => new float4(y,y,y,x); }
+        public float4 yyyy { get => new float4(y,y,y,y); }
+        public float4 yyyz { get => new float4(y,y,y,z); }
+        public float4 yyyw { get => new float4(y,y,y,w); }
+        public float4 yyzx { get => new float4(y,y,z,x); }
+        public float4 yyzy { get => new float4(y,y,z,y); }
+        public float4 yyzz { get => new float4(y,y,z,z); }
+        public float4 yyzw { get => new float4(y,y,z,w); }
+        public float4 yywx { get => new float4(y,y,w,x); }
+        public float4 yywy { get => new float4(y,y,w,y); }
+        public float4 yywz { get => new float4(y,y,w,z); }
+        public float4 yyww { get => new float4(y,y,w,w); }
+        public float4 yzxx { get => new float4(y,z,x,x); }
+        public float4 yzxy { get => new float4(y,z,x,y); }
+        public float4 yzxz { get => new float4(y,z,x,z); }
+        public float4 yzxw { get => new float4(y,z,x,w); set { y = value.x; z = value.y; x = value.z; w = value.w; } }
+        public float4 yzyx { get => new float4(y,z,y,x); }
+        public float4 yzyy { get => new float4(y,z,y,y); }
+        public float4 yzyz { get => new float4(y,z,y,z); }
+        public float4 yzyw { get => new float4(y,z,y,w); }
+        public float4 yzzx { get => new float4(y,z,z,x); }
+        public float4 yzzy { get => new float4(y,z,z,y); }
+        public float4 yzzz { get => new float4(y,z,z,z); }
+        public float4 yzzw { get => new float4(y,z,z,w); }
+        public float4 yzwx { get => new float4(y,z,w,x); set { y = value.x; z = value.y; w = value.z; x = value.w; } }
+        public float4 yzwy { get => new float4(y,z,w,y); }
+        public float4 yzwz { get => new float4(y,z,w,z); }
+        public float4 yzww { get => new float4(y,z,w,w); }
+        public float4 ywxx { get => new float4(y,w,x,x); }
+        public float4 ywxy { get => new float4(y,w,x,y); }
+        public float4 ywxz { get => new float4(y,w,x,z); set { y = value.x; w = value.y; x = value.z; z = value.w; } }
+        public float4 ywxw { get => new float4(y,w,x,w); }
+        public float4 ywyx { get => new float4(y,w,y,x); }
+        public float4 ywyy { get => new float4(y,w,y,y); }
+        public float4 ywyz { get => new float4(y,w,y,z); }
+        public float4 ywyw { get => new float4(y,w,y,w); }
+        public float4 ywzx { get => new float4(y,w,z,x); set { y = value.x; w = value.y; z = value.z; x = value.w; } }
+        public float4 ywzy { get => new float4(y,w,z,y); }
+        public float4 ywzz { get => new float4(y,w,z,z); }
+        public float4 ywzw { get => new float4(y,w,z,w); }
+        public float4 ywwx { get => new float4(y,w,w,x); }
+        public float4 ywwy { get => new float4(y,w,w,y); }
+        public float4 ywwz { get => new float4(y,w,w,z); }
+        public float4 ywww { get => new float4(y,w,w,w); }
+        public float4 zxxx { get => new float4(z,x,x,x); }
+        public float4 zxxy { get => new float4(z,x,x,y); }
+        public float4 zxxz { get => new float4(z,x,x,z); }
+        public float4 zxxw { get => new float4(z,x,x,w); }
+        public float4 zxyx { get => new float4(z,x,y,x); }
+        public float4 zxyy { get => new float4(z,x,y,y); }
+        public float4 zxyz { get => new float4(z,x,y,z); }
+        public float4 zxyw { get => new float4(z,x,y,w); set { z = value.x; x = value.y; y = value.z; w = value.w; } }
+        public float4 zxzx { get => new float4(z,x,z,x); }
+        public float4 zxzy { get => new float4(z,x,z,y); }
+        public float4 zxzz { get => new float4(z,x,z,z); }
+        public float4 zxzw { get => new float4(z,x,z,w); }
+        public float4 zxwx { get => new float4(z,x,w,x); }
+        public float4 zxwy { get => new float4(z,x,w,y); set { z = value.x; x = value.y; w = value.z; y = value.w; } }
+        public float4 zxwz { get => new float4(z,x,w,z); }
+        public float4 zxww { get => new float4(z,x,w,w); }
+        public float4 zyxx { get => new float4(z,y,x,x); }
+        public float4 zyxy { get => new float4(z,y,x,y); }
+        public float4 zyxz { get => new float4(z,y,x,z); }
+        public float4 zyxw { get => new float4(z,y,x,w); set { z = value.x; y = value.y; x = value.z; w = value.w; } }
+        public float4 zyyx { get => new float4(z,y,y,x); }
+        public float4 zyyy { get => new float4(z,y,y,y); }
+        public float4 zyyz { get => new float4(z,y,y,z); }
+        public float4 zyyw { get => new float4(z,y,y,w); }
+        public float4 zyzx { get => new float4(z,y,z,x); }
+        public float4 zyzy { get => new float4(z,y,z,y); }
+        public float4 zyzz { get => new float4(z,y,z,z); }
+        public float4 zyzw { get => new float4(z,y,z,w); }
+        public float4 zywx { get => new float4(z,y,w,x); set { z = value.x; y = value.y; w = value.z; x = value.w; } }
+        public float4 zywy { get => new float4(z,y,w,y); }
+        public float4 zywz { get => new float4(z,y,w,z); }
+        public float4 zyww { get => new float4(z,y,w,w); }
+        public float4 zzxx { get => new float4(z,z,x,x); }
+        public float4 zzxy { get => new float4(z,z,x,y); }
+        public float4 zzxz { get => new float4(z,z,x,z); }
+        public float4 zzxw { get => new float4(z,z,x,w); }
+        public float4 zzyx { get => new float4(z,z,y,x); }
+        public float4 zzyy { get => new float4(z,z,y,y); }
+        public float4 zzyz { get => new float4(z,z,y,z); }
+        public float4 zzyw { get => new float4(z,z,y,w); }
+        public float4 zzzx { get => new float4(z,z,z,x); }
+        public float4 zzzy { get => new float4(z,z,z,y); }
+        public float4 zzzz { get => new float4(z,z,z,z); }
+        public float4 zzzw { get => new float4(z,z,z,w); }
+        public float4 zzwx { get => new float4(z,z,w,x); }
+        public float4 zzwy { get => new float4(z,z,w,y); }
+        public float4 zzwz { get => new float4(z,z,w,z); }
+        public float4 zzww { get => new float4(z,z,w,w); }
+        public float4 zwxx { get => new float4(z,w,x,x); }
+        public float4 zwxy { get => new float4(z,w,x,y); set { z = value.x; w = value.y; x = value.z; y = value.w; } }
+        public float4 zwxz { get => new float4(z,w,x,z); }
+        public float4 zwxw { get => new float4(z,w,x,w); }
+        public float4 zwyx { get => new float4(z,w,y,x); set { z = value.x; w = value.y; y = value.z; x = value.w; } }
+        public float4 zwyy { get => new float4(z,w,y,y); }
+        public float4 zwyz { get => new float4(z,w,y,z); }
+        public float4 zwyw { get => new float4(z,w,y,w); }
+        public float4 zwzx { get => new float4(z,w,z,x); }
+        public float4 zwzy { get => new float4(z,w,z,y); }
+        public float4 zwzz { get => new float4(z,w,z,z); }
+        public float4 zwzw { get => new float4(z,w,z,w); }
+        public float4 zwwx { get => new float4(z,w,w,x); }
+        public float4 zwwy { get => new float4(z,w,w,y); }
+        public float4 zwwz { get => new float4(z,w,w,z); }
+        public float4 zwww { get => new float4(z,w,w,w); }
+        public float4 wxxx { get => new float4(w,x,x,x); }
+        public float4 wxxy { get => new float4(w,x,x,y); }
+        public float4 wxxz { get => new float4(w,x,x,z); }
+        public float4 wxxw { get => new float4(w,x,x,w); }
+        public float4 wxyx { get => new float4(w,x,y,x); }
+        public float4 wxyy { get => new float4(w,x,y,y); }
+        public float4 wxyz { get => new float4(w,x,y,z); set { w = value.x; x = value.y; y = value.z; z = value.w; } }
+        public float4 wxyw { get => new float4(w,x,y,w); }
+        public float4 wxzx { get => new float4(w,x,z,x); }
+        public float4 wxzy { get => new float4(w,x,z,y); set { w = value.x; x = value.y; z = value.z; y = value.w; } }
+        public float4 wxzz { get => new float4(w,x,z,z); }
+        public float4 wxzw { get => new float4(w,x,z,w); }
+        public float4 wxwx { get => new float4(w,x,w,x); }
+        public float4 wxwy { get => new float4(w,x,w,y); }
+        public float4 wxwz { get => new float4(w,x,w,z); }
+        public float4 wxww { get => new float4(w,x,w,w); }
+        public float4 wyxx { get => new float4(w,y,x,x); }
+        public float4 wyxy { get => new float4(w,y,x,y); }
+        public float4 wyxz { get => new float4(w,y,x,z); set { w = value.x; y = value.y; x = value.z; z = value.w; } }
+        public float4 wyxw { get => new float4(w,y,x,w); }
+        public float4 wyyx { get => new float4(w,y,y,x); }
+        public float4 wyyy { get => new float4(w,y,y,y); }
+        public float4 wyyz { get => new float4(w,y,y,z); }
+        public float4 wyyw { get => new float4(w,y,y,w); }
+        public float4 wyzx { get => new float4(w,y,z,x); set { w = value.x; y = value.y; z = value.z; x = value.w; } }
+        public float4 wyzy { get => new float4(w,y,z,y); }
+        public float4 wyzz { get => new float4(w,y,z,z); }
+        public float4 wyzw { get => new float4(w,y,z,w); }
+        public float4 wywx { get => new float4(w,y,w,x); }
+        public float4 wywy { get => new float4(w,y,w,y); }
+        public float4 wywz { get => new float4(w,y,w,z); }
+        public float4 wyww { get => new float4(w,y,w,w); }
+        public float4 wzxx { get => new float4(w,z,x,x); }
+        public float4 wzxy { get => new float4(w,z,x,y); set { w = value.x; z = value.y; x = value.z; y = value.w; } }
+        public float4 wzxz { get => new float4(w,z,x,z); }
+        public float4 wzxw { get => new float4(w,z,x,w); }
+        public float4 wzyx { get => new float4(w,z,y,x); set { w = value.x; z = value.y; y = value.z; x = value.w; } }
+        public float4 wzyy { get => new float4(w,z,y,y); }
+        public float4 wzyz { get => new float4(w,z,y,z); }
+        public float4 wzyw { get => new float4(w,z,y,w); }
+        public float4 wzzx { get => new float4(w,z,z,x); }
+        public float4 wzzy { get => new float4(w,z,z,y); }
+        public float4 wzzz { get => new float4(w,z,z,z); }
+        public float4 wzzw { get => new float4(w,z,z,w); }
+        public float4 wzwx { get => new float4(w,z,w,x); }
+        public float4 wzwy { get => new float4(w,z,w,y); }
+        public float4 wzwz { get => new float4(w,z,w,z); }
+        public float4 wzww { get => new float4(w,z,w,w); }
+        public float4 wwxx { get => new float4(w,w,x,x); }
+        public float4 wwxy { get => new float4(w,w,x,y); }
+        public float4 wwxz { get => new float4(w,w,x,z); }
+        public float4 wwxw { get => new float4(w,w,x,w); }
+        public float4 wwyx { get => new float4(w,w,y,x); }
+        public float4 wwyy { get => new float4(w,w,y,y); }
+        public float4 wwyz { get => new float4(w,w,y,z); }
+        public float4 wwyw { get => new float4(w,w,y,w); }
+        public float4 wwzx { get => new float4(w,w,z,x); }
+        public float4 wwzy { get => new float4(w,w,z,y); }
+        public float4 wwzz { get => new float4(w,w,z,z); }
+        public float4 wwzw { get => new float4(w,w,z,w); }
+        public float4 wwwx { get => new float4(w,w,w,x); }
+        public float4 wwwy { get => new float4(w,w,w,y); }
+        public float4 wwwz { get => new float4(w,w,w,z); }
+        public float4 wwww { get => new float4(w,w,w,w); }
 
         public static float4 operator +(float4 a) => a;
         public static float4 operator -(float4 a) => new float4(-a.x, -a.y, -a.z, -a.w);
