@@ -4,6 +4,26 @@ using UnityEngine.Networking;
 
 public partial class ComputeShaderEmulator
 {
+    public static float degrees(float radians)
+    {
+        return radians * 57.29578f;
+    }
+    
+    public static float radians(float degrees)
+    {
+        return degrees / 57.29578f;
+    }
+    
+    public static float saturate(float value)
+    {
+        return Mathf.Clamp(value, 0.0f, 1.0f);
+    }
+    
+    public static float clamp(float value, float min, float max)
+    {
+        return Mathf.Clamp(value, min, max);
+    }
+    
     public static float abs(float v)
     {
         return Mathf.Abs(v); 
@@ -158,6 +178,21 @@ public partial class ComputeShaderEmulator
         q.z *= sign( q.z * ( x.y - y.x ) );
         return q;
     }
+    
+    public static float4 quaternionFromAsixAngle(float angle, float3 axis)
+    {
+        float4 q = new float4();
+
+        float halfAngle = angle / 2;
+        float sinHalfAngle = sin(halfAngle);
+        float cosHalfAngle = cos(halfAngle);
+        
+        q.x = axis.x * sinHalfAngle;
+        q.y = axis.y * sinHalfAngle;
+        q.z = axis.z * sinHalfAngle;
+        q.w = cosHalfAngle;
+        return q;
+    }
 
     public static float4x4 trs(float3 t, float4 q, float3 s)
     {
@@ -244,18 +279,29 @@ public partial class ComputeShaderEmulator
         );
     }
     
-    public static float3 mulv(float3 v, float4x4 mat)
+    public static float3 transformVector(float3 v, float4x4 mat)
     {
         float4 temp = new float4( v.x, v.y, v.z, 0.0f );
         temp = mul(temp, mat);
         return new float3(temp.x, temp.y, temp.z);
     }
     
-    public static float3 mulp(float3 p, float4x4 mat)
+    public static float3 transformPoint(float3 p, float4x4 mat)
     {
         float4 temp = new float4( p.x, p.y, p.z, 1.0f );
         temp = mul(temp, mat);
         return new float3(temp.x, temp.y, temp.z);
+    }
+    
+    public static float4 transformQuaternion(float4 lhs, float4 rhs)
+    {
+        return new float4
+        (
+            (lhs.w * rhs.x + lhs.x * rhs.w + lhs.y * rhs.z - lhs.z * rhs.y), 
+            (lhs.w * rhs.y + lhs.y * rhs.w + lhs.z * rhs.x - lhs.x * rhs.z), 
+            (lhs.w * rhs.z + lhs.z * rhs.w + lhs.x * rhs.y - lhs.y * rhs.x), 
+            (lhs.w * rhs.w - lhs.x * rhs.x - lhs.y * rhs.y - lhs.z * rhs.z)
+        ); 
     }
     
     public static float3 rotate(float3 v, float4 q)
@@ -265,5 +311,30 @@ public partial class ComputeShaderEmulator
         return u * 2.0f * dot(u, v) +
                v * (s*s - dot(u, u)) +
                cross(u, v) * 2.0f * s;
+    }
+    
+    public static float angle(float2 from, float2 to)
+    {
+        float fromSqrMagnitude = dot(from, from);
+        float toSqrMagnitude = dot(to, to);
+        
+        float num = Mathf.Sqrt( fromSqrMagnitude * toSqrMagnitude );
+        if (num < Mathf.Epsilon)
+        {
+            return 0.0f;
+        }
+
+        return Mathf.Acos( Mathf.Clamp( dot(from, to) / num, -1f, 1f) );
+    }
+
+    public static float sigangle(float2 from, float2 to)
+    {
+        return angle(from, to) * Mathf.Sign( from.x * to.y - from.y * to.x );
+    }
+    
+    public static float lerpargs(float4 args, float xz)
+    {
+        float t = clamp((xz - args.x) / (args.z - args.x), 0.0f, 1.0f);
+        return lerp( args.y, args.w, t );
     }
 }

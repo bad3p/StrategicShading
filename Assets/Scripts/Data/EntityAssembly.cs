@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [ExecuteInEditMode]
-public class EntityAssembly : MonoBehaviour
+public partial class EntityAssembly : MonoBehaviour
 {
     private List<Structs.Entity> _entityBuffer = new List<Structs.Entity>() { new Structs.Entity() };
     private Dictionary<EntityProxy, uint> _entityProxyToEntityId = new Dictionary<EntityProxy, uint>();

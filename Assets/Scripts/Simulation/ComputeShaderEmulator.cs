@@ -155,6 +155,6 @@ public partial class ComputeShaderEmulator
 
         double t1 = Timestamp();
         
-        Debug.Log( "[ComputeShaderEmulator] executed kernel " + kernel.Method.Name + " numThreads[" + numThreads.x + "," + numThreads.y + "," + numThreads.z + "] time " + (t1-t0).ToString("F6") + "sec." );
+        //Debug.Log( "[ComputeShaderEmulator] executed kernel " + kernel.Method.Name + " numThreads[" + numThreads.x + "," + numThreads.y + "," + numThreads.z + "] time " + (t1-t0).ToString("F6") + "sec." );
     }
 }

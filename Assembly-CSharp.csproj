@@ -59,12 +59,14 @@
      <Compile Include="Assets\Scripts\AI\BehaviourTree.cs" />
      <Compile Include="Assets\Scripts\AI\BehaviourTreeNode.cs" />
      <Compile Include="Assets\Scripts\AI\LoopUntilSuccess.cs" />
+     <Compile Include="Assets\Scripts\AI\MoveTo.cs" />
      <Compile Include="Assets\Scripts\AI\Selector.cs" />
      <Compile Include="Assets\Scripts\AI\Sequence.cs" />
      <Compile Include="Assets\Scripts\AI\WaitForChance.cs" />
      <Compile Include="Assets\Scripts\ComputeShaderEngine.cs" />
      <Compile Include="Assets\Scripts\Data\ComponentProxy.cs" />
      <Compile Include="Assets\Scripts\Data\EntityAssembly.cs" />
+     <Compile Include="Assets\Scripts\Data\EntityAssemblySimulation.cs" />
      <Compile Include="Assets\Scripts\Data\EntityProxy.cs" />
      <Compile Include="Assets\Scripts\Data\FirearmsProxy.cs" />
      <Compile Include="Assets\Scripts\Data\FirepowerProxy.cs" />
