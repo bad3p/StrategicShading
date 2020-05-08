@@ -100,11 +100,14 @@ public class EntityProxyEditor : Editor
         
         EditorGUILayout.EndHorizontal();
 
-        if (entityProxy.transformId == 0 && entityProxy.hierarchyId > 0 && entityProxy.transform.hasChanged)
+        if (!EditorApplication.isPlaying)
         {
-            UpdateTransforms(entityProxy);
+            if (entityProxy.transformId == 0 && entityProxy.hierarchyId > 0 && entityProxy.transform.hasChanged)
+            {
+                UpdateTransforms(entityProxy);
+            }
         }
-        
+
         if (GUI.changed)
         {
             EditorUtility.SetDirty(entityProxy);

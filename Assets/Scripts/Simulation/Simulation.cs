@@ -67,13 +67,9 @@ public partial class ComputeShaderEmulator
         {
             if (_movementBuffer[index].targetVelocity > 0)
             {
-                double2 targetPosition;
-                targetPosition.x = _movementBuffer[index].targetPosition.x;
-                targetPosition.y = _movementBuffer[index].targetPosition.z;
+                double2 targetPosition = _movementBuffer[index].targetPosition.xz;
                 
-                double2 currentPosition;
-                currentPosition.x = _transformBuffer[index].position.x;
-                currentPosition.y = _transformBuffer[index].position.z;
+                double2 currentPosition = _transformBuffer[index].position.xz;
                 
                 float2 targetDir = targetPosition - currentPosition;
                 float targetDist = length( targetDir );
@@ -87,9 +83,7 @@ public partial class ComputeShaderEmulator
                 Debug.DrawLine( _transformBuffer[index].position.ToVector3(), _transformBuffer[index].position.ToVector3() + new float3(targetDir.x,0,targetDir.y).ToVector3().normalized * 10, Color.green );
                 Debug.DrawLine( _transformBuffer[index].position.ToVector3(), _transformBuffer[index].position.ToVector3() + transformForward.ToVector3() * 10, Color.red );
 
-                float2 currentDir;
-                currentDir.x = transformForward.x;
-                currentDir.y = transformForward.z;
+                float2 currentDir = transformForward.xz;
                 float currentDirMagnitude = length(currentDir);
                 if (currentDirMagnitude > FLOAT_EPSILON)
                 {
@@ -104,7 +98,8 @@ public partial class ComputeShaderEmulator
                     deltaAngle = -currentAngle;
                 }
 
-                float4 args = new float4
+                // TODO: configure
+                float4 velocityByAngle = new float4
                 (
                     radians(0.0f),
                     _movementBuffer[index].targetVelocity,
@@ -112,7 +107,7 @@ public partial class ComputeShaderEmulator
                     0.0f
                 );
 
-                float currentVelocity = lerpargs(args, abs(currentAngle));
+                float currentVelocity = lerpargs(velocityByAngle, abs(currentAngle));
 
                 float deltaDist = currentVelocity * _dT;
                 if (abs(deltaDist) > targetDist)

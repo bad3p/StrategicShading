@@ -9,9 +9,18 @@ public class TransformProxyEditor : Editor
     {
         TransformProxy transformProxy = target as TransformProxy;
 
-        transformProxy.position = transformProxy.transform.position;
-        transformProxy.rotation = transformProxy.transform.rotation;
-        transformProxy.scale = transformProxy.transform.localScale;
+        if (!EditorApplication.isPlaying)
+        {
+            transformProxy.position = transformProxy.transform.position;
+            transformProxy.rotation = transformProxy.transform.rotation;
+            transformProxy.scale = transformProxy.transform.localScale;
+        }
+        else
+        {
+            transformProxy.transform.position = transformProxy.position.ToVector3();
+            transformProxy.transform.rotation = transformProxy.rotation.ToQuaternion();
+            transformProxy.transform.localScale = transformProxy.scale.ToVector3();
+        }
 
         EditorGUILayout.BeginHorizontal();
         
