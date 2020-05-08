@@ -179,8 +179,7 @@ public class EntityProxy : MonoBehaviour
                 triangulation.Add( indices[rightIndex] );
                 triangulation.Add( indices[earIndex] );
                 triangulation.Add( indices[leftIndex] );
-                
-                
+
                 indices.RemoveAt( earIndex );
             }
             if( indices.Count == 3 )
@@ -191,6 +190,7 @@ public class EntityProxy : MonoBehaviour
             }
 
             _mesh.triangles = triangulation.ToArray();
+            _mesh.RecalculateBounds();
         }
     }
 

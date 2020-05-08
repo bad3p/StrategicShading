@@ -46,6 +46,7 @@ public class MovementProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
+                movementProxy.TargetPosition = movementProxy.targetPosition;
                 EditorGUILayout.LabelField(movementProxy.TargetPosition.x.ToString("F2") + ", " + movementProxy.TargetPosition.y.ToString("F2") + ", " + movementProxy.TargetPosition.z.ToString("F2"));    
             }
             else
@@ -61,6 +62,7 @@ public class MovementProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
+                movementProxy.TargetRotation = movementProxy.targetRotation;
                 EditorGUILayout.LabelField(movementProxy.TargetRotation.x.ToString("F2") + ", " + movementProxy.TargetRotation.y.ToString("F2") + ", " + movementProxy.TargetRotation.z.ToString("F2") + ", " + movementProxy.TargetRotation.w.ToString("F2"));
             }
             else
@@ -80,6 +82,7 @@ public class MovementProxyEditor : Editor
             }
             else
             {
+                movementProxy.TargetVelocity = movementProxy.targetVelocity;
                 movementProxy.TargetVelocity = EditorGUILayout.FloatField(movementProxy.TargetVelocity);
                 if (Mathf.Abs(movementProxy.TargetVelocity - movementProxy.targetVelocity) > Mathf.Epsilon)
                 {

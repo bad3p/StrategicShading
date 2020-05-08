@@ -49,6 +49,7 @@ public class PersonnelProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
+                personnelProxy.Morale = personnelProxy.morale;
                 EditorGUILayout.LabelField(personnelProxy.Morale.ToString("F2"));
             }
             else
@@ -64,6 +65,7 @@ public class PersonnelProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
+                personnelProxy.Fitness = personnelProxy.fitness;
                 EditorGUILayout.LabelField(personnelProxy.Fitness.ToString("F2"));
             }
             else
@@ -79,6 +81,7 @@ public class PersonnelProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
+                personnelProxy.Count = personnelProxy.count;
                 EditorGUILayout.LabelField(personnelProxy.Count.ToString());
             }
             else
@@ -98,6 +101,7 @@ public class PersonnelProxyEditor : Editor
             }
             else
             {
+                personnelProxy.Wounded = personnelProxy.wounded;
                 personnelProxy.Wounded = (uint) EditorGUILayout.IntField((int) personnelProxy.Wounded);
                 if (personnelProxy.Wounded != personnelProxy.wounded)
                 {
@@ -109,6 +113,7 @@ public class PersonnelProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
+                personnelProxy.Killed = personnelProxy.killed;
                 EditorGUILayout.LabelField(personnelProxy.Killed.ToString());
             }
             else

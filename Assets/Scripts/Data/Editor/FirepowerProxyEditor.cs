@@ -42,6 +42,7 @@ public class FirepowerProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
+                firepowerProxy.TargetEntityID = firepowerProxy.targetEntityId;
                 EditorGUILayout.LabelField(firepowerProxy.TargetEntityID.ToString());
             }
             else
@@ -57,6 +58,7 @@ public class FirepowerProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
+                firepowerProxy.AmmunitionBudget = firepowerProxy.ammunitionBudget;
                 EditorGUILayout.LabelField(firepowerProxy.AmmunitionBudget.ToString());
             }
             else

@@ -63,77 +63,114 @@ public partial class ComputeShaderEmulator
     static public void UpdateMovement(uint3 id)
     {
         int movementId = (int)id.x;
-        if( movementId < _movementCount )
+        if (movementId >= _movementCount)
         {
-            if (_movementBuffer[movementId].targetVelocity > 0)
+            return;
+        }
+        
+        int entityId = (int)_movementBuffer[movementId].entityId;
+        if (entityId == 0)
+        {
+            return;
+        }
+        
+        int transformId = (int)_entityBuffer[entityId].transformId;
+        if (transformId == 0)
+        {
+            return;
+        }
+        
+        int personnelId = (int)_entityBuffer[entityId].personnelId;
+        if (personnelId == 0)
+        {
+            return;
+        }
+        
+        if (_movementBuffer[movementId].targetVelocity > 0)
+        {
+            double2 targetPosition = _movementBuffer[movementId].targetPosition.xz;
+            double2 currentPosition = _transformBuffer[transformId].position.xz;
+            
+            float2 targetDir = targetPosition - currentPosition;
+            float targetDist = length( targetDir );
+            if (targetDist > FLOAT_EPSILON)
             {
-                int entityId = (int)_movementBuffer[movementId].entityId;
-                int transformId = (int)_entityBuffer[entityId].transformId;
-                
-                double2 targetPosition = _movementBuffer[movementId].targetPosition.xz;
-                double2 currentPosition = _transformBuffer[transformId].position.xz;
-                
-                float2 targetDir = targetPosition - currentPosition;
-                float targetDist = length( targetDir );
-                if (targetDist > FLOAT_EPSILON)
-                {
-                    targetDir *= 1.0f / targetDist;
-                }
-
-                float3 transformForward = new float3(0, 0, 1);
-                transformForward = rotate(transformForward, _transformBuffer[transformId].rotation);
-                Debug.DrawLine( _transformBuffer[transformId].position.ToVector3(), _transformBuffer[transformId].position.ToVector3() + new float3(targetDir.x,0,targetDir.y).ToVector3().normalized * 10, Color.green );
-                Debug.DrawLine( _transformBuffer[transformId].position.ToVector3(), _transformBuffer[transformId].position.ToVector3() + transformForward.ToVector3() * 10, Color.red );
-
-                float2 currentDir = transformForward.xz;
-                float currentDirMagnitude = length(currentDir);
-                if (currentDirMagnitude > FLOAT_EPSILON)
-                {
-                    currentDir *= 1.0f / currentDirMagnitude;
-                }
-
-                float currentAngle = sigangle(currentDir, targetDir);
-                float targetAngularVelocity = radians(5.0f); // TODO: configure
-                float deltaAngle = -sign(currentAngle) * targetAngularVelocity * _dT;
-                if (abs(deltaAngle) > abs(currentAngle))
-                {
-                    deltaAngle = -currentAngle;
-                }
-
-                // TODO: configure
-                float4 velocityByAngle = new float4
-                (
-                    radians(0.0f),
-                    _movementBuffer[movementId].targetVelocity,
-                    radians(30.0f),
-                    0.0f
-                );
-
-                float currentVelocity = lerpargs(velocityByAngle, abs(currentAngle));
-
-                bool stop = false;
-                float deltaDist = currentVelocity * _dT;
-                if (abs(deltaDist) >= targetDist)
-                {
-                    deltaDist = targetDist;
-                    stop = true;
-                }
-                
-                Transform tempTransform = _transformBuffer[transformId];
-                tempTransform.position += new double3( targetDir.x, 0, targetDir.y ) * deltaDist;
-
-                float4 deltaRotation = quaternionFromAsixAngle(deltaAngle, new float3(0, 1, 0));
-                tempTransform.rotation = transformQuaternion(deltaRotation, tempTransform.rotation);
-
-                _transformBuffer[transformId] = tempTransform;
-                
-                if( stop )
-                {
-                    Movement tempMovement = _movementBuffer[movementId];
-                    tempMovement.targetVelocity = 0;
-                    _movementBuffer[movementId] = tempMovement;
-                }
+                targetDir *= 1.0f / targetDist;
             }
+
+            float3 transformForward = new float3(0, 0, 1);
+            transformForward = rotate(transformForward, _transformBuffer[transformId].rotation);
+            Debug.DrawLine( _transformBuffer[transformId].position.ToVector3(), _transformBuffer[transformId].position.ToVector3() + new float3(targetDir.x,0,targetDir.y).ToVector3().normalized * 10, Color.green );
+            Debug.DrawLine( _transformBuffer[transformId].position.ToVector3(), _transformBuffer[transformId].position.ToVector3() + transformForward.ToVector3() * 10, Color.red );
+
+            float2 currentDir = transformForward.xz;
+            float currentDirMagnitude = length(currentDir);
+            if (currentDirMagnitude > FLOAT_EPSILON)
+            {
+                currentDir *= 1.0f / currentDirMagnitude;
+            }
+
+            float currentAngle = sigangle(currentDir, targetDir);
+            float targetAngularVelocity = radians(5.0f); // TODO: configure
+            float deltaAngle = -sign(currentAngle) * targetAngularVelocity * _dT;
+            if (abs(deltaAngle) > abs(currentAngle))
+            {
+                deltaAngle = -currentAngle;
+            }
+
+            // TODO: configure
+            float4 velocityByAngle = new float4
+            (
+                radians(0.0f),
+                _movementBuffer[movementId].targetVelocity,
+                radians(30.0f),
+                0.0f
+            );
+
+            float currentVelocity = lerpargs(velocityByAngle, abs(currentAngle));
+
+            bool stop = false;
+            float deltaDist = currentVelocity * _dT;
+            if (abs(deltaDist) >= targetDist)
+            {
+                deltaDist = targetDist;
+                stop = true;
+            }
+            
+            Transform tempTransform = _transformBuffer[transformId];
+            tempTransform.position += new double3( targetDir.x, 0, targetDir.y ) * deltaDist;
+
+            float4 deltaRotation = quaternionFromAsixAngle(deltaAngle, new float3(0, 1, 0));
+            tempTransform.rotation = transformQuaternion(deltaRotation, tempTransform.rotation);
+
+            _transformBuffer[transformId] = tempTransform;
+            
+            if( stop )
+            {
+                Movement tempMovement = _movementBuffer[movementId];
+                tempMovement.targetVelocity = 0;
+                _movementBuffer[movementId] = tempMovement;
+            }
+            
+            // TODO: configure
+            float4 fitnessByVelocity = new float4
+            (
+                1.4f,
+                1.0f,
+                4.15f,
+                8.0f
+            );
+            
+            float dFitnessByDt = lerpargs(fitnessByVelocity, abs(currentVelocity));
+            float dFitness = dFitnessByDt * _dT;
+
+            Personnel tempPersonnel = _personnelBuffer[personnelId];
+            if (dFitness > tempPersonnel.fitness)
+            {
+                dFitness = tempPersonnel.fitness;
+            }
+            tempPersonnel.fitness -= dFitness;
+            _personnelBuffer[personnelId] = tempPersonnel;
         }
     }
 }
