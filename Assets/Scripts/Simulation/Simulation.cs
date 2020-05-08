@@ -62,14 +62,16 @@ public partial class ComputeShaderEmulator
     [NumThreads(256,1,1)]
     static public void UpdateMovement(uint3 id)
     {
-        int index = (int)id.x;
-        if( index < _movementCount )
+        int movementId = (int)id.x;
+        if( movementId < _movementCount )
         {
-            if (_movementBuffer[index].targetVelocity > 0)
+            if (_movementBuffer[movementId].targetVelocity > 0)
             {
-                double2 targetPosition = _movementBuffer[index].targetPosition.xz;
+                int entityId = (int)_movementBuffer[movementId].entityId;
+                int transformId = (int)_entityBuffer[entityId].transformId;
                 
-                double2 currentPosition = _transformBuffer[index].position.xz;
+                double2 targetPosition = _movementBuffer[movementId].targetPosition.xz;
+                double2 currentPosition = _transformBuffer[transformId].position.xz;
                 
                 float2 targetDir = targetPosition - currentPosition;
                 float targetDist = length( targetDir );
@@ -79,9 +81,9 @@ public partial class ComputeShaderEmulator
                 }
 
                 float3 transformForward = new float3(0, 0, 1);
-                transformForward = rotate(transformForward, _transformBuffer[index].rotation);
-                Debug.DrawLine( _transformBuffer[index].position.ToVector3(), _transformBuffer[index].position.ToVector3() + new float3(targetDir.x,0,targetDir.y).ToVector3().normalized * 10, Color.green );
-                Debug.DrawLine( _transformBuffer[index].position.ToVector3(), _transformBuffer[index].position.ToVector3() + transformForward.ToVector3() * 10, Color.red );
+                transformForward = rotate(transformForward, _transformBuffer[transformId].rotation);
+                Debug.DrawLine( _transformBuffer[transformId].position.ToVector3(), _transformBuffer[transformId].position.ToVector3() + new float3(targetDir.x,0,targetDir.y).ToVector3().normalized * 10, Color.green );
+                Debug.DrawLine( _transformBuffer[transformId].position.ToVector3(), _transformBuffer[transformId].position.ToVector3() + transformForward.ToVector3() * 10, Color.red );
 
                 float2 currentDir = transformForward.xz;
                 float currentDirMagnitude = length(currentDir);
@@ -102,7 +104,7 @@ public partial class ComputeShaderEmulator
                 float4 velocityByAngle = new float4
                 (
                     radians(0.0f),
-                    _movementBuffer[index].targetVelocity,
+                    _movementBuffer[movementId].targetVelocity,
                     radians(30.0f),
                     0.0f
                 );
@@ -117,19 +119,19 @@ public partial class ComputeShaderEmulator
                     stop = true;
                 }
                 
-                Transform tempTransform = _transformBuffer[index];
+                Transform tempTransform = _transformBuffer[transformId];
                 tempTransform.position += new double3( targetDir.x, 0, targetDir.y ) * deltaDist;
 
                 float4 deltaRotation = quaternionFromAsixAngle(deltaAngle, new float3(0, 1, 0));
                 tempTransform.rotation = transformQuaternion(deltaRotation, tempTransform.rotation);
 
-                _transformBuffer[index] = tempTransform;
+                _transformBuffer[transformId] = tempTransform;
                 
                 if( stop )
                 {
-                    Movement tempMovement = _movementBuffer[index];
+                    Movement tempMovement = _movementBuffer[movementId];
                     tempMovement.targetVelocity = 0;
-                    _movementBuffer[index] = tempMovement;
+                    _movementBuffer[movementId] = tempMovement;
                 }
             }
         }

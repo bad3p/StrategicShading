@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 50754647}
   - component: {fileID: 50754648}
   m_Layer: 0
-  m_Name: RedInfantryPlatoonHQ (1)
+  m_Name: RedInfantrySquadHQ
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -151,11 +151,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 50754640}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -30.26}
-  m_LocalScale: {x: 7.54632, y: 2, z: 8.02}
+  m_LocalPosition: {x: 6, y: 1, z: -12}
+  m_LocalScale: {x: 3, y: 2, z: 3}
   m_Children: []
   m_Father: {fileID: 1676357862}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &50754642
 MonoBehaviour:
@@ -169,17 +169,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Ammo: 30
+  Ammo: 20
   Distance:
     x: 50
     y: 125
     z: 250
     w: 500
   Firepower:
-    x: 97
-    y: 63
-    z: 31
-    w: 11
+    x: 66
+    y: 33
+    z: 11
+    w: 1
   StateID: 0
   StateTimeout: 0
 --- !u!114 &50754643
@@ -196,7 +196,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Morale: 600
   Fitness: 14400
-  Count: 6
+  Count: 2
   Wounded: 0
   Killed: 0
 --- !u!114 &50754644
@@ -248,11 +248,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
   TargetPosition:
+    x: 6
+    y: 0
+    z: -20
+  TargetRotation:
     x: 0
     y: 0
-    z: -38.31999969482422
+    z: 0
+    w: 1
   TargetVelocity: 1.4
 --- !u!114 &50754648
 MonoBehaviour:
@@ -408,7 +412,7 @@ GameObject:
   - component: {fileID: 115422640}
   - component: {fileID: 115422641}
   m_Layer: 0
-  m_Name: BlueInfantrySquad (3)
+  m_Name: BlueRifleFireteam (Charlie)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -422,8 +426,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 115422633}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 40, y: 1, z: 10}
-  m_LocalScale: {x: 36, y: 2, z: 2}
+  m_LocalPosition: {x: 7.5, y: 1, z: 0}
+  m_LocalScale: {x: 3, y: 2, z: 3}
   m_Children: []
   m_Father: {fileID: 402623724}
   m_RootOrder: 2
@@ -479,7 +483,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Morale: 603
   Fitness: 14400
-  Count: 12
+  Count: 3
   Wounded: 0
   Killed: 0
 --- !u!114 &115422639
@@ -519,12 +523,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
   TargetPosition:
+    x: -7.5
+    y: 0
+    z: 0
+  TargetRotation:
     x: 0
     y: 0
     z: 0
-  TargetVelocity: 0
+    w: 1
+  TargetVelocity: 1.4
 --- !u!114 &115422641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1250,7 +1258,7 @@ GameObject:
   - component: {fileID: 402623723}
   - component: {fileID: 402623722}
   m_Layer: 0
-  m_Name: BlueInfantryPlatoon (1)
+  m_Name: BlueInfantrySquad (Alpha)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1289,12 +1297,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 402623721}
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 300}
+  m_LocalPosition: {x: 0, y: 0, z: 250}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1895606204}
   - {fileID: 854208696}
   - {fileID: 115422634}
+  - {fileID: 1219724290}
   - {fileID: 909305569}
   m_Father: {fileID: 0}
   m_RootOrder: 4
@@ -1686,6 +1695,158 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 653036681}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &832503761
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 832503762}
+  - component: {fileID: 832503769}
+  - component: {fileID: 832503768}
+  - component: {fileID: 832503767}
+  - component: {fileID: 832503766}
+  - component: {fileID: 832503765}
+  - component: {fileID: 832503764}
+  - component: {fileID: 832503763}
+  m_Layer: 0
+  m_Name: RedLMGTeam
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &832503762
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 832503761}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6, y: 1, z: -12}
+  m_LocalScale: {x: 3, y: 2, z: 3}
+  m_Children: []
+  m_Father: {fileID: 1676357862}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &832503763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 832503761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
+--- !u!114 &832503764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 832503761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetPosition:
+    x: -6
+    y: 0
+    z: -20
+  TargetRotation:
+    x: 0
+    y: 0
+    z: 0
+    w: 1
+  TargetVelocity: 1.4
+--- !u!114 &832503765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 832503761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ammo: 20
+  Distance:
+    x: 50
+    y: 125
+    z: 250
+    w: 500
+  Firepower:
+    x: 146
+    y: 103
+    z: 63
+    w: 31
+  StateID: 0
+  StateTimeout: 0
+--- !u!114 &832503766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 832503761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Morale: 606
+  Fitness: 14400
+  Count: 2
+  Wounded: 0
+  Killed: 0
+--- !u!114 &832503767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 832503761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &832503768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 832503761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc162d967a96e44b890e8e097bab1f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &832503769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 832503761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e550dd1eef262a47937a68ed99434d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TeamId: 1
 --- !u!1 &838082477
 GameObject:
   m_ObjectHideFlags: 0
@@ -1843,7 +2004,7 @@ GameObject:
   - component: {fileID: 854208702}
   - component: {fileID: 854208703}
   m_Layer: 0
-  m_Name: BlueInfantrySquad (2)
+  m_Name: BlueRifleFireteam (Bravo)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1857,8 +2018,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 854208695}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -40, y: 1, z: 10}
-  m_LocalScale: {x: 36, y: 2, z: 2}
+  m_LocalPosition: {x: -7.5, y: 1, z: 0}
+  m_LocalScale: {x: 3, y: 2, z: 3}
   m_Children: []
   m_Father: {fileID: 402623724}
   m_RootOrder: 1
@@ -1914,7 +2075,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Morale: 602
   Fitness: 14400
-  Count: 12
+  Count: 3
   Wounded: 0
   Killed: 0
 --- !u!114 &854208701
@@ -1954,12 +2115,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
   TargetPosition:
+    x: 7.5
+    y: 0
+    z: 0
+  TargetRotation:
     x: 0
     y: 0
     z: 0
-  TargetVelocity: 0
+    w: 1
+  TargetVelocity: 1.4
 --- !u!114 &854208703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1991,7 +2156,7 @@ GameObject:
   - component: {fileID: 909305575}
   - component: {fileID: 909305576}
   m_Layer: 0
-  m_Name: BlueInfantryPlatoonHQ (1)
+  m_Name: BlueInfantrySquadHQ
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2005,11 +2170,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 909305568}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
-  m_LocalScale: {x: 5, y: 2, z: 8}
+  m_LocalPosition: {x: 0, y: 1, z: -5}
+  m_LocalScale: {x: 3, y: 2, z: 3}
   m_Children: []
   m_Father: {fileID: 402623724}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &909305570
 MonoBehaviour:
@@ -2050,7 +2215,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Morale: 601
   Fitness: 14400
-  Count: 6
+  Count: 3
   Wounded: 0
   Killed: 0
 --- !u!114 &909305572
@@ -2102,12 +2267,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
   TargetPosition:
     x: 0
     y: 0
+    z: 7
+  TargetRotation:
+    x: 0
+    y: 0
     z: 0
-  TargetVelocity: 0
+    w: 1
+  TargetVelocity: 1.4
 --- !u!114 &909305576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2418,7 +2587,7 @@ GameObject:
   - component: {fileID: 1025601189}
   - component: {fileID: 1025601190}
   m_Layer: 0
-  m_Name: RedInfantrySquad (1)
+  m_Name: RedRifleFireteam (Alpha)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2444,13 +2613,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1025601182}
-  m_LocalRotation: {x: 0, y: -0.38268343, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: -26.5, y: 1, z: -10.5}
-  m_LocalScale: {x: 30, y: 2, z: 2}
+  m_LocalRotation: {x: 0, y: -0.258819, z: 0, w: 0.9659259}
+  m_LocalPosition: {x: -20, y: 1, z: -4}
+  m_LocalScale: {x: 3, y: 2, z: 3}
   m_Children: []
   m_Father: {fileID: 1676357862}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -45, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -30, z: 0}
 --- !u!114 &1025601185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2489,7 +2658,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Morale: 600
   Fitness: 14400
-  Count: 12
+  Count: 3
   Wounded: 0
   Killed: 0
 --- !u!114 &1025601188
@@ -2529,11 +2698,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
   TargetPosition:
-    x: -50
+    x: -20
     y: 0
     z: 0
+  TargetRotation:
+    x: 0
+    y: 0
+    z: 0
+    w: 1
   TargetVelocity: 1.4
 --- !u!114 &1025601190
 MonoBehaviour:
@@ -2795,6 +2968,158 @@ Transform:
   m_Father: {fileID: 247553491}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1219724289
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1219724290}
+  - component: {fileID: 1219724297}
+  - component: {fileID: 1219724296}
+  - component: {fileID: 1219724295}
+  - component: {fileID: 1219724294}
+  - component: {fileID: 1219724293}
+  - component: {fileID: 1219724292}
+  - component: {fileID: 1219724291}
+  m_Layer: 0
+  m_Name: BlueRifleFireteam (Delta)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1219724290
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1219724289}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 20, y: 1, z: 0}
+  m_LocalScale: {x: 3, y: 2, z: 3}
+  m_Children: []
+  m_Father: {fileID: 402623724}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1219724291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1219724289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetEntityID: 0
+  AmmunitionBudget: 0
+--- !u!114 &1219724292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1219724289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetPosition:
+    x: -20
+    y: 0
+    z: 0
+  TargetRotation:
+    x: 0
+    y: 0
+    z: 0
+    w: 1
+  TargetVelocity: 1.4
+--- !u!114 &1219724293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1219724289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ammo: 30
+  Distance:
+    x: 50
+    y: 125
+    z: 250
+    w: 500
+  Firepower:
+    x: 97
+    y: 63
+    z: 30
+    w: 11
+  StateID: 0
+  StateTimeout: 0
+--- !u!114 &1219724294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1219724289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Morale: 603
+  Fitness: 14400
+  Count: 3
+  Wounded: 0
+  Killed: 0
+--- !u!114 &1219724295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1219724289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1219724296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1219724289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc162d967a96e44b890e8e097bab1f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1219724297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1219724289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e550dd1eef262a47937a68ed99434d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TeamId: 2
 --- !u!1 &1361310950
 GameObject:
   m_ObjectHideFlags: 0
@@ -3531,7 +3856,7 @@ GameObject:
   - component: {fileID: 1676357861}
   - component: {fileID: 1676357860}
   m_Layer: 0
-  m_Name: RedInfantryPlatoon (1)
+  m_Name: RedInfantrySquad (Alpha)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3570,12 +3895,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1676357859}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -300}
+  m_LocalPosition: {x: 0, y: 0, z: -250}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1025601184}
   - {fileID: 1897142789}
   - {fileID: 2100194436}
+  - {fileID: 832503762}
   - {fileID: 50754641}
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -3967,7 +4293,7 @@ GameObject:
   - component: {fileID: 1895606209}
   - component: {fileID: 1895606210}
   m_Layer: 0
-  m_Name: BlueInfantrySquad (1)
+  m_Name: BlueRifleFireteam (Alpha)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3994,8 +4320,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1895606202}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 15}
-  m_LocalScale: {x: 36, y: 2, z: 2}
+  m_LocalPosition: {x: -20, y: 1, z: 0}
+  m_LocalScale: {x: 3, y: 2, z: 3}
   m_Children: []
   m_Father: {fileID: 402623724}
   m_RootOrder: 0
@@ -4038,7 +4364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Morale: 601
   Fitness: 14400
-  Count: 12
+  Count: 3
   Wounded: 0
   Killed: 0
 --- !u!114 &1895606208
@@ -4078,12 +4404,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
   TargetPosition:
+    x: 20
+    y: 0
+    z: 0
+  TargetRotation:
     x: 0
     y: 0
     z: 0
-  TargetVelocity: 0
+    w: 1
+  TargetVelocity: 1.4
 --- !u!114 &1895606210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4115,7 +4445,7 @@ GameObject:
   - component: {fileID: 1897142795}
   - component: {fileID: 1897142796}
   m_Layer: 0
-  m_Name: RedInfantrySquad (2)
+  m_Name: RedRifleFireteam (Bravo)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4129,8 +4459,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1897142788}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 1.4}
-  m_LocalScale: {x: 30, y: 2, z: 2}
+  m_LocalPosition: {x: 0, y: 1, z: 2}
+  m_LocalScale: {x: 3, y: 2, z: 3}
   m_Children: []
   m_Father: {fileID: 1676357862}
   m_RootOrder: 1
@@ -4186,7 +4516,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Morale: 600
   Fitness: 14400
-  Count: 12
+  Count: 3
   Wounded: 0
   Killed: 0
 --- !u!114 &1897142794
@@ -4226,11 +4556,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
   TargetPosition:
     x: 0
     y: 0
     z: 0
+  TargetRotation:
+    x: 0
+    y: 0
+    z: 0
+    w: 1
   TargetVelocity: 1.4
 --- !u!114 &1897142796
 MonoBehaviour:
@@ -4821,7 +5155,7 @@ GameObject:
   - component: {fileID: 2100194442}
   - component: {fileID: 2100194443}
   m_Layer: 0
-  m_Name: RedInfantrySquad (3)
+  m_Name: RedRifleFireteam (Charlie)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4834,13 +5168,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2100194435}
-  m_LocalRotation: {x: 0, y: 0.38268343, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 26.5, y: 1, z: -10.5}
-  m_LocalScale: {x: 30, y: 2, z: 2}
+  m_LocalRotation: {x: 0, y: 0.2588191, z: 0, w: 0.9659258}
+  m_LocalPosition: {x: 20, y: 1, z: -3}
+  m_LocalScale: {x: 3, y: 2, z: 3}
   m_Children: []
   m_Father: {fileID: 1676357862}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 30, z: 0}
 --- !u!114 &2100194437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4892,7 +5226,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Morale: 606
   Fitness: 14400
-  Count: 12
+  Count: 3
   Wounded: 0
   Killed: 0
 --- !u!114 &2100194441
@@ -4932,11 +5266,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee3564b0e4b466c418fe482aec37deb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
   TargetPosition:
-    x: 50
+    x: 20
     y: 0
     z: 0
+  TargetRotation:
+    x: 0
+    y: 0
+    z: 0
+    w: 1
   TargetVelocity: 1.4
 --- !u!114 &2100194443
 MonoBehaviour:
