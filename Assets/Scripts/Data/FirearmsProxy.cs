@@ -55,7 +55,7 @@ public class FirearmsProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
             {
                 uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
                 Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
@@ -68,7 +68,7 @@ public class FirearmsProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
             {
                 uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
                 Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
@@ -82,7 +82,7 @@ public class FirearmsProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
             {
                 uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
                 Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
@@ -95,7 +95,7 @@ public class FirearmsProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
             {
                 uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
                 Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
@@ -109,7 +109,7 @@ public class FirearmsProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
             {
                 uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
                 Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
@@ -122,7 +122,7 @@ public class FirearmsProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
             {
                 uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
                 Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
@@ -136,7 +136,7 @@ public class FirearmsProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
             {
                 uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
                 Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
@@ -149,7 +149,7 @@ public class FirearmsProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
             {
                 uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
                 Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
@@ -163,7 +163,7 @@ public class FirearmsProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
             {
                 uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
                 Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
@@ -176,7 +176,7 @@ public class FirearmsProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
             {
                 uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
                 Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
@@ -190,7 +190,7 @@ public class FirearmsProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
             {
                 uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
                 Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
@@ -203,7 +203,7 @@ public class FirearmsProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
             {
                 uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
                 Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);

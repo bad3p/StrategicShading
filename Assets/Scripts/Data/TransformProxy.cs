@@ -69,7 +69,7 @@ public class TransformProxy : ComponentProxy
         {
             Awake();
         }
-        if (_entityAssembly)
+        if (_entityAssembly && _entityAssembly.GetTransformId(this) != 0)
         {
             Color teamColor = _entityProxy.GetTeamColor();
             Color solidColor = teamColor;
@@ -100,7 +100,7 @@ public class TransformProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetTransformId(this) != 0)
             {
                 uint thisTransformId = _entityAssembly.GetTransformId(this);
                 Structs.Transform thisTransform = _entityAssembly.GetTransform(thisTransformId);
@@ -113,7 +113,7 @@ public class TransformProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetTransformId(this) != 0)
             {
                 uint thisTransformId = _entityAssembly.GetTransformId(this);
                 Structs.Transform thisTransform = _entityAssembly.GetTransform(thisTransformId);
@@ -127,7 +127,7 @@ public class TransformProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetTransformId(this) != 0)
             {
                 uint thisTransformId = _entityAssembly.GetTransformId(this);
                 Structs.Transform thisTransform = _entityAssembly.GetTransform(thisTransformId);
@@ -140,7 +140,7 @@ public class TransformProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetTransformId(this) != 0)
             {
                 uint thisTransformId = _entityAssembly.GetTransformId(this);
                 Structs.Transform thisTransform = _entityAssembly.GetTransform(thisTransformId);
@@ -154,7 +154,7 @@ public class TransformProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetTransformId(this) != 0)
             {
                 uint thisTransformId = _entityAssembly.GetTransformId(this);
                 Structs.Transform thisTransform = _entityAssembly.GetTransform(thisTransformId);
@@ -167,7 +167,7 @@ public class TransformProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetTransformId(this) != 0)
             {
                 uint thisTransformId = _entityAssembly.GetTransformId(this);
                 Structs.Transform thisTransform = _entityAssembly.GetTransform(thisTransformId);
@@ -181,7 +181,7 @@ public class TransformProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetTransformId(this) != 0)
             {
                 uint thisTransformId = _entityAssembly.GetTransformId(this);
                 Structs.Transform thisTransform = _entityAssembly.GetTransform(thisTransformId);
@@ -194,7 +194,7 @@ public class TransformProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetTransformId(this) != 0)
             {
                 uint thisTransformId = _entityAssembly.GetTransformId(this);
                 Structs.Transform thisTransform = _entityAssembly.GetTransform(thisTransformId);

@@ -60,7 +60,7 @@ public class FirepowerProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetFirepowerId(this) != 0)
             {
                 uint thisFirepowerId = _entityAssembly.GetFirepowerId(this);
                 Structs.Firepower thisFirepower = _entityAssembly.GetFirepower(thisFirepowerId);
@@ -73,7 +73,7 @@ public class FirepowerProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetFirepowerId(this) != 0)
             {
                 uint thisFirepowerId = _entityAssembly.GetFirepowerId(this);
                 Structs.Firepower thisFirepower = _entityAssembly.GetFirepower(thisFirepowerId);
@@ -87,7 +87,7 @@ public class FirepowerProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetFirepowerId(this) != 0)
             {
                 uint thisFirepowerId = _entityAssembly.GetFirepowerId(this);
                 Structs.Firepower thisFirepower = _entityAssembly.GetFirepower(thisFirepowerId);
@@ -100,7 +100,7 @@ public class FirepowerProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetFirepowerId(this) != 0)
             {
                 uint thisFirepowerId = _entityAssembly.GetFirepowerId(this);
                 Structs.Firepower thisFirepower = _entityAssembly.GetFirepower(thisFirepowerId);
@@ -114,7 +114,7 @@ public class FirepowerProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetFirepowerId(this) != 0)
             {
                 uint thisFirepowerId = _entityAssembly.GetFirepowerId(this);
                 Structs.Firepower thisFirepower = _entityAssembly.GetFirepower(thisFirepowerId);
@@ -122,12 +122,12 @@ public class FirepowerProxy : ComponentProxy
             }
             else
             {
-                return 0;
+                return 0; 
             }
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetFirepowerId(this) != 0)
             {
                 uint thisFirepowerId = _entityAssembly.GetFirepowerId(this);
                 Structs.Firepower thisFirepower = _entityAssembly.GetFirepower(thisFirepowerId);

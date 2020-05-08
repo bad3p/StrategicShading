@@ -71,10 +71,17 @@ public class EntityProxyEditor : Editor
             }
             else
             {
-                entityProxy.TeamId = (uint) EditorGUILayout.IntField((int) entityProxy.TeamId);
-                if (entityProxy.teamId != entityProxy.TeamId)
+                if (entityProxy.entityId == 0)
                 {
-                    entityProxy.teamId = entityProxy.TeamId;
+                    EditorGUILayout.LabelField( "0" );
+                }
+                else
+                {
+                    entityProxy.TeamId = (uint) EditorGUILayout.IntField((int) entityProxy.TeamId);
+                    if (entityProxy.teamId != entityProxy.TeamId)
+                    {
+                        entityProxy.teamId = entityProxy.TeamId;
+                    }
                 }
             }
 

@@ -71,7 +71,7 @@ public class MovementProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
             {
                 uint thisMovementId = _entityAssembly.GetMovementId(this);
                 Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
@@ -84,7 +84,7 @@ public class MovementProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
             {
                 uint thisMovementId = _entityAssembly.GetMovementId(this);
                 Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
@@ -98,7 +98,7 @@ public class MovementProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
             {
                 uint thisMovementId = _entityAssembly.GetMovementId(this);
                 Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
@@ -111,7 +111,7 @@ public class MovementProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
             {
                 uint thisMovementId = _entityAssembly.GetMovementId(this);
                 Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
@@ -125,7 +125,7 @@ public class MovementProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
             {
                 uint thisMovementId = _entityAssembly.GetMovementId(this);
                 Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
@@ -138,7 +138,7 @@ public class MovementProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
             {
                 uint thisMovementId = _entityAssembly.GetMovementId(this);
                 Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
@@ -152,7 +152,7 @@ public class MovementProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
             {
                 uint thisMovementId = _entityAssembly.GetMovementId(this);
                 Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
@@ -165,7 +165,7 @@ public class MovementProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
             {
                 uint thisMovementId = _entityAssembly.GetMovementId(this);
                 Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);

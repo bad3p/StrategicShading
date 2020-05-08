@@ -45,7 +45,7 @@ public class EntityProxy : MonoBehaviour
         {
             Awake();
         }
-        if (_entityAssembly)
+        if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
         {
             UpdateConvexHull();
 
@@ -356,7 +356,7 @@ public class EntityProxy : MonoBehaviour
             {
                 Awake();
             }
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
             {
                 uint thisEntityId = _entityAssembly.GetEntityId(this);
                 Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
@@ -391,7 +391,7 @@ public class EntityProxy : MonoBehaviour
             {
                 Awake();
             }
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
             {
                 uint thisEntityId = _entityAssembly.GetEntityId(this);
                 Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
@@ -426,7 +426,7 @@ public class EntityProxy : MonoBehaviour
             {
                 Awake();
             }
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
             {
                 uint thisEntityId = _entityAssembly.GetEntityId(this);
                 Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
@@ -461,7 +461,7 @@ public class EntityProxy : MonoBehaviour
             {
                 Awake();
             }
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
             {
                 uint thisEntityId = _entityAssembly.GetEntityId(this);
                 Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
@@ -496,7 +496,7 @@ public class EntityProxy : MonoBehaviour
             {
                 Awake();
             }
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
             {
                 uint thisEntityId = _entityAssembly.GetEntityId(this);
                 Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
@@ -531,7 +531,7 @@ public class EntityProxy : MonoBehaviour
             {
                 Awake();
             }
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
             {
                 uint thisEntityId = _entityAssembly.GetEntityId(this);
                 Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
@@ -566,7 +566,7 @@ public class EntityProxy : MonoBehaviour
             {
                 Awake();
             }
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
             {
                 uint thisEntityId = _entityAssembly.GetEntityId(this);
                 Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);

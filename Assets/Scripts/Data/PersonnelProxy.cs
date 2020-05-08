@@ -57,7 +57,7 @@ public class PersonnelProxy : ComponentProxy
         {
             Awake();
         }
-        if (_entityAssembly)
+        if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
         {
             Gizmos.color = _entityProxy.GetTeamColor();
 
@@ -110,7 +110,7 @@ public class PersonnelProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
             {
                 uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
                 Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
@@ -123,7 +123,7 @@ public class PersonnelProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
             {
                 uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
                 Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
@@ -137,7 +137,7 @@ public class PersonnelProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
             {
                 uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
                 Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
@@ -150,7 +150,7 @@ public class PersonnelProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
             {
                 uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
                 Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
@@ -164,7 +164,7 @@ public class PersonnelProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
             {
                 uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
                 Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
@@ -177,7 +177,7 @@ public class PersonnelProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
             {
                 uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
                 Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
@@ -191,7 +191,7 @@ public class PersonnelProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
             {
                 uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
                 Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
@@ -204,7 +204,7 @@ public class PersonnelProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
             {
                 uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
                 Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
@@ -218,7 +218,7 @@ public class PersonnelProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
             {
                 uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
                 Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
@@ -231,7 +231,7 @@ public class PersonnelProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
             {
                 uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
                 Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
@@ -245,7 +245,7 @@ public class PersonnelProxy : ComponentProxy
     {
         get
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
             {
                 uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
                 Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
@@ -258,7 +258,7 @@ public class PersonnelProxy : ComponentProxy
         }
         set
         {
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
             {
                 uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
                 Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);

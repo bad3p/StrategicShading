@@ -184,7 +184,7 @@ public class HierarchyProxy : ComponentProxy
             {
                 Awake();
             }
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetHierarchyId(this) != 0)
             {
                 uint thisHierarchyId = _entityAssembly.GetHierarchyId(this);
                 Structs.Hierarchy thisHierarchy = _entityAssembly.GetHierarchy(thisHierarchyId);
@@ -260,7 +260,7 @@ public class HierarchyProxy : ComponentProxy
             {
                 Awake();
             }
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetHierarchyId(this) != 0)
             {
                 uint thisHierarchyId = _entityAssembly.GetHierarchyId(this);
                 Structs.Hierarchy thisHierarchy = _entityAssembly.GetHierarchy(thisHierarchyId);
@@ -295,7 +295,7 @@ public class HierarchyProxy : ComponentProxy
             {
                 Awake();
             }
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetHierarchyId(this) != 0)
             {
                 uint thisHierarchyId = _entityAssembly.GetHierarchyId(this);
                 Structs.Hierarchy thisHierarchy = _entityAssembly.GetHierarchy(thisHierarchyId);
@@ -330,7 +330,7 @@ public class HierarchyProxy : ComponentProxy
             {
                 Awake();
             }
-            if (_entityAssembly)
+            if (_entityAssembly && _entityAssembly.GetHierarchyId(this) != 0)
             {
                 uint thisHierarchyId = _entityAssembly.GetHierarchyId(this);
                 Structs.Hierarchy thisHierarchy = _entityAssembly.GetHierarchy(thisHierarchyId);

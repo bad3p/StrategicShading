@@ -56,8 +56,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\AI\Advance.cs" />
+     <Compile Include="Assets\Scripts\AI\Assault.cs" />
      <Compile Include="Assets\Scripts\AI\BehaviourTree.cs" />
      <Compile Include="Assets\Scripts\AI\BehaviourTreeNode.cs" />
+     <Compile Include="Assets\Scripts\AI\Consolidate.cs" />
+     <Compile Include="Assets\Scripts\AI\Deploy.cs" />
      <Compile Include="Assets\Scripts\AI\LoopUntilSuccess.cs" />
      <Compile Include="Assets\Scripts\AI\MoveTo.cs" />
      <Compile Include="Assets\Scripts\AI\Selector.cs" />
