@@ -109,19 +109,28 @@ public partial class ComputeShaderEmulator
 
                 float currentVelocity = lerpargs(velocityByAngle, abs(currentAngle));
 
+                bool stop = false;
                 float deltaDist = currentVelocity * _dT;
-                if (abs(deltaDist) > targetDist)
+                if (abs(deltaDist) >= targetDist)
                 {
                     deltaDist = targetDist;
+                    stop = true;
                 }
                 
-                Transform temp = _transformBuffer[index];
-                temp.position += new double3( targetDir.x, 0, targetDir.y ) * deltaDist;
+                Transform tempTransform = _transformBuffer[index];
+                tempTransform.position += new double3( targetDir.x, 0, targetDir.y ) * deltaDist;
 
                 float4 deltaRotation = quaternionFromAsixAngle(deltaAngle, new float3(0, 1, 0));
-                temp.rotation = transformQuaternion(deltaRotation, temp.rotation);
+                tempTransform.rotation = transformQuaternion(deltaRotation, tempTransform.rotation);
 
-                _transformBuffer[index] = temp;
+                _transformBuffer[index] = tempTransform;
+                
+                if( stop )
+                {
+                    Movement tempMovement = _movementBuffer[index];
+                    tempMovement.targetVelocity = 0;
+                    _movementBuffer[index] = tempMovement;
+                }
             }
         }
     }

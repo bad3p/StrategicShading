@@ -47,42 +47,77 @@ public class PersonnelProxyEditor : Editor
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            personnelProxy.Morale = EditorGUILayout.FloatField(personnelProxy.Morale);
-            if (Mathf.Abs(personnelProxy.Morale - personnelProxy.morale) > Mathf.Epsilon)
+            if (EditorApplication.isPlaying)
             {
-                personnelProxy.morale = personnelProxy.Morale;
+                EditorGUILayout.LabelField(personnelProxy.Morale.ToString("F2"));
+            }
+            else
+            {
+                personnelProxy.Morale = EditorGUILayout.FloatField(personnelProxy.Morale);
+                if (Mathf.Abs(personnelProxy.Morale - personnelProxy.morale) > Mathf.Epsilon)
+                {
+                    personnelProxy.morale = personnelProxy.Morale;
+                }                
             }
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            personnelProxy.Fitness = EditorGUILayout.FloatField(personnelProxy.Fitness);
-            if (Mathf.Abs(personnelProxy.Fitness - personnelProxy.fitness) > Mathf.Epsilon)
+            if (EditorApplication.isPlaying)
             {
-                personnelProxy.fitness = personnelProxy.Fitness;
+                EditorGUILayout.LabelField(personnelProxy.Fitness.ToString("F2"));
+            }
+            else
+            {
+                personnelProxy.Fitness = EditorGUILayout.FloatField(personnelProxy.Fitness);
+                if (Mathf.Abs(personnelProxy.Fitness - personnelProxy.fitness) > Mathf.Epsilon)
+                {
+                    personnelProxy.fitness = personnelProxy.Fitness;
+                }
             }
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            personnelProxy.Count = (uint)EditorGUILayout.IntField((int)personnelProxy.Count);
-            if (personnelProxy.Count != personnelProxy.count)
+            if (EditorApplication.isPlaying)
             {
-                personnelProxy.count = personnelProxy.Count;
+                EditorGUILayout.LabelField(personnelProxy.Count.ToString());
+            }
+            else
+            {
+                personnelProxy.Count = (uint) EditorGUILayout.IntField((int) personnelProxy.Count);
+                if (personnelProxy.Count != personnelProxy.count)
+                {
+                    personnelProxy.count = personnelProxy.Count;
+                }
             }
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            personnelProxy.Wounded = (uint)EditorGUILayout.IntField((int)personnelProxy.Wounded);
-            if (personnelProxy.Wounded != personnelProxy.wounded)
+            if (EditorApplication.isPlaying)
             {
-                personnelProxy.wounded = personnelProxy.Wounded;
+                EditorGUILayout.LabelField(personnelProxy.Wounded.ToString());
+            }
+            else
+            {
+                personnelProxy.Wounded = (uint) EditorGUILayout.IntField((int) personnelProxy.Wounded);
+                if (personnelProxy.Wounded != personnelProxy.wounded)
+                {
+                    personnelProxy.wounded = personnelProxy.Wounded;
+                }
             }
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            personnelProxy.Killed = (uint)EditorGUILayout.IntField((int)personnelProxy.Killed);
-            if (personnelProxy.Killed != personnelProxy.killed)
+            if (EditorApplication.isPlaying)
             {
-                personnelProxy.killed = personnelProxy.Killed;
+                EditorGUILayout.LabelField(personnelProxy.Killed.ToString());
+            }
+            else
+            {
+                personnelProxy.Killed = (uint) EditorGUILayout.IntField((int) personnelProxy.Killed);
+                if (personnelProxy.Killed != personnelProxy.killed)
+                {
+                    personnelProxy.killed = personnelProxy.Killed;
+                }
             }
             EditorGUILayout.EndHorizontal();
         }

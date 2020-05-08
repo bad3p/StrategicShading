@@ -24,11 +24,11 @@ public class MovementProxyEditor : Editor
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("targetEntityId");
+            EditorGUILayout.LabelField("targetPosition");
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("targetPosition");
+            EditorGUILayout.LabelField("targetRotation");
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
@@ -42,29 +42,51 @@ public class MovementProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField( movementProxy.entityId.ToString() );
             EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            movementProxy.TargetEntityID = (uint)EditorGUILayout.IntField((int)movementProxy.TargetEntityID);
-            if (movementProxy.targetEntityId != movementProxy.TargetEntityID)
-            {
-                movementProxy.targetEntityId = movementProxy.TargetEntityID;
-            }
-            EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
-            movementProxy.TargetPosition = EditorGUILayout.Vector3Field("",movementProxy.TargetPosition.ToVector3());
-            if (ComputeShaderEmulator.length(movementProxy.TargetPosition - movementProxy.targetPosition) > Mathf.Epsilon)
+            if (EditorApplication.isPlaying)
             {
-                movementProxy.targetPosition = movementProxy.TargetPosition;
+                EditorGUILayout.LabelField(movementProxy.TargetPosition.x.ToString("F2") + ", " + movementProxy.TargetPosition.y.ToString("F2") + ", " + movementProxy.TargetPosition.z.ToString("F2"));    
+            }
+            else
+            {
+                movementProxy.TargetPosition = EditorGUILayout.Vector3Field("", movementProxy.TargetPosition.ToVector3());
+                if (ComputeShaderEmulator.length(movementProxy.TargetPosition - movementProxy.targetPosition) > Mathf.Epsilon)
+                {
+                    movementProxy.targetPosition = movementProxy.TargetPosition;
+                }
             }
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            movementProxy.TargetVelocity = EditorGUILayout.FloatField( movementProxy.TargetVelocity );
-            if (Mathf.Abs(movementProxy.TargetVelocity - movementProxy.targetVelocity) > Mathf.Epsilon)
+            if (EditorApplication.isPlaying)
             {
-                movementProxy.targetVelocity = movementProxy.TargetVelocity;
+                EditorGUILayout.LabelField(movementProxy.TargetRotation.x.ToString("F2") + ", " + movementProxy.TargetRotation.y.ToString("F2") + ", " + movementProxy.TargetRotation.z.ToString("F2") + ", " + movementProxy.TargetRotation.w.ToString("F2"));
             }
+            else
+            {
+                movementProxy.TargetRotation = EditorGUILayout.Vector4Field("", movementProxy.TargetRotation.ToVector4());
+                if (ComputeShaderEmulator.length(movementProxy.TargetRotation - movementProxy.targetRotation) > Mathf.Epsilon)
+                {
+                    movementProxy.targetRotation = movementProxy.TargetRotation;
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            if (EditorApplication.isPlaying)
+            {
+                EditorGUILayout.LabelField(movementProxy.TargetVelocity.ToString("F2"));
+            }
+            else
+            {
+                movementProxy.TargetVelocity = EditorGUILayout.FloatField(movementProxy.TargetVelocity);
+                if (Mathf.Abs(movementProxy.TargetVelocity - movementProxy.targetVelocity) > Mathf.Epsilon)
+                {
+                    movementProxy.targetVelocity = movementProxy.TargetVelocity;
+                }
+            }
+
             EditorGUILayout.EndHorizontal();
 
         }

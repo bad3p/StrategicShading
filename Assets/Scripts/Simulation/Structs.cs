@@ -53,8 +53,8 @@ namespace Structs
     public struct Movement
     {
         public uint entityId;
-        public uint targetEntityId;
         public double3 targetPosition;
+        public float4 targetRotation;
         public float targetVelocity;
     };
     

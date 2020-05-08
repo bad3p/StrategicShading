@@ -65,11 +65,19 @@ public class EntityProxyEditor : Editor
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            entityProxy.TeamId = (uint)EditorGUILayout.IntField( (int)entityProxy.TeamId );
-            if (entityProxy.teamId != entityProxy.TeamId)
+            if (EditorApplication.isPlaying)
             {
-                entityProxy.teamId = entityProxy.TeamId;
+                EditorGUILayout.LabelField( entityProxy.TeamId.ToString() );    
             }
+            else
+            {
+                entityProxy.TeamId = (uint) EditorGUILayout.IntField((int) entityProxy.TeamId);
+                if (entityProxy.teamId != entityProxy.TeamId)
+                {
+                    entityProxy.teamId = entityProxy.TeamId;
+                }
+            }
+
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();

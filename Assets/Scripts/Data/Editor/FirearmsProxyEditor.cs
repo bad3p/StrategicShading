@@ -47,42 +47,77 @@ public class FirearmsProxyEditor : Editor
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            firearmsProxy.Ammo = (uint)EditorGUILayout.IntField((int)firearmsProxy.Ammo);
-            if (firearmsProxy.ammo != firearmsProxy.Ammo)
+            if (EditorApplication.isPlaying)
             {
-                firearmsProxy.ammo = firearmsProxy.Ammo;
+                EditorGUILayout.LabelField(firearmsProxy.Ammo.ToString());
+            }
+            else
+            {
+                firearmsProxy.Ammo = (uint) EditorGUILayout.IntField((int) firearmsProxy.Ammo);
+                if (firearmsProxy.ammo != firearmsProxy.Ammo)
+                {
+                    firearmsProxy.ammo = firearmsProxy.Ammo;
+                }
             }
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            firearmsProxy.Distance = EditorGUILayout.Vector4Field("",firearmsProxy.Distance.ToVector4());
-            if (ComputeShaderEmulator.length(firearmsProxy.Distance - firearmsProxy.distance) > Mathf.Epsilon)
+            if (EditorApplication.isPlaying)
             {
-                firearmsProxy.distance = firearmsProxy.Distance;
+                EditorGUILayout.LabelField(firearmsProxy.Distance.x.ToString("F1") + " " + firearmsProxy.Distance.y.ToString("F1") + " " + firearmsProxy.Distance.z.ToString("F1") + " " + firearmsProxy.Distance.w.ToString("F1"));
+            }
+            else
+            {
+                firearmsProxy.Distance = EditorGUILayout.Vector4Field("", firearmsProxy.Distance.ToVector4());
+                if (ComputeShaderEmulator.length(firearmsProxy.Distance - firearmsProxy.distance) > Mathf.Epsilon)
+                {
+                    firearmsProxy.distance = firearmsProxy.Distance;
+                }
             }
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            firearmsProxy.Firepower = EditorGUILayout.Vector4Field("",firearmsProxy.Firepower.ToVector4());
-            if (ComputeShaderEmulator.length(firearmsProxy.Firepower - firearmsProxy.firepower) > Mathf.Epsilon)
+            if (EditorApplication.isPlaying)
             {
-                firearmsProxy.firepower = firearmsProxy.Firepower;
+                EditorGUILayout.LabelField(firearmsProxy.Firepower.x.ToString("F1") + " " + firearmsProxy.Firepower.y.ToString("F1") + " " + firearmsProxy.Firepower.z.ToString("F1") + " " + firearmsProxy.Firepower.w.ToString("F1"));
+            }
+            else
+            {
+                firearmsProxy.Firepower = EditorGUILayout.Vector4Field("", firearmsProxy.Firepower.ToVector4());
+                if (ComputeShaderEmulator.length(firearmsProxy.Firepower - firearmsProxy.firepower) > Mathf.Epsilon)
+                {
+                    firearmsProxy.firepower = firearmsProxy.Firepower;
+                }
             }
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            firearmsProxy.StateID = (uint)EditorGUILayout.IntField( (int)firearmsProxy.StateID );
-            if (firearmsProxy.StateID != firearmsProxy.stateId)
+            if (EditorApplication.isPlaying)
             {
-                firearmsProxy.stateId = firearmsProxy.StateID;
+                EditorGUILayout.LabelField(firearmsProxy.StateID.ToString());
+            }
+            else
+            {
+                firearmsProxy.StateID = (uint) EditorGUILayout.IntField((int) firearmsProxy.StateID);
+                if (firearmsProxy.StateID != firearmsProxy.stateId)
+                {
+                    firearmsProxy.stateId = firearmsProxy.StateID;
+                }
             }
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            firearmsProxy.StateTimeout = (uint)EditorGUILayout.FloatField( firearmsProxy.StateTimeout );
-            if ( Mathf.Abs(firearmsProxy.StateTimeout - firearmsProxy.stateTimeout) > Mathf.Epsilon )
+            if (EditorApplication.isPlaying)
             {
-                firearmsProxy.stateTimeout = firearmsProxy.StateTimeout;
+                EditorGUILayout.LabelField(firearmsProxy.StateTimeout.ToString("F2"));    
+            }
+            else
+            {
+                firearmsProxy.StateTimeout = (uint) EditorGUILayout.FloatField(firearmsProxy.StateTimeout);
+                if (Mathf.Abs(firearmsProxy.StateTimeout - firearmsProxy.stateTimeout) > Mathf.Epsilon)
+                {
+                    firearmsProxy.stateTimeout = firearmsProxy.StateTimeout;
+                }
             }
             EditorGUILayout.EndHorizontal();
         }

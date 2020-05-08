@@ -40,18 +40,32 @@ public class FirepowerProxyEditor : Editor
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            firepowerProxy.TargetEntityID = (uint)EditorGUILayout.IntField((int)firepowerProxy.TargetEntityID);
-            if (firepowerProxy.targetEntityId != firepowerProxy.TargetEntityID)
+            if (EditorApplication.isPlaying)
             {
-                firepowerProxy.targetEntityId = firepowerProxy.TargetEntityID;
+                EditorGUILayout.LabelField(firepowerProxy.TargetEntityID.ToString());
+            }
+            else
+            {
+                firepowerProxy.TargetEntityID = (uint) EditorGUILayout.IntField((int) firepowerProxy.TargetEntityID);
+                if (firepowerProxy.targetEntityId != firepowerProxy.TargetEntityID)
+                {
+                    firepowerProxy.targetEntityId = firepowerProxy.TargetEntityID;
+                }
             }
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            firepowerProxy.AmmunitionBudget = (uint)EditorGUILayout.IntField((int)firepowerProxy.AmmunitionBudget);
-            if (firepowerProxy.ammunitionBudget != firepowerProxy.AmmunitionBudget)
+            if (EditorApplication.isPlaying)
             {
-                firepowerProxy.ammunitionBudget = firepowerProxy.AmmunitionBudget;
+                EditorGUILayout.LabelField(firepowerProxy.AmmunitionBudget.ToString());
+            }
+            else
+            {
+                firepowerProxy.AmmunitionBudget = (uint) EditorGUILayout.IntField((int) firepowerProxy.AmmunitionBudget);
+                if (firepowerProxy.ammunitionBudget != firepowerProxy.AmmunitionBudget)
+                {
+                    firepowerProxy.ammunitionBudget = firepowerProxy.AmmunitionBudget;
+                }
             }
             EditorGUILayout.EndHorizontal();
         }

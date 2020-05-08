@@ -10,8 +10,8 @@ using UnityEditor;
 [RequireComponent(typeof(EntityProxy))]
 public class MovementProxy : ComponentProxy
 {
-    public uint TargetEntityID = 0;
     public double3 TargetPosition = new double3(0,0,0);
+    public float4 TargetRotation = new float4(0,0,0,1);
     public float TargetVelocity = 0;
     
     private EntityAssembly _entityAssembly;
@@ -29,8 +29,8 @@ public class MovementProxy : ComponentProxy
                 thisMovementId = _entityAssembly.RegisterMovementProxy(this);
                 _entityProxy.movementId = thisMovementId;
                 entityId = _entityProxy.entityId;
-                targetEntityId = TargetEntityID;
                 targetPosition = TargetPosition;
+                targetRotation = TargetRotation;
                 targetVelocity = TargetVelocity;
             }
         }    
@@ -61,30 +61,7 @@ public class MovementProxy : ComponentProxy
                 TransformProxy transformProxy = _entityAssembly.GetTransformProxy(_entityProxy.transformId);
                 if (transformProxy)
                 {
-                    if (targetEntityId == 0)
-                    {
-                        Gizmos.DrawLine( transformProxy.position.ToVector3(), targetPosition.ToVector3() );
-                    }
-                    else
-                    {
-                        EntityProxy targetEntityProxy = _entityAssembly.GetEntityProxy(targetEntityId);
-                        if (targetEntityProxy.transformId > 0)
-                        {
-                            TransformProxy targetTransformProxy = _entityAssembly.GetTransformProxy(targetEntityProxy.transformId);
-
-                            float4 targetRotation = targetTransformProxy.rotation;
-                            float3 targetX = ComputeShaderEmulator.rotate(new float3(1, 0, 0), targetRotation);
-                            float3 targetY = ComputeShaderEmulator.rotate(new float3(0, 1, 0), targetRotation);
-                            float3 targetZ = ComputeShaderEmulator.rotate(new float3(0, 0, 1), targetRotation);
-
-                            float3 targetOffset = targetX * (float)targetPosition.x +
-                                                  targetY * (float)targetPosition.y +
-                                                  targetZ * (float)targetPosition.z;
-
-                            double3 absolutePosition = targetTransformProxy.position + new double3( targetOffset.x, targetOffset.y, targetOffset.z );
-                            Gizmos.DrawLine( transformProxy.position.ToVector3(), absolutePosition.ToVector3() );
-                        }
-                    }
+                    Gizmos.DrawLine( transformProxy.position.ToVector3(), targetPosition.ToVector3() );
                 }
             }
         }
@@ -117,33 +94,6 @@ public class MovementProxy : ComponentProxy
         }
     }
     
-    public uint targetEntityId
-    {
-        get
-        {
-            if (_entityAssembly)
-            {
-                uint thisMovementId = _entityAssembly.GetMovementId(this);
-                Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
-                return thisMovement.targetEntityId;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-        set
-        {
-            if (_entityAssembly)
-            {
-                uint thisMovementId = _entityAssembly.GetMovementId(this);
-                Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
-                thisMovement.targetEntityId = value;
-                _entityAssembly.SetMovement(thisMovementId, thisMovement);
-            }
-        }
-    }
-    
     public double3 targetPosition
     {
         get
@@ -166,6 +116,33 @@ public class MovementProxy : ComponentProxy
                 uint thisMovementId = _entityAssembly.GetMovementId(this);
                 Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
                 thisMovement.targetPosition = value;
+                _entityAssembly.SetMovement(thisMovementId, thisMovement);
+            }
+        }
+    }
+    
+    public float4 targetRotation
+    {
+        get
+        {
+            if (_entityAssembly)
+            {
+                uint thisMovementId = _entityAssembly.GetMovementId(this);
+                Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
+                return thisMovement.targetRotation;
+            }
+            else
+            {
+                return new float4(0,0,0,1);
+            }
+        }
+        set
+        {
+            if (_entityAssembly)
+            {
+                uint thisMovementId = _entityAssembly.GetMovementId(this);
+                Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
+                thisMovement.targetRotation = value;
                 _entityAssembly.SetMovement(thisMovementId, thisMovement);
             }
         }
