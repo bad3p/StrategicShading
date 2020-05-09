@@ -111,7 +111,7 @@ public partial class ComputeShaderEmulator
             }
 
             float currentAngle = sigangle(currentDir, targetDir);
-            float targetAngularVelocity = radians(5.0f); // TODO: configure
+            float targetAngularVelocity = radians(45.0f); // TODO: configure
             float deltaAngle = -sign(currentAngle) * targetAngularVelocity * _dT;
             if (abs(deltaAngle) > abs(currentAngle))
             {
@@ -123,7 +123,7 @@ public partial class ComputeShaderEmulator
             (
                 radians(0.0f),
                 _movementBuffer[movementId].targetVelocity,
-                radians(30.0f),
+                radians(45.0f),
                 0.0f
             );
 
