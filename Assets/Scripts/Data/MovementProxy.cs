@@ -13,6 +13,7 @@ public class MovementProxy : ComponentProxy
     public double3 TargetPosition = new double3(0,0,0);
     public float4 TargetRotation = new float4(0,0,0,1);
     public float TargetVelocity = 0;
+    public float TargetAngularVelocity = 0;
     
     private EntityAssembly _entityAssembly;
     private EntityProxy _entityProxy;
@@ -32,6 +33,7 @@ public class MovementProxy : ComponentProxy
                 targetPosition = TargetPosition;
                 targetRotation = TargetRotation;
                 targetVelocity = TargetVelocity;
+                targetAngularVelocity = TargetAngularVelocity;
             }
         }    
     }
@@ -170,6 +172,33 @@ public class MovementProxy : ComponentProxy
                 uint thisMovementId = _entityAssembly.GetMovementId(this);
                 Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
                 thisMovement.targetVelocity = value;
+                _entityAssembly.SetMovement(thisMovementId, thisMovement);
+            }
+        }
+    }
+    
+    public float targetAngularVelocity
+    {
+        get
+        {
+            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
+            {
+                uint thisMovementId = _entityAssembly.GetMovementId(this);
+                Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
+                return thisMovement.targetAngularVelocity;
+            }
+            else
+            {
+                return 0.0f;
+            }
+        }
+        set
+        {
+            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
+            {
+                uint thisMovementId = _entityAssembly.GetMovementId(this);
+                Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
+                thisMovement.targetAngularVelocity = value;
                 _entityAssembly.SetMovement(thisMovementId, thisMovement);
             }
         }

@@ -34,6 +34,10 @@ public class MovementProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("targetVelocity");
             EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("targetAngularVelocity");
+            EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();
         
@@ -78,6 +82,7 @@ public class MovementProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
+                movementProxy.TargetVelocity = movementProxy.targetVelocity;
                 EditorGUILayout.LabelField(movementProxy.TargetVelocity.ToString("F2"));
             }
             else
@@ -89,7 +94,23 @@ public class MovementProxyEditor : Editor
                     movementProxy.targetVelocity = movementProxy.TargetVelocity;
                 }
             }
-
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            if (EditorApplication.isPlaying)
+            {
+                movementProxy.TargetAngularVelocity = movementProxy.targetAngularVelocity;
+                EditorGUILayout.LabelField(movementProxy.TargetAngularVelocity.ToString("F2"));
+            }
+            else
+            {
+                movementProxy.TargetAngularVelocity = movementProxy.targetAngularVelocity;
+                movementProxy.TargetAngularVelocity = EditorGUILayout.FloatField(movementProxy.TargetAngularVelocity);
+                if (Mathf.Abs(movementProxy.TargetAngularVelocity - movementProxy.targetAngularVelocity) > Mathf.Epsilon)
+                {
+                    movementProxy.targetVelocity = movementProxy.TargetAngularVelocity;
+                }
+            }
             EditorGUILayout.EndHorizontal();
 
         }

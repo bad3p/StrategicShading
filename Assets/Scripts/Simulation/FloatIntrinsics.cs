@@ -338,6 +338,39 @@ public partial class ComputeShaderEmulator
         return angle(from, to) * Mathf.Sign( from.x * to.y - from.y * to.x );
     }
     
+    public static float angle(float3 from, float3 to)
+    {
+        float fromSqrMagnitude = dot(from, from);
+        float toSqrMagnitude = dot(to, to);
+        float num = sqrt( fromSqrMagnitude * toSqrMagnitude);
+        if (num < FLOAT_EPSILON)
+        {
+            return 0.0f;
+        }
+        return Mathf.Acos( clamp( dot(from, to) / num, -1f, 1f) );
+    }
+    
+    public static float sigangle(float3 from, float3 to, float3 axis)
+    {
+        float a = angle(from, to);
+        float cx = (from.y * to.z - from.z * to.y);
+        float cy = (from.z * to.x - from.x * to.z);
+        float cz = (from.x * to.y - from.y * to.x);
+        float c = sign( axis.x * cx + axis.y * cy + axis.z * cz);
+        return a * c;
+    }
+    
+    public static float sigangle(float4 from, float4 to)
+    {
+        float3 fromForward = new float3(0, 0, 1);
+        fromForward = rotate(fromForward, from);
+        float3 toForward = new float3(0, 0, 1);
+        toForward = rotate(toForward, to);
+        float3 axis = normalize(cross(fromForward, toForward));
+        float angle = sigangle(fromForward, toForward, axis);
+        return angle;
+    }
+    
     public static float lerpargs(float4 args, float xz)
     {
         float t = clamp((xz - args.x) / (args.z - args.x), 0.0f, 1.0f);

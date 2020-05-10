@@ -157,7 +157,7 @@ public partial class ComputeShaderEmulator
             (
                 1.4f,
                 1.0f,
-                4.15f,
+                4.17f,
                 8.0f
             );
             
@@ -171,6 +171,45 @@ public partial class ComputeShaderEmulator
             }
             tempPersonnel.fitness -= dFitness;
             _personnelBuffer[personnelId] = tempPersonnel;
+        }
+        else if (_movementBuffer[movementId].targetAngularVelocity > 0)
+        {
+            // rotate to target
+            
+            float3 targetForward = new float3(0, 0, 1);
+            targetForward = rotate(targetForward, _movementBuffer[movementId].targetRotation);
+            
+            float3 currentForward = new float3(0, 0, 1);
+            currentForward = rotate(currentForward, _transformBuffer[transformId].rotation);
+            
+            Debug.DrawLine( _transformBuffer[transformId].position.ToVector3(), _transformBuffer[transformId].position.ToVector3() + targetForward.ToVector3() * 10, Color.green );
+            Debug.DrawLine( _transformBuffer[transformId].position.ToVector3(), _transformBuffer[transformId].position.ToVector3() + currentForward.ToVector3() * 10, Color.red );
+
+            float3 axis = normalize(cross(currentForward, targetForward));
+
+            float currentAngle = sigangle(currentForward, targetForward, axis);
+
+            bool stop = false;
+            float deltaAngle = sign(currentAngle) * _movementBuffer[movementId].targetAngularVelocity * _dT;
+            if (abs(deltaAngle) > abs(currentAngle))
+            {
+                deltaAngle = currentAngle;
+                stop = true;
+            }
+            
+            Transform tempTransform = _transformBuffer[transformId];
+
+            float4 deltaRotation = quaternionFromAsixAngle(deltaAngle, axis);
+            tempTransform.rotation = transformQuaternion(deltaRotation, tempTransform.rotation);
+
+            _transformBuffer[transformId] = tempTransform;
+            
+            if( stop )
+            {
+                Movement tempMovement = _movementBuffer[movementId];
+                tempMovement.targetAngularVelocity = 0;
+                _movementBuffer[movementId] = tempMovement;
+            }
         }
     }
 }

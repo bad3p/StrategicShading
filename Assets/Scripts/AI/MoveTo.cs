@@ -98,20 +98,30 @@ public class MoveTo : BehaviourTreeNode
                             var firstChildTransform = _entityAssembly.GetTransform(firstChildEntity.transformId);
                             var firstChildMovement = _entityAssembly.GetMovement(firstChildEntity.movementId);
 
+                            bool allChildrenArrived = true;
                             float3 targetPositionError = firstChildMovement.targetPosition - this.transform.position;
                             if (ComputeShaderEmulator.length(targetPositionError) > Mathf.Epsilon)
                             {
                                 firstChildMovement.targetVelocity = 1.4f; // TODO: configure
                                 firstChildMovement.targetPosition = this.transform.position;
-                                firstChildMovement.targetRotation = Quaternion.identity;
-
                                 _entityAssembly.SetMovement(firstChildEntity.movementId, firstChildMovement);
+                                allChildrenArrived &= false;
+                            }
+                            
+                            float targetRotationError = ComputeShaderEmulator.sigangle(firstChildTransform.rotation, this.transform.rotation);
+                            if (Mathf.Abs(targetRotationError) > Mathf.Epsilon)
+                            {
+                                firstChildMovement.targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
+                                firstChildMovement.targetRotation = this.transform.rotation;
+                                _entityAssembly.SetMovement(firstChildEntity.movementId, firstChildMovement);
+                                allChildrenArrived &= false;
                             }
 
                             float3 movementDir = ComputeShaderEmulator.rotate(new float3(0, 0, -1), firstChildTransform.rotation);
                             float offsetLength = ComputeShaderEmulator.length(firstChildTransform.scale);
                             double3 offset = movementDir * offsetLength;
                             double3 nextSiblingTargetPosition = firstChildTransform.position + offset;
+                            float4 nextSiblingTargetRotation = firstChildTransform.rotation;
 
                             if (firstChildHierarchy.nextSiblingEntityId > 0)
                             {
@@ -127,20 +137,29 @@ public class MoveTo : BehaviourTreeNode
                                         var nextSiblingMovement = _entityAssembly.GetMovement(nextSiblingEntity.movementId);
                                         
                                         targetPositionError = nextSiblingMovement.targetPosition - nextSiblingTargetPosition;
+                                        targetRotationError = ComputeShaderEmulator.sigangle(nextSiblingTransform.rotation, this.transform.rotation);
 
                                         if (ComputeShaderEmulator.length(targetPositionError) > Mathf.Epsilon)
                                         {
                                             nextSiblingMovement.targetVelocity = 1.4f; // TODO: configure
                                             nextSiblingMovement.targetPosition = nextSiblingTargetPosition;
-                                            nextSiblingMovement.targetRotation = Quaternion.identity;
-
                                             _entityAssembly.SetMovement(nextSiblingEntity.movementId, nextSiblingMovement);
+                                            allChildrenArrived &= false;
+                                        }
+                                        
+                                        if (Mathf.Abs(targetRotationError) > Mathf.Epsilon)
+                                        {
+                                            nextSiblingMovement.targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
+                                            nextSiblingMovement.targetRotation = nextSiblingTargetRotation;
+                                            _entityAssembly.SetMovement(nextSiblingEntity.movementId, nextSiblingMovement);
+                                            allChildrenArrived &= false;
                                         }
 
                                         movementDir = ComputeShaderEmulator.rotate(new float3(0, 0, -1), nextSiblingTransform.rotation);
                                         offsetLength = ComputeShaderEmulator.length(nextSiblingTransform.scale);
                                         offset = movementDir * offsetLength;
                                         nextSiblingTargetPosition = nextSiblingTransform.position + offset;
+                                        nextSiblingTargetRotation = nextSiblingTransform.rotation;
                                     }
                                     else
                                     {
@@ -148,6 +167,12 @@ public class MoveTo : BehaviourTreeNode
                                         status = Status.Failure;
                                     }
                                 }
+                            }
+
+                            if (allChildrenArrived)
+                            {
+                                Debug.Log( "[MoveTo] entity \"" + _entityAssembly.GetEntityProxy(entityId).name + "\" to " + transform.position + " is successful!" );
+                                status = Status.Success;
                             }
                         }
                         else

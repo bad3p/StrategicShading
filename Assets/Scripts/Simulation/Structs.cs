@@ -56,6 +56,7 @@ namespace Structs
         public double3 targetPosition;
         public float4 targetRotation;
         public float targetVelocity;
+        public float targetAngularVelocity;
     };
     
     public struct Firepower
