@@ -94,32 +94,40 @@ public class MoveTo : BehaviourTreeNode
                         var firstChildEntity = _entityAssembly.GetEntity(hierarchy.firstChildEntityId);
                         if (firstChildEntity.transformId > 0 && firstChildEntity.movementId > 0)
                         {
+                            const float TargetPositionErrorThreshold = 0.1f;
+                            const float TargetRotationErrorThreshold = Mathf.Deg2Rad * 1.0f;
+                            
                             var firstChildHierarchy = _entityAssembly.GetHierarchy(firstChildEntity.hierarchyId);
                             var firstChildTransform = _entityAssembly.GetTransform(firstChildEntity.transformId);
                             var firstChildMovement = _entityAssembly.GetMovement(firstChildEntity.movementId);
-
-                            bool allChildrenArrived = true;
-                            float3 targetPositionError = firstChildMovement.targetPosition - this.transform.position;
-                            if (ComputeShaderEmulator.length(targetPositionError) > Mathf.Epsilon)
+                            
+                            double3 targetPositionError = firstChildMovement.targetPosition - this.transform.position;
+                            if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
                             {
                                 firstChildMovement.targetVelocity = 1.4f; // TODO: configure
                                 firstChildMovement.targetPosition = this.transform.position;
                                 _entityAssembly.SetMovement(firstChildEntity.movementId, firstChildMovement);
-                                allChildrenArrived &= false;
                             }
                             
                             float targetRotationError = ComputeShaderEmulator.sigangle(firstChildTransform.rotation, this.transform.rotation);
-                            if (Mathf.Abs(targetRotationError) > Mathf.Epsilon)
+                            if (Mathf.Abs(targetRotationError) > TargetRotationErrorThreshold)
                             {
                                 firstChildMovement.targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
                                 firstChildMovement.targetRotation = this.transform.rotation;
                                 _entityAssembly.SetMovement(firstChildEntity.movementId, firstChildMovement);
-                                allChildrenArrived &= false;
+                            }
+                            
+                            bool allChildrenArrived = true;
+                            float3 currentPositionError = firstChildMovement.targetPosition - firstChildTransform.position;
+                            if (ComputeShaderEmulator.length(currentPositionError) > Radius)
+                            {
+                                allChildrenArrived = false;
                             }
 
-                            float3 movementDir = ComputeShaderEmulator.rotate(new float3(0, 0, -1), firstChildTransform.rotation);
+                            float3 movementVel = ComputeShaderEmulator.rotate(new float3(0, 0, 1), firstChildTransform.rotation) * firstChildMovement.targetVelocity;
+                            float3 offsetDir = ComputeShaderEmulator.rotate(new float3(0, 0, -1), firstChildTransform.rotation);
                             float offsetLength = ComputeShaderEmulator.length(firstChildTransform.scale);
-                            double3 offset = movementDir * offsetLength;
+                            double3 offset = (offsetDir * offsetLength);
                             double3 nextSiblingTargetPosition = firstChildTransform.position + offset;
                             float4 nextSiblingTargetRotation = firstChildTransform.rotation;
 
@@ -136,28 +144,48 @@ public class MoveTo : BehaviourTreeNode
                                         var nextSiblingTransform = _entityAssembly.GetTransform(nextSiblingEntity.transformId);
                                         var nextSiblingMovement = _entityAssembly.GetMovement(nextSiblingEntity.movementId);
                                         
-                                        targetPositionError = nextSiblingMovement.targetPosition - nextSiblingTargetPosition;
-                                        targetRotationError = ComputeShaderEmulator.sigangle(nextSiblingTransform.rotation, this.transform.rotation);
+                                        /*
+                                        float3 dirToTargetPosition = nextSiblingTargetPosition - nextSiblingTransform.position;
+                                        float distToTargetPosition = ComputeShaderEmulator.length(dirToTargetPosition);
+                                        if (nextSiblingMovement.targetVelocity > 0)
+                                        {
+                                            float timeToTargetPosition = distToTargetPosition / nextSiblingMovement.targetVelocity;
 
-                                        if (ComputeShaderEmulator.length(targetPositionError) > Mathf.Epsilon)
+                                            float4 args = new float4( Radius, 0.0f, Radius * 2, 1.0f );
+                                            timeToTargetPosition *= ComputeShaderEmulator.lerpargs(args, distToTargetPosition);
+                                            
+                                            double3 targetPositionMovement = movementVel * timeToTargetPosition; 
+                                            nextSiblingTargetPosition = nextSiblingTargetPosition + targetPositionMovement;
+                                        }
+                                        */
+
+                                        targetPositionError = nextSiblingMovement.targetPosition - nextSiblingTargetPosition;
+                                        targetRotationError = ComputeShaderEmulator.sigangle(nextSiblingTransform.rotation, nextSiblingTargetRotation);
+                                        currentPositionError = nextSiblingMovement.targetPosition - nextSiblingTransform.position;
+
+                                        if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
                                         {
                                             nextSiblingMovement.targetVelocity = 1.4f; // TODO: configure
                                             nextSiblingMovement.targetPosition = nextSiblingTargetPosition;
                                             _entityAssembly.SetMovement(nextSiblingEntity.movementId, nextSiblingMovement);
-                                            allChildrenArrived &= false;
                                         }
                                         
-                                        if (Mathf.Abs(targetRotationError) > Mathf.Epsilon)
+                                        if (Mathf.Abs(targetRotationError) > TargetRotationErrorThreshold)
                                         {
                                             nextSiblingMovement.targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
                                             nextSiblingMovement.targetRotation = nextSiblingTargetRotation;
                                             _entityAssembly.SetMovement(nextSiblingEntity.movementId, nextSiblingMovement);
-                                            allChildrenArrived &= false;
                                         }
 
-                                        movementDir = ComputeShaderEmulator.rotate(new float3(0, 0, -1), nextSiblingTransform.rotation);
+                                        if ( ComputeShaderEmulator.length(currentPositionError) > ComputeShaderEmulator.length(nextSiblingTransform.scale) )
+                                        {
+                                            allChildrenArrived = false;
+                                        }
+
+                                        movementVel = ComputeShaderEmulator.rotate(new float3(0, 0, 1), nextSiblingTransform.rotation) * nextSiblingMovement.targetVelocity;
+                                        offsetDir = ComputeShaderEmulator.rotate(new float3(0, 0, -1), nextSiblingTransform.rotation);
                                         offsetLength = ComputeShaderEmulator.length(nextSiblingTransform.scale);
-                                        offset = movementDir * offsetLength;
+                                        offset = offsetDir * offsetLength;
                                         nextSiblingTargetPosition = nextSiblingTransform.position + offset;
                                         nextSiblingTargetRotation = nextSiblingTransform.rotation;
                                     }

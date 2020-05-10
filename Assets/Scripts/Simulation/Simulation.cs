@@ -182,7 +182,7 @@ public partial class ComputeShaderEmulator
             float3 currentForward = new float3(0, 0, 1);
             currentForward = rotate(currentForward, _transformBuffer[transformId].rotation);
             
-            Debug.DrawLine( _transformBuffer[transformId].position.ToVector3(), _transformBuffer[transformId].position.ToVector3() + targetForward.ToVector3() * 10, Color.green );
+            Debug.DrawLine( _transformBuffer[transformId].position.ToVector3(), _transformBuffer[transformId].position.ToVector3() + targetForward.ToVector3() * 10, Color.yellow );
             Debug.DrawLine( _transformBuffer[transformId].position.ToVector3(), _transformBuffer[transformId].position.ToVector3() + currentForward.ToVector3() * 10, Color.red );
 
             float3 axis = normalize(cross(currentForward, targetForward));

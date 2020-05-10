@@ -105,6 +105,16 @@ public partial class ComputeShaderEmulator
         return Mathf.Lerp(a, b, t);
     }
     
+    public static float2 lerp(float2 a, float2 b, float t)
+    {
+        return new float2( Mathf.Lerp(a.x, b.x, t), Mathf.Lerp(a.y, b.y, t) );
+    }
+    
+    public static float3 lerp(float3 a, float3 b, float t)
+    {
+        return new float3( Mathf.Lerp(a.x, b.x, t), Mathf.Lerp(a.y, b.y, t), Mathf.Lerp(a.z, b.z, t) );
+    }
+    
     public static float2 normalize(float2 v)
     {
         float vlen = length(v);
