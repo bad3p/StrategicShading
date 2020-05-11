@@ -2,18 +2,40 @@
 using UnityEngine;
 
 #if UNITY_EDITOR
+using System.Collections.Generic;
 using UnityEditor;
 #endif
 
 public partial class EntityAssembly : MonoBehaviour
 {
-#if UNITY_EDITOR    
+#if UNITY_EDITOR
+    static void InitBuffer<T>(List<T> srcBuffer, ref int dstCounter, ref T[] dstBuffer)
+    {
+        dstCounter = srcBuffer.Count;
+        dstBuffer = new T[srcBuffer.Count];
+        srcBuffer.CopyTo(dstBuffer, 0);
+    }
+
+    static void SyncBuffers<T>(ref T[] srcBuffer, List<T> dstBuffer)
+    {
+        dstBuffer.Clear();
+        dstBuffer.AddRange( srcBuffer );
+    }
+    
     void Start()
     {
         if (!EditorApplication.isPlaying)
         {
             return;
         }
+
+        InitBuffer(_entityBuffer, ref ComputeShaderEmulator._entityCount, ref ComputeShaderEmulator._entityBuffer);
+        InitBuffer(_transformBuffer, ref ComputeShaderEmulator._transformCount, ref ComputeShaderEmulator._transformBuffer);
+        InitBuffer(_hierarchyBuffer, ref ComputeShaderEmulator._hierarchyCount, ref ComputeShaderEmulator._hierarchyBuffer);
+        InitBuffer(_personnelBuffer, ref ComputeShaderEmulator._personnelCount, ref ComputeShaderEmulator._personnelBuffer);
+        InitBuffer(_firearmsBuffer, ref ComputeShaderEmulator._firearmsCount, ref ComputeShaderEmulator._firearmsBuffer);
+        InitBuffer(_movementBuffer, ref ComputeShaderEmulator._movementCount, ref ComputeShaderEmulator._movementBuffer);
+        InitBuffer(_firepowerBuffer, ref ComputeShaderEmulator._firepowerCount, ref ComputeShaderEmulator._firepowerBuffer);
     }
     
     void Update()
@@ -24,58 +46,15 @@ public partial class EntityAssembly : MonoBehaviour
         }
 
         ComputeShaderEmulator._dT = Time.deltaTime;
-
-        ComputeShaderEmulator._entityCount = _entityBuffer.Count;
-        ComputeShaderEmulator._transformCount = _transformBuffer.Count;
-        ComputeShaderEmulator._hierarchyCount = _hierarchyBuffer.Count;
-        ComputeShaderEmulator._personnelCount = _personnelBuffer.Count;
-        ComputeShaderEmulator._firearmsCount = _firearmsBuffer.Count;
-        ComputeShaderEmulator._movementCount = _movementBuffer.Count;
-        ComputeShaderEmulator._firepowerCount = _firepowerBuffer.Count;
-        
-        ComputeShaderEmulator._entityBuffer.Clear();
-        ComputeShaderEmulator._entityBuffer.AddRange( _entityBuffer );
-        
-        ComputeShaderEmulator._transformBuffer.Clear();
-        ComputeShaderEmulator._transformBuffer.AddRange( _transformBuffer );
-        
-        ComputeShaderEmulator._hierarchyBuffer.Clear();
-        ComputeShaderEmulator._hierarchyBuffer.AddRange( _hierarchyBuffer );
-        
-        ComputeShaderEmulator._personnelBuffer.Clear();
-        ComputeShaderEmulator._personnelBuffer.AddRange( _personnelBuffer );
-        
-        ComputeShaderEmulator._firearmsBuffer.Clear();
-        ComputeShaderEmulator._firearmsBuffer.AddRange( _firearmsBuffer );
-        
-        ComputeShaderEmulator._movementBuffer.Clear();
-        ComputeShaderEmulator._movementBuffer.AddRange( _movementBuffer );
-        
-        ComputeShaderEmulator._firepowerBuffer.Clear();
-        ComputeShaderEmulator._firepowerBuffer.AddRange( _firepowerBuffer );
-        
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateMovement, (uint)_movementBuffer.Count / 256 + 1, 1, 1 );
-        
-        _entityBuffer.Clear();
-        _entityBuffer.AddRange( ComputeShaderEmulator._entityBuffer );
-        
-        _transformBuffer.Clear();
-        _transformBuffer.AddRange( ComputeShaderEmulator._transformBuffer );
-        
-        _hierarchyBuffer.Clear();
-        _hierarchyBuffer.AddRange( ComputeShaderEmulator._hierarchyBuffer );
-        
-        _personnelBuffer.Clear();
-        _personnelBuffer.AddRange( ComputeShaderEmulator._personnelBuffer );
-        
-        _firearmsBuffer.Clear();
-        _firearmsBuffer.AddRange( ComputeShaderEmulator._firearmsBuffer );
-        
-        _movementBuffer.Clear();
-        _movementBuffer.AddRange( ComputeShaderEmulator._movementBuffer );
-        
-        _firepowerBuffer.Clear();
-        _firepowerBuffer.AddRange( ComputeShaderEmulator._firepowerBuffer );        
+
+        SyncBuffers(ref ComputeShaderEmulator._entityBuffer, _entityBuffer);
+        SyncBuffers(ref ComputeShaderEmulator._transformBuffer, _transformBuffer);
+        SyncBuffers(ref ComputeShaderEmulator._hierarchyBuffer, _hierarchyBuffer);
+        SyncBuffers(ref ComputeShaderEmulator._personnelBuffer, _personnelBuffer);
+        SyncBuffers(ref ComputeShaderEmulator._firearmsBuffer, _firearmsBuffer);
+        SyncBuffers(ref ComputeShaderEmulator._movementBuffer, _movementBuffer);
+        SyncBuffers(ref ComputeShaderEmulator._firepowerBuffer, _firepowerBuffer);
     }
 #endif    
 }

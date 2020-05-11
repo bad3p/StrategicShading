@@ -18,16 +18,24 @@ public class Deploy : BehaviourTreeNode
         {
             return;
         }
-        if (!behaviourTree.EntityProxy)
-        {
-            return;
-        }
-        if (behaviourTree.EntityProxy.entityId == 0)
+        if (behaviourTree.EntityID == 0)
         {
             return;
         }
         
-        Gizmos.color = behaviourTree.EntityProxy.GetTeamColor();
+        EntityAssembly entityAssembly = FindObjectOfType<EntityAssembly>();
+        if (!entityAssembly)
+        {
+            return;
+        }
+        
+        EntityProxy entityProxy = entityAssembly.GetEntityProxy(behaviourTree.EntityID);
+        if (!entityProxy)
+        {
+            return;
+        }
+        
+        Gizmos.color = entityProxy.GetTeamColor();
 
         Gizmos.DrawLine
         (
@@ -58,8 +66,6 @@ public class Deploy : BehaviourTreeNode
     #endregion
     
     #region BehaviourTreeNode
-    private EntityAssembly _entityAssembly = null;
-    
     public override void Initiate(BehaviourTreeNode parentNode)
     {
         entityId = parentNode.entityId;
@@ -68,12 +74,6 @@ public class Deploy : BehaviourTreeNode
             status = Status.Running;
         }
         else
-        {
-            status = Status.Failure;
-        }
-        
-        _entityAssembly = FindObjectOfType<EntityAssembly>();
-        if (!_entityAssembly)
         {
             status = Status.Failure;
         }
@@ -102,79 +102,72 @@ public class Deploy : BehaviourTreeNode
                     deploymentStep = new float3(0,0,0);
                 }
 
-                var entity = _entityAssembly.GetEntity( entityId );
-                if (entity.hierarchyId > 0)
+                uint hierarchyId = entityBuffer[entityId].hierarchyId;
+                if (hierarchyId > 0)
                 {
-                    var hierarchy = _entityAssembly.GetHierarchy( entity.hierarchyId );
-                    if (hierarchy.firstChildEntityId > 0)
+                    uint firstChildEntityId = hierarchyBuffer[hierarchyId].firstChildEntityId;
+                    if (firstChildEntityId > 0)
                     {
-                        var firstChildEntity = _entityAssembly.GetEntity(hierarchy.firstChildEntityId);
-                        if (firstChildEntity.transformId > 0 && firstChildEntity.movementId > 0)
+                        uint firstChildTransformId = entityBuffer[firstChildEntityId].transformId;
+                        uint firstChildMovementId = entityBuffer[firstChildEntityId].movementId;
+                        uint firstChildHierarchyId = entityBuffer[firstChildEntityId].hierarchyId;
+                        if (firstChildTransformId > 0 && firstChildMovementId > 0)
                         {
                             const float TargetPositionErrorThreshold = 0.1f;
                             const float TargetRotationErrorThreshold = Mathf.Deg2Rad * 1.0f;
                             
-                            var firstChildHierarchy = _entityAssembly.GetHierarchy(firstChildEntity.hierarchyId);
-                            var firstChildTransform = _entityAssembly.GetTransform(firstChildEntity.transformId);
-                            var firstChildMovement = _entityAssembly.GetMovement(firstChildEntity.movementId);
-                            
-                            double3 targetPositionError = firstChildMovement.targetPosition - nextSiblingTargetPosition;
+                            double3 targetPositionError = movementBuffer[firstChildMovementId].targetPosition - nextSiblingTargetPosition;
                             if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
                             {
-                                firstChildMovement.targetVelocity = 1.4f; // TODO: configure
-                                firstChildMovement.targetPosition = nextSiblingTargetPosition;
-                                _entityAssembly.SetMovement(firstChildEntity.movementId, firstChildMovement);
+                                movementBuffer[firstChildMovementId].targetVelocity = 1.4f; // TODO: configure
+                                movementBuffer[firstChildMovementId].targetPosition = nextSiblingTargetPosition;
                             }
                             
-                            float targetRotationError = ComputeShaderEmulator.sigangle(firstChildTransform.rotation, this.transform.rotation);
+                            float targetRotationError = ComputeShaderEmulator.sigangle(transformBuffer[firstChildTransformId].rotation, this.transform.rotation);
                             if (Mathf.Abs(targetRotationError) > TargetRotationErrorThreshold)
                             {
-                                firstChildMovement.targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
-                                firstChildMovement.targetRotation = this.transform.rotation;
-                                _entityAssembly.SetMovement(firstChildEntity.movementId, firstChildMovement);
+                                movementBuffer[firstChildMovementId].targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
+                                movementBuffer[firstChildMovementId].targetRotation = this.transform.rotation;
                             }
                             
                             bool allChildrenArrived = true;
-                            float3 currentPositionError = firstChildMovement.targetPosition - firstChildTransform.position;
-                            if (ComputeShaderEmulator.length(currentPositionError) > ComputeShaderEmulator.length(firstChildTransform.scale))
+                            float3 currentPositionError = movementBuffer[firstChildMovementId].targetPosition - transformBuffer[firstChildTransformId].position;
+                            if (ComputeShaderEmulator.length(currentPositionError) > ComputeShaderEmulator.length(transformBuffer[firstChildTransformId].scale))
                             {
                                 allChildrenArrived = false;
                             }
 
                             nextSiblingTargetPosition = nextSiblingTargetPosition + deploymentStep;
 
-                            if (firstChildHierarchy.nextSiblingEntityId > 0)
+                            if (hierarchyBuffer[firstChildHierarchyId].nextSiblingEntityId > 0)
                             {
-                                var nextSiblingEntity = firstChildEntity;
-                                var nextSiblingHierarchy = firstChildHierarchy;
-                                while (nextSiblingHierarchy.nextSiblingEntityId > 0)
+                                uint nextSiblingEntityId = firstChildEntityId;
+                                uint nextSiblingHierarchyId = firstChildHierarchyId;
+                                while (hierarchyBuffer[nextSiblingHierarchyId].nextSiblingEntityId > 0)
                                 {
-                                    nextSiblingEntity = _entityAssembly.GetEntity(nextSiblingHierarchy.nextSiblingEntityId);
-                                    nextSiblingHierarchy = _entityAssembly.GetHierarchy(nextSiblingEntity.hierarchyId);
-                                    if (nextSiblingEntity.transformId > 0 && nextSiblingEntity.movementId > 0)
+                                    nextSiblingEntityId = hierarchyBuffer[nextSiblingHierarchyId].nextSiblingEntityId;
+                                    nextSiblingHierarchyId = entityBuffer[nextSiblingEntityId].hierarchyId;
+                                    uint nextSiblingTransformId = entityBuffer[nextSiblingEntityId].transformId;
+                                    uint nextSiblingMovementId = entityBuffer[nextSiblingEntityId].movementId;
+                                    if (nextSiblingTransformId > 0 && nextSiblingMovementId > 0)
                                     {
-                                        var nextSiblingTransform = _entityAssembly.GetTransform(nextSiblingEntity.transformId);
-                                        var nextSiblingMovement = _entityAssembly.GetMovement(nextSiblingEntity.movementId);
-
-                                        targetPositionError = nextSiblingMovement.targetPosition - nextSiblingTargetPosition;
-                                        targetRotationError = ComputeShaderEmulator.sigangle(nextSiblingTransform.rotation, nextSiblingTargetRotation);
-                                        currentPositionError = nextSiblingMovement.targetPosition - nextSiblingTransform.position;
+                                        targetPositionError = movementBuffer[nextSiblingMovementId].targetPosition - nextSiblingTargetPosition;
+                                        targetRotationError = ComputeShaderEmulator.sigangle(transformBuffer[nextSiblingTransformId].rotation, nextSiblingTargetRotation);
+                                        currentPositionError = movementBuffer[nextSiblingMovementId].targetPosition - transformBuffer[nextSiblingTransformId].position;
 
                                         if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
                                         {
-                                            nextSiblingMovement.targetVelocity = 1.4f; // TODO: configure
-                                            nextSiblingMovement.targetPosition = nextSiblingTargetPosition;
-                                            _entityAssembly.SetMovement(nextSiblingEntity.movementId, nextSiblingMovement);
+                                            movementBuffer[nextSiblingMovementId].targetVelocity = 1.4f; // TODO: configure
+                                            movementBuffer[nextSiblingMovementId].targetPosition = nextSiblingTargetPosition;
                                         }
                                         
                                         if (Mathf.Abs(targetRotationError) > TargetRotationErrorThreshold)
                                         {
-                                            nextSiblingMovement.targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
-                                            nextSiblingMovement.targetRotation = nextSiblingTargetRotation;
-                                            _entityAssembly.SetMovement(nextSiblingEntity.movementId, nextSiblingMovement);
+                                            movementBuffer[nextSiblingMovementId].targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
+                                            movementBuffer[nextSiblingMovementId].targetRotation = nextSiblingTargetRotation;
                                         }
 
-                                        if ( ComputeShaderEmulator.length(currentPositionError) > ComputeShaderEmulator.length(nextSiblingTransform.scale) )
+                                        if ( ComputeShaderEmulator.length(currentPositionError) > ComputeShaderEmulator.length(transformBuffer[nextSiblingTransformId].scale) )
                                         {
                                             allChildrenArrived = false;
                                         }
@@ -191,7 +184,7 @@ public class Deploy : BehaviourTreeNode
 
                             if (allChildrenArrived)
                             {
-                                Debug.Log( "[Deploy] entity \"" + _entityAssembly.GetEntityProxy(entityId).name + "\" to " + transform.position + " is successful!" );
+                                Debug.Log( "[Deploy] entity \"" + entityId + "\" to " + transform.position + " is successful!" );
                                 status = Status.Success;
                             }
                         }
@@ -218,46 +211,6 @@ public class Deploy : BehaviourTreeNode
                 Debug.LogError( "[Deploy] failed, entityId == 0" );
                 status = Status.Failure;
             }
-        }
-    }
-    
-    public uint GetEntityChildCount(uint entityId)
-    {
-        if (_entityAssembly)
-        {
-            var entity = _entityAssembly.GetEntity(entityId);
-            if (entity.hierarchyId > 0)
-            {
-                var hierarchy = _entityAssembly.GetHierarchy( entity.hierarchyId );
-                if (hierarchy.firstChildEntityId > 0)
-                {
-                    uint result = 1;
-                    
-                    var childEntity = _entityAssembly.GetEntity(hierarchy.firstChildEntityId);
-                    var childHierarchy = _entityAssembly.GetHierarchy(childEntity.hierarchyId);
-
-                    while (childHierarchy.nextSiblingEntityId > 0)
-                    {
-                        result++;
-                        childEntity = _entityAssembly.GetEntity(childHierarchy.nextSiblingEntityId);
-                        childHierarchy = _entityAssembly.GetHierarchy(childEntity.hierarchyId);
-                    }
-
-                    return result;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-            else
-            {
-                return 0;
-            }
-        }
-        else
-        {
-            return 0;
         }
     }
     #endregion

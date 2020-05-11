@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class BehaviourTree : BehaviourTreeNode
 {
-    public EntityProxy EntityProxy;   
-    
+    public uint EntityID;
+
     private BehaviourTreeNode _childNode = null;
     
     #region MonoBehaviour
@@ -54,9 +54,12 @@ public class BehaviourTree : BehaviourTreeNode
             return;
         }
         
-        if (EntityProxy)
+        entityId = EntityID;
+        if (entityId == 0)
         {
-            entityId = EntityProxy.entityId;
+            Debug.LogError( "[BehaviourTree] \"" + name + "\" failed, entityId is 0!" );
+            status = Status.Failure;
+            return;
         }
 
         Transform thisTransform = this.transform;

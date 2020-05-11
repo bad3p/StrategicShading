@@ -2060,51 +2060,6 @@ namespace Types
 
     public delegate void ComputeShaderKernel(uint3 id);
 
-    public class RWStructuredBuffer<T> : List<T>
-    {
-        public RWStructuredBuffer() : base()
-        {
-            
-        }
-        public RWStructuredBuffer(int length, T defaultValue) : base()
-        {
-            for (int i = 0; i < length; i++)
-            {
-                Add( defaultValue );       
-            }
-        }
-    };
-
-    public class RWTexture2D<T>
-    {
-        private int _width;
-        private int _height;
-        private T[] _pixels;
-        
-        public RWTexture2D(int width, int height)
-        {
-            _width = width;
-            _height = height;
-            _pixels = new T[width*height];
-        }
-        
-        public int width
-        {
-            get => _width;
-        }
-        
-        public int height
-        {
-            get => _height;
-        }
-        
-        public T this[int2 key]
-        {
-            get { return _pixels[key.y * _width + key.x]; }
-            set { _pixels[key.y * _width + key.x] = value; }
-        }
-    };
-    
     [System.AttributeUsage(System.AttributeTargets.Method)]  
     public class NumThreads : System.Attribute  
     {  

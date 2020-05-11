@@ -8,7 +8,7 @@ public partial class ComputeShaderEmulator
     public static int _outBufferSizeX;
     public static int _outBufferSizeY;
     public static int _outBufferSizeZ;
-    public static RWStructuredBuffer<int3> _outBuffer;
+    public static int3[] _outBuffer = new int3[0];
 
     [NumThreads(16,8,4)]
     static public void GenerateThreadIDs(uint3 id)
@@ -23,23 +23,6 @@ public partial class ComputeShaderEmulator
             _outBuffer[index] = temp;
         }
     }
-    
-    public static int _outRenderTextureWidth;
-    public static int _outRenderTextureHeight;
-    public static RWTexture2D<float> _outRenderTexture;
-    
-    [NumThreads(256,1,1)]
-    static public void GenerateRandomNumbers(uint3 id)
-    {
-        int index = (int)(id.x);
-        if( index < _outRenderTextureWidth * _outRenderTextureHeight )    
-        {
-            int y = index / _outRenderTextureWidth;
-            int x = index - y * _outRenderTextureWidth;
-            int2 xy = new int2( x, y );
-            _outRenderTexture[xy] = rngNormal(rngIndex(index));
-        }
-    }
 
     public static float _dT = 0.0f;
     
@@ -51,13 +34,13 @@ public partial class ComputeShaderEmulator
     public static int _movementCount = 0;
     public static int _firepowerCount = 0;
 
-    public static RWStructuredBuffer<Entity> _entityBuffer = new RWStructuredBuffer<Entity>();
-    public static RWStructuredBuffer<Transform> _transformBuffer = new RWStructuredBuffer<Transform>();
-    public static RWStructuredBuffer<Hierarchy> _hierarchyBuffer = new RWStructuredBuffer<Hierarchy>();
-    public static RWStructuredBuffer<Personnel> _personnelBuffer = new RWStructuredBuffer<Personnel>();
-    public static RWStructuredBuffer<Firearms> _firearmsBuffer = new RWStructuredBuffer<Firearms>();
-    public static RWStructuredBuffer<Movement> _movementBuffer = new RWStructuredBuffer<Movement>();
-    public static RWStructuredBuffer<Firepower> _firepowerBuffer = new RWStructuredBuffer<Firepower>();
+    public static Entity[] _entityBuffer = new Entity[0];
+    public static Transform[] _transformBuffer = new Transform[0];
+    public static Hierarchy[] _hierarchyBuffer = new Hierarchy[0];
+    public static Personnel[] _personnelBuffer = new Personnel[0];
+    public static Firearms[] _firearmsBuffer = new Firearms[0];
+    public static Movement[] _movementBuffer = new Movement[0];
+    public static Firepower[] _firepowerBuffer = new Firepower[0];
     
     [NumThreads(256,1,1)]
     static public void UpdateMovement(uint3 id)

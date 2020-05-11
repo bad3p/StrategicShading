@@ -15,5 +15,5 @@ public partial class ComputeShaderEmulator
     public static int _rngMax;
     public static int _rngCount;
     public static int _rngStateLength;
-    public static RWStructuredBuffer<int> _rngState;
+    public static int[] _rngState = new int[0];
 }

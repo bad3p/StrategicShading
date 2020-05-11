@@ -18,16 +18,24 @@ public class Consolidate : BehaviourTreeNode
         {
             return;
         }
-        if (!behaviourTree.EntityProxy)
-        {
-            return;
-        }
-        if (behaviourTree.EntityProxy.entityId == 0)
+        if (behaviourTree.EntityID == 0)
         {
             return;
         }
         
-        Gizmos.color = behaviourTree.EntityProxy.GetTeamColor();
+        EntityAssembly entityAssembly = FindObjectOfType<EntityAssembly>();
+        if (!entityAssembly)
+        {
+            return;
+        }
+        
+        EntityProxy entityProxy = entityAssembly.GetEntityProxy(behaviourTree.EntityID);
+        if (!entityProxy)
+        {
+            return;
+        }
+
+        Gizmos.color = entityProxy.GetTeamColor();
             
         Gizmos.DrawLine
         (

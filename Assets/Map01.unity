@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e94391d1c55572f44b268a7d7b79b62f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EntityProxy: {fileID: 402623723}
+  EntityID: 4
 --- !u!4 &2631572
 Transform:
   m_ObjectHideFlags: 0
@@ -1594,7 +1594,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e94391d1c55572f44b268a7d7b79b62f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EntityProxy: {fileID: 1676357861}
+  EntityID: 2
 --- !u!1 &559942083
 GameObject:
   m_ObjectHideFlags: 0

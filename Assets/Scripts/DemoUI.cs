@@ -12,7 +12,6 @@ public class DemoUI : MonoBehaviour
     private ComputeShaderEngine _computeShaderEngine = null;
     private Material      _mapImageMaterial = null;
     private RenderTexture _renderTexture = null;
-    private RWTexture2D<float> _rwTexture2D = null;
 
     void Awake()
     {
@@ -26,14 +25,11 @@ public class DemoUI : MonoBehaviour
         _renderTexture.enableRandomWrite = true;
         _renderTexture.filterMode = FilterMode.Point;
         _renderTexture.Create();
-        
-        _rwTexture2D = new RWTexture2D<float>( 256, 128 );
     }
 
     void Update()
     {
         _computeShaderEngine.GenerateRandomNumbers( _renderTexture );
-        _computeShaderEngine.GenerateRandomNumbers( _rwTexture2D );
         _mapImageMaterial.mainTexture = _renderTexture;
     }
 }

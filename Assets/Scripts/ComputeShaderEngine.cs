@@ -51,8 +51,8 @@ public class ComputeShaderEngine : MonoBehaviour
         ComputeShaderEmulator._rngMax = RngMaxUniform;
         ComputeShaderEmulator._rngCount = RngCount;
         ComputeShaderEmulator._rngStateLength = RngStateLength;
-        ComputeShaderEmulator._rngState = new RWStructuredBuffer<int>();
-        ComputeShaderEmulator._rngState.AddRange( rngStateData );
+        ComputeShaderEmulator._rngState = new int[rngStateData.Length];
+        rngStateData.CopyTo(ComputeShaderEmulator._rngState, 0);
     }
 
     void TestThreadGroupIDs()
@@ -79,7 +79,7 @@ public class ComputeShaderEngine : MonoBehaviour
         ComputeShaderEmulator._outBufferSizeX = OutBufferSizeX;
         ComputeShaderEmulator._outBufferSizeY = OutBufferSizeY;
         ComputeShaderEmulator._outBufferSizeZ = OutBufferSizeZ;
-        ComputeShaderEmulator._outBuffer = new RWStructuredBuffer<int3>( OutBufferSizeX * OutBufferSizeY * OutBufferSizeZ, new int3() );
+        ComputeShaderEmulator._outBuffer = new int3[OutBufferSizeX * OutBufferSizeY * OutBufferSizeZ];
         ComputeShaderEmulator.Dispatch(ComputeShaderEmulator.GenerateThreadIDs, (OutBufferSizeX / GroupSizeX) + 1, (OutBufferSizeY / GroupSizeY) + 1, (OutBufferSizeZ / GroupSizeZ) + 1);
         
         /**/
@@ -122,15 +122,6 @@ public class ComputeShaderEngine : MonoBehaviour
         ComputeShader.SetBuffer(kernel, "_rngState", _rngState);
         ComputeShader.SetTexture(kernel, "_outRenderTexture", renderTexture);
         ComputeShader.Dispatch(kernel, ((renderTexture.width * renderTexture.height ) / GPUGroupSize) + 1, 1, 1);
-    }
-    public void GenerateRandomNumbers(RWTexture2D<float> renderTexture)
-    {
-        ComputeShaderEmulator._outRenderTextureWidth = renderTexture.width;
-        ComputeShaderEmulator._outRenderTextureHeight = renderTexture.height;
-        ComputeShaderEmulator._outRenderTexture = renderTexture;
-        
-        ComputeShaderKernel kernel = ComputeShaderEmulator.GenerateRandomNumbers;
-        ComputeShaderEmulator.Dispatch( kernel, (uint)((renderTexture.width * renderTexture.height ) / GPUGroupSize) + 1, 1, 1 );
     }
     #endregion
     
