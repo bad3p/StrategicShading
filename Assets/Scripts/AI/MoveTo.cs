@@ -124,7 +124,6 @@ public class MoveTo : BehaviourTreeNode
                                 allChildrenArrived = false;
                             }
 
-                            float3 movementVel = ComputeShaderEmulator.rotate(new float3(0, 0, 1), firstChildTransform.rotation) * firstChildMovement.targetVelocity;
                             float3 offsetDir = ComputeShaderEmulator.rotate(new float3(0, 0, -1), firstChildTransform.rotation);
                             float offsetLength = ComputeShaderEmulator.length(firstChildTransform.scale);
                             double3 offset = (offsetDir * offsetLength);
@@ -143,21 +142,6 @@ public class MoveTo : BehaviourTreeNode
                                     {
                                         var nextSiblingTransform = _entityAssembly.GetTransform(nextSiblingEntity.transformId);
                                         var nextSiblingMovement = _entityAssembly.GetMovement(nextSiblingEntity.movementId);
-                                        
-                                        /*
-                                        float3 dirToTargetPosition = nextSiblingTargetPosition - nextSiblingTransform.position;
-                                        float distToTargetPosition = ComputeShaderEmulator.length(dirToTargetPosition);
-                                        if (nextSiblingMovement.targetVelocity > 0)
-                                        {
-                                            float timeToTargetPosition = distToTargetPosition / nextSiblingMovement.targetVelocity;
-
-                                            float4 args = new float4( Radius, 0.0f, Radius * 2, 1.0f );
-                                            timeToTargetPosition *= ComputeShaderEmulator.lerpargs(args, distToTargetPosition);
-                                            
-                                            double3 targetPositionMovement = movementVel * timeToTargetPosition; 
-                                            nextSiblingTargetPosition = nextSiblingTargetPosition + targetPositionMovement;
-                                        }
-                                        */
 
                                         targetPositionError = nextSiblingMovement.targetPosition - nextSiblingTargetPosition;
                                         targetRotationError = ComputeShaderEmulator.sigangle(nextSiblingTransform.rotation, nextSiblingTargetRotation);
@@ -182,7 +166,6 @@ public class MoveTo : BehaviourTreeNode
                                             allChildrenArrived = false;
                                         }
 
-                                        movementVel = ComputeShaderEmulator.rotate(new float3(0, 0, 1), nextSiblingTransform.rotation) * nextSiblingMovement.targetVelocity;
                                         offsetDir = ComputeShaderEmulator.rotate(new float3(0, 0, -1), nextSiblingTransform.rotation);
                                         offsetLength = ComputeShaderEmulator.length(nextSiblingTransform.scale);
                                         offset = offsetDir * offsetLength;
