@@ -186,7 +186,7 @@ public class Advance : BehaviourTreeNode
                             
                             double3 targetPositionError = movementBuffer[firstChildMovementId].targetPosition - nextSiblingTargetPosition;
                             float targetRotationError = ComputeShaderEmulator.sigangle(transformBuffer[firstChildTransformId].rotation, this.transform.rotation);
-                            float3 currentPositionError = movementBuffer[firstChildMovementId].targetPosition - transformBuffer[firstChildTransformId].position;
+                            float3 currentPositionError = nextSiblingTargetPosition - transformBuffer[firstChildTransformId].position;
                             
                             if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
                             {
@@ -223,7 +223,7 @@ public class Advance : BehaviourTreeNode
                                     {
                                         targetPositionError = movementBuffer[nextSiblingMovementId].targetPosition - nextSiblingTargetPosition;
                                         targetRotationError = ComputeShaderEmulator.sigangle(transformBuffer[nextSiblingTransformId].rotation, nextSiblingTargetRotation);
-                                        currentPositionError = movementBuffer[nextSiblingMovementId].targetPosition - transformBuffer[nextSiblingTransformId].position;
+                                        currentPositionError = nextSiblingTargetPosition - transformBuffer[nextSiblingTransformId].position;
 
                                         if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
                                         {
@@ -253,7 +253,6 @@ public class Advance : BehaviourTreeNode
                                 }
                             }
 
-                            allChildrenArrived = false;
                             if (allChildrenArrived)
                             {
                                 Debug.Log( "[Advance] entity \"" + entityId + "\" to " + transform.position + " is successful!" );
