@@ -19,27 +19,7 @@ public class EntityAssemblyEditor : Editor
         EditorGUILayout.BeginVertical();
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("entityBuffer");
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("transformBuffer");
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("hierarchyBuffer");
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("personnelBuffer");
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("firearmsBuffer");
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("actionBuffer");
+            EditorGUILayout.LabelField("entityCount");
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();
@@ -47,27 +27,7 @@ public class EntityAssemblyEditor : Editor
         EditorGUILayout.BeginVertical();
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(entityAssembly.entityBuffer.Count.ToString());
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(entityAssembly.transformBuffer.Count.ToString());
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(entityAssembly.hierarchyBuffer.Count.ToString());
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(entityAssembly.personnelBuffer.Count.ToString());
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(entityAssembly.firearmsBuffer.Count.ToString());
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(entityAssembly.movementBuffer.Count.ToString());
+            EditorGUILayout.LabelField(entityAssembly.descBuffer.Count.ToString());
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();

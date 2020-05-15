@@ -33,27 +33,7 @@ public class EntityProxyEditor : Editor
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("transformId");
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("hierarchyId");
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("personnelId");
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("firearmsId");
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("movementId");
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("firepowerId");
+            EditorGUILayout.LabelField("desc");
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();
@@ -88,27 +68,7 @@ public class EntityProxyEditor : Editor
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField( entityProxy.transformId.ToString() );
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField( entityProxy.hierarchyId.ToString() );
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField( entityProxy.personnelId.ToString() );
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField( entityProxy.firearmsId.ToString() );
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField( entityProxy.movementId.ToString() );
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField( entityProxy.firepowerId.ToString() );
+            EditorGUILayout.LabelField( entityProxy.entityDesc.ToString("X8") );
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();
@@ -117,7 +77,9 @@ public class EntityProxyEditor : Editor
 
         if (!EditorApplication.isPlaying)
         {
-            if (entityProxy.transformId == 0 && entityProxy.hierarchyId > 0 && entityProxy.transform.hasChanged)
+            if ((entityProxy.entityDesc & ComputeShaderEmulator.TRANSFORM) == ComputeShaderEmulator.TRANSFORM && 
+                (entityProxy.entityDesc & ComputeShaderEmulator.HIERARCHY) == ComputeShaderEmulator.HIERARCHY && 
+                entityProxy.transform.hasChanged)
             {
                 UpdateTransforms(entityProxy);
             }
@@ -132,7 +94,7 @@ public class EntityProxyEditor : Editor
 
     static void UpdateTransforms(EntityProxy entityProxy)
     {
-        if (entityProxy.transformId > 0)
+        if ((entityProxy.entityDesc & ComputeShaderEmulator.TRANSFORM) == ComputeShaderEmulator.TRANSFORM)
         {
             TransformProxy transformProxy = entityProxy.GetComponent<TransformProxy>();
             transformProxy.position = transformProxy.transform.position;

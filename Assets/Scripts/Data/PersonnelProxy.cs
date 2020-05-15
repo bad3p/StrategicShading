@@ -25,12 +25,9 @@ public class PersonnelProxy : ComponentProxy
         _entityAssembly = FindObjectOfType<EntityAssembly>();
         if (_entityAssembly)
         {
-            uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
-            if (thisPersonnelId == 0)
+            if (_entityAssembly.GetEntityId(this) == 0)
             {
-                thisPersonnelId = _entityAssembly.RegisterPersonnelProxy(this);
-                _entityProxy.personnelId = thisPersonnelId;
-                entityId = _entityProxy.entityId;
+                _entityAssembly.RegisterPersonnelProxy(_entityProxy.entityId, this);
                 morale = Morale;
                 fitness = Fitness;
                 count = Count;
@@ -48,7 +45,10 @@ public class PersonnelProxy : ComponentProxy
             return;
         }
 #endif        
-        _entityProxy.personnelId = 0;
+        if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
+        {
+            _entityAssembly.UnregisterPersonnelProxy( _entityAssembly.GetEntityId(this), this );
+        }
     }
     
     void OnDrawGizmos()
@@ -57,7 +57,7 @@ public class PersonnelProxy : ComponentProxy
         {
             Awake();
         }
-        if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
+        if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
         {
             Gizmos.color = _entityProxy.GetTeamColor();
 
@@ -98,173 +98,91 @@ public class PersonnelProxy : ComponentProxy
                     
                     Gizmos.DrawCube(p.ToVector3(), new Vector3( 0.25f,2.0f,0.25f) );
                 }
-
-                // Gizmos.DrawWireCube(Vector3.zero, scale.ToVector3());
-                
-                // Жаль :) У меня примерно полтора знакомых за всю мою жизнь имели отношение к JS: оказывается IT отрасль развилась до такой степени когда эффект разделения труда имеет социальные эффекты :D 
             }
         }
     }
     
-    public uint entityId
+    private static Structs.Personnel _dummy = new Structs.Personnel();
+
+    private Structs.Personnel _component
     {
         get
         {
-            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
+            if (_entityAssembly)
             {
-                uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
-                Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
-                return thisPersonnel.entityId;
+                uint entityId = _entityAssembly.GetEntityId(this);
+                if (entityId != 0)
+                {
+                    return _entityAssembly.GetPersonnel(entityId);
+                }
             }
-            else
-            {
-                return 0;
-            }
+            return _dummy;
         }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
+            if (_entityAssembly)
             {
-                uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
-                Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
-                thisPersonnel.entityId = value;
-                _entityAssembly.SetPersonnel(thisPersonnelId, thisPersonnel);
+                uint entityId = _entityAssembly.GetEntityId(this);
+                if (entityId != 0)
+                {
+                    _entityAssembly.SetPersonnel(entityId, value);
+                }
             }
         }
     }
 
     public float morale
     {
-        get
-        {
-            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
-            {
-                uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
-                Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
-                return thisPersonnel.morale;
-            }
-            else
-            {
-                return 0.0f;
-            }
-        }
+        get { return _component.morale; }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
-            {
-                uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
-                Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
-                thisPersonnel.morale = value;
-                _entityAssembly.SetPersonnel(thisPersonnelId, thisPersonnel);
-            }
+            var temp = _component;
+            temp.morale = value;
+            _component = temp;
         }
     }
     
     public float fitness
     {
-        get
-        {
-            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
-            {
-                uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
-                Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
-                return thisPersonnel.fitness;
-            }
-            else
-            {
-                return 0.0f;
-            }
-        }
+        get { return _component.fitness; }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
-            {
-                uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
-                Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
-                thisPersonnel.fitness = value;
-                _entityAssembly.SetPersonnel(thisPersonnelId, thisPersonnel);
-            }
+            var temp = _component;
+            temp.fitness = value;
+            _component = temp;
         }
     }
     
     public uint count
     {
-        get
-        {
-            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
-            {
-                uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
-                Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
-                return thisPersonnel.count;
-            }
-            else
-            {
-                return 0;
-            }
-        }
+        get { return _component.count; }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
-            {
-                uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
-                Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
-                thisPersonnel.count = value;
-                _entityAssembly.SetPersonnel(thisPersonnelId, thisPersonnel);
-            }
+            var temp = _component;
+            temp.count = value;
+            _component = temp;
         }
     }
     
     public uint wounded
     {
-        get
-        {
-            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
-            {
-                uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
-                Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
-                return thisPersonnel.wounded;
-            }
-            else
-            {
-                return 0;
-            }
-        }
+        get { return _component.wounded; }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
-            {
-                uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
-                Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
-                thisPersonnel.wounded = value;
-                _entityAssembly.SetPersonnel(thisPersonnelId, thisPersonnel);
-            }
+            var temp = _component;
+            temp.wounded = value;
+            _component = temp;
         }
     }
     
     public uint killed
     {
-        get
-        {
-            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
-            {
-                uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
-                Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
-                return thisPersonnel.killed;
-            }
-            else
-            {
-                return 0;
-            }
-        }
+        get { return _component.killed; }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetPersonnelId(this) != 0)
-            {
-                uint thisPersonnelId = _entityAssembly.GetPersonnelId(this);
-                Structs.Personnel thisPersonnel = _entityAssembly.GetPersonnel(thisPersonnelId);
-                thisPersonnel.killed = value;
-                _entityAssembly.SetPersonnel(thisPersonnelId, thisPersonnel);
-            }
+            var temp = _component;
+            temp.killed = value;
+            _component = temp;
         }
     }
 }

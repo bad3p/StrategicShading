@@ -75,13 +75,7 @@ public class Advance : BehaviourTreeNode
     #region BehaviourTreeNode
     protected static double GetNearestDistanceFromChildEntityToLine(uint entityId, double2 p0, double2 p1)
     {
-        uint hierarchyId = entityBuffer[entityId].hierarchyId;
-        if (hierarchyId == 0)
-        {
-            return 0;
-        }
-        
-        uint childEntityId = hierarchyBuffer[hierarchyId].firstChildEntityId;
+        uint childEntityId = hierarchyBuffer[entityId].firstChildEntityId;
         if (childEntityId == 0)
         {
             return 0;
@@ -95,21 +89,15 @@ public class Advance : BehaviourTreeNode
         double llen = Math.Sqrt( ldx * ldx + ldy * ldy );
         if (llen < ComputeShaderEmulator.DOUBLE_EPSILON)
         {
-            return 0;
+            return float.MaxValue;
         }
         
         while (childEntityId > 0)
         {
-            uint childTransformId = entityBuffer[childEntityId].transformId;
-            if (childTransformId > 0)
-            {
-                double2 p = transformBuffer[childTransformId].position.xz;
-                double distance = Math.Abs(ldy * p.x - ldx * p.y + lcrs) / llen;
-                nearestDistance = Math.Min(nearestDistance, distance);
-            }
-            
-            uint childHierarchyId = entityBuffer[childEntityId].hierarchyId;
-            childEntityId = hierarchyBuffer[childHierarchyId].nextSiblingEntityId;
+            double2 p = transformBuffer[childEntityId].position.xz;
+            double distance = Math.Abs(ldy * p.x - ldx * p.y + lcrs) / llen;
+            nearestDistance = Math.Min(nearestDistance, distance);
+            childEntityId = hierarchyBuffer[childEntityId].nextSiblingEntityId;
         }
 
         return nearestDistance;
@@ -170,75 +158,69 @@ public class Advance : BehaviourTreeNode
                     4.17f
                 );
 
-                uint hierarchyId = entityBuffer[entityId].hierarchyId;
-                if (hierarchyId > 0)
+                if ( (descBuffer[entityId] & ComputeShaderEmulator.HIERARCHY) == ComputeShaderEmulator.HIERARCHY)
                 {
-                    uint firstChildEntityId = hierarchyBuffer[hierarchyId].firstChildEntityId;
+                    uint firstChildEntityId = hierarchyBuffer[entityId].firstChildEntityId;
                     if (firstChildEntityId > 0)
                     {
-                        uint firstChildTransformId = entityBuffer[firstChildEntityId].transformId;
-                        uint firstChildMovementId = entityBuffer[firstChildEntityId].movementId;
-                        uint firstChildHierarchyId = entityBuffer[firstChildEntityId].hierarchyId;
-                        if (firstChildTransformId > 0 && firstChildMovementId > 0)
+                        if ( (descBuffer[firstChildEntityId] & ComputeShaderEmulator.TRANSFORM) == ComputeShaderEmulator.TRANSFORM &&
+                             (descBuffer[firstChildEntityId] & ComputeShaderEmulator.MOVEMENT) == ComputeShaderEmulator.MOVEMENT ) 
                         {
                             const float TargetPositionErrorThreshold = 0.1f;
                             const float TargetRotationErrorThreshold = Mathf.Deg2Rad * 1.0f;
                             
-                            double3 targetPositionError = movementBuffer[firstChildMovementId].targetPosition - nextSiblingTargetPosition;
-                            float targetRotationError = ComputeShaderEmulator.sigangle(transformBuffer[firstChildTransformId].rotation, this.transform.rotation);
-                            float3 currentPositionError = nextSiblingTargetPosition - transformBuffer[firstChildTransformId].position;
+                            double3 targetPositionError = movementBuffer[firstChildEntityId].targetPosition - nextSiblingTargetPosition;
+                            float targetRotationError = ComputeShaderEmulator.sigangle(transformBuffer[firstChildEntityId].rotation, this.transform.rotation);
+                            float3 currentPositionError = nextSiblingTargetPosition - transformBuffer[firstChildEntityId].position;
                             
                             if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
                             {
                                 float targetVelocity = ComputeShaderEmulator.lerpargs(velocityByCurrentPositionError, ComputeShaderEmulator.length(currentPositionError));
-                                movementBuffer[firstChildMovementId].targetVelocity = targetVelocity; // TODO: configure
-                                movementBuffer[firstChildMovementId].targetPosition = nextSiblingTargetPosition;
+                                movementBuffer[firstChildEntityId].targetVelocity = targetVelocity; // TODO: configure
+                                movementBuffer[firstChildEntityId].targetPosition = nextSiblingTargetPosition;
                             }
 
                             if (Mathf.Abs(targetRotationError) > TargetRotationErrorThreshold)
                             {
-                                movementBuffer[firstChildMovementId].targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
-                                movementBuffer[firstChildMovementId].targetRotation = this.transform.rotation;
+                                movementBuffer[firstChildEntityId].targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
+                                movementBuffer[firstChildEntityId].targetRotation = this.transform.rotation;
                             }
                             
                             bool allChildrenArrived = true;
-                            if (ComputeShaderEmulator.length(currentPositionError) > ComputeShaderEmulator.length(transformBuffer[firstChildTransformId].scale))
+                            if (ComputeShaderEmulator.length(currentPositionError) > ComputeShaderEmulator.length(transformBuffer[firstChildEntityId].scale))
                             {
                                 allChildrenArrived = false;
                             }
 
                             nextSiblingTargetPosition = nextSiblingTargetPosition + advancementStep;
 
-                            if (hierarchyBuffer[firstChildHierarchyId].nextSiblingEntityId > 0)
+                            if (hierarchyBuffer[firstChildEntityId].nextSiblingEntityId > 0)
                             {
                                 uint nextSiblingEntityId = firstChildEntityId;
-                                uint nextSiblingHierarchyId = firstChildHierarchyId;
-                                while (hierarchyBuffer[nextSiblingHierarchyId].nextSiblingEntityId > 0)
+                                while (hierarchyBuffer[nextSiblingEntityId].nextSiblingEntityId > 0)
                                 {
-                                    nextSiblingEntityId = hierarchyBuffer[nextSiblingHierarchyId].nextSiblingEntityId;
-                                    nextSiblingHierarchyId = entityBuffer[nextSiblingEntityId].hierarchyId;
-                                    uint nextSiblingTransformId = entityBuffer[nextSiblingEntityId].transformId;
-                                    uint nextSiblingMovementId = entityBuffer[nextSiblingEntityId].movementId;
-                                    if (nextSiblingTransformId > 0 && nextSiblingMovementId > 0)
+                                    nextSiblingEntityId = hierarchyBuffer[nextSiblingEntityId].nextSiblingEntityId;
+                                    if ( (descBuffer[nextSiblingEntityId] & ComputeShaderEmulator.TRANSFORM) == ComputeShaderEmulator.TRANSFORM &&
+                                         (descBuffer[nextSiblingEntityId] & ComputeShaderEmulator.MOVEMENT) == ComputeShaderEmulator.MOVEMENT)
                                     {
-                                        targetPositionError = movementBuffer[nextSiblingMovementId].targetPosition - nextSiblingTargetPosition;
-                                        targetRotationError = ComputeShaderEmulator.sigangle(transformBuffer[nextSiblingTransformId].rotation, nextSiblingTargetRotation);
-                                        currentPositionError = nextSiblingTargetPosition - transformBuffer[nextSiblingTransformId].position;
+                                        targetPositionError = movementBuffer[nextSiblingEntityId].targetPosition - nextSiblingTargetPosition;
+                                        targetRotationError = ComputeShaderEmulator.sigangle(transformBuffer[nextSiblingEntityId].rotation, nextSiblingTargetRotation);
+                                        currentPositionError = nextSiblingTargetPosition - transformBuffer[nextSiblingEntityId].position;
 
                                         if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
                                         {
                                             float targetVelocity = ComputeShaderEmulator.lerpargs(velocityByCurrentPositionError, ComputeShaderEmulator.length(currentPositionError));
-                                            movementBuffer[nextSiblingMovementId].targetVelocity = targetVelocity; // TODO: configure
-                                            movementBuffer[nextSiblingMovementId].targetPosition = nextSiblingTargetPosition;
+                                            movementBuffer[nextSiblingEntityId].targetVelocity = targetVelocity; // TODO: configure
+                                            movementBuffer[nextSiblingEntityId].targetPosition = nextSiblingTargetPosition;
                                         }
                                         
                                         if (Mathf.Abs(targetRotationError) > TargetRotationErrorThreshold)
                                         {
-                                            movementBuffer[nextSiblingMovementId].targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
-                                            movementBuffer[nextSiblingMovementId].targetRotation = nextSiblingTargetRotation;
+                                            movementBuffer[nextSiblingEntityId].targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
+                                            movementBuffer[nextSiblingEntityId].targetRotation = nextSiblingTargetRotation;
                                         }
 
-                                        if ( ComputeShaderEmulator.length(currentPositionError) > ComputeShaderEmulator.length(transformBuffer[nextSiblingTransformId].scale) )
+                                        if ( ComputeShaderEmulator.length(currentPositionError) > ComputeShaderEmulator.length(transformBuffer[nextSiblingEntityId].scale) )
                                         {
                                             allChildrenArrived = false;
                                         }
@@ -249,6 +231,7 @@ public class Advance : BehaviourTreeNode
                                     {
                                         Debug.LogError( "[Advance] failed, inconsistent entity (missing Transform or Movement component)!" );
                                         status = Status.Failure;
+                                        break;
                                     }
                                 }
                             }

@@ -20,6 +20,7 @@ public class EntityProxy : MonoBehaviour
 
     void Awake()
     {
+        _isInitialized = true;
         _entityAssembly = FindObjectOfType<EntityAssembly>();
         if (_entityAssembly)
         {
@@ -36,7 +37,6 @@ public class EntityProxy : MonoBehaviour
                 componentProxies[i].AwakeImmediate();
             }
         }
-        _isInitialized = true;
     }
 
     void OnDrawGizmos()
@@ -49,7 +49,7 @@ public class EntityProxy : MonoBehaviour
         {
             UpdateConvexHull();
 
-            if (transformId == 0)
+            if ((entityDesc & ComputeShaderEmulator.HIERARCHY) == ComputeShaderEmulator.HIERARCHY)
             {
                 UpdateMesh();
 
@@ -208,9 +208,9 @@ public class EntityProxy : MonoBehaviour
             
             _pointCloud.Clear();
             
-            if (transformId > 0)
+            if ((entityDesc & ComputeShaderEmulator.TRANSFORM) == ComputeShaderEmulator.TRANSFORM)
             {
-                TransformProxy transformProxy = _entityAssembly.GetTransformProxy(transformId);
+                TransformProxy transformProxy = _entityAssembly.GetTransformProxy(entityId);
                 
                 Matrix4x4 entityMatrix = Matrix4x4.Translate(transformProxy.position.ToVector3()) * Matrix4x4.Rotate(transformProxy.rotation.ToQuaternion());
                 Vector3 scale = transformProxy.scale.ToVector3() * 0.5f;
@@ -234,9 +234,9 @@ public class EntityProxy : MonoBehaviour
                 _hull.Clear();
                 _hull.AddRange( _pointCloud );
             }
-            else if (hierarchyId > 0)
+            else if ((entityDesc & ComputeShaderEmulator.HIERARCHY) == ComputeShaderEmulator.HIERARCHY)
             {
-                HierarchyProxy hierarchyProxy = _entityAssembly.GetHierarchyProxy(hierarchyId);
+                HierarchyProxy hierarchyProxy = _entityAssembly.GetHierarchyProxy(entityId);
 
                 uint childEntityId = hierarchyProxy.firstChildEntityId;
                 while (childEntityId > 0)
@@ -244,17 +244,9 @@ public class EntityProxy : MonoBehaviour
                     EntityProxy childEntityProxy = _entityAssembly.GetEntityProxy(childEntityId);
                     childEntityProxy.UpdateConvexHull();
                     _pointCloud.AddRange( childEntityProxy._hull );
-                    
-                    uint childHierarchyId = childEntityProxy.hierarchyId;
-                    if (childHierarchyId > 0)
-                    {
-                        HierarchyProxy childHierarchyProxy = _entityAssembly.GetHierarchyProxy(childHierarchyId);
-                        childEntityId = childHierarchyProxy.nextSiblingEntityId;
-                    }
-                    else
-                    {
-                        break;
-                    }
+                
+                    HierarchyProxy childHierarchyProxy = _entityAssembly.GetHierarchyProxy(childEntityId);
+                    childEntityId = childHierarchyProxy.nextSiblingEntityId;
                 }
 
                 if (_pointCloud.Count > 0)
@@ -321,7 +313,7 @@ public class EntityProxy : MonoBehaviour
                 return Color.blue;
                 break;
             case 3:
-                return Color.Lerp( Color.green, Color.black, 0.125f );
+                return Color.green;
                 break;
             default:
                 return Color.white;
@@ -348,6 +340,26 @@ public class EntityProxy : MonoBehaviour
         }
     }
     
+    public uint entityDesc
+    {
+        get
+        {
+            if (!_isInitialized)
+            {
+                Awake();
+            }
+            if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
+            {
+                uint thisEntityId = _entityAssembly.GetEntityId(this);
+                return _entityAssembly.GetEntityDesc(thisEntityId);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+    }
+    
     public uint teamId
     {
         get
@@ -359,8 +371,8 @@ public class EntityProxy : MonoBehaviour
             if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
             {
                 uint thisEntityId = _entityAssembly.GetEntityId(this);
-                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
-                return entity.teamId;
+                uint thisEntityDesc = _entityAssembly.GetEntityDesc(thisEntityId);
+                return thisEntityDesc >> (int)ComputeShaderEmulator.TEAM_SHIFT;
             }
             else
             {
@@ -376,219 +388,10 @@ public class EntityProxy : MonoBehaviour
             if (_entityAssembly)
             {
                 uint thisEntityId = _entityAssembly.GetEntityId(this);
-                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
-                entity.teamId = value;
-                _entityAssembly.SetEntity(thisEntityId, entity);
-            }
-        }
-    }
-
-    public uint transformId
-    {
-        get
-        {
-            if (!_isInitialized)
-            {
-                Awake();
-            }
-            if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
-            {
-                uint thisEntityId = _entityAssembly.GetEntityId(this);
-                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
-                return entity.transformId;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-        set
-        {
-            if (!_isInitialized)
-            {
-                Awake();
-            }
-            if (_entityAssembly)
-            {
-                uint thisEntityId = _entityAssembly.GetEntityId(this);
-                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
-                entity.transformId = value;
-                _entityAssembly.SetEntity(thisEntityId, entity);
-            }
-        }
-    }
-    
-    public uint hierarchyId
-    {
-        get
-        {
-            if (!_isInitialized)
-            {
-                Awake();
-            }
-            if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
-            {
-                uint thisEntityId = _entityAssembly.GetEntityId(this);
-                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
-                return entity.hierarchyId;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-        set
-        {
-            if (!_isInitialized)
-            {
-                Awake();
-            }
-            if (_entityAssembly)
-            {
-                uint thisEntityId = _entityAssembly.GetEntityId(this);
-                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
-                entity.hierarchyId = value;
-                _entityAssembly.SetEntity(thisEntityId, entity);
-            }
-        }
-    }
-    
-    public uint personnelId
-    {
-        get
-        {
-            if (!_isInitialized)
-            {
-                Awake();
-            }
-            if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
-            {
-                uint thisEntityId = _entityAssembly.GetEntityId(this);
-                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
-                return entity.personnelId;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-        set
-        {
-            if (!_isInitialized)
-            {
-                Awake();
-            }
-            if (_entityAssembly)
-            {
-                uint thisEntityId = _entityAssembly.GetEntityId(this);
-                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
-                entity.personnelId = value;
-                _entityAssembly.SetEntity(thisEntityId, entity);
-            }
-        }
-    }
-    
-    public uint firearmsId
-    {
-        get
-        {
-            if (!_isInitialized)
-            {
-                Awake();
-            }
-            if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
-            {
-                uint thisEntityId = _entityAssembly.GetEntityId(this);
-                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
-                return entity.firearmsId;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-        set
-        {
-            if (!_isInitialized)
-            {
-                Awake();
-            }
-            if (_entityAssembly)
-            {
-                uint thisEntityId = _entityAssembly.GetEntityId(this);
-                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
-                entity.firearmsId = value;
-                _entityAssembly.SetEntity(thisEntityId, entity);
-            }
-        }
-    }
-    
-    public uint movementId
-    {
-        get
-        {
-            if (!_isInitialized)
-            {
-                Awake();
-            }
-            if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
-            {
-                uint thisEntityId = _entityAssembly.GetEntityId(this);
-                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
-                return entity.movementId;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-        set
-        {
-            if (!_isInitialized)
-            {
-                Awake();
-            }
-            if (_entityAssembly)
-            {
-                uint thisEntityId = _entityAssembly.GetEntityId(this);
-                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
-                entity.movementId = value;
-                _entityAssembly.SetEntity(thisEntityId, entity);
-            }
-        }
-    }
-    
-    public uint firepowerId
-    {
-        get
-        {
-            if (!_isInitialized)
-            {
-                Awake();
-            }
-            if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
-            {
-                uint thisEntityId = _entityAssembly.GetEntityId(this);
-                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
-                return entity.firepowerId;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-        set
-        {
-            if (!_isInitialized)
-            {
-                Awake();
-            }
-            if (_entityAssembly)
-            {
-                uint thisEntityId = _entityAssembly.GetEntityId(this);
-                Structs.Entity entity = _entityAssembly.GetEntity(thisEntityId);
-                entity.firepowerId = value;
-                _entityAssembly.SetEntity(thisEntityId, entity);
+                uint thisEntityDesc = _entityAssembly.GetEntityDesc(thisEntityId);
+                thisEntityDesc &= ~ComputeShaderEmulator.TEAM_BITMASK;
+                thisEntityDesc |= value << (int)ComputeShaderEmulator.TEAM_SHIFT;
+                _entityAssembly.SetEntityDesc(thisEntityId, thisEntityDesc);
             }
         }
     }

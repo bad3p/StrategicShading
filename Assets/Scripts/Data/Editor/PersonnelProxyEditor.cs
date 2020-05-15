@@ -15,10 +15,6 @@ public class PersonnelProxyEditor : Editor
         EditorGUILayout.BeginVertical();
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("entityId");
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("morale");
             EditorGUILayout.EndHorizontal();
             
@@ -42,10 +38,6 @@ public class PersonnelProxyEditor : Editor
         
         EditorGUILayout.BeginVertical();
         {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField( personnelProxy.entityId.ToString() );
-            EditorGUILayout.EndHorizontal();
-            
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {

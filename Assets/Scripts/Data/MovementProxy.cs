@@ -24,12 +24,9 @@ public class MovementProxy : ComponentProxy
         _entityAssembly = FindObjectOfType<EntityAssembly>();
         if (_entityAssembly)
         {
-            uint thisMovementId = _entityAssembly.GetMovementId(this);
-            if (thisMovementId == 0)
+            if (_entityAssembly.GetEntityId(this) == 0)
             {
-                thisMovementId = _entityAssembly.RegisterMovementProxy(this);
-                _entityProxy.movementId = thisMovementId;
-                entityId = _entityProxy.entityId;
+                _entityAssembly.RegisterMovementProxy(_entityProxy.entityId, this);
                 targetPosition = TargetPosition;
                 targetRotation = TargetRotation;
                 targetVelocity = TargetVelocity;
@@ -46,7 +43,10 @@ public class MovementProxy : ComponentProxy
             return;
         }
 #endif        
-        _entityProxy.movementId = 0;
+        if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
+        {
+            _entityAssembly.UnregisterMovementProxy( _entityAssembly.GetEntityId(this), this );
+        }
     }
 
     void OnDrawGizmosSelected()
@@ -58,9 +58,9 @@ public class MovementProxy : ComponentProxy
         if (_entityAssembly)
         {
             Gizmos.color = _entityProxy.GetTeamColor();
-            if (targetVelocity > 0 && _entityProxy.transformId > 0)
+            if (targetVelocity > 0 && (_entityProxy.entityDesc & ComputeShaderEmulator.TRANSFORM) == ComputeShaderEmulator.TRANSFORM)
             {
-                TransformProxy transformProxy = _entityAssembly.GetTransformProxy(_entityProxy.transformId);
+                TransformProxy transformProxy = _entityAssembly.GetTransformProxy(_entityProxy.entityId);
                 if (transformProxy)
                 {
                     Gizmos.DrawLine( transformProxy.position.ToVector3(), targetPosition.ToVector3() );
@@ -68,139 +68,77 @@ public class MovementProxy : ComponentProxy
             }
         }
     }
-    
-    public uint entityId
+
+    private static Structs.Movement _dummy = new Structs.Movement();
+
+    private Structs.Movement _component
     {
         get
         {
-            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
+            if (_entityAssembly)
             {
-                uint thisMovementId = _entityAssembly.GetMovementId(this);
-                Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
-                return thisMovement.entityId;
+                uint entityId = _entityAssembly.GetEntityId(this);
+                if (entityId != 0)
+                {
+                    return _entityAssembly.GetMovement(entityId);
+                }
             }
-            else
-            {
-                return 0;
-            }
+            return _dummy;
         }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
+            if (_entityAssembly)
             {
-                uint thisMovementId = _entityAssembly.GetMovementId(this);
-                Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
-                thisMovement.entityId = value;
-                _entityAssembly.SetMovement(thisMovementId, thisMovement);
+                uint entityId = _entityAssembly.GetEntityId(this);
+                if (entityId != 0)
+                {
+                    _entityAssembly.SetMovement(entityId, value);
+                }
             }
         }
     }
     
     public double3 targetPosition
     {
-        get
-        {
-            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
-            {
-                uint thisMovementId = _entityAssembly.GetMovementId(this);
-                Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
-                return thisMovement.targetPosition;
-            }
-            else
-            {
-                return new double3(0,0,0);
-            }
-        }
+        get { return _component.targetPosition; }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
-            {
-                uint thisMovementId = _entityAssembly.GetMovementId(this);
-                Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
-                thisMovement.targetPosition = value;
-                _entityAssembly.SetMovement(thisMovementId, thisMovement);
-            }
+            var temp = _component;
+            temp.targetPosition = value;
+            _component = temp;
         }
     }
     
     public float4 targetRotation
     {
-        get
-        {
-            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
-            {
-                uint thisMovementId = _entityAssembly.GetMovementId(this);
-                Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
-                return thisMovement.targetRotation;
-            }
-            else
-            {
-                return new float4(0,0,0,1);
-            }
-        }
+        get { return _component.targetRotation; }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
-            {
-                uint thisMovementId = _entityAssembly.GetMovementId(this);
-                Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
-                thisMovement.targetRotation = value;
-                _entityAssembly.SetMovement(thisMovementId, thisMovement);
-            }
+            var temp = _component;
+            temp.targetRotation = value;
+            _component = temp;
         }
     }
     
     public float targetVelocity
     {
-        get
-        {
-            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
-            {
-                uint thisMovementId = _entityAssembly.GetMovementId(this);
-                Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
-                return thisMovement.targetVelocity;
-            }
-            else
-            {
-                return 0.0f;
-            }
-        }
+        get { return _component.targetVelocity; }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
-            {
-                uint thisMovementId = _entityAssembly.GetMovementId(this);
-                Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
-                thisMovement.targetVelocity = value;
-                _entityAssembly.SetMovement(thisMovementId, thisMovement);
-            }
+            var temp = _component;
+            temp.targetVelocity = value;
+            _component = temp;
         }
     }
     
     public float targetAngularVelocity
     {
-        get
-        {
-            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
-            {
-                uint thisMovementId = _entityAssembly.GetMovementId(this);
-                Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
-                return thisMovement.targetAngularVelocity;
-            }
-            else
-            {
-                return 0.0f;
-            }
-        }
+        get { return _component.targetAngularVelocity; }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetMovementId(this) != 0)
-            {
-                uint thisMovementId = _entityAssembly.GetMovementId(this);
-                Structs.Movement thisMovement = _entityAssembly.GetMovement(thisMovementId);
-                thisMovement.targetAngularVelocity = value;
-                _entityAssembly.SetMovement(thisMovementId, thisMovement);
-            }
+            var temp = _component;
+            temp.targetAngularVelocity = value;
+            _component = temp;
         }
     }
 }

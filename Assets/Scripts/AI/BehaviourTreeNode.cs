@@ -20,14 +20,7 @@ public abstract class BehaviourTreeNode : MonoBehaviour
     }
     
     protected static int entityCount { get => ComputeShaderEmulator._entityCount; }
-    protected static int transformCount { get => ComputeShaderEmulator._transformCount; }
-    protected static int hierarchyCount { get => ComputeShaderEmulator._hierarchyCount; }
-    protected static int personnelCount { get => ComputeShaderEmulator._personnelCount; }
-    protected static int firearmsCount { get => ComputeShaderEmulator._firearmsCount; }
-    protected static int movementCount { get => ComputeShaderEmulator._movementCount; }
-    protected static int firepowerCount { get => ComputeShaderEmulator._firepowerCount; }
-    
-    protected static Structs.Entity[] entityBuffer { get => ComputeShaderEmulator._entityBuffer; }
+    protected static uint[] descBuffer { get => ComputeShaderEmulator._descBuffer; }
     protected static Structs.Transform[] transformBuffer { get => ComputeShaderEmulator._transformBuffer; }
     protected static Structs.Hierarchy[] hierarchyBuffer { get => ComputeShaderEmulator._hierarchyBuffer; }
     protected static Structs.Personnel[] personnelBuffer { get => ComputeShaderEmulator._personnelBuffer; }
@@ -37,13 +30,13 @@ public abstract class BehaviourTreeNode : MonoBehaviour
     
     protected static uint GetEntityChildCount(uint entityId)
     {
-        uint hierarchyId = entityBuffer[entityId].hierarchyId;
-        if (hierarchyId == 0)
+        const uint COMPONENT_MASK = ComputeShaderEmulator.HIERARCHY;
+        if ((descBuffer[entityId] & COMPONENT_MASK) != COMPONENT_MASK)
         {
             return 0;
         }
         
-        uint childEntityId = hierarchyBuffer[hierarchyId].firstChildEntityId;
+        uint childEntityId = hierarchyBuffer[entityId].firstChildEntityId;
         if (childEntityId == 0)
         {
             return 0;
@@ -53,8 +46,7 @@ public abstract class BehaviourTreeNode : MonoBehaviour
         while (childEntityId > 0)
         {
             childCount++;
-            uint childHierarchyId = entityBuffer[childEntityId].hierarchyId;
-            childEntityId = hierarchyBuffer[childHierarchyId].nextSiblingEntityId;
+            childEntityId = hierarchyBuffer[childEntityId].nextSiblingEntityId;
         }
 
         return childCount;

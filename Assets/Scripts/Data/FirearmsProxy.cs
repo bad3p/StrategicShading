@@ -25,12 +25,9 @@ public class FirearmsProxy : ComponentProxy
         _entityAssembly = FindObjectOfType<EntityAssembly>();
         if (_entityAssembly)
         {
-            uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
-            if (thisFirearmsId == 0)
+            if (_entityAssembly.GetEntityId(this) == 0)
             {
-                thisFirearmsId = _entityAssembly.RegisterFirearmsProxy(this);
-                _entityProxy.firearmsId = thisFirearmsId;
-                entityId = _entityProxy.entityId;
+                _entityAssembly.RegisterFirearmsProxy(_entityProxy.entityId, this);
                 ammo = Ammo;
                 distance = Distance;
                 firepower = Firepower;
@@ -47,169 +44,94 @@ public class FirearmsProxy : ComponentProxy
         {
             return;
         }
-#endif        
-        _entityProxy.firearmsId = 0;
+#endif
+        if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
+        {
+            _entityAssembly.UnregisterFirearmsProxy( _entityAssembly.GetEntityId(this), this );
+        }
     }
     
-    public uint entityId
+    private static Structs.Firearms _dummy = new Structs.Firearms();
+
+    private Structs.Firearms _component
     {
         get
         {
-            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
+            if (_entityAssembly)
             {
-                uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
-                Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
-                return thisFirearms.entityId;
+                uint entityId = _entityAssembly.GetEntityId(this);
+                if (entityId != 0)
+                {
+                    return _entityAssembly.GetFirearms(entityId);
+                }
             }
-            else
-            {
-                return 0;
-            }
+            return _dummy;
         }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
+            if (_entityAssembly)
             {
-                uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
-                Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
-                thisFirearms.entityId = value;
-                _entityAssembly.SetFirearms(thisFirearmsId, thisFirearms);
+                uint entityId = _entityAssembly.GetEntityId(this);
+                if (entityId != 0)
+                {
+                    _entityAssembly.SetFirearms(entityId, value);
+                }
             }
         }
     }
 
     public uint ammo
     {
-        get
-        {
-            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
-            {
-                uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
-                Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
-                return thisFirearms.ammo;
-            }
-            else
-            {
-                return 0;
-            }
-        }
+        get { return _component.ammo; }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
-            {
-                uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
-                Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
-                thisFirearms.ammo = value;
-                _entityAssembly.SetFirearms(thisFirearmsId, thisFirearms);
-            }
+            var temp = _component;
+            temp.ammo = value;
+            _component = temp;
         }
     }
     
     public float4 distance
     {
-        get
-        {
-            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
-            {
-                uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
-                Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
-                return thisFirearms.distance;
-            }
-            else
-            {
-                return new float4(0,0,0,0);
-            }
-        }
+        get { return _component.distance; }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
-            {
-                uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
-                Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
-                thisFirearms.distance = value;
-                _entityAssembly.SetFirearms(thisFirearmsId, thisFirearms);
-            }
+            var temp = _component;
+            temp.distance = value;
+            _component = temp;
         }
     }
     
     public float4 firepower
     {
-        get
-        {
-            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
-            {
-                uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
-                Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
-                return thisFirearms.firepower;
-            }
-            else
-            {
-                return new float4(0,0,0,0);
-            }
-        }
+        get { return _component.firepower; }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
-            {
-                uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
-                Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
-                thisFirearms.firepower = value;
-                _entityAssembly.SetFirearms(thisFirearmsId, thisFirearms);
-            }
+            var temp = _component;
+            temp.firepower = value;
+            _component = temp;
         }
     }
     
     public uint stateId
     {
-        get
-        {
-            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
-            {
-                uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
-                Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
-                return thisFirearms.stateId;
-            }
-            else
-            {
-                return 0;
-            }
-        }
+        get { return _component.stateId; }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
-            {
-                uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
-                Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
-                thisFirearms.stateId = value;
-                _entityAssembly.SetFirearms(thisFirearmsId, thisFirearms);
-            }
+            var temp = _component;
+            temp.stateId = value;
+            _component = temp;
         }
     }
     
     public float stateTimeout
     {
-        get
-        {
-            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
-            {
-                uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
-                Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
-                return thisFirearms.stateTimeout;
-            }
-            else
-            {
-                return 0;
-            }
-        }
+        get { return _component.stateTimeout; }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetFirearmsId(this) != 0)
-            {
-                uint thisFirearmsId = _entityAssembly.GetFirearmsId(this);
-                Structs.Firearms thisFirearms = _entityAssembly.GetFirearms(thisFirearmsId);
-                thisFirearms.stateTimeout = value;
-                _entityAssembly.SetFirearms(thisFirearmsId, thisFirearms);
-            }
+            var temp = _component;
+            temp.stateTimeout = value;
+            _component = temp;
         }
     }
 }

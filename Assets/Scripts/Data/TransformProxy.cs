@@ -39,12 +39,9 @@ public class TransformProxy : ComponentProxy
         _entityAssembly = FindObjectOfType<EntityAssembly>();
         if (_entityAssembly)
         {
-            uint thisTransformId = _entityAssembly.GetTransformId(this);
-            if (thisTransformId == 0)
+            if (_entityAssembly.GetEntityId(this) == 0)
             {
-                thisTransformId = _entityAssembly.RegisterTransformProxy(this);
-                _entityProxy.transformId = thisTransformId;
-                entityId = _entityProxy.entityId;
+                _entityAssembly.RegisterTransformProxy(_entityProxy.entityId,this);
                 position = transform.position;
                 rotation = transform.rotation;
                 scale = transform.localScale;
@@ -60,7 +57,10 @@ public class TransformProxy : ComponentProxy
             return;
         }
 #endif        
-        _entityProxy.transformId = 0;
+        if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
+        {
+            _entityAssembly.UnregisterTransformProxy( _entityAssembly.GetEntityId(this), this );
+        }
     }
     
     void OnDrawGizmos()
@@ -69,7 +69,7 @@ public class TransformProxy : ComponentProxy
         {
             Awake();
         }
-        if (_entityAssembly && _entityAssembly.GetTransformId(this) != 0)
+        if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
         {
             Color teamColor = _entityProxy.GetTeamColor();
             Color solidColor = teamColor;
@@ -95,112 +95,66 @@ public class TransformProxy : ComponentProxy
             }
         }
     }
-    
-    public uint entityId
+
+    private static Structs.Transform _dummy = new Structs.Transform();
+
+    private Structs.Transform _component
     {
         get
         {
-            if (_entityAssembly && _entityAssembly.GetTransformId(this) != 0)
+            if (_entityAssembly)
             {
-                uint thisTransformId = _entityAssembly.GetTransformId(this);
-                Structs.Transform thisTransform = _entityAssembly.GetTransform(thisTransformId);
-                return thisTransform.entityId;
+                uint entityId = _entityAssembly.GetEntityId(this);
+                if (entityId != 0)
+                {
+                    return _entityAssembly.GetTransform(entityId);
+                }
             }
-            else
-            {
-                return 0;
-            }
+            return _dummy;
         }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetTransformId(this) != 0)
+            if (_entityAssembly)
             {
-                uint thisTransformId = _entityAssembly.GetTransformId(this);
-                Structs.Transform thisTransform = _entityAssembly.GetTransform(thisTransformId);
-                thisTransform.entityId = value;
-                _entityAssembly.SetTransform(thisTransformId, thisTransform);
+                uint entityId = _entityAssembly.GetEntityId(this);
+                if (entityId != 0)
+                {
+                    _entityAssembly.SetTransform(entityId, value);
+                }
             }
         }
     }
 
     public double3 position
     {
-        get
-        {
-            if (_entityAssembly && _entityAssembly.GetTransformId(this) != 0)
-            {
-                uint thisTransformId = _entityAssembly.GetTransformId(this);
-                Structs.Transform thisTransform = _entityAssembly.GetTransform(thisTransformId);
-                return thisTransform.position;
-            }
-            else
-            {
-                return new double3(0,0,0);
-            }
-        }
+        get { return _component.position; }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetTransformId(this) != 0)
-            {
-                uint thisTransformId = _entityAssembly.GetTransformId(this);
-                Structs.Transform thisTransform = _entityAssembly.GetTransform(thisTransformId);
-                thisTransform.position = value;
-                _entityAssembly.SetTransform(thisTransformId, thisTransform);
-            }
+            var temp = _component;
+            temp.position = value;
+            _component = temp;
         }
     }
     
     public float4 rotation
     {
-        get
-        {
-            if (_entityAssembly && _entityAssembly.GetTransformId(this) != 0)
-            {
-                uint thisTransformId = _entityAssembly.GetTransformId(this);
-                Structs.Transform thisTransform = _entityAssembly.GetTransform(thisTransformId);
-                return thisTransform.rotation;
-            }
-            else
-            {
-                return new float4(0,0,0,1);
-            }
-        }
+        get { return _component.rotation; }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetTransformId(this) != 0)
-            {
-                uint thisTransformId = _entityAssembly.GetTransformId(this);
-                Structs.Transform thisTransform = _entityAssembly.GetTransform(thisTransformId);
-                thisTransform.rotation = value;
-                _entityAssembly.SetTransform(thisTransformId, thisTransform);
-            }
+            var temp = _component;
+            temp.rotation = value;
+            _component = temp;
         }
     }
     
     public float3 scale
     {
-        get
-        {
-            if (_entityAssembly && _entityAssembly.GetTransformId(this) != 0)
-            {
-                uint thisTransformId = _entityAssembly.GetTransformId(this);
-                Structs.Transform thisTransform = _entityAssembly.GetTransform(thisTransformId);
-                return thisTransform.scale;
-            }
-            else
-            {
-                return new float3(1,1,1);
-            }
-        }
+        get { return _component.scale; }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetTransformId(this) != 0)
-            {
-                uint thisTransformId = _entityAssembly.GetTransformId(this);
-                Structs.Transform thisTransform = _entityAssembly.GetTransform(thisTransformId);
-                thisTransform.scale = value;
-                _entityAssembly.SetTransform(thisTransformId, thisTransform);
-            }
+            var temp = _component;
+            temp.scale = value;
+            _component = temp;
         }
     }
 }

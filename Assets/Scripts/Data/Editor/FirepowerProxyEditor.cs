@@ -20,10 +20,6 @@ public class FirepowerProxyEditor : Editor
         EditorGUILayout.BeginVertical();
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("entityId");
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("targetEntityId");
             EditorGUILayout.EndHorizontal();
             
@@ -35,10 +31,6 @@ public class FirepowerProxyEditor : Editor
         
         EditorGUILayout.BeginVertical();
         {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField( firepowerProxy.entityId.ToString() );
-            EditorGUILayout.EndHorizontal();
-            
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {

@@ -20,10 +20,6 @@ public class MovementProxyEditor : Editor
         EditorGUILayout.BeginVertical();
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("entityId");
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("targetPosition");
             EditorGUILayout.EndHorizontal();
             
@@ -43,10 +39,6 @@ public class MovementProxyEditor : Editor
         
         EditorGUILayout.BeginVertical();
         {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField( movementProxy.entityId.ToString() );
-            EditorGUILayout.EndHorizontal();
-
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {

@@ -15,10 +15,6 @@ public class FirearmsProxyEditor : Editor
         EditorGUILayout.BeginVertical();
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("entityId");
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("ammo");
             EditorGUILayout.EndHorizontal();
             
@@ -42,10 +38,6 @@ public class FirearmsProxyEditor : Editor
         
         EditorGUILayout.BeginVertical();
         {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField( firearmsProxy.entityId.ToString() );
-            EditorGUILayout.EndHorizontal();
-            
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {

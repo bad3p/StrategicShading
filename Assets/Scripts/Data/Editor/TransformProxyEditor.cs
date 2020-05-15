@@ -27,10 +27,6 @@ public class TransformProxyEditor : Editor
         EditorGUILayout.BeginVertical();
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("entityId");
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("position");
             EditorGUILayout.EndHorizontal();
             
@@ -46,10 +42,6 @@ public class TransformProxyEditor : Editor
         
         EditorGUILayout.BeginVertical();
         {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField( transformProxy.entityId.ToString() );
-            EditorGUILayout.EndHorizontal();
-            
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField( transformProxy.position.ToVector3().ToString() );
             EditorGUILayout.EndHorizontal();

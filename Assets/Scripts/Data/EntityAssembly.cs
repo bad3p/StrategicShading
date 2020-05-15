@@ -5,93 +5,159 @@ using System.Collections.Generic;
 [ExecuteInEditMode]
 public partial class EntityAssembly : MonoBehaviour
 {
-    private List<Structs.Entity> _entityBuffer = new List<Structs.Entity>() { new Structs.Entity() };
-    private Dictionary<EntityProxy, uint> _entityProxyToEntityId = new Dictionary<EntityProxy, uint>();
+    private List<uint> _descBuffer = new List<uint>() { 0 };
+    private Dictionary<uint, EntityProxy> _entityProxyById = new Dictionary<uint,EntityProxy>();
+    private Dictionary<EntityProxy, uint> _idByEntityProxy = new Dictionary<EntityProxy,uint>();
     
     private List<Structs.Transform> _transformBuffer = new List<Structs.Transform>() { new Structs.Transform() };
-    private Dictionary<TransformProxy, uint> _transformProxyToEntityId = new Dictionary<TransformProxy, uint>();
+    private Dictionary<uint, TransformProxy> _transformProxyById = new Dictionary<uint, TransformProxy>();
+    private Dictionary<TransformProxy, uint> _idByTransformProxy = new Dictionary<TransformProxy,uint>();
     
     private List<Structs.Hierarchy> _hierarchyBuffer = new List<Structs.Hierarchy>() { new Structs.Hierarchy() };
-    private Dictionary<HierarchyProxy, uint> _hierarchyProxyToEntityId = new Dictionary<HierarchyProxy, uint>();
+    private Dictionary<uint, HierarchyProxy> _hierarchyProxyById = new Dictionary<uint, HierarchyProxy>();
+    private Dictionary<HierarchyProxy, uint> _idByHierarchyProxy = new Dictionary<HierarchyProxy,uint>();
     
     private List<Structs.Personnel> _personnelBuffer = new List<Structs.Personnel>() { new Structs.Personnel() };
-    private Dictionary<PersonnelProxy, uint> _personnelProxyToEntityId = new Dictionary<PersonnelProxy, uint>();
+    private Dictionary<uint, PersonnelProxy> _personnelProxyById = new Dictionary<uint, PersonnelProxy>();
+    private Dictionary<PersonnelProxy, uint> _idByPersonnelProxy = new Dictionary<PersonnelProxy,uint>();
     
     private List<Structs.Firearms> _firearmsBuffer = new List<Structs.Firearms>() { new Structs.Firearms() };
-    private Dictionary<FirearmsProxy, uint> _firearmsProxyToEntityId = new Dictionary<FirearmsProxy, uint>();
+    private Dictionary<uint, FirearmsProxy> _firearmsProxyById = new Dictionary<uint, FirearmsProxy>();
+    private Dictionary<FirearmsProxy, uint> _idByFirearmsProxy = new Dictionary<FirearmsProxy,uint>();
     
     private List<Structs.Movement> _movementBuffer = new List<Structs.Movement>() { new Structs.Movement() };
-    private Dictionary<MovementProxy, uint> _movementProxyToEntityId = new Dictionary<MovementProxy, uint>();
+    private Dictionary<uint, MovementProxy> _movementProxyById = new Dictionary<uint, MovementProxy>();
+    private Dictionary<MovementProxy, uint> _idByMovementProxy = new Dictionary<MovementProxy,uint>();
     
     private List<Structs.Firepower> _firepowerBuffer = new List<Structs.Firepower>() { new Structs.Firepower() };
-    private Dictionary<FirepowerProxy, uint> _firepowerProxyToEntityId = new Dictionary<FirepowerProxy, uint>();
+    private Dictionary<uint, FirepowerProxy> _firepowerProxyById = new Dictionary<uint, FirepowerProxy>();
+    private Dictionary<FirepowerProxy, uint> _idByFirepowerProxy = new Dictionary<FirepowerProxy,uint>();
     
     #region Generics
-    public uint GetProxyId<P>(P proxy, Dictionary<P,uint> proxyToId)
+    uint GetComponentBitMask<P>(P proxy) where P : ComponentProxy
     {
-        uint proxyId = 0;
-        if (proxyToId.TryGetValue(proxy, out proxyId))
+        if (proxy is TransformProxy)
         {
-            return proxyId;
+            return ComputeShaderEmulator.TRANSFORM;
+        }
+        else if (proxy is HierarchyProxy)
+        {
+            return ComputeShaderEmulator.HIERARCHY;
+        }
+        else if (proxy is PersonnelProxy)
+        {
+            return ComputeShaderEmulator.PERSONNEL;
+        }
+        else if (proxy is FirearmsProxy)
+        {
+            return ComputeShaderEmulator.FIREARMS;
+        }
+        else if (proxy is MovementProxy)
+        {
+            return ComputeShaderEmulator.MOVEMENT;
+        }
+        else if (proxy is FirepowerProxy)
+        {
+            return ComputeShaderEmulator.FIREPOWER;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    
+    uint GetComponentEntityId<P>(P proxy, Dictionary<P,uint> idByProxy)
+    {
+        uint entityId = 0;
+        if (idByProxy.TryGetValue(proxy, out entityId))
+        {
+            return entityId;
         }
         return 0;
     }
     
-    public P GetProxy<P>(uint proxyId, Dictionary<P,uint> proxyToId) where P : Component
+    P GetComponentProxy<P>(uint entityId, Dictionary<uint,P> proxyById) where P : Component
     {
-        foreach (var keyValuePair in proxyToId)
+        P proxy = null;
+        if (proxyById.TryGetValue(entityId, out proxy))
         {
-            if (keyValuePair.Value == proxyId)
-            {
-                return keyValuePair.Key;
-            }
+            return proxy;
         }
-
-        return null;
+        return null as P;
     }
     
-    public uint RegisterProxy<P,S>(P proxy, List<S> structBuffer, Dictionary<P,uint> proxyToId) where S : struct
+    void RegisterComponentProxy<P>(uint entityId, P proxy, Dictionary<P,uint> idByProxy, Dictionary<uint,P> proxyById) where P : ComponentProxy
     {
-        uint proxyId = GetProxyId<P>(proxy, proxyToId);
-        if (proxyId == 0)
+        uint componentBitMask = GetComponentBitMask(proxy);
+        if (componentBitMask == 0)
         {
-            proxyId = (uint) structBuffer.Count;
-            proxyToId.Add( proxy, proxyId );
-            structBuffer.Add( new S() );
+            Debug.LogError("[EntityAssembly] RegisterComponentProxy<" + typeof(P).Name + ">() failed, component bitmask is 0!" );
+            return;
         }
-        return proxyId;
-    }
-    
-    public S GetStruct<P,S>(uint proxyId, List<S> structBuffer) where S : struct
-    {
-        if (proxyId > 0 && proxyId < structBuffer.Count)
+        
+        if ( GetComponentEntityId( proxy, idByProxy ) == 0 )
         {
-            return structBuffer[(int)proxyId];
+            proxyById.Add( entityId, proxy );
+            idByProxy.Add( proxy, entityId );
+            SetEntityDesc(entityId, GetEntityDesc(entityId) | componentBitMask);
         }
         else
         {
-            Debug.LogError("[EntityAssembly] GetStruct<" + typeof(P).Name + "," + typeof(S).Name + ">() failed, invalid proxyId: " + proxyId + "!");
+            Debug.LogError("[EntityAssembly] RegisterComponentProxy<" + typeof(P).Name + ">() failed, entity " + entityId + " already have this component!");
+        }
+    }
+    
+    void UnregisterComponentProxy<P>(uint entityId, P proxy, Dictionary<P,uint> idByProxy, Dictionary<uint,P> proxyById) where P : ComponentProxy
+    {
+        uint componentBitMask = GetComponentBitMask(proxy);
+        if (componentBitMask == 0)
+        {
+            Debug.LogError("[EntityAssembly] RegisterComponentProxy<" + typeof(P).Name + ">() failed, component bitmask is 0!" );
+            return;
+        }
+        
+        if ( GetComponentEntityId( proxy, idByProxy ) != 0 )
+        {
+            proxyById.Remove( entityId );
+            idByProxy.Remove( proxy );
+            SetEntityDesc(entityId, GetEntityDesc(entityId) & ~componentBitMask);
+        }
+        else
+        {
+            Debug.LogError("[EntityAssembly] UnregisterComponentProxy<" + typeof(P).Name + ">() failed, entity " + entityId + " have no such component!");
+        }
+    }
+    
+    S GetComponent<P,S>(uint entityId, List<S> structBuffer) where S : struct
+    {
+        if (entityId > 0 && entityId < structBuffer.Count)
+        {
+            return structBuffer[(int)entityId];
+        }
+        else
+        {
+            Debug.LogError("[EntityAssembly] GetStruct<" + typeof(P).Name + "," + typeof(S).Name + ">() failed, invalid entityId: " + entityId + "!");
             return new S();
         }
     }
     
-    public void SetStruct<P,S>(uint proxyId, S s, List<S> structBuffer) where S : struct
+    public void SetComponent<P,S>(uint entityId, S s, List<S> structBuffer) where S : struct
     {
-        if (proxyId > 0 && proxyId < structBuffer.Count)
+        if (entityId > 0 && entityId < structBuffer.Count)
         {
-            structBuffer[(int) proxyId] = s;
+            structBuffer[(int) entityId] = s;
         }
         else
         {
-            Debug.LogError("[EntityAssembly] SetEntity<" + typeof(P).Name + "," + typeof(S).Name + ">() failed, invalid proxiId: " + proxyId + "!");
+            Debug.LogError("[EntityAssembly] SetEntity<" + typeof(P).Name + "," + typeof(S).Name + ">() failed, invalid proxiId: " + entityId + "!");
         }
     }
     #endregion
     
     #region Buffers
-    public List<Structs.Entity> entityBuffer
+    public List<uint> descBuffer
     {
-        get { return _entityBuffer; }
+        get { return _descBuffer; }
     }
 
     public List<Structs.Transform> transformBuffer
@@ -122,189 +188,263 @@ public partial class EntityAssembly : MonoBehaviour
     #region Entities
     public uint GetEntityId(EntityProxy entityProxy)
     {
-        return GetProxyId( entityProxy, _entityProxyToEntityId );
+        uint entityId = 0;
+        if (_idByEntityProxy.TryGetValue(entityProxy, out entityId))
+        {
+            return entityId;
+        }
+        return 0;
     }
     
     public EntityProxy GetEntityProxy(uint entityId)
     {
-        return GetProxy( entityId, _entityProxyToEntityId );
+        EntityProxy entityProxy = null;
+        if (_entityProxyById.TryGetValue(entityId, out entityProxy))
+        {
+            return entityProxy;
+        }
+        return null as EntityProxy;
     }
 
     public uint RegisterEntityProxy(EntityProxy entityProxy)
     {
-        return RegisterProxy( entityProxy, _entityBuffer, _entityProxyToEntityId );
+        uint entityId = GetEntityId( entityProxy );
+        if (entityId == 0)
+        {
+            entityId = (uint) descBuffer.Count;
+            _entityProxyById.Add( entityId, entityProxy );
+            _idByEntityProxy.Add( entityProxy, entityId );
+            _descBuffer.Add( 0 );
+            _transformBuffer.Add( new Structs.Transform() );
+            _hierarchyBuffer.Add( new Structs.Hierarchy() );
+            _personnelBuffer.Add( new Structs.Personnel() );
+            _firearmsBuffer.Add( new Structs.Firearms() );
+            _movementBuffer.Add( new Structs.Movement() );
+            _firepowerBuffer.Add( new Structs.Firepower() );
+        }
+        return entityId;
     }
     
-    public Structs.Entity GetEntity(uint entityId)
+    public void UnregisterEntityProxy(EntityProxy entityProxy)
     {
-        return GetStruct<EntityProxy,Structs.Entity>(entityId, _entityBuffer);
+        uint entityId = GetEntityId( entityProxy );
+        if (entityId != 0)
+        {
+            _entityProxyById.Remove(entityId);
+            _idByEntityProxy.Remove(entityProxy);
+        }
     }
     
-    public void SetEntity(uint entityId, Structs.Entity entity)
+    public uint GetEntityDesc(uint entityId)
     {
-        SetStruct<EntityProxy,Structs.Entity>(entityId, entity, _entityBuffer);
+        if (entityId > 0 && entityId < _descBuffer.Count)
+        {
+            return _descBuffer[(int)entityId];
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    
+    public void SetEntityDesc(uint entityId, uint entityDesc)
+    {
+        if (entityId > 0 && entityId < _descBuffer.Count)
+        {
+            _descBuffer[(int)entityId] = entityDesc;
+        }
     }
     #endregion
     
     #region Transforms
-    public uint GetTransformId(TransformProxy transformProxy)
+    public uint GetEntityId(TransformProxy transformProxy)
     {
-        return GetProxyId( transformProxy, _transformProxyToEntityId );
+        return GetComponentEntityId( transformProxy, _idByTransformProxy );
     }
     
-    public TransformProxy GetTransformProxy(uint transformId)
+    public TransformProxy GetTransformProxy(uint entityId)
     {
-        return GetProxy( transformId, _transformProxyToEntityId );
+        return GetComponentProxy( entityId, _transformProxyById );
     }
     
-    public uint RegisterTransformProxy(TransformProxy transformProxy)
+    public void RegisterTransformProxy(uint entityId, TransformProxy transformProxy)
     {
-        return RegisterProxy( transformProxy, _transformBuffer, _transformProxyToEntityId );
+        RegisterComponentProxy( entityId, transformProxy, _idByTransformProxy, _transformProxyById );
     }
     
-    public Structs.Transform GetTransform(uint transformId)
+    public void UnregisterTransformProxy(uint entityId, TransformProxy transformProxy)
     {
-        return GetStruct<TransformProxy,Structs.Transform>(transformId, _transformBuffer);
+        UnregisterComponentProxy( entityId, transformProxy, _idByTransformProxy, _transformProxyById );
     }
     
-    public void SetTransform(uint transformId, Structs.Transform t)
+    public Structs.Transform GetTransform(uint entityId)
     {
-        SetStruct<TransformProxy,Structs.Transform>(transformId, t, _transformBuffer);
+        return GetComponent<TransformProxy,Structs.Transform>(entityId, _transformBuffer);
+    }
+    
+    public void SetTransform(uint entityId, Structs.Transform t)
+    {
+        SetComponent<TransformProxy,Structs.Transform>(entityId, t, _transformBuffer);
     }
     #endregion
     
     #region Hierarchies
-    public uint GetHierarchyId(HierarchyProxy hierarchyProxy)
+    public uint GetEntityId(HierarchyProxy hierarchyProxy)
     {
-        return GetProxyId( hierarchyProxy, _hierarchyProxyToEntityId );
+        return GetComponentEntityId( hierarchyProxy, _idByHierarchyProxy );
     }
     
-    public HierarchyProxy GetHierarchyProxy(uint hierarchyId)
+    public HierarchyProxy GetHierarchyProxy(uint entityId)
     {
-        return GetProxy( hierarchyId, _hierarchyProxyToEntityId );
+        return GetComponentProxy( entityId, _hierarchyProxyById );
     }
     
-    public uint RegisterHierarchyProxy(HierarchyProxy hierarchyProxy)
+    public void RegisterHierarchyProxy(uint entityId, HierarchyProxy hierarchyProxy)
     {
-        return RegisterProxy( hierarchyProxy, _hierarchyBuffer, _hierarchyProxyToEntityId );
+        RegisterComponentProxy( entityId, hierarchyProxy, _idByHierarchyProxy, _hierarchyProxyById );
     }
     
-    public Structs.Hierarchy GetHierarchy(uint hierarchyId)
+    public void UnregisterHierarchyProxy(uint entityId, HierarchyProxy hierarchyProxy)
     {
-        return GetStruct<HierarchyProxy,Structs.Hierarchy>(hierarchyId, _hierarchyBuffer);
+        UnregisterComponentProxy( entityId, hierarchyProxy, _idByHierarchyProxy, _hierarchyProxyById );
     }
     
-    public void SetHierarchy(uint hierarchyId, Structs.Hierarchy h)
+    public Structs.Hierarchy GetHierarchy(uint entityId)
     {
-        SetStruct<HierarchyProxy,Structs.Hierarchy>(hierarchyId, h, _hierarchyBuffer);
+        return GetComponent<HierarchyProxy,Structs.Hierarchy>(entityId, _hierarchyBuffer);
+    }
+    
+    public void SetHierarchy(uint entityId, Structs.Hierarchy h)
+    {
+        SetComponent<HierarchyProxy,Structs.Hierarchy>(entityId, h, _hierarchyBuffer);
     }
     #endregion
     
     #region Personnel
-    public uint GetPersonnelId(PersonnelProxy personnelProxy)
+    public uint GetEntityId(PersonnelProxy personnelProxy)
     {
-        return GetProxyId( personnelProxy, _personnelProxyToEntityId );
+        return GetComponentEntityId( personnelProxy, _idByPersonnelProxy );
     }
     
-    public PersonnelProxy GetPersonnelProxy(uint personnelId)
+    public PersonnelProxy GetPersonnelProxy(uint entityId)
     {
-        return GetProxy( personnelId, _personnelProxyToEntityId );
+        return GetComponentProxy( entityId, _personnelProxyById );
     }
     
-    public uint RegisterPersonnelProxy(PersonnelProxy personnelProxy)
+    public void RegisterPersonnelProxy(uint entityId, PersonnelProxy personnelProxy)
     {
-        return RegisterProxy( personnelProxy, _personnelBuffer, _personnelProxyToEntityId );
+        RegisterComponentProxy( entityId, personnelProxy, _idByPersonnelProxy, _personnelProxyById );
     }
     
-    public Structs.Personnel GetPersonnel(uint personnelId)
+    public void UnregisterPersonnelProxy(uint entityId, PersonnelProxy personnelProxy)
     {
-        return GetStruct<PersonnelProxy,Structs.Personnel>(personnelId, _personnelBuffer);
+        UnregisterComponentProxy( entityId, personnelProxy, _idByPersonnelProxy, _personnelProxyById );
     }
     
-    public void SetPersonnel(uint personnelId, Structs.Personnel p)
+    public Structs.Personnel GetPersonnel(uint entityId)
     {
-        SetStruct<PersonnelProxy,Structs.Personnel>(personnelId, p, _personnelBuffer);
+        return GetComponent<PersonnelProxy,Structs.Personnel>(entityId, _personnelBuffer);
+    }
+    
+    public void SetPersonnel(uint entityId, Structs.Personnel p)
+    {
+        SetComponent<PersonnelProxy,Structs.Personnel>(entityId, p, _personnelBuffer);
     }
     #endregion
     
     #region Firearms
-    public uint GetFirearmsId(FirearmsProxy firearmsProxy)
+    public uint GetEntityId(FirearmsProxy firearmsProxy)
     {
-        return GetProxyId( firearmsProxy, _firearmsProxyToEntityId );
+        return GetComponentEntityId( firearmsProxy, _idByFirearmsProxy );
     }
     
-    public FirearmsProxy GetFirearmsProxy(uint firearmsId)
+    public FirearmsProxy GetFirearmsProxy(uint entityId)
     {
-        return GetProxy( firearmsId, _firearmsProxyToEntityId );
+        return GetComponentProxy( entityId, _firearmsProxyById );
     }
     
-    public uint RegisterFirearmsProxy(FirearmsProxy firearmsProxy)
+    public void RegisterFirearmsProxy(uint entityId, FirearmsProxy firearmsProxy)
     {
-        return RegisterProxy( firearmsProxy, _firearmsBuffer, _firearmsProxyToEntityId );
+        RegisterComponentProxy( entityId, firearmsProxy, _idByFirearmsProxy, _firearmsProxyById );
     }
     
-    public Structs.Firearms GetFirearms(uint firearmsId)
+    public void UnregisterFirearmsProxy(uint entityId, FirearmsProxy firearmsProxy)
     {
-        return GetStruct<FirearmsProxy,Structs.Firearms>(firearmsId, _firearmsBuffer);
+        UnregisterComponentProxy( entityId, firearmsProxy, _idByFirearmsProxy, _firearmsProxyById );
     }
     
-    public void SetFirearms(uint firearmsId, Structs.Firearms f)
+    public Structs.Firearms GetFirearms(uint entityId)
     {
-        SetStruct<FirearmsProxy,Structs.Firearms>(firearmsId, f, _firearmsBuffer);
+        return GetComponent<FirearmsProxy,Structs.Firearms>(entityId, _firearmsBuffer);
+    }
+    
+    public void SetFirearms(uint entityId, Structs.Firearms f)
+    {
+        SetComponent<FirearmsProxy,Structs.Firearms>(entityId, f, _firearmsBuffer);
     }
     #endregion
     
     #region Movement
-    public uint GetMovementId(MovementProxy movementProxy)
+    public uint GetEntityId(MovementProxy movementProxy)
     {
-        return GetProxyId( movementProxy, _movementProxyToEntityId );
+        return GetComponentEntityId( movementProxy, _idByMovementProxy );
     }
     
-    public MovementProxy GetMovementProxy(uint movementId)
+    public MovementProxy GetMovementProxy(uint entityId)
     {
-        return GetProxy( movementId, _movementProxyToEntityId );
+        return GetComponentProxy( entityId, _movementProxyById );
     }
     
-    public uint RegisterMovementProxy(MovementProxy movementProxy)
+    public void RegisterMovementProxy(uint entityId, MovementProxy movementProxy)
     {
-        return RegisterProxy( movementProxy, _movementBuffer, _movementProxyToEntityId );
+        RegisterComponentProxy( entityId, movementProxy, _idByMovementProxy, _movementProxyById );
     }
     
-    public Structs.Movement GetMovement(uint movementId)
+    public void UnregisterMovementProxy(uint entityId, MovementProxy movementProxy)
     {
-        return GetStruct<MovementProxy,Structs.Movement>(movementId, _movementBuffer);
+        UnregisterComponentProxy( entityId, movementProxy, _idByMovementProxy, _movementProxyById );
     }
     
-    public void SetMovement(uint movementId, Structs.Movement m)
+    public Structs.Movement GetMovement(uint entityId)
     {
-        SetStruct<MovementProxy,Structs.Movement>(movementId, m, _movementBuffer);
+        return GetComponent<MovementProxy,Structs.Movement>(entityId, _movementBuffer);
+    }
+    
+    public void SetMovement(uint entityId, Structs.Movement m)
+    {
+        SetComponent<MovementProxy,Structs.Movement>(entityId, m, _movementBuffer);
     }
     #endregion
     
     #region Firepower
-    public uint GetFirepowerId(FirepowerProxy firepowerProxy)
+    public uint GetEntityId(FirepowerProxy firepowerProxy)
     {
-        return GetProxyId( firepowerProxy, _firepowerProxyToEntityId );
+        return GetComponentEntityId( firepowerProxy, _idByFirepowerProxy );
     }
     
-    public FirepowerProxy GetFirepowerProxy(uint firepowerId)
+    public FirepowerProxy GetFirepowerProxy(uint entityId)
     {
-        return GetProxy( firepowerId, _firepowerProxyToEntityId );
+        return GetComponentProxy( entityId, _firepowerProxyById );
     }
     
-    public uint RegisterFirepowerProxy(FirepowerProxy firepowerProxy)
+    public void RegisterFirepowerProxy(uint entityId, FirepowerProxy firepowerProxy)
     {
-        return RegisterProxy( firepowerProxy, _firepowerBuffer, _firepowerProxyToEntityId );
+        RegisterComponentProxy( entityId, firepowerProxy, _idByFirepowerProxy, _firepowerProxyById );
     }
     
-    public Structs.Firepower GetFirepower(uint firepowerId)
+    public void UnregisterFirepowerProxy(uint entityId, FirepowerProxy firepowerProxy)
     {
-        return GetStruct<FirepowerProxy,Structs.Firepower>(firepowerId, _firepowerBuffer);
+        UnregisterComponentProxy( entityId, firepowerProxy, _idByFirepowerProxy, _firepowerProxyById );
     }
     
-    public void SetFirepower(uint firepowerId, Structs.Firepower f)
+    public Structs.Firepower GetFirepower(uint entityId)
     {
-        SetStruct<FirepowerProxy,Structs.Firepower>(firepowerId, f, _firepowerBuffer);
+        return GetComponent<FirepowerProxy,Structs.Firepower>(entityId, _firepowerBuffer);
+    }
+    
+    public void SetFirepower(uint entityId, Structs.Firepower f)
+    {
+        SetComponent<FirepowerProxy,Structs.Firepower>(entityId, f, _firepowerBuffer);
     }
     #endregion
 }

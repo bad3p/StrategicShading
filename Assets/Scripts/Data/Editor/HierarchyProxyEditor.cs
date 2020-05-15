@@ -14,10 +14,6 @@ public class HierarchyProxyEditor : Editor
         EditorGUILayout.BeginVertical();
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("entityId");
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("parentEntityId");
             EditorGUILayout.EndHorizontal();
             
@@ -33,10 +29,6 @@ public class HierarchyProxyEditor : Editor
         
         EditorGUILayout.BeginVertical();
         {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField( hierarchyProxy.entityId.ToString() );
-            EditorGUILayout.EndHorizontal();
-            
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField( hierarchyProxy.parentEntityId.ToString() );
             EditorGUILayout.EndHorizontal();

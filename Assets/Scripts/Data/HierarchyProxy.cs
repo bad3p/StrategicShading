@@ -19,12 +19,11 @@ public class HierarchyProxy : ComponentProxy
         _entityAssembly = FindObjectOfType<EntityAssembly>();
         if (_entityAssembly)
         {
-            uint thisHierarchyId = _entityAssembly.GetHierarchyId(this);
-            if (thisHierarchyId == 0)
+            // get entityId ahead of time
+            uint thisEntityId = _entityProxy.entityId;
+            if (_entityAssembly.GetEntityId(this) == 0)
             {
-                thisHierarchyId = _entityAssembly.RegisterHierarchyProxy(this);
-                _entityProxy.hierarchyId = thisHierarchyId;
-                entityId = _entityProxy.entityId;
+                _entityAssembly.RegisterHierarchyProxy(thisEntityId, this);
                 firstChildEntityId = 0;
                 nextSiblingEntityId = 0;
                 if (transform.parent)
@@ -32,7 +31,7 @@ public class HierarchyProxy : ComponentProxy
                     HierarchyProxy parentHierarchyProxy = transform.parent.GetComponent<HierarchyProxy>();
                     if (parentHierarchyProxy)
                     {
-                        parentEntityId = parentHierarchyProxy.entityId;
+                        parentEntityId = _entityAssembly.GetEntityId(parentHierarchyProxy);
                         parentHierarchyProxy.ConnectChild(this);
                     }
                     else
@@ -64,15 +63,17 @@ public class HierarchyProxy : ComponentProxy
 
         if (parentEntityId != 0)
         {
-            EntityProxy oldParentEntityProxy = _entityAssembly.GetEntityProxy(parentEntityId);
-            HierarchyProxy oldParentHierarchyProxy = _entityAssembly.GetHierarchyProxy(oldParentEntityProxy.hierarchyId);
+            HierarchyProxy oldParentHierarchyProxy = _entityAssembly.GetHierarchyProxy(parentEntityId);
             if (oldParentHierarchyProxy)
             {
                 oldParentHierarchyProxy.DisconnectChild(this);
             }
         }
         
-        _entityProxy.hierarchyId = 0;
+        if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
+        {
+            _entityAssembly.UnregisterHierarchyProxy( _entityAssembly.GetEntityId(this), this );
+        }
     }
 
     void OnTransformParentChanged()
@@ -86,8 +87,7 @@ public class HierarchyProxy : ComponentProxy
         {
             if (parentEntityId != 0)
             {
-                EntityProxy oldParentEntityProxy = _entityAssembly.GetEntityProxy(parentEntityId);
-                HierarchyProxy oldParentHierarchyProxy = _entityAssembly.GetHierarchyProxy(oldParentEntityProxy.hierarchyId);
+                HierarchyProxy oldParentHierarchyProxy = _entityAssembly.GetHierarchyProxy(parentEntityId);
                 oldParentHierarchyProxy.DisconnectChild( this );
             }
 
@@ -96,7 +96,7 @@ public class HierarchyProxy : ComponentProxy
                 HierarchyProxy newParentHierarchyProxy = transform.parent.GetComponent<HierarchyProxy>();
                 if (newParentHierarchyProxy)
                 {
-                    parentEntityId = newParentHierarchyProxy.entityId;
+                    parentEntityId = _entityAssembly.GetEntityId(newParentHierarchyProxy);
                     newParentHierarchyProxy.ConnectChild(this);
                 }
                 else
@@ -120,21 +120,19 @@ public class HierarchyProxy : ComponentProxy
         
         if (_entityAssembly)
         {
-            childHierarchyProxy.parentEntityId = entityId;
+            childHierarchyProxy.parentEntityId = _entityAssembly.GetEntityId(this);
             if (firstChildEntityId == 0)
             {
-                firstChildEntityId = childHierarchyProxy.entityId;
+                firstChildEntityId = _entityAssembly.GetEntityId(childHierarchyProxy);
             }
             else
             {
-                EntityProxy siblingEntityProxy = _entityAssembly.GetEntityProxy(firstChildEntityId);
-                HierarchyProxy siblingHierarchyProxy = _entityAssembly.GetHierarchyProxy(siblingEntityProxy.hierarchyId);
+                HierarchyProxy siblingHierarchyProxy = _entityAssembly.GetHierarchyProxy(firstChildEntityId);
                 while (siblingHierarchyProxy.nextSiblingEntityId > 0)
                 {
-                    siblingEntityProxy = _entityAssembly.GetEntityProxy(siblingHierarchyProxy.nextSiblingEntityId);
-                    siblingHierarchyProxy = _entityAssembly.GetHierarchyProxy(siblingEntityProxy.hierarchyId);
+                    siblingHierarchyProxy = _entityAssembly.GetHierarchyProxy(siblingHierarchyProxy.nextSiblingEntityId);
                 }
-                siblingHierarchyProxy.nextSiblingEntityId = childHierarchyProxy.entityId;
+                siblingHierarchyProxy.nextSiblingEntityId = _entityAssembly.GetEntityId(childHierarchyProxy);
             }
         }
     }
@@ -148,65 +146,57 @@ public class HierarchyProxy : ComponentProxy
         
         if (_entityAssembly)
         {
-            if (firstChildEntityId == childHierarchyProxy.entityId)
+            if (firstChildEntityId == _entityAssembly.GetEntityId(childHierarchyProxy))
             {
                 firstChildEntityId = childHierarchyProxy.nextSiblingEntityId;
                 childHierarchyProxy.nextSiblingEntityId = 0;
             }
             else
             {
-                EntityProxy siblingEntityProxy = _entityAssembly.GetEntityProxy(firstChildEntityId);
-                HierarchyProxy siblingHierarchyProxy = _entityAssembly.GetHierarchyProxy(siblingEntityProxy.hierarchyId);
-                while (siblingHierarchyProxy.nextSiblingEntityId != childHierarchyProxy.entityId && siblingHierarchyProxy.nextSiblingEntityId != 0)
+                HierarchyProxy siblingHierarchyProxy = _entityAssembly.GetHierarchyProxy(firstChildEntityId);
+                while (siblingHierarchyProxy.nextSiblingEntityId != _entityAssembly.GetEntityId(childHierarchyProxy) && siblingHierarchyProxy.nextSiblingEntityId != 0)
                 {
-                    siblingEntityProxy = _entityAssembly.GetEntityProxy(siblingHierarchyProxy.nextSiblingEntityId);
-                    siblingHierarchyProxy = _entityAssembly.GetHierarchyProxy(siblingEntityProxy.hierarchyId);
+                    siblingHierarchyProxy = _entityAssembly.GetHierarchyProxy(siblingHierarchyProxy.nextSiblingEntityId);
                 }
-                if (siblingHierarchyProxy.nextSiblingEntityId == childHierarchyProxy.entityId)
+                if (siblingHierarchyProxy.nextSiblingEntityId == _entityAssembly.GetEntityId(childHierarchyProxy))
                 {
                     siblingHierarchyProxy.nextSiblingEntityId = childHierarchyProxy.nextSiblingEntityId;
                     childHierarchyProxy.nextSiblingEntityId = 0;
                 }
                 else
                 {
-                    Debug.Log("[HierarchyProxy] DisconnectChild() failed, unable to locate entity " + childHierarchyProxy.entityId + " in hierarchy!");
+                    Debug.Log("[HierarchyProxy] DisconnectChild() failed, unable to locate entity " + _entityAssembly.GetEntityId(childHierarchyProxy) + " in hierarchy!");
                 }
             }
             childHierarchyProxy.parentEntityId = 0;
         }
     }
+    
+    private static Structs.Hierarchy _dummy = new Structs.Hierarchy();
 
-    public uint entityId
+    private Structs.Hierarchy _component
     {
         get
         {
-            if (!_entityProxy)
+            if (_entityAssembly)
             {
-                Awake();
+                uint entityId = _entityAssembly.GetEntityId(this);
+                if (entityId != 0)
+                {
+                    return _entityAssembly.GetHierarchy(entityId);
+                }
             }
-            if (_entityAssembly && _entityAssembly.GetHierarchyId(this) != 0)
-            {
-                uint thisHierarchyId = _entityAssembly.GetHierarchyId(this);
-                Structs.Hierarchy thisHierarchy = _entityAssembly.GetHierarchy(thisHierarchyId);
-                return thisHierarchy.entityId;
-            }
-            else
-            {
-                return 0;
-            }
+            return _dummy;
         }
         set
         {
-            if (!_entityProxy)
-            {
-                Awake();
-            }
             if (_entityAssembly)
             {
-                uint thisHierarchyId = _entityAssembly.GetHierarchyId(this);
-                Structs.Hierarchy thisHierarchy = _entityAssembly.GetHierarchy(thisHierarchyId);
-                thisHierarchy.entityId = value;
-                _entityAssembly.SetHierarchy(thisHierarchyId, thisHierarchy);
+                uint entityId = _entityAssembly.GetEntityId(this);
+                if (entityId != 0)
+                {
+                    _entityAssembly.SetHierarchy(entityId, value);
+                }
             }
         }
     }
@@ -227,17 +217,15 @@ public class HierarchyProxy : ComponentProxy
                 }
                 else
                 {
-                    uint maxChildRank = 0; 
+                    uint maxChildRank = 0;
                     
-                    EntityProxy childEntityProxy =  _entityAssembly.GetEntityProxy(firstChildEntityId);
-                    HierarchyProxy childHierarchyProxy = _entityAssembly.GetHierarchyProxy(childEntityProxy.hierarchyId);
+                    HierarchyProxy childHierarchyProxy = _entityAssembly.GetHierarchyProxy(firstChildEntityId);
                     uint childRank = childHierarchyProxy.rank;
                     maxChildRank = maxChildRank < childRank ? childRank : maxChildRank;
 
-                    while (childHierarchyProxy.nextSiblingEntityId > 0)
+                    while (childHierarchyProxy.nextSiblingEntityId != 0)
                     {
-                        childEntityProxy =  _entityAssembly.GetEntityProxy(childHierarchyProxy.nextSiblingEntityId);
-                        childHierarchyProxy = _entityAssembly.GetHierarchyProxy(childEntityProxy.hierarchyId);
+                        childHierarchyProxy = _entityAssembly.GetHierarchyProxy(childHierarchyProxy.nextSiblingEntityId);
                         childRank = childHierarchyProxy.rank;
                         maxChildRank = maxChildRank < childRank ? childRank : maxChildRank;
                     }
@@ -254,106 +242,34 @@ public class HierarchyProxy : ComponentProxy
 
     public uint parentEntityId
     {
-        get
-        {
-            if (!_entityProxy)
-            {
-                Awake();
-            }
-            if (_entityAssembly && _entityAssembly.GetHierarchyId(this) != 0)
-            {
-                uint thisHierarchyId = _entityAssembly.GetHierarchyId(this);
-                Structs.Hierarchy thisHierarchy = _entityAssembly.GetHierarchy(thisHierarchyId);
-                return thisHierarchy.parentEntityId;
-            }
-            else
-            {
-                return 0;
-            }
-        }
+        get { return _component.parentEntityId; }
         set
         {
-            if (!_entityProxy)
-            {
-                Awake();
-            }
-            if (_entityAssembly)
-            {
-                uint thisHierarchyId = _entityAssembly.GetHierarchyId(this);
-                Structs.Hierarchy thisHierarchy = _entityAssembly.GetHierarchy(thisHierarchyId);
-                thisHierarchy.parentEntityId = value;
-                _entityAssembly.SetHierarchy(thisHierarchyId, thisHierarchy);
-            }
+            var temp = _component;
+            temp.parentEntityId = value;
+            _component = temp;
         }
     }
     
     public uint firstChildEntityId
     {
-        get
-        {
-            if (!_entityProxy)
-            {
-                Awake();
-            }
-            if (_entityAssembly && _entityAssembly.GetHierarchyId(this) != 0)
-            {
-                uint thisHierarchyId = _entityAssembly.GetHierarchyId(this);
-                Structs.Hierarchy thisHierarchy = _entityAssembly.GetHierarchy(thisHierarchyId);
-                return thisHierarchy.firstChildEntityId;
-            }
-            else
-            {
-                return 0;
-            }
-        }
+        get { return _component.firstChildEntityId; }
         set
         {
-            if (!_entityProxy)
-            {
-                Awake();
-            }
-            if (_entityAssembly)
-            {
-                uint thisHierarchyId = _entityAssembly.GetHierarchyId(this);
-                Structs.Hierarchy thisHierarchy = _entityAssembly.GetHierarchy(thisHierarchyId);
-                thisHierarchy.firstChildEntityId = value;
-                _entityAssembly.SetHierarchy(thisHierarchyId, thisHierarchy);
-            }
+            var temp = _component;
+            temp.firstChildEntityId = value;
+            _component = temp;
         }
     }
     
     public uint nextSiblingEntityId
     {
-        get
-        {
-            if (!_entityProxy)
-            {
-                Awake();
-            }
-            if (_entityAssembly && _entityAssembly.GetHierarchyId(this) != 0)
-            {
-                uint thisHierarchyId = _entityAssembly.GetHierarchyId(this);
-                Structs.Hierarchy thisHierarchy = _entityAssembly.GetHierarchy(thisHierarchyId);
-                return thisHierarchy.nextSiblingEntityId;
-            }
-            else
-            {
-                return 0;
-            }
-        }
+        get { return _component.nextSiblingEntityId; }
         set
         {
-            if (!_entityProxy)
-            {
-                Awake();
-            }
-            if (_entityAssembly)
-            {
-                uint thisHierarchyId = _entityAssembly.GetHierarchyId(this);
-                Structs.Hierarchy thisHierarchy = _entityAssembly.GetHierarchy(thisHierarchyId);
-                thisHierarchy.nextSiblingEntityId = value;
-                _entityAssembly.SetHierarchy(thisHierarchyId, thisHierarchy);
-            }
+            var temp = _component;
+            temp.nextSiblingEntityId = value;
+            _component = temp;
         }
     }
 }

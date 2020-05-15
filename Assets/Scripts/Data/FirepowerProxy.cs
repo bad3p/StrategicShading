@@ -22,12 +22,9 @@ public class FirepowerProxy : ComponentProxy
         _entityAssembly = FindObjectOfType<EntityAssembly>();
         if (_entityAssembly)
         {
-            uint thisFirepowerId = _entityAssembly.GetFirepowerId(this);
-            if (thisFirepowerId == 0)
+            if (_entityAssembly.GetEntityId(this) == 0)
             {
-                thisFirepowerId = _entityAssembly.RegisterFirepowerProxy(this);
-                _entityProxy.firepowerId = thisFirepowerId;
-                entityId = _entityProxy.entityId;
+                _entityAssembly.RegisterFirepowerProxy(_entityProxy.entityId, this);
                 targetEntityId = TargetEntityID;
                 ammunitionBudget = AmmunitionBudget;
             }
@@ -42,7 +39,10 @@ public class FirepowerProxy : ComponentProxy
             return;
         }
 #endif        
-        _entityProxy.firepowerId = 0;
+        if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
+        {
+            _entityAssembly.UnregisterFirepowerProxy( _entityAssembly.GetEntityId(this), this );
+        }
     }
 
     void OnDrawGizmosSelected()
@@ -56,84 +56,54 @@ public class FirepowerProxy : ComponentProxy
         }
     }
     
-    public uint entityId
+    private static Structs.Firepower _dummy = new Structs.Firepower();
+
+    private Structs.Firepower _component
     {
         get
         {
-            if (_entityAssembly && _entityAssembly.GetFirepowerId(this) != 0)
+            if (_entityAssembly)
             {
-                uint thisFirepowerId = _entityAssembly.GetFirepowerId(this);
-                Structs.Firepower thisFirepower = _entityAssembly.GetFirepower(thisFirepowerId);
-                return thisFirepower.entityId;
+                uint entityId = _entityAssembly.GetEntityId(this);
+                if (entityId != 0)
+                {
+                    return _entityAssembly.GetFirepower(entityId);
+                }
             }
-            else
-            {
-                return 0;
-            }
+            return _dummy;
         }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetFirepowerId(this) != 0)
+            if (_entityAssembly)
             {
-                uint thisFirepowerId = _entityAssembly.GetFirepowerId(this);
-                Structs.Firepower thisFirepower = _entityAssembly.GetFirepower(thisFirepowerId);
-                thisFirepower.entityId = value;
-                _entityAssembly.SetFirepower(thisFirepowerId, thisFirepower);
+                uint entityId = _entityAssembly.GetEntityId(this);
+                if (entityId != 0)
+                {
+                    _entityAssembly.SetFirepower(entityId, value);
+                }
             }
         }
     }
-    
+
     public uint targetEntityId
     {
-        get
-        {
-            if (_entityAssembly && _entityAssembly.GetFirepowerId(this) != 0)
-            {
-                uint thisFirepowerId = _entityAssembly.GetFirepowerId(this);
-                Structs.Firepower thisFirepower = _entityAssembly.GetFirepower(thisFirepowerId);
-                return thisFirepower.targetEntityId;
-            }
-            else
-            {
-                return 0;
-            }
-        }
+        get { return _component.targetEntityId; }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetFirepowerId(this) != 0)
-            {
-                uint thisFirepowerId = _entityAssembly.GetFirepowerId(this);
-                Structs.Firepower thisFirepower = _entityAssembly.GetFirepower(thisFirepowerId);
-                thisFirepower.targetEntityId = value;
-                _entityAssembly.SetFirepower(thisFirepowerId, thisFirepower);
-            }
+            var temp = _component;
+            temp.targetEntityId = value;
+            _component = temp;
         }
     }
     
     public uint ammunitionBudget
     {
-        get
-        {
-            if (_entityAssembly && _entityAssembly.GetFirepowerId(this) != 0)
-            {
-                uint thisFirepowerId = _entityAssembly.GetFirepowerId(this);
-                Structs.Firepower thisFirepower = _entityAssembly.GetFirepower(thisFirepowerId);
-                return thisFirepower.ammunitionBudget;
-            }
-            else
-            {
-                return 0; 
-            }
-        }
+        get { return _component.ammunitionBudget; }
         set
         {
-            if (_entityAssembly && _entityAssembly.GetFirepowerId(this) != 0)
-            {
-                uint thisFirepowerId = _entityAssembly.GetFirepowerId(this);
-                Structs.Firepower thisFirepower = _entityAssembly.GetFirepower(thisFirepowerId);
-                thisFirepower.ammunitionBudget = value;
-                _entityAssembly.SetFirepower(thisFirepowerId, thisFirepower);
-            }
+            var temp = _component;
+            temp.ammunitionBudget = value;
+            _component = temp;
         }
     }
 }

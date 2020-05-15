@@ -25,16 +25,8 @@ public partial class ComputeShaderEmulator
     }
 
     public static float _dT = 0.0f;
-    
     public static int _entityCount = 0;
-    public static int _transformCount = 0;
-    public static int _hierarchyCount = 0;
-    public static int _personnelCount = 0;
-    public static int _firearmsCount = 0;
-    public static int _movementCount = 0;
-    public static int _firepowerCount = 0;
-
-    public static Entity[] _entityBuffer = new Entity[0];
+    public static uint[] _descBuffer = new uint[0];
     public static Transform[] _transformBuffer = new Transform[0];
     public static Hierarchy[] _hierarchyBuffer = new Hierarchy[0];
     public static Personnel[] _personnelBuffer = new Personnel[0];
@@ -45,34 +37,23 @@ public partial class ComputeShaderEmulator
     [NumThreads(256,1,1)]
     static public void UpdateMovement(uint3 id)
     {
-        int movementId = (int)id.x;
-        if (movementId >= _movementCount)
+        int entityId = (int)id.x;
+        if (entityId >= _entityCount)
         {
             return;
         }
-        
-        int entityId = (int)_movementBuffer[movementId].entityId;
-        if (entityId == 0)
+
+        const uint COMPONENT_MASK = TRANSFORM | MOVEMENT | PERSONNEL; 
+
+        if ( (_descBuffer[entityId] & COMPONENT_MASK) != COMPONENT_MASK )
         {
             return;
         }
-        
-        int transformId = (int)_entityBuffer[entityId].transformId;
-        if (transformId == 0)
+
+        if (_movementBuffer[entityId].targetVelocity > 0)
         {
-            return;
-        }
-        
-        int personnelId = (int)_entityBuffer[entityId].personnelId;
-        if (personnelId == 0)
-        {
-            return;
-        }
-        
-        if (_movementBuffer[movementId].targetVelocity > 0)
-        {
-            double2 targetPosition = _movementBuffer[movementId].targetPosition.xz;
-            double2 currentPosition = _transformBuffer[transformId].position.xz;
+            double2 targetPosition = _movementBuffer[entityId].targetPosition.xz;
+            double2 currentPosition = _transformBuffer[entityId].position.xz;
             
             float2 targetDir = targetPosition - currentPosition;
             float targetDist = length( targetDir );
@@ -82,9 +63,9 @@ public partial class ComputeShaderEmulator
             }
 
             float3 transformForward = new float3(0, 0, 1);
-            transformForward = rotate(transformForward, _transformBuffer[transformId].rotation);
-            Debug.DrawLine( _transformBuffer[transformId].position.ToVector3(), _transformBuffer[transformId].position.ToVector3() + new float3(targetDir.x,0,targetDir.y).ToVector3().normalized * 10, Color.green );
-            Debug.DrawLine( _transformBuffer[transformId].position.ToVector3(), _transformBuffer[transformId].position.ToVector3() + transformForward.ToVector3() * 10, Color.red );
+            transformForward = rotate(transformForward, _transformBuffer[entityId].rotation);
+            Debug.DrawLine( _transformBuffer[entityId].position.ToVector3(), _transformBuffer[entityId].position.ToVector3() + new float3(targetDir.x,0,targetDir.y).ToVector3().normalized * 10, Color.green );
+            Debug.DrawLine( _transformBuffer[entityId].position.ToVector3(), _transformBuffer[entityId].position.ToVector3() + transformForward.ToVector3() * 10, Color.red );
 
             float2 currentDir = transformForward.xz;
             float currentDirMagnitude = length(currentDir);
@@ -105,7 +86,7 @@ public partial class ComputeShaderEmulator
             float4 velocityByAngle = new float4
             (
                 radians(0.0f),
-                _movementBuffer[movementId].targetVelocity,
+                _movementBuffer[entityId].targetVelocity,
                 radians(45.0f),
                 0.0f
             );
@@ -120,19 +101,19 @@ public partial class ComputeShaderEmulator
                 stop = true;
             }
             
-            Transform tempTransform = _transformBuffer[transformId];
+            Transform tempTransform = _transformBuffer[entityId];
             tempTransform.position += new double3( targetDir.x, 0, targetDir.y ) * deltaDist;
 
             float4 deltaRotation = quaternionFromAsixAngle(deltaAngle, new float3(0, 1, 0));
             tempTransform.rotation = transformQuaternion(deltaRotation, tempTransform.rotation);
 
-            _transformBuffer[transformId] = tempTransform;
+            _transformBuffer[entityId] = tempTransform;
             
             if( stop )
             {
-                Movement tempMovement = _movementBuffer[movementId];
+                Movement tempMovement = _movementBuffer[entityId];
                 tempMovement.targetVelocity = 0;
-                _movementBuffer[movementId] = tempMovement;
+                _movementBuffer[entityId] = tempMovement;
             }
             
             // TODO: configure
@@ -147,51 +128,51 @@ public partial class ComputeShaderEmulator
             float dFitnessByDt = lerpargs(fitnessByVelocity, abs(currentVelocity));
             float dFitness = dFitnessByDt * _dT;
 
-            Personnel tempPersonnel = _personnelBuffer[personnelId];
+            Personnel tempPersonnel = _personnelBuffer[entityId];
             if (dFitness > tempPersonnel.fitness)
             {
                 dFitness = tempPersonnel.fitness;
             }
             tempPersonnel.fitness -= dFitness;
-            _personnelBuffer[personnelId] = tempPersonnel;
+            _personnelBuffer[entityId] = tempPersonnel;
         }
-        else if (_movementBuffer[movementId].targetAngularVelocity > 0)
+        else if (_movementBuffer[entityId].targetAngularVelocity > 0)
         {
             // rotate to target
             
             float3 targetForward = new float3(0, 0, 1);
-            targetForward = rotate(targetForward, _movementBuffer[movementId].targetRotation);
+            targetForward = rotate(targetForward, _movementBuffer[entityId].targetRotation);
             
             float3 currentForward = new float3(0, 0, 1);
-            currentForward = rotate(currentForward, _transformBuffer[transformId].rotation);
+            currentForward = rotate(currentForward, _transformBuffer[entityId].rotation);
             
-            Debug.DrawLine( _transformBuffer[transformId].position.ToVector3(), _transformBuffer[transformId].position.ToVector3() + targetForward.ToVector3() * 10, Color.yellow );
-            Debug.DrawLine( _transformBuffer[transformId].position.ToVector3(), _transformBuffer[transformId].position.ToVector3() + currentForward.ToVector3() * 10, Color.red );
+            Debug.DrawLine( _transformBuffer[entityId].position.ToVector3(), _transformBuffer[entityId].position.ToVector3() + targetForward.ToVector3() * 10, Color.yellow );
+            Debug.DrawLine( _transformBuffer[entityId].position.ToVector3(), _transformBuffer[entityId].position.ToVector3() + currentForward.ToVector3() * 10, Color.red );
 
             float3 axis = normalize(cross(currentForward, targetForward));
 
             float currentAngle = sigangle(currentForward, targetForward, axis);
 
             bool stop = false;
-            float deltaAngle = sign(currentAngle) * _movementBuffer[movementId].targetAngularVelocity * _dT;
+            float deltaAngle = sign(currentAngle) * _movementBuffer[entityId].targetAngularVelocity * _dT;
             if (abs(deltaAngle) > abs(currentAngle))
             {
                 deltaAngle = currentAngle;
                 stop = true;
             }
             
-            Transform tempTransform = _transformBuffer[transformId];
+            Transform tempTransform = _transformBuffer[entityId];
 
             float4 deltaRotation = quaternionFromAsixAngle(deltaAngle, axis);
             tempTransform.rotation = transformQuaternion(deltaRotation, tempTransform.rotation);
 
-            _transformBuffer[transformId] = tempTransform;
+            _transformBuffer[entityId] = tempTransform;
             
             if( stop )
             {
-                Movement tempMovement = _movementBuffer[movementId];
+                Movement tempMovement = _movementBuffer[entityId];
                 tempMovement.targetAngularVelocity = 0;
-                _movementBuffer[movementId] = tempMovement;
+                _movementBuffer[entityId] = tempMovement;
             }
         }
     }

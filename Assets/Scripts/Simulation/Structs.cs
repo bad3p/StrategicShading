@@ -3,20 +3,8 @@ using Types;
 
 namespace Structs
 {
-    public struct Entity
-    {
-        public uint teamId;
-        public uint transformId;
-        public uint hierarchyId;
-        public uint personnelId;
-        public uint firearmsId;
-        public uint movementId;
-        public uint firepowerId;
-    };
-
     public struct Transform
     {
-        public uint entityId;
         public double3 position;
         public float4 rotation;
         public float3 scale;
@@ -24,7 +12,6 @@ namespace Structs
     
     public struct Hierarchy
     {
-        public uint entityId;
         public uint parentEntityId;
         public uint firstChildEntityId;
         public uint nextSiblingEntityId;
@@ -32,7 +19,6 @@ namespace Structs
 
     public struct Personnel
     {
-        public uint entityId;
         public float morale;
         public float fitness;
         public uint count;
@@ -42,7 +28,6 @@ namespace Structs
     
     public struct Firearms
     {
-        public uint entityId;
         public uint ammo;
         public float4 distance;
         public float4 firepower;
@@ -52,7 +37,6 @@ namespace Structs
     
     public struct Movement
     {
-        public uint entityId;
         public double3 targetPosition;
         public float4 targetRotation;
         public float targetVelocity;
@@ -61,7 +45,6 @@ namespace Structs
     
     public struct Firepower
     {
-        public uint entityId;
         public uint targetEntityId;
         public uint ammunitionBudget;
     };
