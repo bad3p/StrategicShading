@@ -62,6 +62,18 @@ public partial class ComputeShaderEmulator
                 targetDir *= 1.0f / targetDist;
             }
 
+            // test : simulate pinned & routed movement
+            const float PinnedMoraleThreshold = 400.0f;
+            const float RoutedMoraleThreshold = 300.0f;
+            if (_personnelBuffer[entityId].morale < RoutedMoraleThreshold)
+            {
+                targetDir *= -1;
+            }
+            else if (_personnelBuffer[entityId].morale < PinnedMoraleThreshold)
+            {
+                targetDir = new float2(0,0);
+            }
+
             float3 transformForward = new float3(0, 0, 1);
             transformForward = rotate(transformForward, _transformBuffer[entityId].rotation);
             Debug.DrawLine( _transformBuffer[entityId].position.ToVector3(), _transformBuffer[entityId].position.ToVector3() + new float3(targetDir.x,0,targetDir.y).ToVector3().normalized * 10, Color.green );
@@ -101,19 +113,13 @@ public partial class ComputeShaderEmulator
                 stop = true;
             }
             
-            Transform tempTransform = _transformBuffer[entityId];
-            tempTransform.position += new double3( targetDir.x, 0, targetDir.y ) * deltaDist;
-
+            _transformBuffer[entityId].position += new double3( targetDir.x, 0, targetDir.y ) * deltaDist;
             float4 deltaRotation = quaternionFromAsixAngle(deltaAngle, new float3(0, 1, 0));
-            tempTransform.rotation = transformQuaternion(deltaRotation, tempTransform.rotation);
-
-            _transformBuffer[entityId] = tempTransform;
+            _transformBuffer[entityId].rotation = transformQuaternion(deltaRotation, _transformBuffer[entityId].rotation);
             
             if( stop )
             {
-                Movement tempMovement = _movementBuffer[entityId];
-                tempMovement.targetVelocity = 0;
-                _movementBuffer[entityId] = tempMovement;
+                _movementBuffer[entityId].targetVelocity = 0;
             }
             
             // TODO: configure
@@ -128,13 +134,33 @@ public partial class ComputeShaderEmulator
             float dFitnessByDt = lerpargs(fitnessByVelocity, abs(currentVelocity));
             float dFitness = dFitnessByDt * _dT;
 
-            Personnel tempPersonnel = _personnelBuffer[entityId];
-            if (dFitness > tempPersonnel.fitness)
+            if (dFitness > _personnelBuffer[entityId].fitness)
             {
-                dFitness = tempPersonnel.fitness;
+                dFitness = _personnelBuffer[entityId].fitness;
             }
-            tempPersonnel.fitness -= dFitness;
-            _personnelBuffer[entityId] = tempPersonnel;
+            _personnelBuffer[entityId].fitness -= dFitness;
+            
+            // test : lose morale while moving
+            if(false)
+            {
+                const float MoraleLossProbability = 1.0f / 300.0f;
+                float dice = rngRange(0.0f, 1.0f, rngIndex(entityId));
+                if (dice < MoraleLossProbability)
+                {
+                    float dMorale = rngRange(10.0f, 50.0f, rngIndex(entityId));
+                    _personnelBuffer[entityId].morale = clamp(_personnelBuffer[entityId].morale - dMorale, 0.0f, 600);
+                }
+
+                float4 moraleRecoveryRateByMorale = new float4
+                (
+                    200.0f,
+                    5.0f,
+                    400.0f,
+                    1.0f
+                );
+                float moraleRecoveryRate = lerpargs(moraleRecoveryRateByMorale, _personnelBuffer[entityId].morale);
+                _personnelBuffer[entityId].morale = clamp(_personnelBuffer[entityId].morale + moraleRecoveryRate * _dT, 0.0f, 600);
+            }
         }
         else if (_movementBuffer[entityId].targetAngularVelocity > 0)
         {
@@ -160,19 +186,13 @@ public partial class ComputeShaderEmulator
                 deltaAngle = currentAngle;
                 stop = true;
             }
-            
-            Transform tempTransform = _transformBuffer[entityId];
 
             float4 deltaRotation = quaternionFromAsixAngle(deltaAngle, axis);
-            tempTransform.rotation = transformQuaternion(deltaRotation, tempTransform.rotation);
-
-            _transformBuffer[entityId] = tempTransform;
+            _transformBuffer[entityId].rotation = transformQuaternion(deltaRotation, _transformBuffer[entityId].rotation);
             
             if( stop )
             {
-                Movement tempMovement = _movementBuffer[entityId];
-                tempMovement.targetAngularVelocity = 0;
-                _movementBuffer[entityId] = tempMovement;
+                _movementBuffer[entityId].targetAngularVelocity = 0;
             }
         }
     }

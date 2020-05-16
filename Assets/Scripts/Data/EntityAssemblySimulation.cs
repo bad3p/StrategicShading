@@ -8,6 +8,16 @@ using UnityEditor;
 
 public partial class EntityAssembly : MonoBehaviour
 {
+    [Header("CPU Emulation")]
+    public int NumCPUThreads = 1;
+    
+    [Header("RNG")]
+    public bool RngSeedFromTimer = false;
+    public int RngSeed = 0;
+    public int RngMaxUniform = 1000000;
+    public int RngCount = 256;
+    public int RngStateLength = 55;
+    
 #if UNITY_EDITOR
     static void InitBuffer<T>(List<T> srcBuffer, ref T[] dstBuffer)
     {
@@ -27,6 +37,31 @@ public partial class EntityAssembly : MonoBehaviour
         {
             return;
         }
+        
+        if (RngSeedFromTimer)
+        {
+            Random.InitState( (int)System.DateTime.Now.Ticks );
+        }
+        else
+        {
+            Random.InitState( RngSeed );
+        }
+        
+        int[] rngStateData = new int[RngCount*(RngStateLength+1)];
+        for (int i = 0; i < RngCount; i++)
+        {
+            rngStateData[i * (RngStateLength + 1)] = 0;
+            for (int j = 0; j < RngStateLength; j++)
+            {
+                rngStateData[i * (RngStateLength + 1) + j + 1] = Random.Range( 0, RngMaxUniform );
+            }
+        }
+        
+        ComputeShaderEmulator._rngMax = RngMaxUniform;
+        ComputeShaderEmulator._rngCount = RngCount;
+        ComputeShaderEmulator._rngStateLength = RngStateLength;
+        ComputeShaderEmulator._rngState = new int[rngStateData.Length];
+        rngStateData.CopyTo(ComputeShaderEmulator._rngState, 0);
 
         ComputeShaderEmulator._entityCount = _descBuffer.Count; 
         InitBuffer(_descBuffer, ref ComputeShaderEmulator._descBuffer);
