@@ -85,7 +85,6 @@ public class Advance : BehaviourTreeNode
 
         double ldx = p1.x - p0.x;
         double ldy = p1.y - p0.y;
-        double lcrs = p1.x * p0.y - p1.y * p0.x;
         double llen = Math.Sqrt( ldx * ldx + ldy * ldy );
         if (llen < ComputeShaderEmulator.DOUBLE_EPSILON)
         {
@@ -95,7 +94,9 @@ public class Advance : BehaviourTreeNode
         while (childEntityId > 0)
         {
             double2 p = transformBuffer[childEntityId].position.xz;
-            double distance = Math.Abs(ldy * p.x - ldx * p.y + lcrs) / llen;
+            double rx = p0.x - p.x;
+            double ry = p0.y - p.y;
+            double distance = Math.Abs(ldx * ry - ldy * rx) / llen;
             nearestDistance = Math.Min(nearestDistance, distance);
             childEntityId = hierarchyBuffer[childEntityId].nextSiblingEntityId;
         }
@@ -211,7 +212,9 @@ public class Advance : BehaviourTreeNode
 
                                         if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
                                         {
-                                            float targetVelocity = ComputeShaderEmulator.lerpargs(velocityByCurrentPositionError, ComputeShaderEmulator.length(currentPositionError));
+                                            currentPositionError = nextSiblingTargetPosition - transformBuffer[nextSiblingEntityId].position;
+                                            currentPositionErrorMagnitude = ComputeShaderEmulator.length(currentPositionError);
+                                            float targetVelocity = ComputeShaderEmulator.lerpargs(velocityByCurrentPositionError, currentPositionErrorMagnitude);
                                             movementBuffer[nextSiblingEntityId].targetVelocity = targetVelocity; // TODO: configure
                                             movementBuffer[nextSiblingEntityId].targetPosition = nextSiblingTargetPosition;
                                         }
