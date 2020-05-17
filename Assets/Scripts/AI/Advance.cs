@@ -172,7 +172,7 @@ public class Advance : BehaviourTreeNode
                             double3 targetPositionError = movementBuffer[firstChildEntityId].targetPosition - nextSiblingTargetPosition;
                             float targetRotationError = ComputeShaderEmulator.sigangle(transformBuffer[firstChildEntityId].rotation, this.transform.rotation);
                             float3 currentPositionError = nextSiblingTargetPosition - transformBuffer[firstChildEntityId].position;
-                            
+
                             if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
                             {
                                 float targetVelocity = ComputeShaderEmulator.lerpargs(velocityByCurrentPositionError, ComputeShaderEmulator.length(currentPositionError));
@@ -186,8 +186,11 @@ public class Advance : BehaviourTreeNode
                                 movementBuffer[firstChildEntityId].targetRotation = this.transform.rotation;
                             }
                             
+                            currentPositionError = nextSiblingTargetPosition - transformBuffer[firstChildEntityId].position;
+                            float currentPositionErrorMagnitude = ComputeShaderEmulator.length(currentPositionError);
+                            
                             bool allChildrenArrived = true;
-                            if (ComputeShaderEmulator.length(currentPositionError) > ComputeShaderEmulator.length(transformBuffer[firstChildEntityId].scale))
+                            if (currentPositionErrorMagnitude > ComputeShaderEmulator.length(transformBuffer[firstChildEntityId].scale))
                             {
                                 allChildrenArrived = false;
                             }
@@ -205,7 +208,6 @@ public class Advance : BehaviourTreeNode
                                     {
                                         targetPositionError = movementBuffer[nextSiblingEntityId].targetPosition - nextSiblingTargetPosition;
                                         targetRotationError = ComputeShaderEmulator.sigangle(transformBuffer[nextSiblingEntityId].rotation, nextSiblingTargetRotation);
-                                        currentPositionError = nextSiblingTargetPosition - transformBuffer[nextSiblingEntityId].position;
 
                                         if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
                                         {
@@ -219,8 +221,11 @@ public class Advance : BehaviourTreeNode
                                             movementBuffer[nextSiblingEntityId].targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
                                             movementBuffer[nextSiblingEntityId].targetRotation = nextSiblingTargetRotation;
                                         }
+                                        
+                                        currentPositionError = nextSiblingTargetPosition - transformBuffer[nextSiblingEntityId].position;
+                                        currentPositionErrorMagnitude = ComputeShaderEmulator.length(currentPositionError);
 
-                                        if ( ComputeShaderEmulator.length(currentPositionError) > ComputeShaderEmulator.length(transformBuffer[nextSiblingEntityId].scale) )
+                                        if ( currentPositionErrorMagnitude > ComputeShaderEmulator.length(transformBuffer[nextSiblingEntityId].scale) )
                                         {
                                             allChildrenArrived = false;
                                         }

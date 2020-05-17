@@ -342,13 +342,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 88985222}
-  m_LocalRotation: {x: -0, y: -0.25179604, z: -0, w: 0.96778035}
-  m_LocalPosition: {x: 14.2, y: 0, z: -204.5}
+  m_LocalRotation: {x: -0, y: -0.3624258, z: -0, w: 0.9320126}
+  m_LocalPosition: {x: 30.600002, y: 0, z: -201.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 247553491}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: -29.168001, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -42.499, z: 0}
 --- !u!114 &88985224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -565,10 +565,10 @@ MonoBehaviour:
     z: 250
     w: 500
   Firepower:
-    x: 97
-    y: 63
-    z: 30
-    w: 11
+    x: 0
+    y: 0
+    z: 0
+    w: 0
   StateID: 0
   StateTimeout: 0
 --- !u!114 &115422640
@@ -1402,7 +1402,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 402623721}
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
-  m_LocalPosition: {x: -40.4, y: 0, z: 242.4}
+  m_LocalPosition: {x: -40, y: 0, z: 300}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1895606204}
@@ -1999,7 +1999,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Morale: 606
+  Morale: 600
   Fitness: 14400
   Count: 2
   Wounded: 0
@@ -2065,13 +2065,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 838082477}
-  m_LocalRotation: {x: -0, y: -0.25179604, z: -0, w: 0.96778035}
-  m_LocalPosition: {x: 14.2, y: 0, z: -204.5}
+  m_LocalRotation: {x: -0, y: -0.3624258, z: -0, w: 0.9320126}
+  m_LocalPosition: {x: 39.7, y: 0, z: -211.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 247553491}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -29.168001, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -42.499, z: 0}
 --- !u!114 &838082479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2288,10 +2288,10 @@ MonoBehaviour:
     z: 250
     w: 500
   Firepower:
-    x: 97
-    y: 62
-    z: 31
-    w: 11
+    x: 0
+    y: 0
+    z: 0
+    w: 0
   StateID: 0
   StateTimeout: 0
 --- !u!114 &854208702
@@ -2405,7 +2405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Morale: 601
+  Morale: 605
   Fitness: 14400
   Count: 3
   Wounded: 0
@@ -2940,13 +2940,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1095388833}
-  m_LocalRotation: {x: 0.00076247304, y: -0.39120287, z: 0.0027146637, w: 0.9203001}
-  m_LocalPosition: {x: 20, y: 0.1, z: -202}
+  m_LocalRotation: {x: 0.0012069364, y: -0.54000103, z: 0.0025483465, w: 0.8416596}
+  m_LocalPosition: {x: 41.9, y: 0.2, z: -210.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1693995789}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0.202, y: -46.059002, z: 0.252}
+  m_LocalEulerAnglesHint: {x: 0.27400002, y: -65.367004, z: 0.171}
 --- !u!114 &1095388835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3345,7 +3345,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Morale: 603
+  Morale: 604
   Fitness: 14400
   Count: 3
   Wounded: 0
@@ -3753,6 +3753,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9e3a77ad767b164ba8488185c9187fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NumCPUThreads: 1
+  RngSeedFromTimer: 0
+  RngSeed: 0
+  RngMaxUniform: 1000000
+  RngCount: 256
+  RngStateLength: 55
 --- !u!1 &1590249389
 GameObject:
   m_ObjectHideFlags: 0
@@ -4176,7 +4182,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1676357859}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 31.7, y: 0, z: -240}
+  m_LocalPosition: {x: 40, y: 0, z: -300}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1025601184}
@@ -5214,13 +5220,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1988941625}
-  m_LocalRotation: {x: 0.00076247304, y: -0.39120287, z: 0.0027146637, w: 0.9203001}
+  m_LocalRotation: {x: 0.0012069364, y: -0.54000103, z: 0.0025483465, w: 0.8416596}
   m_LocalPosition: {x: 20, y: 0.1, z: -202}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1693995789}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0.202, y: -46.059002, z: 0.252}
+  m_LocalEulerAnglesHint: {x: 0.27400002, y: -65.367004, z: 0.171}
 --- !u!114 &1988941627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5599,7 +5605,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Morale: 606
+  Morale: 600
   Fitness: 14400
   Count: 3
   Wounded: 0

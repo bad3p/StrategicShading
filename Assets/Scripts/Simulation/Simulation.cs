@@ -141,13 +141,13 @@ public partial class ComputeShaderEmulator
             _personnelBuffer[entityId].fitness -= dFitness;
             
             // test : lose morale while moving
-            if(false)
+            if(true)
             {
-                const float MoraleLossProbability = 1.0f / 300.0f;
+                const float MoraleLossProbability = 1.0f / 1000.0f;
                 float dice = rngRange(0.0f, 1.0f, rngIndex(entityId));
                 if (dice < MoraleLossProbability)
                 {
-                    float dMorale = rngRange(10.0f, 50.0f, rngIndex(entityId));
+                    float dMorale = rngRange(25.0f, 50.0f, rngIndex(entityId));
                     _personnelBuffer[entityId].morale = clamp(_personnelBuffer[entityId].morale - dMorale, 0.0f, 600);
                 }
 

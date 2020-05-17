@@ -127,9 +127,11 @@ public class Deploy : BehaviourTreeNode
                                 movementBuffer[firstChildEntityId].targetRotation = this.transform.rotation;
                             }
                             
-                            bool allChildrenArrived = true;
                             float3 currentPositionError = movementBuffer[firstChildEntityId].targetPosition - transformBuffer[firstChildEntityId].position;
-                            if (ComputeShaderEmulator.length(currentPositionError) > ComputeShaderEmulator.length(transformBuffer[firstChildEntityId].scale))
+                            float currentPositionErrorMagnitude = ComputeShaderEmulator.length(currentPositionError);
+                            
+                            bool allChildrenArrived = true;
+                            if (currentPositionErrorMagnitude > ComputeShaderEmulator.length(transformBuffer[firstChildEntityId].scale))
                             {
                                 allChildrenArrived = false;
                             }
@@ -147,7 +149,6 @@ public class Deploy : BehaviourTreeNode
                                     {
                                         targetPositionError = movementBuffer[nextSiblingEntityId].targetPosition - nextSiblingTargetPosition;
                                         targetRotationError = ComputeShaderEmulator.sigangle(transformBuffer[nextSiblingEntityId].rotation, nextSiblingTargetRotation);
-                                        currentPositionError = movementBuffer[nextSiblingEntityId].targetPosition - transformBuffer[nextSiblingEntityId].position;
 
                                         if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
                                         {
@@ -161,7 +162,9 @@ public class Deploy : BehaviourTreeNode
                                             movementBuffer[nextSiblingEntityId].targetRotation = nextSiblingTargetRotation;
                                         }
 
-                                        if ( ComputeShaderEmulator.length(currentPositionError) > ComputeShaderEmulator.length(transformBuffer[nextSiblingEntityId].scale) )
+                                        currentPositionError = movementBuffer[nextSiblingEntityId].targetPosition - transformBuffer[nextSiblingEntityId].position;
+                                        currentPositionErrorMagnitude = ComputeShaderEmulator.length(currentPositionError);
+                                        if ( currentPositionErrorMagnitude > ComputeShaderEmulator.length(transformBuffer[nextSiblingEntityId].scale) )
                                         {
                                             allChildrenArrived = false;
                                         }

@@ -1,4 +1,5 @@
 ﻿
+using Types;
 using UnityEngine;
 
 public abstract class BehaviourTreeNode : MonoBehaviour
@@ -30,8 +31,7 @@ public abstract class BehaviourTreeNode : MonoBehaviour
     
     protected static uint GetEntityChildCount(uint entityId)
     {
-        const uint COMPONENT_MASK = ComputeShaderEmulator.HIERARCHY;
-        if ((descBuffer[entityId] & COMPONENT_MASK) != COMPONENT_MASK)
+        if ((descBuffer[entityId] & ComputeShaderEmulator.HIERARCHY) != ComputeShaderEmulator.HIERARCHY)
         {
             return 0;
         }
@@ -50,6 +50,96 @@ public abstract class BehaviourTreeNode : MonoBehaviour
         }
 
         return childCount;
+    }
+    
+    protected static double3 GetCenterOfHierarchy(uint entityId)
+    {
+        double3 result = new double3(0, 0, 0);
+        
+        if ((descBuffer[entityId] & ComputeShaderEmulator.HIERARCHY) != ComputeShaderEmulator.HIERARCHY)
+        {
+            return result;
+        }
+        
+        uint childEntityId = hierarchyBuffer[entityId].firstChildEntityId;
+        if (childEntityId == 0)
+        {
+            return result;
+        }
+        
+        uint childCount = 0;
+        while (childEntityId > 0)
+        {
+            if( (descBuffer[childEntityId] & ComputeShaderEmulator.TRANSFORM) == ComputeShaderEmulator.TRANSFORM )
+            {
+                result += transformBuffer[childEntityId].position;
+                childCount++;
+            }
+            else if( hierarchyBuffer[childEntityId].firstChildEntityId > 0 )
+            {
+                result += GetCenterOfHierarchy(hierarchyBuffer[childEntityId].firstChildEntityId);
+                childCount++;
+            }
+
+            childEntityId = hierarchyBuffer[childEntityId].nextSiblingEntityId;
+        }
+
+        if (childCount > 0)
+        {
+            result = result / childCount;
+        }
+        
+        return result;
+    }
+    
+    protected static uint GetNearestEntityInHierarchy(uint entityId, double3 position)
+    {
+        uint nearestEntityId = 0;
+        float nearestDistance = float.MaxValue;
+        
+        if ((descBuffer[entityId] & ComputeShaderEmulator.HIERARCHY) != ComputeShaderEmulator.HIERARCHY)
+        {
+            return nearestEntityId;
+        }
+        
+        uint childEntityId = hierarchyBuffer[entityId].firstChildEntityId;
+        if (childEntityId == 0)
+        {
+            return nearestEntityId;
+        }
+        
+        while (childEntityId > 0)
+        {
+            if( (descBuffer[childEntityId] & ComputeShaderEmulator.TRANSFORM) == ComputeShaderEmulator.TRANSFORM )
+            {
+                double3 direction = position - transformBuffer[childEntityId].position;
+                float distance = ComputeShaderEmulator.length( direction );
+                if (distance < nearestDistance)
+                {
+                    nearestDistance = distance;
+                    nearestEntityId = childEntityId;
+                }
+                
+            }
+            else if( hierarchyBuffer[childEntityId].firstChildEntityId > 0 )
+            {
+                uint depthSearchResult = GetNearestEntityInHierarchy( childEntityId, position );
+                if (depthSearchResult > 0)
+                {
+                    double3 direction = position - transformBuffer[depthSearchResult].position;
+                    float distance = ComputeShaderEmulator.length( direction );
+                    if (distance < nearestDistance)
+                    {
+                        nearestDistance = distance;
+                        nearestEntityId = depthSearchResult;    
+                    }
+                }
+            }
+
+            childEntityId = hierarchyBuffer[childEntityId].nextSiblingEntityId;
+        }
+        
+        return nearestEntityId;
     }
     #endregion
     
