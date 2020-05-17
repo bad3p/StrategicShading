@@ -62,7 +62,7 @@ public partial class ComputeShaderEmulator
                 targetDir *= 1.0f / targetDist;
             }
 
-            // test : simulate pinned & routed movement
+            // TODO : move away from this system
             const float PinnedMoraleThreshold = 400.0f;
             const float RoutedMoraleThreshold = 300.0f;
             if (_personnelBuffer[entityId].morale < RoutedMoraleThreshold)
@@ -121,46 +121,6 @@ public partial class ComputeShaderEmulator
             {
                 _movementBuffer[entityId].targetVelocity = 0;
             }
-            
-            // TODO: configure
-            float4 fitnessByVelocity = new float4
-            (
-                1.4f,
-                1.0f,
-                4.17f,
-                8.0f
-            );
-            
-            float dFitnessByDt = lerpargs(fitnessByVelocity, abs(currentVelocity));
-            float dFitness = dFitnessByDt * _dT;
-
-            if (dFitness > _personnelBuffer[entityId].fitness)
-            {
-                dFitness = _personnelBuffer[entityId].fitness;
-            }
-            _personnelBuffer[entityId].fitness -= dFitness;
-            
-            // test : lose morale while moving
-            if(true)
-            {
-                const float MoraleLossProbability = 1.0f / 1000.0f;
-                float dice = rngRange(0.0f, 1.0f, rngIndex(entityId));
-                if (dice < MoraleLossProbability)
-                {
-                    float dMorale = rngRange(25.0f, 50.0f, rngIndex(entityId));
-                    _personnelBuffer[entityId].morale = clamp(_personnelBuffer[entityId].morale - dMorale, 0.0f, 600);
-                }
-
-                float4 moraleRecoveryRateByMorale = new float4
-                (
-                    200.0f,
-                    5.0f,
-                    400.0f,
-                    1.0f
-                );
-                float moraleRecoveryRate = lerpargs(moraleRecoveryRateByMorale, _personnelBuffer[entityId].morale);
-                _personnelBuffer[entityId].morale = clamp(_personnelBuffer[entityId].morale + moraleRecoveryRate * _dT, 0.0f, 600);
-            }
         }
         else if (_movementBuffer[entityId].targetAngularVelocity > 0)
         {
@@ -194,6 +154,84 @@ public partial class ComputeShaderEmulator
             {
                 _movementBuffer[entityId].targetAngularVelocity = 0;
             }
+        }
+    }
+
+    [NumThreads(256, 1, 1)]
+    static public void UpdatePersonnel(uint3 id)
+    {
+        int entityId = (int) id.x;
+        if (entityId >= _entityCount)
+        {
+            return;
+        }
+
+        const uint COMPONENT_MASK = TRANSFORM | MOVEMENT | PERSONNEL;
+
+        if ((_descBuffer[entityId] & COMPONENT_MASK) != COMPONENT_MASK)
+        {
+            return;
+        }
+        
+        // MORALE
+
+        float morale = _personnelBuffer[entityId].morale; 
+
+        float4 moraleLossProbabilityByMorale = new float4
+        (
+            400.0f,
+            1.0f / 5000.0f,
+            600.0f,
+            1.0f / 500.0f
+        );
+
+        float diceThreshold = lerpargs(moraleLossProbabilityByMorale, morale);
+        float dice = rngRange(0.0f, 1.0f, rngIndex(entityId));
+        float moraleLoss = 0.0f;
+        if (dice < diceThreshold)
+        {
+            moraleLoss = rngRange(25.0f, 50.0f, rngIndex(entityId));     
+        }
+        
+        // TODO: configure
+        float4 moraleRecoveryRateByMorale = new float4
+        (
+            200.0f,
+            5.0f,
+            400.0f,
+            1.0f
+        );
+        float moraleRecoveryRate = lerpargs(moraleRecoveryRateByMorale, morale);
+        float moraleGain = moraleRecoveryRate * _dT;
+
+        // TODO: configure
+        const float MinMorale = 0.0f;
+        const float MaxMorale = 600.0f;
+        
+        _personnelBuffer[entityId].morale = clamp(morale - moraleLoss + moraleGain, MinMorale, MaxMorale);
+        
+        // FITNESS
+
+        if (abs(_movementBuffer[entityId].targetVelocity) > FLOAT_EPSILON)
+        {
+            // TODO: configure
+            float4 fitnessByVelocity = new float4
+            (
+                1.4f,
+                1.0f,
+                4.17f,
+                8.0f
+            );
+
+            float dFitnessByDt = lerpargs(fitnessByVelocity, abs(_movementBuffer[entityId].targetVelocity));
+            float dFitness = dFitnessByDt * _dT;
+
+            if (dFitness > _personnelBuffer[entityId].fitness)
+            {
+                dFitness = _personnelBuffer[entityId].fitness;
+            }
+
+            _personnelBuffer[entityId].fitness -= dFitness;
         }
     }
 }

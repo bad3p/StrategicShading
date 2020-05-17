@@ -82,6 +82,7 @@ public partial class EntityAssembly : MonoBehaviour
 
         ComputeShaderEmulator._dT = Time.deltaTime;
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateMovement, (uint)_movementBuffer.Count / 256 + 1, 1, 1 );
+        ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdatePersonnel, (uint)_movementBuffer.Count / 256 + 1, 1, 1 );
 
         SyncBuffers(ref ComputeShaderEmulator._descBuffer, _descBuffer);
         SyncBuffers(ref ComputeShaderEmulator._transformBuffer, _transformBuffer);
