@@ -30,6 +30,19 @@ public abstract class BehaviourTreeNode : MonoBehaviour
     protected static Structs.Movement[] movementBuffer { get => ComputeShaderEmulator._movementBuffer; }
     protected static Structs.Firepower[] firepowerBuffer { get => ComputeShaderEmulator._firepowerBuffer; }
     
+    protected static void ForEveryChildEntity(uint entityId, Action<uint> callback)
+    {
+        if ((descBuffer[entityId] & ComputeShaderEmulator.HIERARCHY) == ComputeShaderEmulator.HIERARCHY)
+        {
+            uint childEntityId = hierarchyBuffer[entityId].firstChildEntityId;
+            while (childEntityId > 0)
+            {
+                callback(childEntityId);
+                childEntityId = hierarchyBuffer[childEntityId].nextSiblingEntityId;
+            }
+        }
+    }
+    
     protected static uint GetEntityChildCount(uint entityId)
     {
         if ((descBuffer[entityId] & ComputeShaderEmulator.HIERARCHY) != ComputeShaderEmulator.HIERARCHY)
