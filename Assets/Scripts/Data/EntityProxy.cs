@@ -73,7 +73,7 @@ public class EntityProxy : MonoBehaviour
 
                     solidColor.a = solidAlpha.Evaluate(distance);
 
-                    if (solidColor.a > 0)
+                    if (solidColor.a > 0 && teamId != 0)
                     {
                         Gizmos.color = solidColor;
                         Gizmos.DrawMesh(_mesh);

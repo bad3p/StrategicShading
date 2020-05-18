@@ -11,6 +11,7 @@ public class BehaviourTree : BehaviourTreeNode
     void Start()
     {
         Initiate( null as BehaviourTreeNode );
+        
         switch (status)
         {
             case Status.Failure:
@@ -58,6 +59,13 @@ public class BehaviourTree : BehaviourTreeNode
         if (entityId == 0)
         {
             Debug.LogError( "[BehaviourTree] \"" + name + "\" failed, entityId is 0!" );
+            status = Status.Failure;
+            return;
+        }
+        
+        if (entityId > entityCount)
+        {
+            Debug.LogError( "[BehaviourTree] \"" + name + "\" failed, entityId is invalid!" );
             status = Status.Failure;
             return;
         }

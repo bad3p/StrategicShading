@@ -81,7 +81,14 @@ public class Assault : BehaviourTreeNode
     public override void Initiate(BehaviourTreeNode parentNode)
     {
         entityId = parentNode.entityId;
-        status = Status.Running;
+        if (entityId > 0 && entityId <= entityCount)
+        {
+            status = Status.Running;
+        }
+        else
+        {
+            status = Status.Failure;
+        }
     }
 
     public override void Run()

@@ -76,8 +76,6 @@ public partial class ComputeShaderEmulator
 
             float3 transformForward = new float3(0, 0, 1);
             transformForward = rotate(transformForward, _transformBuffer[entityId].rotation);
-            Debug.DrawLine( _transformBuffer[entityId].position.ToVector3(), _transformBuffer[entityId].position.ToVector3() + new float3(targetDir.x,0,targetDir.y).ToVector3().normalized * 10, Color.green );
-            Debug.DrawLine( _transformBuffer[entityId].position.ToVector3(), _transformBuffer[entityId].position.ToVector3() + transformForward.ToVector3() * 10, Color.red );
 
             float2 currentDir = transformForward.xz;
             float currentDirMagnitude = length(currentDir);
@@ -131,9 +129,6 @@ public partial class ComputeShaderEmulator
             
             float3 currentForward = new float3(0, 0, 1);
             currentForward = rotate(currentForward, _transformBuffer[entityId].rotation);
-            
-            Debug.DrawLine( _transformBuffer[entityId].position.ToVector3(), _transformBuffer[entityId].position.ToVector3() + targetForward.ToVector3() * 10, Color.yellow );
-            Debug.DrawLine( _transformBuffer[entityId].position.ToVector3(), _transformBuffer[entityId].position.ToVector3() + currentForward.ToVector3() * 10, Color.red );
 
             float3 axis = normalize(cross(currentForward, targetForward));
 
@@ -184,6 +179,7 @@ public partial class ComputeShaderEmulator
             600.0f,
             1.0f / 500.0f
         );
+
 
         float diceThreshold = lerpargs(moraleLossProbabilityByMorale, morale);
         float dice = rngRange(0.0f, 1.0f, rngIndex(entityId));

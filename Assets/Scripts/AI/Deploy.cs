@@ -69,7 +69,7 @@ public class Deploy : BehaviourTreeNode
     public override void Initiate(BehaviourTreeNode parentNode)
     {
         entityId = parentNode.entityId;
-        if (entityId > 0)
+        if (entityId > 0 && entityId <= entityCount)
         {
             status = Status.Running;
         }
@@ -83,130 +83,122 @@ public class Deploy : BehaviourTreeNode
     {
         if (status == Status.Running)
         {
-            if (entityId > 0)
+            uint entityChildCount = GetEntityChildCount(entityId);
+            
+            double3 nextSiblingTargetPosition;
+            double3 deploymentStep;
+            float4 nextSiblingTargetRotation = this.transform.rotation;
+
+            if (entityChildCount > 1)
             {
-                uint entityChildCount = GetEntityChildCount(entityId);
-                
-                double3 nextSiblingTargetPosition;
-                double3 deploymentStep;
-                float4 nextSiblingTargetRotation = this.transform.rotation;
+                nextSiblingTargetPosition = this.transform.position - this.transform.right * FrontlineWidth / 2;
+                deploymentStep = this.transform.right * FrontlineWidth / (entityChildCount-1);
+            }
+            else
+            {
+                nextSiblingTargetPosition = this.transform.position;
+                deploymentStep = new float3(0,0,0);
+            }
 
-                if (entityChildCount > 1)
+            if ( (descBuffer[entityId] & ComputeShaderEmulator.HIERARCHY) == ComputeShaderEmulator.HIERARCHY )
+            {
+                uint firstChildEntityId = hierarchyBuffer[entityId].firstChildEntityId;
+                if (firstChildEntityId > 0)
                 {
-                    nextSiblingTargetPosition = this.transform.position - this.transform.right * FrontlineWidth / 2;
-                    deploymentStep = this.transform.right * FrontlineWidth / (entityChildCount-1);
-                }
-                else
-                {
-                    nextSiblingTargetPosition = this.transform.position;
-                    deploymentStep = new float3(0,0,0);
-                }
-
-                if ( (descBuffer[entityId] & ComputeShaderEmulator.HIERARCHY) == ComputeShaderEmulator.HIERARCHY )
-                {
-                    uint firstChildEntityId = hierarchyBuffer[entityId].firstChildEntityId;
-                    if (firstChildEntityId > 0)
+                    if ( (descBuffer[firstChildEntityId] & ComputeShaderEmulator.TRANSFORM) == ComputeShaderEmulator.TRANSFORM &&
+                         (descBuffer[firstChildEntityId] & ComputeShaderEmulator.MOVEMENT) == ComputeShaderEmulator.MOVEMENT )
                     {
-                        if ( (descBuffer[firstChildEntityId] & ComputeShaderEmulator.TRANSFORM) == ComputeShaderEmulator.TRANSFORM &&
-                             (descBuffer[firstChildEntityId] & ComputeShaderEmulator.MOVEMENT) == ComputeShaderEmulator.MOVEMENT )
+                        const float TargetPositionErrorThreshold = 0.1f;
+                        const float TargetRotationErrorThreshold = Mathf.Deg2Rad * 1.0f;
+                        
+                        double3 targetPositionError = movementBuffer[firstChildEntityId].targetPosition - nextSiblingTargetPosition;
+                        if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
                         {
-                            const float TargetPositionErrorThreshold = 0.1f;
-                            const float TargetRotationErrorThreshold = Mathf.Deg2Rad * 1.0f;
-                            
-                            double3 targetPositionError = movementBuffer[firstChildEntityId].targetPosition - nextSiblingTargetPosition;
-                            if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
-                            {
-                                movementBuffer[firstChildEntityId].targetVelocity = 1.4f; // TODO: configure
-                                movementBuffer[firstChildEntityId].targetPosition = nextSiblingTargetPosition;
-                            }
-                            
-                            float targetRotationError = ComputeShaderEmulator.sigangle(transformBuffer[firstChildEntityId].rotation, this.transform.rotation);
-                            if (Mathf.Abs(targetRotationError) > TargetRotationErrorThreshold)
-                            {
-                                movementBuffer[firstChildEntityId].targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
-                                movementBuffer[firstChildEntityId].targetRotation = this.transform.rotation;
-                            }
-                            
-                            float3 currentPositionError = movementBuffer[firstChildEntityId].targetPosition - transformBuffer[firstChildEntityId].position;
-                            float currentPositionErrorMagnitude = ComputeShaderEmulator.length(currentPositionError);
-                            
-                            bool allChildrenArrived = true;
-                            if (currentPositionErrorMagnitude > ComputeShaderEmulator.length(transformBuffer[firstChildEntityId].scale))
-                            {
-                                allChildrenArrived = false;
-                            }
+                            movementBuffer[firstChildEntityId].targetVelocity = 1.4f; // TODO: configure
+                            movementBuffer[firstChildEntityId].targetPosition = nextSiblingTargetPosition;
+                        }
+                        
+                        float targetRotationError = ComputeShaderEmulator.sigangle(transformBuffer[firstChildEntityId].rotation, this.transform.rotation);
+                        if (Mathf.Abs(targetRotationError) > TargetRotationErrorThreshold)
+                        {
+                            movementBuffer[firstChildEntityId].targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
+                            movementBuffer[firstChildEntityId].targetRotation = this.transform.rotation;
+                        }
+                        
+                        float3 currentPositionError = movementBuffer[firstChildEntityId].targetPosition - transformBuffer[firstChildEntityId].position;
+                        float currentPositionErrorMagnitude = ComputeShaderEmulator.length(currentPositionError);
+                        
+                        bool allChildrenArrived = true;
+                        if (currentPositionErrorMagnitude > ComputeShaderEmulator.length(transformBuffer[firstChildEntityId].scale))
+                        {
+                            allChildrenArrived = false;
+                        }
 
-                            nextSiblingTargetPosition = nextSiblingTargetPosition + deploymentStep;
+                        nextSiblingTargetPosition = nextSiblingTargetPosition + deploymentStep;
 
-                            if (hierarchyBuffer[firstChildEntityId].nextSiblingEntityId > 0)
+                        if (hierarchyBuffer[firstChildEntityId].nextSiblingEntityId > 0)
+                        {
+                            uint nextSiblingEntityId = firstChildEntityId;
+                            while (hierarchyBuffer[nextSiblingEntityId].nextSiblingEntityId > 0)
                             {
-                                uint nextSiblingEntityId = firstChildEntityId;
-                                while (hierarchyBuffer[nextSiblingEntityId].nextSiblingEntityId > 0)
+                                nextSiblingEntityId = hierarchyBuffer[nextSiblingEntityId].nextSiblingEntityId;
+                                if ((descBuffer[nextSiblingEntityId] & ComputeShaderEmulator.TRANSFORM) == ComputeShaderEmulator.TRANSFORM &&
+                                    (descBuffer[nextSiblingEntityId] & ComputeShaderEmulator.MOVEMENT) == ComputeShaderEmulator.MOVEMENT)
                                 {
-                                    nextSiblingEntityId = hierarchyBuffer[nextSiblingEntityId].nextSiblingEntityId;
-                                    if ((descBuffer[nextSiblingEntityId] & ComputeShaderEmulator.TRANSFORM) == ComputeShaderEmulator.TRANSFORM &&
-                                        (descBuffer[nextSiblingEntityId] & ComputeShaderEmulator.MOVEMENT) == ComputeShaderEmulator.MOVEMENT)
+                                    targetPositionError = movementBuffer[nextSiblingEntityId].targetPosition - nextSiblingTargetPosition;
+                                    targetRotationError = ComputeShaderEmulator.sigangle(transformBuffer[nextSiblingEntityId].rotation, nextSiblingTargetRotation);
+
+                                    if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
                                     {
-                                        targetPositionError = movementBuffer[nextSiblingEntityId].targetPosition - nextSiblingTargetPosition;
-                                        targetRotationError = ComputeShaderEmulator.sigangle(transformBuffer[nextSiblingEntityId].rotation, nextSiblingTargetRotation);
-
-                                        if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
-                                        {
-                                            movementBuffer[nextSiblingEntityId].targetVelocity = 1.4f; // TODO: configure
-                                            movementBuffer[nextSiblingEntityId].targetPosition = nextSiblingTargetPosition;
-                                        }
-                                        
-                                        if (Mathf.Abs(targetRotationError) > TargetRotationErrorThreshold)
-                                        {
-                                            movementBuffer[nextSiblingEntityId].targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
-                                            movementBuffer[nextSiblingEntityId].targetRotation = nextSiblingTargetRotation;
-                                        }
-
-                                        currentPositionError = movementBuffer[nextSiblingEntityId].targetPosition - transformBuffer[nextSiblingEntityId].position;
-                                        currentPositionErrorMagnitude = ComputeShaderEmulator.length(currentPositionError);
-                                        if ( currentPositionErrorMagnitude > ComputeShaderEmulator.length(transformBuffer[nextSiblingEntityId].scale) )
-                                        {
-                                            allChildrenArrived = false;
-                                        }
-
-                                        nextSiblingTargetPosition = nextSiblingTargetPosition + deploymentStep;
+                                        movementBuffer[nextSiblingEntityId].targetVelocity = 1.4f; // TODO: configure
+                                        movementBuffer[nextSiblingEntityId].targetPosition = nextSiblingTargetPosition;
                                     }
-                                    else
+                                    
+                                    if (Mathf.Abs(targetRotationError) > TargetRotationErrorThreshold)
                                     {
-                                        Debug.LogError( "[Deploy] failed, inconsistent entity (missing Transform or Movement component)!" );
-                                        status = Status.Failure;
+                                        movementBuffer[nextSiblingEntityId].targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
+                                        movementBuffer[nextSiblingEntityId].targetRotation = nextSiblingTargetRotation;
                                     }
+
+                                    currentPositionError = movementBuffer[nextSiblingEntityId].targetPosition - transformBuffer[nextSiblingEntityId].position;
+                                    currentPositionErrorMagnitude = ComputeShaderEmulator.length(currentPositionError);
+                                    if ( currentPositionErrorMagnitude > ComputeShaderEmulator.length(transformBuffer[nextSiblingEntityId].scale) )
+                                    {
+                                        allChildrenArrived = false;
+                                    }
+
+                                    nextSiblingTargetPosition = nextSiblingTargetPosition + deploymentStep;
+                                }
+                                else
+                                {
+                                    Debug.LogError( "[Deploy] failed, inconsistent entity (missing Transform or Movement component)!" );
+                                    status = Status.Failure;
                                 }
                             }
-
-                            if (allChildrenArrived)
-                            {
-                                Debug.Log( "[Deploy] entity \"" + entityId + "\" to " + transform.position + " is successful!" );
-                                status = Status.Success;
-                            }
                         }
-                        else
+
+                        if (allChildrenArrived)
                         {
-                            Debug.LogError( "[Deploy] failed, not implemented for units above squad!" );
-                            status = Status.Failure;    
+                            Debug.Log( "[Deploy] entity \"" + entityId + "\" to " + transform.position + " is successful!" );
+                            status = Status.Success;
                         }
                     }
                     else
                     {
-                        Debug.LogError( "[Deploy] failed, hierarchy.firstChildEntityId == 0" );
+                        Debug.LogError( "[Deploy] failed, not implemented for units above squad!" );
                         status = Status.Failure;    
                     }
                 }
                 else
                 {
-                    Debug.LogError( "[Deploy] failed, entity.hierarchyId == 0" );
+                    Debug.LogError( "[Deploy] failed, hierarchy.firstChildEntityId == 0" );
                     status = Status.Failure;    
                 }
             }
             else
             {
-                Debug.LogError( "[Deploy] failed, entityId == 0" );
-                status = Status.Failure;
+                Debug.LogError( "[Deploy] failed, entity.hierarchyId == 0" );
+                status = Status.Failure;    
             }
         }
     }

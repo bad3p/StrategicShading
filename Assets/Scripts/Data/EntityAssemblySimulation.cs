@@ -62,8 +62,7 @@ public partial class EntityAssembly : MonoBehaviour
         ComputeShaderEmulator._rngStateLength = RngStateLength;
         ComputeShaderEmulator._rngState = new int[rngStateData.Length];
         rngStateData.CopyTo(ComputeShaderEmulator._rngState, 0);
-
-        ComputeShaderEmulator._entityCount = _descBuffer.Count; 
+        
         InitBuffer(_descBuffer, ref ComputeShaderEmulator._descBuffer);
         InitBuffer(_transformBuffer, ref ComputeShaderEmulator._transformBuffer);
         InitBuffer(_hierarchyBuffer, ref ComputeShaderEmulator._hierarchyBuffer);
@@ -71,6 +70,7 @@ public partial class EntityAssembly : MonoBehaviour
         InitBuffer(_firearmsBuffer, ref ComputeShaderEmulator._firearmsBuffer);
         InitBuffer(_movementBuffer, ref ComputeShaderEmulator._movementBuffer);
         InitBuffer(_firepowerBuffer, ref ComputeShaderEmulator._firepowerBuffer);
+        ComputeShaderEmulator._entityCount = _descBuffer.Count;
     }
     
     void Update()

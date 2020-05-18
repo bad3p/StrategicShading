@@ -1,4 +1,5 @@
 ﻿
+using System;
 using Types;
 using UnityEngine;
 
@@ -140,6 +141,37 @@ public abstract class BehaviourTreeNode : MonoBehaviour
         }
         
         return nearestEntityId;
+    }
+    
+    protected static double GetNearestDistanceFromChildEntityToLine(uint entityId, double2 p0, double2 p1)
+    {
+        uint childEntityId = hierarchyBuffer[entityId].firstChildEntityId;
+        if (childEntityId == 0)
+        {
+            return 0;
+        }
+
+        double nearestDistance = float.MaxValue;
+
+        double ldx = p1.x - p0.x;
+        double ldy = p1.y - p0.y;
+        double llen = Math.Sqrt( ldx * ldx + ldy * ldy );
+        if (llen < ComputeShaderEmulator.DOUBLE_EPSILON)
+        {
+            return float.MaxValue;
+        }
+        
+        while (childEntityId > 0)
+        {
+            double2 p = transformBuffer[childEntityId].position.xz;
+            double rx = p0.x - p.x;
+            double ry = p0.y - p.y;
+            double distance = Math.Abs(ldx * ry - ldy * rx) / llen;
+            nearestDistance = Math.Min(nearestDistance, distance);
+            childEntityId = hierarchyBuffer[childEntityId].nextSiblingEntityId;
+        }
+
+        return nearestDistance;
     }
     #endregion
     
