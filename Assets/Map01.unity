@@ -214,17 +214,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Ammo: 20
+  Ammo: 15
   Distance:
-    x: 50
-    y: 125
-    z: 250
-    w: 500
+    x: 25
+    y: 50
+    z: 100
+    w: 250
   Firepower:
-    x: 0
-    y: 0
-    z: 0
-    w: 0
+    x: 51
+    y: 26
+    z: 13
+    w: 2
   StateID: 0
   StateTimeout: 0
 --- !u!114 &50754643
@@ -565,10 +565,10 @@ MonoBehaviour:
     z: 250
     w: 500
   Firepower:
-    x: 0
-    y: 0
-    z: 0
-    w: 0
+    x: 77
+    y: 33
+    z: 11
+    w: 5
   StateID: 0
   StateTimeout: 0
 --- !u!114 &115422640
@@ -2094,7 +2094,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fce57fd7ebcce044bb57908c821187d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FrontlineWidth: 50
+  FrontlineWidth: 75
 --- !u!1 &726560650
 GameObject:
   m_ObjectHideFlags: 0
@@ -2328,10 +2328,10 @@ MonoBehaviour:
     z: 250
     w: 500
   Firepower:
-    x: 0
-    y: 0
-    z: 0
-    w: 0
+    x: 162
+    y: 96
+    z: 48
+    w: 24
   StateID: 0
   StateTimeout: 0
 --- !u!114 &832503766
@@ -2635,10 +2635,10 @@ MonoBehaviour:
     z: 250
     w: 500
   Firepower:
-    x: 0
-    y: 0
-    z: 0
-    w: 0
+    x: 77
+    y: 33
+    z: 11
+    w: 5
   StateID: 0
   StateTimeout: 0
 --- !u!114 &854208702
@@ -2727,17 +2727,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Ammo: 30
+  Ammo: 15
   Distance:
-    x: 50
-    y: 125
-    z: 250
-    w: 500
+    x: 25
+    y: 50
+    z: 100
+    w: 250
   Firepower:
-    x: 96
-    y: 63
-    z: 31
-    w: 11
+    x: 51
+    y: 26
+    z: 13
+    w: 2
   StateID: 0
   StateTimeout: 0
 --- !u!114 &909305571
@@ -3213,17 +3213,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Ammo: 30
+  Ammo: 31
   Distance:
     x: 50
     y: 125
     z: 250
     w: 500
   Firepower:
-    x: 0
-    y: 0
-    z: 0
-    w: 0
+    x: 77
+    y: 33
+    z: 11
+    w: 5
   StateID: 0
   StateTimeout: 0
 --- !u!114 &1025601189
@@ -3674,10 +3674,10 @@ MonoBehaviour:
     z: 250
     w: 500
   Firepower:
-    x: 0
-    y: 0
-    z: 0
-    w: 0
+    x: 77
+    y: 33
+    z: 11
+    w: 5
   StateID: 0
   StateTimeout: 0
 --- !u!114 &1219724294
@@ -3777,7 +3777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fce57fd7ebcce044bb57908c821187d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FrontlineWidth: 50
+  FrontlineWidth: 75
 --- !u!1 &1392305122
 GameObject:
   m_ObjectHideFlags: 0
@@ -5208,10 +5208,10 @@ MonoBehaviour:
     z: 250
     w: 500
   Firepower:
-    x: 96
-    y: 63
-    z: 31
-    w: 11
+    x: 77
+    y: 33
+    z: 11
+    w: 5
   StateID: 0
   StateTimeout: 0
 --- !u!114 &1895606209
@@ -5361,10 +5361,10 @@ MonoBehaviour:
     z: 250
     w: 500
   Firepower:
-    x: 0
-    y: 0
-    z: 0
-    w: 0
+    x: 77
+    y: 33
+    z: 11
+    w: 5
   StateID: 0
   StateTimeout: 0
 --- !u!114 &1897142795
@@ -6389,17 +6389,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Ammo: 30
+  Ammo: 31
   Distance:
     x: 50
     y: 125
     z: 250
     w: 500
   Firepower:
-    x: 0
-    y: 0
-    z: 0
-    w: 0
+    x: 77
+    y: 33
+    z: 11
+    w: 5
   StateID: 0
   StateTimeout: 0
 --- !u!114 &2100194442
