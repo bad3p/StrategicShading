@@ -78,10 +78,11 @@ public class Assault : BehaviourTreeNode
     #endregion
     
     #region BehaviourTreeNode
+    const uint MOVABLE_PERSONNEL_MASK = ComputeShaderEmulator.TRANSFORM | ComputeShaderEmulator.MOVEMENT | ComputeShaderEmulator.PERSONNEL;
+    
     private static void Halt(uint entityId)
     {
-        const uint MOVABLE_MASK = ComputeShaderEmulator.TRANSFORM | ComputeShaderEmulator.MOVEMENT;
-        if ((descBuffer[entityId] & MOVABLE_MASK) == MOVABLE_MASK)
+        if ((descBuffer[entityId] & MOVABLE_PERSONNEL_MASK) == MOVABLE_PERSONNEL_MASK)
         {
             movementBuffer[entityId].targetPosition = transformBuffer[entityId].position;
             movementBuffer[entityId].targetRotation = transformBuffer[entityId].rotation;
@@ -100,7 +101,8 @@ public class Assault : BehaviourTreeNode
     {
         uint entityChildCount = GetEntityChildCount(entityId);
 
-        const float LeapfrogDistance = 25.0f;
+        const float PinnedMoraleThreshold = 400.0f; // TODO: configure
+        const float LeapfrogDistance = 25.0f; // TODO: configure
         
         double3 fp0 = this.transform.position - this.transform.right * FrontlineWidth / 2;
         double3 fp1 = this.transform.position + this.transform.right * FrontlineWidth / 2;
@@ -108,43 +110,78 @@ public class Assault : BehaviourTreeNode
         float targetDistance = nearestDistance - LeapfrogDistance;
         targetDistance = (targetDistance < 0) ? 0 : targetDistance;
 
+        float averageDistance = 0;
+        float averageThreshold = 0;
         int childIndex = 0;
         double3 targetPosition = this.transform.position - this.transform.right * FrontlineWidth / 2 - transform.forward * targetDistance;
         double3 targetPositionOffset = this.transform.right * FrontlineWidth / Mathf.Max(entityChildCount-1, 1);
         ForEveryChildEntity(entityId, (childEntityId) =>
         {
-            if (childIndex % 2 == _leapfrogIndex)
+            if ((descBuffer[childEntityId] & MOVABLE_PERSONNEL_MASK) == MOVABLE_PERSONNEL_MASK)
             {
-                movementBuffer[childEntityId].targetPosition = targetPosition;
-                movementBuffer[childEntityId].targetVelocity = (15.0f * 1000.0f) / (60.0f * 60.0f);
-                movementBuffer[childEntityId].targetRotation = this.transform.rotation;
-                movementBuffer[childEntityId].targetAngularVelocity = ComputeShaderEmulator.radians(45.0f);
+                if (personnelBuffer[childEntityId].morale > PinnedMoraleThreshold)
+                {
+                    if (childIndex % 2 == _leapfrogIndex)
+                    {
+                        movementBuffer[childEntityId].targetPosition = targetPosition;
+                        movementBuffer[childEntityId].targetVelocity = (15.0f * 1000.0f) / (60.0f * 60.0f);
+                        movementBuffer[childEntityId].targetRotation = this.transform.rotation;
+                        movementBuffer[childEntityId].targetAngularVelocity = ComputeShaderEmulator.radians(45.0f);
+                    }
+
+                    childIndex++;
+                    targetPosition += targetPositionOffset;
+                    averageDistance += (float) GetDistanceFromEntityToLine(childEntityId, fp0.xz, fp1.xz);
+                    averageThreshold += ComputeShaderEmulator.length(transformBuffer[childEntityId].scale);
+                }
             }
-            else
-            {
-                movementBuffer[childEntityId].targetPosition = transformBuffer[childEntityId].position;
-                movementBuffer[childEntityId].targetVelocity = 0;
-            }
-            
-            childIndex++;
-            targetPosition += targetPositionOffset;
         });
+
+        if (childIndex > 0)
+        {
+            averageDistance *= 1.0f / childIndex;
+            averageThreshold *= 1.0f / childIndex;
+            
+            if (averageDistance < averageThreshold)
+            {
+                Debug.Log( "[Assault] entity \"" + entityId + "\" to " + transform.position + " is successful!" );
+                status = Status.Success;
+            }
+        }
+        else
+        {
+            if (averageDistance < averageThreshold)
+            {
+                Debug.Log( "[Assault] entity \"" + entityId + "\" to " + transform.position + " is failed!" );
+                status = Status.Failure;
+            }
+        }
 
         _leapfrogIndex = _leapfrogIndex == 0 ? 1 : 0;
     }
 
     private bool CheckOrders()
     {
+        const float PinnedMoraleThreshold = 400.0f; // TODO: configure
+        
         bool result = true;
         ForEveryChildEntity(entityId, (childEntityId) =>
         {
-            if (movementBuffer[childEntityId].targetVelocity > 0)
+            if ((descBuffer[childEntityId] & MOVABLE_PERSONNEL_MASK) == MOVABLE_PERSONNEL_MASK)
             {
-                double3 currentPositionError = movementBuffer[childEntityId].targetPosition - transformBuffer[childEntityId].position;
-                float currentPositionErrorMagnitude = ComputeShaderEmulator.length(currentPositionError);
-                if (currentPositionErrorMagnitude > ComputeShaderEmulator.length(transformBuffer[childEntityId].scale))
+                if (personnelBuffer[childEntityId].morale > PinnedMoraleThreshold)
                 {
-                    result = false;
+                    if (movementBuffer[childEntityId].targetVelocity > 0)
+                    {
+                        double3 currentPositionError = movementBuffer[childEntityId].targetPosition -
+                                                       transformBuffer[childEntityId].position;
+                        float currentPositionErrorMagnitude = ComputeShaderEmulator.length(currentPositionError);
+                        if (currentPositionErrorMagnitude >
+                            ComputeShaderEmulator.length(transformBuffer[childEntityId].scale))
+                        {
+                            result = false;
+                        }
+                    }
                 }
             }
         });

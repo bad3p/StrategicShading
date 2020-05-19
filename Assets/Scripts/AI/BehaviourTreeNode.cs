@@ -155,6 +155,17 @@ public abstract class BehaviourTreeNode : MonoBehaviour
         
         return nearestEntityId;
     }
+
+    protected static double GetDistanceFromEntityToLine(uint entityId, double2 p0, double2 p1)
+    {
+        double ldx = p1.x - p0.x;
+        double ldy = p1.y - p0.y;
+        double llen = Math.Sqrt( ldx * ldx + ldy * ldy );
+        double2 p = transformBuffer[entityId].position.xz;
+        double rx = p0.x - p.x;
+        double ry = p0.y - p.y;
+        return (llen > Mathf.Epsilon) ? (Math.Abs(ldx * ry - ldy * rx) / llen) : (Math.Sqrt(rx*rx + ry*ry));
+    }
     
     protected static double GetNearestDistanceFromChildEntityToLine(uint entityId, double2 p0, double2 p1)
     {
@@ -169,17 +180,13 @@ public abstract class BehaviourTreeNode : MonoBehaviour
         double ldx = p1.x - p0.x;
         double ldy = p1.y - p0.y;
         double llen = Math.Sqrt( ldx * ldx + ldy * ldy );
-        if (llen < ComputeShaderEmulator.DOUBLE_EPSILON)
-        {
-            return float.MaxValue;
-        }
-        
+
         while (childEntityId > 0)
         {
             double2 p = transformBuffer[childEntityId].position.xz;
             double rx = p0.x - p.x;
             double ry = p0.y - p.y;
-            double distance = Math.Abs(ldx * ry - ldy * rx) / llen;
+            double distance = (llen > Mathf.Epsilon) ? (Math.Abs(ldx * ry - ldy * rx) / llen) : (Math.Sqrt(rx*rx + ry*ry));
             nearestDistance = Math.Min(nearestDistance, distance);
             childEntityId = hierarchyBuffer[childEntityId].nextSiblingEntityId;
         }

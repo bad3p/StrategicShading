@@ -175,9 +175,9 @@ public partial class ComputeShaderEmulator
         float4 moraleLossProbabilityByMorale = new float4
         (
             400.0f,
-            1.0f / 5000.0f,
+            1.0f / 3300.0f,
             600.0f,
-            1.0f / 500.0f
+            1.0f / 330.0f
         );
 
 
