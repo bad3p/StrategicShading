@@ -21,7 +21,7 @@ public class DemoUI : MonoBehaviour
         MapImage.material = _mapImageMaterial;
         MapImage.SetMaterialDirty();
         
-        _renderTexture = new RenderTexture( 256, 128, 0, RenderTextureFormat.RFloat );		
+        _renderTexture = new RenderTexture( 512, 256, 0, RenderTextureFormat.RFloat );		
         _renderTexture.enableRandomWrite = true;
         _renderTexture.filterMode = FilterMode.Point;
         _renderTexture.Create();

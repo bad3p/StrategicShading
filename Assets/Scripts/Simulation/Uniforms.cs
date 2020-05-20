@@ -21,8 +21,8 @@ public partial class ComputeShaderEmulator
     public const float FLOAT_2PI = 2*3.1415927f;
     public const double DOUBLE_2PI = 2*3.1415926535897931;
 
-    public static int _rngMax;
-    public static int _rngCount;
-    public static int _rngStateLength;
-    public static int[] _rngState = new int[0];
+    public static uint _rngMax;
+    public static uint _rngCount;
+    public static uint _rngStateLength;
+    public static uint[] _rngState = new uint[0];
 }

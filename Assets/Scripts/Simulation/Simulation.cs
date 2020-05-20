@@ -25,7 +25,7 @@ public partial class ComputeShaderEmulator
     }
 
     public static float _dT = 0.0f;
-    public static int _entityCount = 0;
+    public static uint _entityCount = 0;
     public static uint[] _descBuffer = new uint[0];
     public static Transform[] _transformBuffer = new Transform[0];
     public static Hierarchy[] _hierarchyBuffer = new Hierarchy[0];
@@ -37,7 +37,7 @@ public partial class ComputeShaderEmulator
     [NumThreads(256,1,1)]
     static public void UpdateMovement(uint3 id)
     {
-        int entityId = (int)id.x;
+        uint entityId = id.x;
         if (entityId >= _entityCount)
         {
             return;
@@ -155,7 +155,7 @@ public partial class ComputeShaderEmulator
     [NumThreads(256, 1, 1)]
     static public void UpdatePersonnel(uint3 id)
     {
-        int entityId = (int) id.x;
+        uint entityId = id.x;
         if (entityId >= _entityCount)
         {
             return;

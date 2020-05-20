@@ -13,10 +13,10 @@ public partial class EntityAssembly : MonoBehaviour
     
     [Header("RNG")]
     public bool RngSeedFromTimer = false;
-    public int RngSeed = 0;
-    public int RngMaxUniform = 1000000;
-    public int RngCount = 256;
-    public int RngStateLength = 55;
+    public uint RngSeed = 0;
+    public uint RngMaxUniform = 1000000;
+    public uint RngCount = 256;
+    public uint RngStateLength = 55;
     
 #if UNITY_EDITOR
     static void InitBuffer<T>(List<T> srcBuffer, ref T[] dstBuffer)
@@ -44,23 +44,23 @@ public partial class EntityAssembly : MonoBehaviour
         }
         else
         {
-            Random.InitState( RngSeed );
+            Random.InitState( (int)RngSeed );
         }
         
-        int[] rngStateData = new int[RngCount*(RngStateLength+1)];
+        uint[] rngStateData = new uint[RngCount*(RngStateLength+1)];
         for (int i = 0; i < RngCount; i++)
         {
             rngStateData[i * (RngStateLength + 1)] = 0;
             for (int j = 0; j < RngStateLength; j++)
             {
-                rngStateData[i * (RngStateLength + 1) + j + 1] = Random.Range( 0, RngMaxUniform );
+                rngStateData[i * (RngStateLength + 1) + j + 1] = (uint)Random.Range( 0, (int)RngMaxUniform );
             }
         }
         
         ComputeShaderEmulator._rngMax = RngMaxUniform;
         ComputeShaderEmulator._rngCount = RngCount;
         ComputeShaderEmulator._rngStateLength = RngStateLength;
-        ComputeShaderEmulator._rngState = new int[rngStateData.Length];
+        ComputeShaderEmulator._rngState = new uint[rngStateData.Length];
         rngStateData.CopyTo(ComputeShaderEmulator._rngState, 0);
         
         InitBuffer(_descBuffer, ref ComputeShaderEmulator._descBuffer);
@@ -70,7 +70,7 @@ public partial class EntityAssembly : MonoBehaviour
         InitBuffer(_firearmsBuffer, ref ComputeShaderEmulator._firearmsBuffer);
         InitBuffer(_movementBuffer, ref ComputeShaderEmulator._movementBuffer);
         InitBuffer(_firepowerBuffer, ref ComputeShaderEmulator._firepowerBuffer);
-        ComputeShaderEmulator._entityCount = _descBuffer.Count;
+        ComputeShaderEmulator._entityCount = (uint)_descBuffer.Count;
     }
     
     void Update()

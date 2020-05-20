@@ -21,7 +21,7 @@ public abstract class BehaviourTreeNode : MonoBehaviour
         protected set { _entityId = value; }
     }
     
-    protected static int entityCount { get => ComputeShaderEmulator._entityCount; }
+    protected static uint entityCount { get => ComputeShaderEmulator._entityCount; }
     protected static uint[] descBuffer { get => ComputeShaderEmulator._descBuffer; }
     protected static Structs.Transform[] transformBuffer { get => ComputeShaderEmulator._transformBuffer; }
     protected static Structs.Hierarchy[] hierarchyBuffer { get => ComputeShaderEmulator._hierarchyBuffer; }

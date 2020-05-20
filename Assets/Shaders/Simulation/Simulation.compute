@@ -33,18 +33,18 @@ void GenerateThreadIDs(uint3 id : SV_DispatchThreadID)
 
 #pragma kernel GenerateRandomNumbers
 
-int _outRenderTextureWidth;
-int _outRenderTextureHeight;
+uint _outRenderTextureWidth;
+uint _outRenderTextureHeight;
 RWTexture2D<float> _outRenderTexture;
 
 [numthreads(GROUPSIZE,1,1)]
 void GenerateRandomNumbers(uint3 id : SV_DispatchThreadID)
 {
-    int index = int(id.x);
+    uint index = id.x;
     if( index < _outRenderTextureWidth * _outRenderTextureHeight )    
     {
-        int y = index / _outRenderTextureWidth;
-        int x = index - y * _outRenderTextureWidth;
+        uint y = index / _outRenderTextureWidth;
+        uint x = index - y * _outRenderTextureWidth;
         int2 xy = int2( x, y );    
         //_outRenderTexture[xy] = rngRange( 0.0, 1.0, rngIndex(index) );
         _outRenderTexture[xy] = 0.5 * ( 1.0 + rngNormal( rngIndex(index) ) );
