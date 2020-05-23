@@ -25,12 +25,16 @@ public partial class ComputeShaderEmulator
     }
 
     public static float _dT = 0.0f;
+    public static uint _firearmDescCount = 0;
+    public static FirearmDesc[] _firearmDescBuffer = new FirearmDesc[0];
+    public static uint _personnelDescCount = 0;
+    public static PersonnelDesc[] _personnelDescBuffer = new PersonnelDesc[0];
     public static uint _entityCount = 0;
     public static uint[] _descBuffer = new uint[0];
     public static Transform[] _transformBuffer = new Transform[0];
     public static Hierarchy[] _hierarchyBuffer = new Hierarchy[0];
     public static Personnel[] _personnelBuffer = new Personnel[0];
-    public static Firearms[] _firearmsBuffer = new Firearms[0];
+    public static Firearm[] FirearmBuffer = new Firearm[0];
     public static Movement[] _movementBuffer = new Movement[0];
     public static Firepower[] _firepowerBuffer = new Firepower[0];
     

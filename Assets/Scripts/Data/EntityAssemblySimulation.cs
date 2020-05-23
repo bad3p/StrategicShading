@@ -3,6 +3,7 @@ using UnityEngine;
 
 #if UNITY_EDITOR
 using System.Collections.Generic;
+using Structs;
 using UnityEditor;
 #endif
 
@@ -67,10 +68,14 @@ public partial class EntityAssembly : MonoBehaviour
         InitBuffer(_transformBuffer, ref ComputeShaderEmulator._transformBuffer);
         InitBuffer(_hierarchyBuffer, ref ComputeShaderEmulator._hierarchyBuffer);
         InitBuffer(_personnelBuffer, ref ComputeShaderEmulator._personnelBuffer);
-        InitBuffer(_firearmsBuffer, ref ComputeShaderEmulator._firearmsBuffer);
+        InitBuffer(_firearmsBuffer, ref ComputeShaderEmulator.FirearmBuffer);
         InitBuffer(_movementBuffer, ref ComputeShaderEmulator._movementBuffer);
         InitBuffer(_firepowerBuffer, ref ComputeShaderEmulator._firepowerBuffer);
+        InitBuffer(FirearmDescBuffer, ref ComputeShaderEmulator._firearmDescBuffer);
+        InitBuffer(PersonnelDescBuffer, ref ComputeShaderEmulator._personnelDescBuffer);
         ComputeShaderEmulator._entityCount = (uint)_descBuffer.Count;
+        ComputeShaderEmulator._firearmDescCount = (uint) FirearmDescBuffer.Count;
+        ComputeShaderEmulator._personnelDescCount = (uint) PersonnelDescBuffer.Count;
     }
     
     void Update()
@@ -88,7 +93,7 @@ public partial class EntityAssembly : MonoBehaviour
         SyncBuffers(ref ComputeShaderEmulator._transformBuffer, _transformBuffer);
         SyncBuffers(ref ComputeShaderEmulator._hierarchyBuffer, _hierarchyBuffer);
         SyncBuffers(ref ComputeShaderEmulator._personnelBuffer, _personnelBuffer);
-        SyncBuffers(ref ComputeShaderEmulator._firearmsBuffer, _firearmsBuffer);
+        SyncBuffers(ref ComputeShaderEmulator.FirearmBuffer, _firearmsBuffer);
         SyncBuffers(ref ComputeShaderEmulator._movementBuffer, _movementBuffer);
         SyncBuffers(ref ComputeShaderEmulator._firepowerBuffer, _firepowerBuffer);
     }

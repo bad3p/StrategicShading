@@ -67,7 +67,8 @@ public class EntityProxy : MonoBehaviour
                         new Keyframe[]
                         {
                             new Keyframe(size, 0.0f),
-                            new Keyframe(size * 2, 1.0f)
+                            new Keyframe(size * 2, 0.25f),
+                            new Keyframe(size * 4, 1.0f)
                         }
                     );
 

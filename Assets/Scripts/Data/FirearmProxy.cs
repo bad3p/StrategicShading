@@ -8,11 +8,10 @@ using UnityEditor;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(EntityProxy))]
-public class FirearmsProxy : ComponentProxy
+public class FirearmProxy : ComponentProxy
 {
+    public uint DescID = 0;
     public uint Ammo = 30;
-    public float4 Distance = new float4( 50, 125, 250, 500 );
-    public float4 Firepower= new float4( 99, 66, 33, 13 );
     public uint StateID = 0;
     public float StateTimeout = 0.0f;
     
@@ -28,9 +27,8 @@ public class FirearmsProxy : ComponentProxy
             if (_entityAssembly.GetEntityId(this) == 0)
             {
                 _entityAssembly.RegisterFirearmsProxy(_entityProxy.entityId, this);
+                descId = DescID;
                 ammo = Ammo;
-                distance = Distance;
-                firepower = Firepower;
                 stateId = StateID;
                 stateTimeout = StateTimeout;
             }
@@ -51,9 +49,9 @@ public class FirearmsProxy : ComponentProxy
         }
     }
     
-    private static Structs.Firearms _dummy = new Structs.Firearms();
+    private static Structs.Firearm _dummy = new Structs.Firearm();
 
-    private Structs.Firearms _component
+    private Structs.Firearm _component
     {
         get
         {
@@ -80,6 +78,36 @@ public class FirearmsProxy : ComponentProxy
         }
     }
 
+    public void ValidateDataConsistency()
+    {
+        if (!_entityAssembly)
+        {
+            Awake();
+        }
+        if (!_entityAssembly)
+        {
+            return;
+        }
+
+        if (descId < _entityAssembly.FirearmDescBuffer.Count)
+        {
+            var firearmDesc = _entityAssembly.FirearmDescBuffer[(int) descId];
+            Ammo = firearmDesc.maxAmmo;
+            ammo = Ammo;
+        }
+    }
+    
+    public uint descId
+    {
+        get { return _component.descId; }
+        set
+        {
+            var temp = _component;
+            temp.descId = value;
+            _component = temp;
+        }
+    }
+
     public uint ammo
     {
         get { return _component.ammo; }
@@ -87,28 +115,6 @@ public class FirearmsProxy : ComponentProxy
         {
             var temp = _component;
             temp.ammo = value;
-            _component = temp;
-        }
-    }
-    
-    public float4 distance
-    {
-        get { return _component.distance; }
-        set
-        {
-            var temp = _component;
-            temp.distance = value;
-            _component = temp;
-        }
-    }
-    
-    public float4 firepower
-    {
-        get { return _component.firepower; }
-        set
-        {
-            var temp = _component;
-            temp.firepower = value;
             _component = temp;
         }
     }

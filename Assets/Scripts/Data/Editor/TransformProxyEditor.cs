@@ -8,6 +8,13 @@ public class TransformProxyEditor : Editor
     public override void OnInspectorGUI()
     {
         TransformProxy transformProxy = target as TransformProxy;
+        
+        EntityAssembly entityAssembly = GameObject.FindObjectOfType<EntityAssembly>();
+
+        if (entityAssembly && entityAssembly.GetEntityId(transformProxy) == 0)
+        {
+            return;
+        }
 
         if (!EditorApplication.isPlaying)
         {

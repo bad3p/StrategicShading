@@ -8,6 +8,13 @@ public class HierarchyProxyEditor : Editor
     public override void OnInspectorGUI()
     {
         HierarchyProxy hierarchyProxy = target as HierarchyProxy;
+        
+        EntityAssembly entityAssembly = GameObject.FindObjectOfType<EntityAssembly>();
+
+        if (entityAssembly && entityAssembly.GetEntityId(hierarchyProxy) == 0)
+        {
+            return;
+        }
 
         EditorGUILayout.BeginHorizontal();
         

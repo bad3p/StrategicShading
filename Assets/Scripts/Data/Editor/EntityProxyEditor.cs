@@ -19,6 +19,13 @@ public class EntityProxyEditor : Editor
     public override void OnInspectorGUI()
     {
         EntityProxy entityProxy = target as EntityProxy;
+        
+        EntityAssembly entityAssembly = GameObject.FindObjectOfType<EntityAssembly>();
+
+        if (entityAssembly && entityAssembly.GetEntityId(entityProxy) == 0)
+        {
+            return;
+        }
 
         EditorGUILayout.BeginHorizontal();
         

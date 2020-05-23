@@ -214,17 +214,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DescID: 1
   Ammo: 15
-  Distance:
-    x: 25
-    y: 50
-    z: 100
-    w: 250
-  Firepower:
-    x: 0
-    y: 0
-    z: 0
-    w: 0
   StateID: 0
   StateTimeout: 0
 --- !u!114 &50754643
@@ -239,11 +230,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DescID: 1
   Morale: 600
   Fitness: 14400
+  Exposure: 3
   Count: 2
-  Wounded: 0
-  Killed: 0
 --- !u!114 &50754644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -541,11 +532,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DescID: 2
   Morale: 603
   Fitness: 14400
+  Exposure: 3
   Count: 3
-  Wounded: 0
-  Killed: 0
 --- !u!114 &115422639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -558,17 +549,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DescID: 2
   Ammo: 30
-  Distance:
-    x: 50
-    y: 125
-    z: 250
-    w: 500
-  Firepower:
-    x: 77
-    y: 33
-    z: 11
-    w: 5
   StateID: 0
   StateTimeout: 0
 --- !u!114 &115422640
@@ -2321,17 +2303,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DescID: 3
   Ammo: 20
-  Distance:
-    x: 50
-    y: 125
-    z: 250
-    w: 500
-  Firepower:
-    x: 162
-    y: 96
-    z: 48
-    w: 24
   StateID: 0
   StateTimeout: 0
 --- !u!114 &832503766
@@ -2346,11 +2319,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DescID: 3
   Morale: 600
   Fitness: 14400
+  Exposure: 3
   Count: 2
-  Wounded: 0
-  Killed: 0
 --- !u!114 &832503767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2611,11 +2584,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DescID: 2
   Morale: 602
   Fitness: 14400
+  Exposure: 3
   Count: 3
-  Wounded: 0
-  Killed: 0
 --- !u!114 &854208701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2628,17 +2601,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DescID: 2
   Ammo: 30
-  Distance:
-    x: 50
-    y: 125
-    z: 250
-    w: 500
-  Firepower:
-    x: 77
-    y: 33
-    z: 11
-    w: 5
   StateID: 0
   StateTimeout: 0
 --- !u!114 &854208702
@@ -2727,17 +2691,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DescID: 1
   Ammo: 15
-  Distance:
-    x: 25
-    y: 50
-    z: 100
-    w: 250
-  Firepower:
-    x: 51
-    y: 26
-    z: 13
-    w: 2
   StateID: 0
   StateTimeout: 0
 --- !u!114 &909305571
@@ -2752,11 +2707,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DescID: 1
   Morale: 605
   Fitness: 14400
-  Count: 3
-  Wounded: 0
-  Killed: 0
+  Exposure: 3
+  Count: 2
 --- !u!114 &909305572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3196,11 +3151,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DescID: 2
   Morale: 600
   Fitness: 14400
-  Count: 3
-  Wounded: 0
-  Killed: 0
+  Exposure: 3
+  Count: 2
 --- !u!114 &1025601188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3213,17 +3168,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Ammo: 31
-  Distance:
-    x: 50
-    y: 125
-    z: 250
-    w: 500
-  Firepower:
-    x: 77
-    y: 33
-    z: 11
-    w: 5
+  DescID: 2
+  Ammo: 30
   StateID: 0
   StateTimeout: 0
 --- !u!114 &1025601189
@@ -3667,17 +3613,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DescID: 2
   Ammo: 30
-  Distance:
-    x: 50
-    y: 125
-    z: 250
-    w: 500
-  Firepower:
-    x: 77
-    y: 33
-    z: 11
-    w: 5
   StateID: 0
   StateTimeout: 0
 --- !u!114 &1219724294
@@ -3692,11 +3629,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DescID: 2
   Morale: 604
   Fitness: 14400
+  Exposure: 3
   Count: 3
-  Wounded: 0
-  Killed: 0
 --- !u!114 &1219724295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4170,6 +4107,154 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9e3a77ad767b164ba8488185c9187fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FirearmNameBuffer:
+  - NULL
+  - Semi-Automatic Pistol
+  - Bolt-Action Rifle
+  - Light Machinegun
+  FirearmDescBuffer:
+  - maxAmmo: 0
+    distance:
+      x: 0
+      y: 0
+      z: 0
+      w: 0
+    firepower:
+      x: 0
+      y: 0
+      z: 0
+      w: 0
+    aimingTime: 0
+    reloadingTime: 0
+  - maxAmmo: 15
+    distance:
+      x: 25
+      y: 50
+      z: 100
+      w: 200
+    firepower:
+      x: 66
+      y: 33
+      z: 11
+      w: 5
+    aimingTime: 1
+    reloadingTime: 5
+  - maxAmmo: 30
+    distance:
+      x: 50
+      y: 100
+      z: 250
+      w: 500
+    firepower:
+      x: 99
+      y: 66
+      z: 33
+      w: 11
+    aimingTime: 1
+    reloadingTime: 5
+  - maxAmmo: 20
+    distance:
+      x: 50
+      y: 100
+      z: 250
+      w: 500
+    firepower:
+      x: 166
+      y: 99
+      z: 66
+      w: 33
+    aimingTime: 2
+    reloadingTime: 10
+  PersonnelNameBuffer:
+  - NULL
+  - Squad HQ
+  - Rifle Fireteam
+  - LMG Team
+  PersonnelDescBuffer:
+  - maxPersonnel: 0
+    linearVelocity:
+      x: 0
+      y: 0
+      z: 0
+    angularVelocity: 0
+    fitnessConsumptionRate:
+      x: 0
+      y: 0
+      z: 0
+    fitnessRecoveryRate: 0
+    moraleThreshold:
+      x: 0
+      y: 0
+      z: 0
+      w: 0
+    moraleRecoveryRate:
+      x: 0
+      y: 0
+      z: 0
+      w: 0
+  - maxPersonnel: 2
+    linearVelocity:
+      x: 0.138
+      y: 1.38
+      z: 4.16
+    angularVelocity: 0.785398
+    fitnessConsumptionRate:
+      x: 4
+      y: 1
+      z: 16
+    fitnessRecoveryRate: 1
+    moraleThreshold:
+      x: 500
+      y: 400
+      z: 300
+      w: 200
+    moraleRecoveryRate:
+      x: 1
+      y: 2
+      z: 3
+      w: 4
+  - maxPersonnel: 3
+    linearVelocity:
+      x: 0.138
+      y: 1.38
+      z: 4.16
+    angularVelocity: 0.785398
+    fitnessConsumptionRate:
+      x: 4
+      y: 1
+      z: 16
+    fitnessRecoveryRate: 1
+    moraleThreshold:
+      x: 500
+      y: 400
+      z: 300
+      w: 200
+    moraleRecoveryRate:
+      x: 1
+      y: 2
+      z: 3
+      w: 4
+  - maxPersonnel: 2
+    linearVelocity:
+      x: 0.138
+      y: 1.38
+      z: 4.16
+    angularVelocity: 0.785398
+    fitnessConsumptionRate:
+      x: 4
+      y: 1
+      z: 16
+    fitnessRecoveryRate: 1
+    moraleThreshold:
+      x: 500
+      y: 400
+      z: 300
+      w: 200
+    moraleRecoveryRate:
+      x: 1
+      y: 2
+      z: 3
+      w: 4
   NumCPUThreads: 1
   RngSeedFromTimer: 0
   RngSeed: 0
@@ -5184,11 +5269,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DescID: 2
   Morale: 601
   Fitness: 14400
-  Count: 3
-  Wounded: 0
-  Killed: 0
+  Exposure: 3
+  Count: 2
 --- !u!114 &1895606208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5201,17 +5286,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DescID: 2
   Ammo: 30
-  Distance:
-    x: 50
-    y: 125
-    z: 250
-    w: 500
-  Firepower:
-    x: 77
-    y: 33
-    z: 11
-    w: 5
   StateID: 0
   StateTimeout: 0
 --- !u!114 &1895606209
@@ -5337,11 +5413,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DescID: 2
   Morale: 600
   Fitness: 14400
+  Exposure: 3
   Count: 3
-  Wounded: 0
-  Killed: 0
 --- !u!114 &1897142794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5354,17 +5430,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Ammo: 31
-  Distance:
-    x: 50
-    y: 125
-    z: 250
-    w: 500
-  Firepower:
-    x: 77
-    y: 33
-    z: 11
-    w: 5
+  DescID: 2
+  Ammo: 30
   StateID: 0
   StateTimeout: 0
 --- !u!114 &1897142795
@@ -6372,11 +6439,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7146886001031fa49a4807246e33f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DescID: 2
   Morale: 600
   Fitness: 14400
+  Exposure: 3
   Count: 3
-  Wounded: 0
-  Killed: 0
 --- !u!114 &2100194441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6389,17 +6456,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e1acd585d3e9c43acc28d46b73a29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Ammo: 31
-  Distance:
-    x: 50
-    y: 125
-    z: 250
-    w: 500
-  Firepower:
-    x: 77
-    y: 33
-    z: 11
-    w: 5
+  DescID: 2
+  Ammo: 30
   StateID: 0
   StateTimeout: 0
 --- !u!114 &2100194442

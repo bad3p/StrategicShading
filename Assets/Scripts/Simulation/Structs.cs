@@ -3,6 +3,32 @@ using Types;
 
 namespace Structs
 {
+    // FLYWEIGHT
+    
+    [System.Serializable]
+    public struct FirearmDesc
+    {
+        public uint maxAmmo;
+        public float4 distance;
+        public float4 firepower;
+        public float aimingTime;
+        public float reloadingTime;
+    };
+    
+    [System.Serializable]
+    public struct PersonnelDesc
+    {
+        public uint maxPersonnel;
+        public float3 linearVelocity; // { crawl, walk, run }
+        public float angularVelocity;
+        public float3 fitnessConsumptionRate;
+        public float fitnessRecoveryRate;
+        public float4 moraleThreshold; // { shaken, pinned, panic, broken }
+        public float4 moraleRecoveryRate;
+    };
+    
+    // COMPONENTS
+    
     public struct Transform
     {
         public double3 position;
@@ -19,18 +45,16 @@ namespace Structs
 
     public struct Personnel
     {
+        public uint descId;
         public float morale;
         public float fitness;
-        public uint count;
-        public uint wounded;
-        public uint killed;
+        public uint status; // [EXPOSURE_BITS][PERSONNEL_BITS]
     };
     
-    public struct Firearms
+    public struct Firearm
     {
+        public uint descId;
         public uint ammo;
-        public float4 distance;
-        public float4 firepower;
         public uint stateId;
         public float stateTimeout;
     };

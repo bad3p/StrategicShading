@@ -58,7 +58,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Data\Editor\EntityAssemblyEditor.cs" />
      <Compile Include="Assets\Scripts\Data\Editor\EntityProxyEditor.cs" />
-     <Compile Include="Assets\Scripts\Data\Editor\FirearmsProxyEditor.cs" />
+     <Compile Include="Assets\Scripts\Data\Editor\FirearmProxyEditor.cs" />
      <Compile Include="Assets\Scripts\Data\Editor\FirepowerProxyEditor.cs" />
      <Compile Include="Assets\Scripts\Data\Editor\HierarchyProxyEditor.cs" />
      <Compile Include="Assets\Scripts\Data\Editor\MovementProxyEditor.cs" />

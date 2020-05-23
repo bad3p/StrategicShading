@@ -10,10 +10,21 @@ public class PersonnelProxyEditor : Editor
     {
         PersonnelProxy personnelProxy = target as PersonnelProxy;
 
+        EntityAssembly entityAssembly = GameObject.FindObjectOfType<EntityAssembly>();
+        
+        if (entityAssembly && entityAssembly.GetEntityId(personnelProxy) == 0)
+        {
+            return;
+        }
+
         EditorGUILayout.BeginHorizontal();
         
         EditorGUILayout.BeginVertical();
         {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("descId");
+            EditorGUILayout.EndHorizontal();
+            
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("morale");
             EditorGUILayout.EndHorizontal();
@@ -23,21 +34,66 @@ public class PersonnelProxyEditor : Editor
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("exposure");
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("count");
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("wounded");
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("killed");
+            EditorGUILayout.LabelField("status");
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();
         
         EditorGUILayout.BeginVertical();
         {
+            EditorGUILayout.BeginHorizontal();
+            if (EditorApplication.isPlaying)
+            {
+                personnelProxy.DescID = personnelProxy.descId;
+                if (entityAssembly)
+                {
+                    if (personnelProxy.DescID < entityAssembly.PersonnelNameBuffer.Count)
+                    {
+                        EditorGUILayout.LabelField(entityAssembly.PersonnelNameBuffer[(int)personnelProxy.DescID]);        
+                    }
+                    else
+                    {
+                        EditorGUILayout.LabelField(personnelProxy.DescID.ToString());    
+                    }
+                }
+                else
+                {
+                    EditorGUILayout.LabelField(personnelProxy.DescID.ToString());
+                }
+            }
+            else
+            {
+                if (entityAssembly)
+                {
+                    personnelProxy.DescID = (uint)EditorGUILayout.Popup((int)personnelProxy.DescID, entityAssembly.PersonnelNameBuffer.ToArray());
+                    if (personnelProxy.descId != personnelProxy.DescID)
+                    {
+                        personnelProxy.descId = personnelProxy.DescID;
+                        personnelProxy.ValidateDataConsistency();
+                        EditorUtility.SetDirty(personnelProxy);
+                    }
+                }
+                else
+                {
+                    personnelProxy.DescID = (uint) EditorGUILayout.IntField((int) personnelProxy.DescID);
+                    if (personnelProxy.descId != personnelProxy.DescID)
+                    {
+                        personnelProxy.descId = personnelProxy.DescID;
+                        personnelProxy.ValidateDataConsistency();
+                        EditorUtility.SetDirty(personnelProxy);
+                    }
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+            
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
@@ -73,6 +129,22 @@ public class PersonnelProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
+                personnelProxy.Exposure = personnelProxy.exposure;
+                EditorGUILayout.LabelField(personnelProxy.Count.ToString());
+            }
+            else
+            {
+                personnelProxy.Exposure = (uint) EditorGUILayout.IntField((int) personnelProxy.Exposure);
+                if (personnelProxy.Exposure != personnelProxy.exposure)
+                {
+                    personnelProxy.exposure = personnelProxy.Exposure;
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            if (EditorApplication.isPlaying)
+            {
                 personnelProxy.Count = personnelProxy.count;
                 EditorGUILayout.LabelField(personnelProxy.Count.ToString());
             }
@@ -87,35 +159,7 @@ public class PersonnelProxyEditor : Editor
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            if (EditorApplication.isPlaying)
-            {
-                EditorGUILayout.LabelField(personnelProxy.Wounded.ToString());
-            }
-            else
-            {
-                personnelProxy.Wounded = personnelProxy.wounded;
-                personnelProxy.Wounded = (uint) EditorGUILayout.IntField((int) personnelProxy.Wounded);
-                if (personnelProxy.Wounded != personnelProxy.wounded)
-                {
-                    personnelProxy.wounded = personnelProxy.Wounded;
-                }
-            }
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            if (EditorApplication.isPlaying)
-            {
-                personnelProxy.Killed = personnelProxy.killed;
-                EditorGUILayout.LabelField(personnelProxy.Killed.ToString());
-            }
-            else
-            {
-                personnelProxy.Killed = (uint) EditorGUILayout.IntField((int) personnelProxy.Killed);
-                if (personnelProxy.Killed != personnelProxy.killed)
-                {
-                    personnelProxy.killed = personnelProxy.Killed;
-                }
-            }
+            EditorGUILayout.LabelField(personnelProxy.status.ToString("X8"));
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();

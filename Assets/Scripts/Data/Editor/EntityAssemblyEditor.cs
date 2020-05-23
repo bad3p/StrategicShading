@@ -33,6 +33,8 @@ public class EntityAssemblyEditor : Editor
         EditorGUILayout.EndVertical();
         
         EditorGUILayout.EndHorizontal();
+
+        DrawDefaultInspector();
     }
 
 }

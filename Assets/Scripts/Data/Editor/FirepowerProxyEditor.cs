@@ -10,7 +10,10 @@ public class FirepowerProxyEditor : Editor
     public override void OnInspectorGUI()
     {
         FirepowerProxy firepowerProxy = target as FirepowerProxy;
-        if (!firepowerProxy)
+        
+        EntityAssembly entityAssembly = GameObject.FindObjectOfType<EntityAssembly>();
+
+        if (entityAssembly && entityAssembly.GetEntityId(firepowerProxy) == 0)
         {
             return;
         }

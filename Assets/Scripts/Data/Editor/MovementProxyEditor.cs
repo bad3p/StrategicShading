@@ -10,7 +10,10 @@ public class MovementProxyEditor : Editor
     public override void OnInspectorGUI()
     {
         MovementProxy movementProxy = target as MovementProxy;
-        if (!movementProxy)
+        
+        EntityAssembly entityAssembly = GameObject.FindObjectOfType<EntityAssembly>();
+
+        if (entityAssembly && entityAssembly.GetEntityId(movementProxy) == 0)
         {
             return;
         }

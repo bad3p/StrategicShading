@@ -5,6 +5,12 @@ using System.Collections.Generic;
 [ExecuteInEditMode]
 public partial class EntityAssembly : MonoBehaviour
 {
+    public List<string> FirearmNameBuffer = new List<string>(){ "NULL" };
+    public List<Structs.FirearmDesc> FirearmDescBuffer = new List<Structs.FirearmDesc>(){ new Structs.FirearmDesc() };
+    
+    public List<string> PersonnelNameBuffer = new List<string>(){ "NULL" };
+    public List<Structs.PersonnelDesc> PersonnelDescBuffer = new List<Structs.PersonnelDesc>(){ new Structs.PersonnelDesc() };
+    
     private List<uint> _descBuffer = new List<uint>() { 0 };
     private Dictionary<uint, EntityProxy> _entityProxyById = new Dictionary<uint,EntityProxy>();
     private Dictionary<EntityProxy, uint> _idByEntityProxy = new Dictionary<EntityProxy,uint>();
@@ -21,9 +27,9 @@ public partial class EntityAssembly : MonoBehaviour
     private Dictionary<uint, PersonnelProxy> _personnelProxyById = new Dictionary<uint, PersonnelProxy>();
     private Dictionary<PersonnelProxy, uint> _idByPersonnelProxy = new Dictionary<PersonnelProxy,uint>();
     
-    private List<Structs.Firearms> _firearmsBuffer = new List<Structs.Firearms>() { new Structs.Firearms() };
-    private Dictionary<uint, FirearmsProxy> _firearmsProxyById = new Dictionary<uint, FirearmsProxy>();
-    private Dictionary<FirearmsProxy, uint> _idByFirearmsProxy = new Dictionary<FirearmsProxy,uint>();
+    private List<Structs.Firearm> _firearmsBuffer = new List<Structs.Firearm>() { new Structs.Firearm() };
+    private Dictionary<uint, FirearmProxy> _firearmsProxyById = new Dictionary<uint, FirearmProxy>();
+    private Dictionary<FirearmProxy, uint> _idByFirearmsProxy = new Dictionary<FirearmProxy,uint>();
     
     private List<Structs.Movement> _movementBuffer = new List<Structs.Movement>() { new Structs.Movement() };
     private Dictionary<uint, MovementProxy> _movementProxyById = new Dictionary<uint, MovementProxy>();
@@ -48,7 +54,7 @@ public partial class EntityAssembly : MonoBehaviour
         {
             return ComputeShaderEmulator.PERSONNEL;
         }
-        else if (proxy is FirearmsProxy)
+        else if (proxy is FirearmProxy)
         {
             return ComputeShaderEmulator.FIREARMS;
         }
@@ -174,7 +180,7 @@ public partial class EntityAssembly : MonoBehaviour
         get { return _personnelBuffer;  }
     }
 
-    public List<Structs.Firearms> firearmsBuffer
+    public List<Structs.Firearm> firearmsBuffer
     {
         get { return _firearmsBuffer; }
     }
@@ -218,7 +224,7 @@ public partial class EntityAssembly : MonoBehaviour
             _transformBuffer.Add( new Structs.Transform() );
             _hierarchyBuffer.Add( new Structs.Hierarchy() );
             _personnelBuffer.Add( new Structs.Personnel() );
-            _firearmsBuffer.Add( new Structs.Firearms() );
+            _firearmsBuffer.Add( new Structs.Firearm() );
             _movementBuffer.Add( new Structs.Movement() );
             _firepowerBuffer.Add( new Structs.Firepower() );
         }
@@ -353,34 +359,34 @@ public partial class EntityAssembly : MonoBehaviour
     #endregion
     
     #region Firearms
-    public uint GetEntityId(FirearmsProxy firearmsProxy)
+    public uint GetEntityId(FirearmProxy firearmProxy)
     {
-        return GetComponentEntityId( firearmsProxy, _idByFirearmsProxy );
+        return GetComponentEntityId( firearmProxy, _idByFirearmsProxy );
     }
     
-    public FirearmsProxy GetFirearmsProxy(uint entityId)
+    public FirearmProxy GetFirearmsProxy(uint entityId)
     {
         return GetComponentProxy( entityId, _firearmsProxyById );
     }
     
-    public void RegisterFirearmsProxy(uint entityId, FirearmsProxy firearmsProxy)
+    public void RegisterFirearmsProxy(uint entityId, FirearmProxy firearmProxy)
     {
-        RegisterComponentProxy( entityId, firearmsProxy, _idByFirearmsProxy, _firearmsProxyById );
+        RegisterComponentProxy( entityId, firearmProxy, _idByFirearmsProxy, _firearmsProxyById );
     }
     
-    public void UnregisterFirearmsProxy(uint entityId, FirearmsProxy firearmsProxy)
+    public void UnregisterFirearmsProxy(uint entityId, FirearmProxy firearmProxy)
     {
-        UnregisterComponentProxy( entityId, firearmsProxy, _idByFirearmsProxy, _firearmsProxyById );
+        UnregisterComponentProxy( entityId, firearmProxy, _idByFirearmsProxy, _firearmsProxyById );
     }
     
-    public Structs.Firearms GetFirearms(uint entityId)
+    public Structs.Firearm GetFirearms(uint entityId)
     {
-        return GetComponent<FirearmsProxy,Structs.Firearms>(entityId, _firearmsBuffer);
+        return GetComponent<FirearmProxy,Structs.Firearm>(entityId, _firearmsBuffer);
     }
     
-    public void SetFirearms(uint entityId, Structs.Firearms f)
+    public void SetFirearms(uint entityId, Structs.Firearm f)
     {
-        SetComponent<FirearmsProxy,Structs.Firearms>(entityId, f, _firearmsBuffer);
+        SetComponent<FirearmProxy,Structs.Firearm>(entityId, f, _firearmsBuffer);
     }
     #endregion
     

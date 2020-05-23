@@ -10,11 +10,11 @@ using UnityEditor;
 [RequireComponent(typeof(PersonnelProxy))]
 public class PersonnelProxy : ComponentProxy
 {
+    public uint DescID = 0;
     public float Morale = 600.0f;
     public float Fitness = 14400.0f;
-    public uint Count = 12;
-    public uint Wounded = 0;
-    public uint Killed = 0;
+    public uint Exposure = 0;
+    public uint Count = 0;
     
     private EntityAssembly _entityAssembly;
     private EntityProxy _entityProxy;
@@ -28,11 +28,11 @@ public class PersonnelProxy : ComponentProxy
             if (_entityAssembly.GetEntityId(this) == 0)
             {
                 _entityAssembly.RegisterPersonnelProxy(_entityProxy.entityId, this);
+                descId = DescID;
                 morale = Morale;
                 fitness = Fitness;
-                count = Count;
-                wounded = Wounded;
-                killed = Killed;
+                exposure = Exposure;
+                ValidateStatus();
             }
         }    
     }
@@ -64,7 +64,7 @@ public class PersonnelProxy : ComponentProxy
             TransformProxy transformProxy = GetComponent<TransformProxy>();
             if (transformProxy)
             {
-                const float DistanceThreshold = 100.0f;
+                const float DistanceThreshold = 125.0f;
                 
                 if (Vector3.Distance(transformProxy.position.ToVector3(), Camera.current.transform.position) > DistanceThreshold)
                 {
@@ -101,6 +101,50 @@ public class PersonnelProxy : ComponentProxy
             }
         }
     }
+
+    private void ValidateStatus()
+    {
+        if (!_entityAssembly)
+        {
+            Awake();
+        }
+        if (!_entityAssembly)
+        {
+            return;
+        }
+            
+        uint maxPersonnel = 0;
+        uint descId = _component.descId;
+        if (descId > 0 && descId < _entityAssembly.PersonnelDescBuffer.Count)
+        {
+            maxPersonnel = _entityAssembly.PersonnelDescBuffer[(int)descId].maxPersonnel;
+        }
+        
+        maxPersonnel = maxPersonnel < ComputeShaderEmulator.MAX_PERSONNEL
+            ? maxPersonnel
+            : ComputeShaderEmulator.MAX_PERSONNEL; 
+            
+        var temp = _component;
+        for (uint i = 0; i < maxPersonnel; i++)
+        {
+            uint personnelStatus = temp.status >> (int)(i*2);
+            personnelStatus &= ComputeShaderEmulator.PERSONNEL_STATUS_BITMASK;
+            if( personnelStatus == ComputeShaderEmulator.PERSONNEL_STATUS_ABSENT )
+            {
+                personnelStatus = ComputeShaderEmulator.PERSONNEL_STATUS_HEALTHY;
+            }
+            
+            temp.status &= ~(ComputeShaderEmulator.PERSONNEL_STATUS_BITMASK << (int)(i*2));
+            temp.status |= personnelStatus << (int)(i*2);
+        }
+        for (uint i = maxPersonnel; i < ComputeShaderEmulator.MAX_PERSONNEL; i++)
+        {
+            temp.status &= ~(ComputeShaderEmulator.PERSONNEL_STATUS_BITMASK << (int)(i*2));
+        }
+        
+        _component = temp;
+    }
+
     
     private static Structs.Personnel _dummy = new Structs.Personnel();
 
@@ -130,6 +174,31 @@ public class PersonnelProxy : ComponentProxy
             }
         }
     }
+    
+    public void ValidateDataConsistency()
+    {
+        if (!_entityAssembly)
+        {
+            Awake();
+        }
+        if (!_entityAssembly)
+        {
+            return;
+        }
+        ValidateStatus();
+        Count = count;
+    }
+    
+    public uint descId
+    {
+        get { return _component.descId; }
+        set
+        {
+            var temp = _component;
+            temp.descId = value;
+            _component = temp;
+        }
+    }
 
     public float morale
     {
@@ -153,36 +222,96 @@ public class PersonnelProxy : ComponentProxy
         }
     }
     
+    public uint status
+    {
+        get { return _component.status; }
+    }
+
+    public uint exposure
+    {
+        get
+        {
+            return _component.status >> (int)ComputeShaderEmulator.PERSONNEL_EXPOSURE_SHIFT;
+        }
+        set
+        {
+            var temp = _component;
+            temp.status &= ~ComputeShaderEmulator.PERSONNEL_EXPOSURE_BITMASK;
+            temp.status |= value << (int)ComputeShaderEmulator.PERSONNEL_EXPOSURE_SHIFT;
+            _component = temp;
+        }
+    }
+
     public uint count
     {
-        get { return _component.count; }
-        set
+        get
         {
+            if (!_entityAssembly)
+            {
+                Awake();
+            }
+            
+            uint maxPersonnel = 0;
+            uint descId = _component.descId;
+            if (descId > 0 && descId < _entityAssembly.PersonnelDescBuffer.Count)
+            {
+                maxPersonnel = _entityAssembly.PersonnelDescBuffer[(int)descId].maxPersonnel;
+            }
+
+            maxPersonnel = maxPersonnel < ComputeShaderEmulator.MAX_PERSONNEL
+                ? maxPersonnel
+                : ComputeShaderEmulator.MAX_PERSONNEL; 
+            
             var temp = _component;
-            temp.count = value;
-            _component = temp;
+            uint result = 0;
+            for (uint i = 0; i < maxPersonnel; i++)
+            {
+                uint personnelStatus = temp.status >> (int)(i * 2);
+                personnelStatus &= ComputeShaderEmulator.PERSONNEL_STATUS_BITMASK;
+                if( personnelStatus == ComputeShaderEmulator.PERSONNEL_STATUS_HEALTHY )
+                {
+                    result++;
+                }
+            }
+
+            return result;
         }
-    }
-    
-    public uint wounded
-    {
-        get { return _component.wounded; }
         set
         {
+            if (!_entityAssembly)
+            {
+                Awake();
+            }
+            
+            uint maxPersonnel = 0;
+            uint descId = _component.descId;
+            if (descId > 0 && descId < _entityAssembly.PersonnelDescBuffer.Count)
+            {
+                maxPersonnel = _entityAssembly.PersonnelDescBuffer[(int)descId].maxPersonnel;
+            }
+
+            maxPersonnel = maxPersonnel < ComputeShaderEmulator.MAX_PERSONNEL
+                ? maxPersonnel
+                : ComputeShaderEmulator.MAX_PERSONNEL; 
+            
             var temp = _component;
-            temp.wounded = value;
+            for (uint i = 0; i < maxPersonnel; i++)
+            {
+                uint personnelStatus = ComputeShaderEmulator.PERSONNEL_STATUS_ABSENT;
+                if( i < value )
+                {
+                    personnelStatus = ComputeShaderEmulator.PERSONNEL_STATUS_HEALTHY;
+                }
+                else
+                {
+                    personnelStatus = ComputeShaderEmulator.PERSONNEL_STATUS_KILLED;
+                }
+                temp.status &= ~(ComputeShaderEmulator.PERSONNEL_STATUS_BITMASK << (int)(i*2));
+                temp.status |= personnelStatus << (int)(i*2);
+            }
+
             _component = temp;
-        }
-    }
-    
-    public uint killed
-    {
-        get { return _component.killed; }
-        set
-        {
-            var temp = _component;
-            temp.killed = value;
-            _component = temp;
+            ValidateStatus();
         }
     }
 }
