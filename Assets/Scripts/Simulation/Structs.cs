@@ -19,10 +19,13 @@ namespace Structs
     public struct PersonnelDesc
     {
         public uint maxPersonnel;
-        public float3 linearVelocity; // { crawl, walk, run }
+        public float3 linearVelocitySlow; // { crawling, crouching, standing }
+        public float3 linearVelocityFast;
         public float angularVelocity;
-        public float3 fitnessConsumptionRate;
-        public float fitnessRecoveryRate;
+        public float3 fitnessConsumptionRateSlow;
+        public float3 fitnessConsumptionRateFast;
+        public float3 fitnessThreshold; // { wind, weakened, exhausted }
+        public float3 fitnessRecoveryRate;
         public float4 moraleThreshold; // { shaken, pinned, panic, broken }
         public float4 moraleRecoveryRate;
     };
@@ -48,7 +51,7 @@ namespace Structs
         public uint descId;
         public float morale;
         public float fitness;
-        public uint status; // [EXPOSURE_BITS][PERSONNEL_BITS]
+        public uint status; // [POSE_BITS][PERSONNEL_BITS]...[PERSONNEL_BITS]
     };
     
     public struct Firearm

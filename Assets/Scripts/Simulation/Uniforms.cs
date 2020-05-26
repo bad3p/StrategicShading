@@ -12,18 +12,24 @@ public partial class ComputeShaderEmulator
     public const uint TEAM_BITMASK = 0xC0000000;
     public const uint TEAM_SHIFT = 30;
     
-    public const uint PERSONNEL_EXPOSURE_BITMASK = 0xC0000000;
-    public const uint PERSONNEL_EXPOSURE_SHIFT = 30;
-    public const uint PERSONNEL_EXPOSURE_STAND = 3;
-    public const uint PERSONNEL_EXPOSURE_CROUCH = 2;
-    public const uint PERSONNEL_EXPOSURE_CRAWL = 1;
-    public const uint PERSONNEL_EXPOSURE_HIDE = 0;
+    public const uint PERSONNEL_POSE_BITMASK = 0xC0000000;
+    public const uint PERSONNEL_POSE_SHIFT = 30;
+    public const uint PERSONNEL_POSE_STANDING = 3;
+    public const uint PERSONNEL_POSE_CROUCHING = 2;
+    public const uint PERSONNEL_POSE_LAYING = 1;
+    public const uint PERSONNEL_POSE_HIDING = 0;
     public const uint MAX_PERSONNEL = 10;
     public const uint PERSONNEL_STATUS_BITMASK = 0x3;
     public const uint PERSONNEL_STATUS_HEALTHY = 3;
     public const uint PERSONNEL_STATUS_WOUNDED = 2;
     public const uint PERSONNEL_STATUS_KILLED = 1;
     public const uint PERSONNEL_STATUS_ABSENT = 0;
+    
+    public const float PERSONNEL_MORALE_MAX = 600.0f;
+    public const float PERSONNEL_MORALE_MIN = 1.0f;
+    
+    public const float PERSONNEL_FITNESS_MAX = 14400.0f;
+    public const float PERSONNEL_FITNESS_MIN = 1.0f;
     
     public const float FLOAT_EPSILON = 1.19e-07f;
     public const double DOUBLE_EPSILON = .22e-16;

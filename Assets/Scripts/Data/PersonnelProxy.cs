@@ -13,7 +13,7 @@ public class PersonnelProxy : ComponentProxy
     public uint DescID = 0;
     public float Morale = 600.0f;
     public float Fitness = 14400.0f;
-    public uint Exposure = 0;
+    public uint Pose = 0;
     public uint Count = 0;
     
     private EntityAssembly _entityAssembly;
@@ -31,7 +31,8 @@ public class PersonnelProxy : ComponentProxy
                 descId = DescID;
                 morale = Morale;
                 fitness = Fitness;
-                exposure = Exposure;
+                pose = Pose;
+                count = Count;
                 ValidateStatus();
             }
         }    
@@ -92,11 +93,18 @@ public class PersonnelProxy : ComponentProxy
                     float3 p = new float3
                     (
                         -scale.x / 2 + x * xStep + xStep / 2,
-                        0,
+                        0.0f,
                         -scale.z / 2 + z * zStep + zStep / 2
                     );
-                    
-                    Gizmos.DrawCube(p.ToVector3(), new Vector3( 0.25f,2.0f,0.25f) );
+
+                    if (pose >= 2)
+                    {
+                        Gizmos.DrawCube(p.ToVector3(), new Vector3(0.25f, scale.y, 0.25f));
+                    }
+                    else
+                    {
+                        Gizmos.DrawCube(p.ToVector3(), new Vector3(0.25f, 0.25f, 1.8f));
+                    }
                 }
             }
         }
@@ -227,17 +235,17 @@ public class PersonnelProxy : ComponentProxy
         get { return _component.status; }
     }
 
-    public uint exposure
+    public uint pose
     {
         get
         {
-            return _component.status >> (int)ComputeShaderEmulator.PERSONNEL_EXPOSURE_SHIFT;
+            return _component.status >> (int)ComputeShaderEmulator.PERSONNEL_POSE_SHIFT;
         }
         set
         {
             var temp = _component;
-            temp.status &= ~ComputeShaderEmulator.PERSONNEL_EXPOSURE_BITMASK;
-            temp.status |= value << (int)ComputeShaderEmulator.PERSONNEL_EXPOSURE_SHIFT;
+            temp.status &= ~ComputeShaderEmulator.PERSONNEL_POSE_BITMASK;
+            temp.status |= value << (int)ComputeShaderEmulator.PERSONNEL_POSE_SHIFT;
             _component = temp;
         }
     }

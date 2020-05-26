@@ -34,7 +34,7 @@ public class PersonnelProxyEditor : Editor
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("exposure");
+            EditorGUILayout.LabelField("pose");
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
@@ -129,15 +129,19 @@ public class PersonnelProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
-                personnelProxy.Exposure = personnelProxy.exposure;
+                personnelProxy.Pose = personnelProxy.pose;
                 EditorGUILayout.LabelField(personnelProxy.Count.ToString());
             }
             else
             {
-                personnelProxy.Exposure = (uint) EditorGUILayout.IntField((int) personnelProxy.Exposure);
-                if (personnelProxy.Exposure != personnelProxy.exposure)
+                personnelProxy.Pose = (uint) EditorGUILayout.IntField((int) personnelProxy.Pose);
+                if (personnelProxy.Pose > ComputeShaderEmulator.PERSONNEL_POSE_STANDING)
                 {
-                    personnelProxy.exposure = personnelProxy.Exposure;
+                    personnelProxy.Pose = ComputeShaderEmulator.PERSONNEL_POSE_STANDING;
+                }
+                if (personnelProxy.Pose != personnelProxy.pose)
+                {
+                    personnelProxy.pose = personnelProxy.Pose;
                 }
             }
             EditorGUILayout.EndHorizontal();

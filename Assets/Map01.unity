@@ -233,7 +233,7 @@ MonoBehaviour:
   DescID: 1
   Morale: 600
   Fitness: 14400
-  Exposure: 3
+  Pose: 3
   Count: 2
 --- !u!114 &50754644
 MonoBehaviour:
@@ -535,7 +535,7 @@ MonoBehaviour:
   DescID: 2
   Morale: 603
   Fitness: 14400
-  Exposure: 3
+  Pose: 3
   Count: 3
 --- !u!114 &115422639
 MonoBehaviour:
@@ -2322,7 +2322,7 @@ MonoBehaviour:
   DescID: 3
   Morale: 600
   Fitness: 14400
-  Exposure: 3
+  Pose: 3
   Count: 2
 --- !u!114 &832503767
 MonoBehaviour:
@@ -2587,7 +2587,7 @@ MonoBehaviour:
   DescID: 2
   Morale: 602
   Fitness: 14400
-  Exposure: 3
+  Pose: 3
   Count: 3
 --- !u!114 &854208701
 MonoBehaviour:
@@ -2710,7 +2710,7 @@ MonoBehaviour:
   DescID: 1
   Morale: 605
   Fitness: 14400
-  Exposure: 3
+  Pose: 3
   Count: 2
 --- !u!114 &909305572
 MonoBehaviour:
@@ -3154,7 +3154,7 @@ MonoBehaviour:
   DescID: 2
   Morale: 600
   Fitness: 14400
-  Exposure: 3
+  Pose: 3
   Count: 2
 --- !u!114 &1025601188
 MonoBehaviour:
@@ -3632,7 +3632,7 @@ MonoBehaviour:
   DescID: 2
   Morale: 604
   Fitness: 14400
-  Exposure: 3
+  Pose: 3
   Count: 3
 --- !u!114 &1219724295
 MonoBehaviour:
@@ -4172,16 +4172,31 @@ MonoBehaviour:
   - LMG Team
   PersonnelDescBuffer:
   - maxPersonnel: 0
-    linearVelocity:
+    linearVelocitySlow:
+      x: 0
+      y: 0
+      z: 0
+    linearVelocityFast:
       x: 0
       y: 0
       z: 0
     angularVelocity: 0
-    fitnessConsumptionRate:
+    fitnessConsumptionRateSlow:
       x: 0
       y: 0
       z: 0
-    fitnessRecoveryRate: 0
+    fitnessConsumptionRateFast:
+      x: 0
+      y: 0
+      z: 0
+    fitnessThreshold:
+      x: 0
+      y: 0
+      z: 0
+    fitnessRecoveryRate:
+      x: 0
+      y: 0
+      z: 0
     moraleThreshold:
       x: 0
       y: 0
@@ -4193,16 +4208,31 @@ MonoBehaviour:
       z: 0
       w: 0
   - maxPersonnel: 2
-    linearVelocity:
-      x: 0.138
-      y: 1.38
-      z: 4.16
+    linearVelocitySlow:
+      x: 0.14
+      y: 0.55
+      z: 1.4
+    linearVelocityFast:
+      x: 0.27
+      y: 2.61
+      z: 6.66
     angularVelocity: 0.785398
-    fitnessConsumptionRate:
-      x: 4
-      y: 1
-      z: 16
-    fitnessRecoveryRate: 1
+    fitnessConsumptionRateSlow:
+      x: 2
+      y: 4
+      z: 1
+    fitnessConsumptionRateFast:
+      x: 8
+      y: 16
+      z: 8
+    fitnessThreshold:
+      x: 10800
+      y: 7200
+      z: 3600
+    fitnessRecoveryRate:
+      x: 1
+      y: 2
+      z: 4
     moraleThreshold:
       x: 500
       y: 400
@@ -4214,16 +4244,31 @@ MonoBehaviour:
       z: 3
       w: 4
   - maxPersonnel: 3
-    linearVelocity:
-      x: 0.138
-      y: 1.38
-      z: 4.16
+    linearVelocitySlow:
+      x: 0.14
+      y: 0.55
+      z: 1.4
+    linearVelocityFast:
+      x: 0.27
+      y: 2.61
+      z: 6.66
     angularVelocity: 0.785398
-    fitnessConsumptionRate:
-      x: 4
-      y: 1
-      z: 16
-    fitnessRecoveryRate: 1
+    fitnessConsumptionRateSlow:
+      x: 2
+      y: 4
+      z: 1
+    fitnessConsumptionRateFast:
+      x: 8
+      y: 16
+      z: 8
+    fitnessThreshold:
+      x: 10800
+      y: 7200
+      z: 3600
+    fitnessRecoveryRate:
+      x: 1
+      y: 2
+      z: 4
     moraleThreshold:
       x: 500
       y: 400
@@ -4235,16 +4280,31 @@ MonoBehaviour:
       z: 3
       w: 4
   - maxPersonnel: 2
-    linearVelocity:
-      x: 0.138
-      y: 1.38
-      z: 4.16
+    linearVelocitySlow:
+      x: 0.14
+      y: 0.55
+      z: 1.4
+    linearVelocityFast:
+      x: 0.27
+      y: 2.61
+      z: 6.66
     angularVelocity: 0.785398
-    fitnessConsumptionRate:
-      x: 4
-      y: 1
-      z: 16
-    fitnessRecoveryRate: 1
+    fitnessConsumptionRateSlow:
+      x: 2
+      y: 4
+      z: 1
+    fitnessConsumptionRateFast:
+      x: 8
+      y: 16
+      z: 8
+    fitnessThreshold:
+      x: 10800
+      y: 7200
+      z: 3600
+    fitnessRecoveryRate:
+      x: 1
+      y: 2
+      z: 4
     moraleThreshold:
       x: 500
       y: 400
@@ -5272,7 +5332,7 @@ MonoBehaviour:
   DescID: 2
   Morale: 601
   Fitness: 14400
-  Exposure: 3
+  Pose: 3
   Count: 2
 --- !u!114 &1895606208
 MonoBehaviour:
@@ -5416,7 +5476,7 @@ MonoBehaviour:
   DescID: 2
   Morale: 600
   Fitness: 14400
-  Exposure: 3
+  Pose: 3
   Count: 3
 --- !u!114 &1897142794
 MonoBehaviour:
@@ -6442,7 +6502,7 @@ MonoBehaviour:
   DescID: 2
   Morale: 600
   Fitness: 14400
-  Exposure: 3
+  Pose: 3
   Count: 3
 --- !u!114 &2100194441
 MonoBehaviour:
