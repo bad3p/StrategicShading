@@ -10,6 +10,7 @@ using UnityEditor;
 public class MoveTo : BehaviourTreeNode
 {
     public float Radius = 25.0f;
+    public float TargetPositionErrorThreshold = 1.0f;
     
     #region MonoBehaviour
     void OnDrawGizmos()
@@ -84,7 +85,7 @@ public class MoveTo : BehaviourTreeNode
     {
         if (status == Status.Running)
         {
-            if ( (descBuffer[entityId] & ComputeShaderEmulator.HIERARCHY) == ComputeShaderEmulator.HIERARCHY )
+            if ( ComputeShaderEmulator.HasComponents(entityId, ComputeShaderEmulator.HIERARCHY) )
             {
                 double3 centerOfHierarchy = GetCenterOfHierarchy(entityId);
                 uint nearestEntityId = GetNearestEntityInHierarchy(entityId, transform.position);
@@ -113,53 +114,30 @@ public class MoveTo : BehaviourTreeNode
                     nextSiblingTargetPosition.ToVector3(),
                     Color.white
                 );
-                
-                const uint COMPONENT_MASK = ComputeShaderEmulator.TRANSFORM | ComputeShaderEmulator.MOVEMENT | ComputeShaderEmulator.PERSONNEL;
 
                 uint firstChildEntityId = hierarchyBuffer[entityId].firstChildEntityId;
                 if (firstChildEntityId > 0)
                 {
-                    if ( (descBuffer[firstChildEntityId] & COMPONENT_MASK) == COMPONENT_MASK )
+                    if ( ComputeShaderEmulator.HasComponents(firstChildEntityId, ComputeShaderEmulator.MOVABLE_PERSONNEL_MASK) )
                     {
-                        const float TargetPositionErrorThreshold = 0.1f;
-                        const float TargetRotationErrorThreshold = Mathf.Deg2Rad * 5.0f;
-                        const float PinnedMoraleThreshold = 400.0f; // TODO: configure
-                        
                         bool allChildrenArrived = true;
-                        bool useRelativePositionError = false;
+                        float4 targetVelocityByDistance = new float4( 5.0f, 0.5f, 25.0f, 1.0f );
 
-                        if (personnelBuffer[firstChildEntityId].morale > PinnedMoraleThreshold)
+                        uint suppression = ComputeShaderEmulator.GetPersonnelSuppression(firstChildEntityId);
+                        if (suppression < ComputeShaderEmulator.SUPPRESSION_PINNED)
                         {
-                            double3 targetPositionError = movementBuffer[firstChildEntityId].targetPosition - nextSiblingTargetPosition;
-                            float targetRotationError = ComputeShaderEmulator.sigangle(transformBuffer[firstChildEntityId].rotation, nextSiblingTargetRotation);
-
-                            if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
+                            ComputeShaderEmulator.AdjustMovement(firstChildEntityId, TargetPositionErrorThreshold, nextSiblingTargetPosition, nextSiblingTargetRotation, targetVelocityByDistance);
+                            if (allChildrenArrived)
                             {
-                                movementBuffer[firstChildEntityId].targetVelocity = 1.4f; // TODO: configure
-                                movementBuffer[firstChildEntityId].targetPosition = nextSiblingTargetPosition;
+                                allChildrenArrived = ComputeShaderEmulator.IsMovementCompleted(firstChildEntityId);
                             }
 
-                            if (Mathf.Abs(targetRotationError) > TargetRotationErrorThreshold)
-                            {
-                                movementBuffer[firstChildEntityId].targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
-                                movementBuffer[firstChildEntityId].targetRotation = nextSiblingTargetRotation;
-                            }
-                            
-                            float3 currentPositionError = transform.position - transformBuffer[firstChildEntityId].position;
-                            float currentPositionErrorMagnitude = ComputeShaderEmulator.length(currentPositionError);
-                            if (currentPositionErrorMagnitude > Radius)
-                            {
-                                allChildrenArrived = false;
-                            }
-                            
                             double3 offsetDir = ComputeShaderEmulator.rotate(new float3(0, 0, -1), transformBuffer[firstChildEntityId].rotation);
                             double offsetLength = ComputeShaderEmulator.length(transformBuffer[firstChildEntityId].scale);
                             double3 offset = offsetDir * offsetLength;
                             nextSiblingTargetPosition = transformBuffer[firstChildEntityId].position + offset;
                             nextSiblingTargetRotation = transformBuffer[firstChildEntityId].rotation;
-                            useRelativePositionError = true;
-                            //nextSiblingTargetPosition += movementDir * ComputeShaderEmulator.length(transformBuffer[firstChildEntityId].scale);
-                            //nextSiblingTargetRotation = transformBuffer[firstChildEntityId].rotation;
+                            targetVelocityByDistance = new float4( 1.0f, 0.5f, 10.0f, 1.0f );
                         }
 
                         if (hierarchyBuffer[firstChildEntityId].nextSiblingEntityId > 0)
@@ -168,34 +146,15 @@ public class MoveTo : BehaviourTreeNode
                             while (hierarchyBuffer[nextSiblingEntityId].nextSiblingEntityId > 0)
                             {
                                 nextSiblingEntityId = hierarchyBuffer[nextSiblingEntityId].nextSiblingEntityId;
-                                if ( (descBuffer[nextSiblingEntityId] & COMPONENT_MASK) == COMPONENT_MASK )
+                                if( ComputeShaderEmulator.HasComponents(nextSiblingEntityId, ComputeShaderEmulator.MOVABLE_PERSONNEL_MASK) )
                                 {
-                                    if (personnelBuffer[nextSiblingEntityId].morale > PinnedMoraleThreshold)
+                                    suppression = ComputeShaderEmulator.GetPersonnelSuppression(nextSiblingEntityId);
+                                    if (suppression < ComputeShaderEmulator.SUPPRESSION_PINNED)
                                     {
-                                        double3 targetPositionError = movementBuffer[nextSiblingEntityId].targetPosition - nextSiblingTargetPosition;
-                                        float targetRotationError = ComputeShaderEmulator.sigangle( transformBuffer[nextSiblingEntityId].rotation, nextSiblingTargetRotation);
-
-                                        if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
+                                        ComputeShaderEmulator.AdjustMovement(nextSiblingEntityId, TargetPositionErrorThreshold, nextSiblingTargetPosition, nextSiblingTargetRotation, targetVelocityByDistance);
+                                        if (allChildrenArrived)
                                         {
-                                            movementBuffer[nextSiblingEntityId].targetVelocity = 1.4f; // TODO: configure
-                                            movementBuffer[nextSiblingEntityId].targetPosition = nextSiblingTargetPosition;
-                                        }
-
-                                        if (Mathf.Abs(targetRotationError) > TargetRotationErrorThreshold)
-                                        {
-                                            movementBuffer[nextSiblingEntityId].targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
-                                            movementBuffer[nextSiblingEntityId].targetRotation = nextSiblingTargetRotation;
-                                        }
-
-                                        float3 currentPositionError = movementBuffer[nextSiblingEntityId].targetPosition - transformBuffer[nextSiblingEntityId].position;
-                                        if (!useRelativePositionError)
-                                        {
-                                            currentPositionError = transform.position - transformBuffer[nextSiblingEntityId].position;
-                                        }
-                                        float currentPositionErrorMagnitude = ComputeShaderEmulator.length(currentPositionError);
-                                        if (currentPositionErrorMagnitude > ComputeShaderEmulator.length(transformBuffer[nextSiblingEntityId].scale))
-                                        {
-                                            allChildrenArrived = false;
+                                            allChildrenArrived = allChildrenArrived && ComputeShaderEmulator.IsMovementCompleted(nextSiblingEntityId);
                                         }
 
                                         double3 offsetDir = ComputeShaderEmulator.rotate(new float3(0, 0, -1), transformBuffer[nextSiblingEntityId].rotation);
@@ -203,9 +162,7 @@ public class MoveTo : BehaviourTreeNode
                                         double3 offset = offsetDir * offsetLength;
                                         nextSiblingTargetPosition = transformBuffer[nextSiblingEntityId].position + offset;
                                         nextSiblingTargetRotation = transformBuffer[nextSiblingEntityId].rotation;
-                                        useRelativePositionError = true;
-                                        //nextSiblingTargetPosition += movementDir * ComputeShaderEmulator.length(transformBuffer[nextSiblingEntityId].scale);
-                                        //nextSiblingTargetRotation = transformBuffer[nextSiblingEntityId].rotation;
+                                        targetVelocityByDistance = new float4( 1.0f, 0.5f, 10.0f, 1.0f );
                                     }
                                 }
                                 else

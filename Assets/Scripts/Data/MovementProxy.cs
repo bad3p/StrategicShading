@@ -12,8 +12,7 @@ public class MovementProxy : ComponentProxy
 {
     public double3 TargetPosition = new double3(0,0,0);
     public float4 TargetRotation = new float4(0,0,0,1);
-    public float TargetVelocity = 0;
-    public float TargetAngularVelocity = 0;
+    public float4 TargetVelocityByDistance = new float4(0,0,0,1);
     
     private EntityAssembly _entityAssembly;
     private EntityProxy _entityProxy;
@@ -29,8 +28,7 @@ public class MovementProxy : ComponentProxy
                 _entityAssembly.RegisterMovementProxy(_entityProxy.entityId, this);
                 targetPosition = TargetPosition;
                 targetRotation = TargetRotation;
-                targetVelocity = TargetVelocity;
-                targetAngularVelocity = TargetAngularVelocity;
+                targetVelocityByDistance = TargetVelocityByDistance;
             }
         }    
     }
@@ -58,7 +56,11 @@ public class MovementProxy : ComponentProxy
         if (_entityAssembly)
         {
             Gizmos.color = _entityProxy.GetTeamColor();
-            if (targetVelocity > 0 && (_entityProxy.entityDesc & ComputeShaderEmulator.TRANSFORM) == ComputeShaderEmulator.TRANSFORM)
+
+            bool isMoving = (Mathf.Abs(targetVelocityByDistance.y) > Mathf.Epsilon) ||
+                            (Mathf.Abs(targetVelocityByDistance.w) > Mathf.Epsilon);
+            
+            if ( isMoving && (_entityProxy.entityDesc & ComputeShaderEmulator.TRANSFORM) == ComputeShaderEmulator.TRANSFORM)
             {
                 TransformProxy transformProxy = _entityAssembly.GetTransformProxy(_entityProxy.entityId);
                 if (transformProxy)
@@ -120,25 +122,19 @@ public class MovementProxy : ComponentProxy
         }
     }
     
-    public float targetVelocity
+    public float4 targetVelocityByDistance
     {
-        get { return _component.targetVelocity; }
+        get { return _component.targetVelocityByDistance; }
         set
         {
             var temp = _component;
-            temp.targetVelocity = value;
+            temp.targetVelocityByDistance = TargetVelocityByDistance;
             _component = temp;
         }
     }
     
-    public float targetAngularVelocity
+    public float3 deltaPosition
     {
-        get { return _component.targetAngularVelocity; }
-        set
-        {
-            var temp = _component;
-            temp.targetAngularVelocity = value;
-            _component = temp;
-        }
+        get { return _component.deltaPosition; }
     }
 }

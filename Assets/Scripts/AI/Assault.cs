@@ -8,6 +8,7 @@ using UnityEditor;
 public class Assault : BehaviourTreeNode
 {
     public float FrontlineWidth = 25.0f;
+    public float LeapfrogDistance = 25.0f;
     
     #region MonoBehaviour
     void OnDrawGizmos()
@@ -78,16 +79,11 @@ public class Assault : BehaviourTreeNode
     #endregion
     
     #region BehaviourTreeNode
-    const uint MOVABLE_PERSONNEL_MASK = ComputeShaderEmulator.TRANSFORM | ComputeShaderEmulator.MOVEMENT | ComputeShaderEmulator.PERSONNEL;
-    
     private static void Halt(uint entityId)
     {
-        if ((descBuffer[entityId] & MOVABLE_PERSONNEL_MASK) == MOVABLE_PERSONNEL_MASK)
+        if (ComputeShaderEmulator.HasComponents(entityId,ComputeShaderEmulator.MOVABLE_MASK))
         {
-            movementBuffer[entityId].targetPosition = transformBuffer[entityId].position;
-            movementBuffer[entityId].targetRotation = transformBuffer[entityId].rotation;
-            movementBuffer[entityId].targetVelocity = 0;
-            movementBuffer[entityId].targetAngularVelocity = 0;
+            ComputeShaderEmulator.StopMovement(entityId);
         }
         else
         {
@@ -99,11 +95,16 @@ public class Assault : BehaviourTreeNode
 
     private void IssueOrders()
     {
-        uint entityChildCount = GetEntityChildCount(entityId);
+        uint entityChildCount = GetEntityFilteredChildCount(entityId, (childEntityId) =>
+        {
+            if (!ComputeShaderEmulator.HasComponents(childEntityId, ComputeShaderEmulator.MOVABLE_PERSONNEL_MASK))
+            {
+                return false;
+            }
+            uint suppression = ComputeShaderEmulator.GetPersonnelSuppression(childEntityId);
+            return (suppression < ComputeShaderEmulator.SUPPRESSION_PINNED);
+        });
 
-        const float PinnedMoraleThreshold = 400.0f; // TODO: configure
-        const float LeapfrogDistance = 25.0f; // TODO: configure
-        
         double3 fp0 = this.transform.position - this.transform.right * FrontlineWidth / 2;
         double3 fp1 = this.transform.position + this.transform.right * FrontlineWidth / 2;
         float nearestDistance = (float)GetNearestDistanceFromChildEntityToLine(entityId, fp0.xz, fp1.xz);
@@ -117,16 +118,15 @@ public class Assault : BehaviourTreeNode
         double3 targetPositionOffset = this.transform.right * FrontlineWidth / Mathf.Max(entityChildCount-1, 1);
         ForEveryChildEntity(entityId, (childEntityId) =>
         {
-            if ((descBuffer[childEntityId] & MOVABLE_PERSONNEL_MASK) == MOVABLE_PERSONNEL_MASK)
+            if( ComputeShaderEmulator.HasComponents(childEntityId, ComputeShaderEmulator.MOVABLE_PERSONNEL_MASK) )
             {
-                if (personnelBuffer[childEntityId].morale > PinnedMoraleThreshold)
+                uint suppression = ComputeShaderEmulator.GetPersonnelSuppression(childEntityId);
+                if (suppression < ComputeShaderEmulator.SUPPRESSION_PINNED)
                 {
                     if (childIndex % 2 == _leapfrogIndex)
                     {
-                        movementBuffer[childEntityId].targetPosition = targetPosition;
-                        movementBuffer[childEntityId].targetVelocity = (15.0f * 1000.0f) / (60.0f * 60.0f);
-                        movementBuffer[childEntityId].targetRotation = this.transform.rotation;
-                        movementBuffer[childEntityId].targetAngularVelocity = ComputeShaderEmulator.radians(45.0f);
+                        float4 targetVelocityByDistance = new float4( 1.0f, 0.5f, 3.0f, 1.0f );
+                        ComputeShaderEmulator.StartMovement(childEntityId, targetPosition, this.transform.rotation, targetVelocityByDistance);
                     }
 
                     childIndex++;
@@ -162,25 +162,17 @@ public class Assault : BehaviourTreeNode
 
     private bool CheckOrders()
     {
-        const float PinnedMoraleThreshold = 400.0f; // TODO: configure
-        
         bool result = true;
         ForEveryChildEntity(entityId, (childEntityId) =>
         {
-            if ((descBuffer[childEntityId] & MOVABLE_PERSONNEL_MASK) == MOVABLE_PERSONNEL_MASK)
+            if (ComputeShaderEmulator.HasComponents(childEntityId, ComputeShaderEmulator.MOVABLE_PERSONNEL_MASK))
             {
-                if (personnelBuffer[childEntityId].morale > PinnedMoraleThreshold)
+                uint suppression = ComputeShaderEmulator.GetPersonnelSuppression(childEntityId);
+                if (suppression < ComputeShaderEmulator.SUPPRESSION_PINNED)
                 {
-                    if (movementBuffer[childEntityId].targetVelocity > 0)
+                    if (!ComputeShaderEmulator.IsMovementCompleted(childEntityId))
                     {
-                        double3 currentPositionError = movementBuffer[childEntityId].targetPosition -
-                                                       transformBuffer[childEntityId].position;
-                        float currentPositionErrorMagnitude = ComputeShaderEmulator.length(currentPositionError);
-                        if (currentPositionErrorMagnitude >
-                            ComputeShaderEmulator.length(transformBuffer[childEntityId].scale))
-                        {
-                            result = false;
-                        }
+                        result = false;
                     }
                 }
             }

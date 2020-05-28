@@ -130,7 +130,7 @@ public class PersonnelProxyEditor : Editor
             if (EditorApplication.isPlaying)
             {
                 personnelProxy.Pose = personnelProxy.pose;
-                EditorGUILayout.LabelField(personnelProxy.Count.ToString());
+                EditorGUILayout.LabelField(personnelProxy.Pose.ToString());
             }
             else
             {

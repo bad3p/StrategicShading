@@ -2,6 +2,7 @@
 using System;
 using Types;
 using UnityEngine;
+using ECS = ComputeShaderEmulator;
 
 public abstract class BehaviourTreeNode : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public abstract class BehaviourTreeNode : MonoBehaviour
         Failure
     }
     
-    #region ETCBinding
+    #region ECSBinding
     private uint _entityId = 0;
 
     public uint entityId
@@ -32,7 +33,7 @@ public abstract class BehaviourTreeNode : MonoBehaviour
     
     protected static void ForEveryChildEntity(uint entityId, Action<uint> callback)
     {
-        if ((descBuffer[entityId] & ComputeShaderEmulator.HIERARCHY) == ComputeShaderEmulator.HIERARCHY)
+        if (ComputeShaderEmulator.HasComponents(entityId,ComputeShaderEmulator.HIERARCHY))
         {
             uint childEntityId = hierarchyBuffer[entityId].firstChildEntityId;
             while (childEntityId > 0)
@@ -41,11 +42,11 @@ public abstract class BehaviourTreeNode : MonoBehaviour
                 childEntityId = hierarchyBuffer[childEntityId].nextSiblingEntityId;
             }
         }
-    }
+    } 
     
     protected static uint GetEntityChildCount(uint entityId)
     {
-        if ((descBuffer[entityId] & ComputeShaderEmulator.HIERARCHY) != ComputeShaderEmulator.HIERARCHY)
+        if (!ComputeShaderEmulator.HasComponents(entityId,ComputeShaderEmulator.HIERARCHY))
         {
             return 0;
         }
@@ -65,12 +66,38 @@ public abstract class BehaviourTreeNode : MonoBehaviour
 
         return childCount;
     }
+
+    protected static uint GetEntityFilteredChildCount(uint entityId, Func<uint,bool> filterCallback)
+    {
+        if (!ComputeShaderEmulator.HasComponents(entityId,ComputeShaderEmulator.HIERARCHY))
+        {
+            return 0;
+        }
+        
+        uint childEntityId = hierarchyBuffer[entityId].firstChildEntityId;
+        if (childEntityId == 0)
+        {
+            return 0;
+        }
+
+        uint childCount = 0;
+        while (childEntityId > 0)
+        {
+            if (filterCallback(childEntityId))
+            {
+                childCount++;
+            }
+            childEntityId = hierarchyBuffer[childEntityId].nextSiblingEntityId;
+        }
+
+        return childCount;
+    }
     
     protected static double3 GetCenterOfHierarchy(uint entityId)
     {
         double3 result = new double3(0, 0, 0);
         
-        if ((descBuffer[entityId] & ComputeShaderEmulator.HIERARCHY) != ComputeShaderEmulator.HIERARCHY)
+        if (!ComputeShaderEmulator.HasComponents(entityId,ComputeShaderEmulator.HIERARCHY))
         {
             return result;
         }
@@ -84,7 +111,7 @@ public abstract class BehaviourTreeNode : MonoBehaviour
         uint childCount = 0;
         while (childEntityId > 0)
         {
-            if( (descBuffer[childEntityId] & ComputeShaderEmulator.TRANSFORM) == ComputeShaderEmulator.TRANSFORM )
+            if( ComputeShaderEmulator.HasComponents(childEntityId,ComputeShaderEmulator.TRANSFORM) )
             {
                 result += transformBuffer[childEntityId].position;
                 childCount++;
@@ -111,7 +138,7 @@ public abstract class BehaviourTreeNode : MonoBehaviour
         uint nearestEntityId = 0;
         float nearestDistance = float.MaxValue;
         
-        if ((descBuffer[entityId] & ComputeShaderEmulator.HIERARCHY) != ComputeShaderEmulator.HIERARCHY)
+        if (!ComputeShaderEmulator.HasComponents(entityId,ComputeShaderEmulator.HIERARCHY))            
         {
             return nearestEntityId;
         }
@@ -124,7 +151,7 @@ public abstract class BehaviourTreeNode : MonoBehaviour
         
         while (childEntityId > 0)
         {
-            if( (descBuffer[childEntityId] & ComputeShaderEmulator.TRANSFORM) == ComputeShaderEmulator.TRANSFORM )
+            if (ComputeShaderEmulator.HasComponents(childEntityId,ComputeShaderEmulator.TRANSFORM))
             {
                 double3 direction = position - transformBuffer[childEntityId].position;
                 float distance = ComputeShaderEmulator.length( direction );
@@ -169,6 +196,11 @@ public abstract class BehaviourTreeNode : MonoBehaviour
     
     protected static double GetNearestDistanceFromChildEntityToLine(uint entityId, double2 p0, double2 p1)
     {
+        if (!ComputeShaderEmulator.HasComponents(entityId,ComputeShaderEmulator.HIERARCHY))            
+        {
+            return 0;
+        }
+        
         uint childEntityId = hierarchyBuffer[entityId].firstChildEntityId;
         if (childEntityId == 0)
         {

@@ -8,6 +8,7 @@ using UnityEditor;
 public class Deploy : BehaviourTreeNode
 {
     public float FrontlineWidth = 25.0f;
+    public float TargetPositionErrorThreshold = 1.0f;
     
     #region MonoBehaviour
     void OnDrawGizmos()
@@ -83,11 +84,18 @@ public class Deploy : BehaviourTreeNode
     {
         if (status == Status.Running)
         {
-            uint entityChildCount = GetEntityChildCount(entityId);
+            uint entityChildCount = GetEntityFilteredChildCount(entityId, (childEntityId) =>
+            {
+                if (!ComputeShaderEmulator.HasComponents(childEntityId, ComputeShaderEmulator.MOVABLE_PERSONNEL_MASK))
+                {
+                    return false;
+                }
+                uint suppression = ComputeShaderEmulator.GetPersonnelSuppression(childEntityId);
+                return (suppression < ComputeShaderEmulator.SUPPRESSION_PINNED);
+            });
             
             double3 nextSiblingTargetPosition;
             double3 deploymentStep;
-            float4 nextSiblingTargetRotation = this.transform.rotation;
 
             if (entityChildCount > 1)
             {
@@ -100,41 +108,26 @@ public class Deploy : BehaviourTreeNode
                 deploymentStep = new float3(0,0,0);
             }
 
-            if ( (descBuffer[entityId] & ComputeShaderEmulator.HIERARCHY) == ComputeShaderEmulator.HIERARCHY )
+            if ( ComputeShaderEmulator.HasComponents(entityId, ComputeShaderEmulator.HIERARCHY) )
             {
                 uint firstChildEntityId = hierarchyBuffer[entityId].firstChildEntityId;
                 if (firstChildEntityId > 0)
                 {
-                    if ( (descBuffer[firstChildEntityId] & ComputeShaderEmulator.TRANSFORM) == ComputeShaderEmulator.TRANSFORM &&
-                         (descBuffer[firstChildEntityId] & ComputeShaderEmulator.MOVEMENT) == ComputeShaderEmulator.MOVEMENT )
+                    if ( ComputeShaderEmulator.HasComponents(firstChildEntityId, ComputeShaderEmulator.MOVABLE_PERSONNEL_MASK) )
                     {
-                        const float TargetPositionErrorThreshold = 0.1f;
-                        const float TargetRotationErrorThreshold = Mathf.Deg2Rad * 1.0f;
-                        
-                        double3 targetPositionError = movementBuffer[firstChildEntityId].targetPosition - nextSiblingTargetPosition;
-                        if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
-                        {
-                            movementBuffer[firstChildEntityId].targetVelocity = 1.4f; // TODO: configure
-                            movementBuffer[firstChildEntityId].targetPosition = nextSiblingTargetPosition;
-                        }
-                        
-                        float targetRotationError = ComputeShaderEmulator.sigangle(transformBuffer[firstChildEntityId].rotation, this.transform.rotation);
-                        if (Mathf.Abs(targetRotationError) > TargetRotationErrorThreshold)
-                        {
-                            movementBuffer[firstChildEntityId].targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
-                            movementBuffer[firstChildEntityId].targetRotation = this.transform.rotation;
-                        }
-                        
-                        float3 currentPositionError = movementBuffer[firstChildEntityId].targetPosition - transformBuffer[firstChildEntityId].position;
-                        float currentPositionErrorMagnitude = ComputeShaderEmulator.length(currentPositionError);
-                        
                         bool allChildrenArrived = true;
-                        if (currentPositionErrorMagnitude > ComputeShaderEmulator.length(transformBuffer[firstChildEntityId].scale))
+                        float4 targetVelocityByDistance = new float4( 5.0f, 0.5f, 10.0f, 1.0f );
+                        
+                        uint suppression = ComputeShaderEmulator.GetPersonnelSuppression(firstChildEntityId);
+                        if (suppression < ComputeShaderEmulator.SUPPRESSION_PINNED)
                         {
-                            allChildrenArrived = false;
+                            ComputeShaderEmulator.AdjustMovement(firstChildEntityId, TargetPositionErrorThreshold, nextSiblingTargetPosition, this.transform.rotation, targetVelocityByDistance);
+                            if (allChildrenArrived)
+                            {
+                                allChildrenArrived = ComputeShaderEmulator.IsMovementCompleted(firstChildEntityId);
+                            }
+                            nextSiblingTargetPosition = nextSiblingTargetPosition + deploymentStep;
                         }
-
-                        nextSiblingTargetPosition = nextSiblingTargetPosition + deploymentStep;
 
                         if (hierarchyBuffer[firstChildEntityId].nextSiblingEntityId > 0)
                         {
@@ -142,32 +135,18 @@ public class Deploy : BehaviourTreeNode
                             while (hierarchyBuffer[nextSiblingEntityId].nextSiblingEntityId > 0)
                             {
                                 nextSiblingEntityId = hierarchyBuffer[nextSiblingEntityId].nextSiblingEntityId;
-                                if ((descBuffer[nextSiblingEntityId] & ComputeShaderEmulator.TRANSFORM) == ComputeShaderEmulator.TRANSFORM &&
-                                    (descBuffer[nextSiblingEntityId] & ComputeShaderEmulator.MOVEMENT) == ComputeShaderEmulator.MOVEMENT)
+                                if( ComputeShaderEmulator.HasComponents(nextSiblingEntityId, ComputeShaderEmulator.MOVABLE_PERSONNEL_MASK) )
                                 {
-                                    targetPositionError = movementBuffer[nextSiblingEntityId].targetPosition - nextSiblingTargetPosition;
-                                    targetRotationError = ComputeShaderEmulator.sigangle(transformBuffer[nextSiblingEntityId].rotation, nextSiblingTargetRotation);
-
-                                    if (ComputeShaderEmulator.length(targetPositionError) > TargetPositionErrorThreshold)
+                                    suppression = ComputeShaderEmulator.GetPersonnelSuppression(nextSiblingEntityId);
+                                    if (suppression < ComputeShaderEmulator.SUPPRESSION_PINNED)
                                     {
-                                        movementBuffer[nextSiblingEntityId].targetVelocity = 1.4f; // TODO: configure
-                                        movementBuffer[nextSiblingEntityId].targetPosition = nextSiblingTargetPosition;
+                                        ComputeShaderEmulator.AdjustMovement(nextSiblingEntityId, TargetPositionErrorThreshold, nextSiblingTargetPosition, this.transform.rotation, targetVelocityByDistance);
+                                        if (allChildrenArrived)
+                                        {
+                                            allChildrenArrived = allChildrenArrived && ComputeShaderEmulator.IsMovementCompleted(nextSiblingEntityId);
+                                        }
+                                        nextSiblingTargetPosition = nextSiblingTargetPosition + deploymentStep;
                                     }
-                                    
-                                    if (Mathf.Abs(targetRotationError) > TargetRotationErrorThreshold)
-                                    {
-                                        movementBuffer[nextSiblingEntityId].targetAngularVelocity = ComputeShaderEmulator.radians(45.0f); // TODO: configure
-                                        movementBuffer[nextSiblingEntityId].targetRotation = nextSiblingTargetRotation;
-                                    }
-
-                                    currentPositionError = movementBuffer[nextSiblingEntityId].targetPosition - transformBuffer[nextSiblingEntityId].position;
-                                    currentPositionErrorMagnitude = ComputeShaderEmulator.length(currentPositionError);
-                                    if ( currentPositionErrorMagnitude > ComputeShaderEmulator.length(transformBuffer[nextSiblingEntityId].scale) )
-                                    {
-                                        allChildrenArrived = false;
-                                    }
-
-                                    nextSiblingTargetPosition = nextSiblingTargetPosition + deploymentStep;
                                 }
                                 else
                                 {

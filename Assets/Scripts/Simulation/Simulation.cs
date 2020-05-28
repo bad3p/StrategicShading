@@ -23,38 +23,22 @@ public partial class ComputeShaderEmulator
             _outBuffer[index] = temp;
         }
     }
-
-    public static float _dT = 0.0f;
-    public static uint _firearmDescCount = 0;
-    public static FirearmDesc[] _firearmDescBuffer = new FirearmDesc[0];
-    public static uint _personnelDescCount = 0;
-    public static PersonnelDesc[] _personnelDescBuffer = new PersonnelDesc[0];
-    public static uint _entityCount = 0;
-    public static uint[] _descBuffer = new uint[0];
-    public static Transform[] _transformBuffer = new Transform[0];
-    public static Hierarchy[] _hierarchyBuffer = new Hierarchy[0];
-    public static Personnel[] _personnelBuffer = new Personnel[0];
-    public static Firearm[] FirearmBuffer = new Firearm[0];
-    public static Movement[] _movementBuffer = new Movement[0];
-    public static Firepower[] _firepowerBuffer = new Firepower[0];
     
     [NumThreads(256,1,1)]
     static public void UpdateMovement(uint3 id)
     {
         uint entityId = id.x;
-        if (entityId >= _entityCount)
+        if (entityId == 0 || entityId >= _entityCount)
+        {
+            return;
+        }
+        
+        if ( !HasComponents( entityId, MOVABLE_PERSONNEL_MASK ) )
         {
             return;
         }
 
-        const uint COMPONENT_MASK = TRANSFORM | MOVEMENT | PERSONNEL; 
-
-        if ( (_descBuffer[entityId] & COMPONENT_MASK) != COMPONENT_MASK )
-        {
-            return;
-        }
-
-        if (_movementBuffer[entityId].targetVelocity > 0)
+        if (IsMoving(entityId))
         {
             double2 targetPosition = _movementBuffer[entityId].targetPosition.xz;
             double2 currentPosition = _transformBuffer[entityId].position.xz;
@@ -66,14 +50,13 @@ public partial class ComputeShaderEmulator
                 targetDir *= 1.0f / targetDist;
             }
 
-            // TODO : move away from this system
-            const float PinnedMoraleThreshold = 400.0f;
-            const float RoutedMoraleThreshold = 300.0f;
-            if (_personnelBuffer[entityId].morale < RoutedMoraleThreshold)
+            // TODO : improve broken & pinned behaviour
+            uint suppression = GetPersonnelSuppression(entityId);
+            if (suppression >= SUPPRESSION_BROKEN)
             {
                 targetDir *= -1;
             }
-            else if (_personnelBuffer[entityId].morale < PinnedMoraleThreshold)
+            else if (suppression >= SUPPRESSION_PINNED)
             {
                 targetDir = new float2(0,0);
             }
@@ -88,24 +71,26 @@ public partial class ComputeShaderEmulator
                 currentDir *= 1.0f / currentDirMagnitude;
             }
 
+            uint personnelDescId = _personnelBuffer[entityId].descId; 
+
             float currentAngle = sigangle(currentDir, targetDir);
-            float targetAngularVelocity = radians(45.0f); // TODO: configure
+            float targetAngularVelocity = _personnelDescBuffer[personnelDescId].angularVelocity;
             float deltaAngle = -sign(currentAngle) * targetAngularVelocity * _dT;
             if (abs(deltaAngle) > abs(currentAngle))
             {
                 deltaAngle = -currentAngle;
             }
 
-            // TODO: configure
-            float4 velocityByAngle = new float4
+            float targetVelocity = GetPersonnelTargetVelocity(entityId);
+            float4 targetVelocityByAngle = new float4
             (
                 radians(0.0f),
-                _movementBuffer[entityId].targetVelocity,
+                targetVelocity,
                 radians(45.0f),
                 0.0f
             );
 
-            float currentVelocity = lerpargs(velocityByAngle, abs(currentAngle));
+            float currentVelocity = lerpargs(targetVelocityByAngle, abs(currentAngle));
 
             bool stop = false;
             float deltaDist = currentVelocity * _dT;
@@ -114,17 +99,18 @@ public partial class ComputeShaderEmulator
                 deltaDist = targetDist;
                 stop = true;
             }
-            
+
+            _movementBuffer[entityId].deltaPosition = new float3( targetDir.x, 0, targetDir.y ) * deltaDist;
             _transformBuffer[entityId].position += new double3( targetDir.x, 0, targetDir.y ) * deltaDist;
             float4 deltaRotation = quaternionFromAsixAngle(deltaAngle, new float3(0, 1, 0));
             _transformBuffer[entityId].rotation = transformQuaternion(deltaRotation, _transformBuffer[entityId].rotation);
             
             if( stop )
             {
-                _movementBuffer[entityId].targetVelocity = 0;
+                StopMovement(entityId);
             }
         }
-        else if (_movementBuffer[entityId].targetAngularVelocity > 0)
+        else
         {
             // rotate to target
             
@@ -138,21 +124,22 @@ public partial class ComputeShaderEmulator
 
             float currentAngle = sigangle(currentForward, targetForward, axis);
 
-            bool stop = false;
-            float deltaAngle = sign(currentAngle) * _movementBuffer[entityId].targetAngularVelocity * _dT;
-            if (abs(deltaAngle) > abs(currentAngle))
+            if (abs(currentAngle) > FLOAT_EPSILON)
             {
-                deltaAngle = currentAngle;
-                stop = true;
+                uint personnelDescId = _personnelBuffer[entityId].descId;
+                float targetAngularVelocity = _personnelDescBuffer[personnelDescId].angularVelocity;
+
+                float deltaAngle = sign(currentAngle) * targetAngularVelocity * _dT;
+                if (abs(deltaAngle) > abs(currentAngle))
+                {
+                    deltaAngle = currentAngle;
+                }
+
+                float4 deltaRotation = quaternionFromAsixAngle(deltaAngle, axis);
+                _transformBuffer[entityId].rotation = transformQuaternion(deltaRotation, _transformBuffer[entityId].rotation);
             }
 
-            float4 deltaRotation = quaternionFromAsixAngle(deltaAngle, axis);
-            _transformBuffer[entityId].rotation = transformQuaternion(deltaRotation, _transformBuffer[entityId].rotation);
-            
-            if( stop )
-            {
-                _movementBuffer[entityId].targetAngularVelocity = 0;
-            }
+            _movementBuffer[entityId].deltaPosition = new float3(0, 0, 0);
         }
     }
 
@@ -160,19 +147,17 @@ public partial class ComputeShaderEmulator
     static public void UpdatePersonnel(uint3 id)
     {
         uint entityId = id.x;
-        if (entityId >= _entityCount)
+        if (entityId == 0 || entityId >= _entityCount)
         {
             return;
         }
 
-        const uint COMPONENT_MASK = TRANSFORM | MOVEMENT | PERSONNEL;
-
-        if ((_descBuffer[entityId] & COMPONENT_MASK) != COMPONENT_MASK)
+        if ( !HasComponents( entityId, MOVABLE_PERSONNEL_MASK ) )
         {
             return;
         }
         
-        // MORALE
+        // TEST MORALE LOSS
 
         float morale = _personnelBuffer[entityId].morale; 
 
@@ -184,7 +169,6 @@ public partial class ComputeShaderEmulator
             1.0f / 330.0f
         );
 
-
         float diceThreshold = lerpargs(moraleLossProbabilityByMorale, morale);
         float dice = rngRange(0.0f, 1.0f, rngIndex(entityId));
         float moraleLoss = 0.0f;
@@ -193,45 +177,23 @@ public partial class ComputeShaderEmulator
             moraleLoss = rngRange(25.0f, 50.0f, rngIndex(entityId));     
         }
         
-        // TODO: configure
-        float4 moraleRecoveryRateByMorale = new float4
-        (
-            200.0f,
-            5.0f,
-            400.0f,
-            1.0f
-        );
-        float moraleRecoveryRate = lerpargs(moraleRecoveryRateByMorale, morale);
+        // MORALE RECOVERY
+
+        float moraleRecoveryRate = GetPersonnelMoraleRecoveryRate(entityId);
         float moraleGain = moraleRecoveryRate * _dT;
 
-        // TODO: configure
-        const float MinMorale = 0.0f;
-        const float MaxMorale = 600.0f;
+        // MORALE DYNAMICS
         
-        _personnelBuffer[entityId].morale = clamp(morale - moraleLoss + moraleGain, MinMorale, MaxMorale);
+        _personnelBuffer[entityId].morale = clamp(morale - moraleLoss + moraleGain, PERSONNEL_MORALE_MIN, PERSONNEL_MORALE_MAX);
         
         // FITNESS
 
-        if (abs(_movementBuffer[entityId].targetVelocity) > FLOAT_EPSILON)
+        float fitnessConsumptionRate = GetPersonnelFitnessConsumptionRate(entityId);
+
+        if (fitnessConsumptionRate > FLOAT_EPSILON)
         {
-            // TODO: configure
-            float4 fitnessByVelocity = new float4
-            (
-                1.4f,
-                1.0f,
-                4.17f,
-                8.0f
-            );
-
-            float dFitnessByDt = lerpargs(fitnessByVelocity, abs(_movementBuffer[entityId].targetVelocity));
-            float dFitness = dFitnessByDt * _dT;
-
-            if (dFitness > _personnelBuffer[entityId].fitness)
-            {
-                dFitness = _personnelBuffer[entityId].fitness;
-            }
-
-            _personnelBuffer[entityId].fitness -= dFitness;
+            float fitness = _personnelBuffer[entityId].fitness;
+            _personnelBuffer[entityId].fitness = clamp(fitness + fitnessConsumptionRate * _dT, PERSONNEL_FITNESS_MIN, PERSONNEL_FITNESS_MAX);
         }
     }
 }
