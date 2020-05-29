@@ -133,7 +133,7 @@ public class Advance : BehaviourTreeNode
                     if( ComputeShaderEmulator.HasComponents(firstChildEntityId, ComputeShaderEmulator.MOVABLE_PERSONNEL_MASK) )
                     {
                         bool allChildrenArrived = true;
-                        float4 targetVelocityByDistance = new float4( AdvanceDistance + 5.0f, 0.5f, AdvanceDistance + 10.0f, 1.0f );
+                        float4 targetVelocityByDistance = new float4( AdvanceDistance + 1.0f, 0.5f, AdvanceDistance + 10.0f, 1.0f );
                         
                         uint suppression = ComputeShaderEmulator.GetPersonnelSuppression(firstChildEntityId);
                         if (suppression < ComputeShaderEmulator.SUPPRESSION_PINNED)

@@ -293,8 +293,11 @@ MonoBehaviour:
     y: 0
     z: 0
     w: 1
-  TargetVelocity: 0
-  TargetAngularVelocity: 0
+  TargetVelocityByDistance:
+    x: 0
+    y: 0
+    z: 0
+    w: 0
 --- !u!114 &50754648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353,6 +356,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FrontlineWidth: 50
+  TargetPositionErrorThreshold: 1
 --- !u!1 &103197989
 GameObject:
   m_ObjectHideFlags: 0
@@ -574,8 +578,11 @@ MonoBehaviour:
     y: 0
     z: 0
     w: 1
-  TargetVelocity: 0
-  TargetAngularVelocity: 0
+  TargetVelocityByDistance:
+    x: 0
+    y: 0
+    z: 0
+    w: 0
 --- !u!114 &115422641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1217,6 +1224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FrontlineWidth: 50
+  LeapfrogDistance: 25
 --- !u!1 &342539617
 GameObject:
   m_ObjectHideFlags: 0
@@ -1509,6 +1517,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FrontlineWidth: 50
+  AdvanceDistance: 10
+  TargetPositionErrorThreshold: 1
 --- !u!1 &459451355
 GameObject:
   m_ObjectHideFlags: 0
@@ -2289,8 +2299,11 @@ MonoBehaviour:
     y: 0
     z: 0
     w: 1
-  TargetVelocity: 0
-  TargetAngularVelocity: 0
+  TargetVelocityByDistance:
+    x: 0
+    y: 0
+    z: 0
+    w: 0
 --- !u!114 &832503765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2405,6 +2418,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Radius: 5
+  TargetPositionErrorThreshold: 1
 --- !u!1 &851641392
 GameObject:
   m_ObjectHideFlags: 0
@@ -2626,8 +2640,11 @@ MonoBehaviour:
     y: 0
     z: 0
     w: 1
-  TargetVelocity: 0
-  TargetAngularVelocity: 0
+  TargetVelocityByDistance:
+    x: 0
+    y: 0
+    z: 0
+    w: 0
 --- !u!114 &854208703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2770,8 +2787,11 @@ MonoBehaviour:
     y: 0
     z: 0
     w: 1
-  TargetVelocity: 0
-  TargetAngularVelocity: 0
+  TargetVelocityByDistance:
+    x: 0
+    y: 0
+    z: 0
+    w: 0
 --- !u!114 &909305576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3193,8 +3213,11 @@ MonoBehaviour:
     y: 0
     z: 0
     w: 1
-  TargetVelocity: 0
-  TargetAngularVelocity: 0
+  TargetVelocityByDistance:
+    x: 0
+    y: 0
+    z: 0
+    w: 0
 --- !u!114 &1025601190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3253,6 +3276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Radius: 5
+  TargetPositionErrorThreshold: 1
 --- !u!1 &1110142094
 GameObject:
   m_ObjectHideFlags: 0
@@ -3390,6 +3414,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FrontlineWidth: 50
+  AdvanceDistance: 10
+  TargetPositionErrorThreshold: 1
 --- !u!1 &1196519417
 GameObject:
   m_ObjectHideFlags: 0
@@ -3527,6 +3553,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FrontlineWidth: 50
+  LeapfrogDistance: 25
 --- !u!1 &1219724289
 GameObject:
   m_ObjectHideFlags: 0
@@ -3599,8 +3626,11 @@ MonoBehaviour:
     y: 0
     z: 0
     w: 1
-  TargetVelocity: 0
-  TargetAngularVelocity: 0
+  TargetVelocityByDistance:
+    x: 0
+    y: 0
+    z: 0
+    w: 0
 --- !u!114 &1219724293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5371,8 +5401,11 @@ MonoBehaviour:
     y: 0
     z: 0
     w: 1
-  TargetVelocity: 0
-  TargetAngularVelocity: 0
+  TargetVelocityByDistance:
+    x: 0
+    y: 0
+    z: 0
+    w: 0
 --- !u!114 &1895606210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5515,8 +5548,11 @@ MonoBehaviour:
     y: 0
     z: 0
     w: 1
-  TargetVelocity: 0
-  TargetAngularVelocity: 0
+  TargetVelocityByDistance:
+    x: 0
+    y: 0
+    z: 0
+    w: 0
 --- !u!114 &1897142796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5994,6 +6030,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FrontlineWidth: 50
+  TargetPositionErrorThreshold: 1
 --- !u!1 &2006245100
 GameObject:
   m_ObjectHideFlags: 0
@@ -6541,8 +6578,11 @@ MonoBehaviour:
     y: 0
     z: 0
     w: 1
-  TargetVelocity: 0
-  TargetAngularVelocity: 0
+  TargetVelocityByDistance:
+    x: 0
+    y: 0
+    z: 0
+    w: 0
 --- !u!114 &2100194443
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,6 +7,11 @@ using UnityEditor.SceneManagement;
 [CustomEditor(typeof(MovementProxy))]
 public class MovementProxyEditor : Editor
 {
+    public override bool RequiresConstantRepaint()
+    {
+        return true;
+    }
+    
     public override void OnInspectorGUI()
     {
         MovementProxy movementProxy = target as MovementProxy;
@@ -36,6 +41,10 @@ public class MovementProxyEditor : Editor
             
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("deltaPosition");
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("velocity");
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();
@@ -94,6 +103,18 @@ public class MovementProxyEditor : Editor
             EditorGUILayout.LabelField(movementProxy.deltaPosition.x.ToString("F2") + ", " + movementProxy.deltaPosition.y.ToString("F2") + ", " + movementProxy.deltaPosition.z.ToString("F2"));
             EditorGUILayout.EndHorizontal();
 
+            EditorGUILayout.BeginHorizontal();
+            if (ComputeShaderEmulator._dT > ComputeShaderEmulator.FLOAT_EPSILON)
+            {
+                float vel = ComputeShaderEmulator.length(movementProxy.deltaPosition) / ComputeShaderEmulator._dT;
+                EditorGUILayout.LabelField(vel.ToString("F2") + " m/s");
+            }
+            else
+            {
+                EditorGUILayout.LabelField("");
+            }
+
+            EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();
         

@@ -107,7 +107,8 @@ public partial class ComputeShaderEmulator
             
             if( stop )
             {
-                StopMovement(entityId);
+                _movementBuffer[entityId].targetPosition = _transformBuffer[entityId].position;
+                _movementBuffer[entityId].targetVelocityByDistance = new float4(0,0,0,0);
             }
         }
         else
@@ -193,7 +194,7 @@ public partial class ComputeShaderEmulator
         if (fitnessConsumptionRate > FLOAT_EPSILON)
         {
             float fitness = _personnelBuffer[entityId].fitness;
-            _personnelBuffer[entityId].fitness = clamp(fitness + fitnessConsumptionRate * _dT, PERSONNEL_FITNESS_MIN, PERSONNEL_FITNESS_MAX);
+            _personnelBuffer[entityId].fitness = clamp(fitness - fitnessConsumptionRate * _dT, PERSONNEL_FITNESS_MIN, PERSONNEL_FITNESS_MAX);
         }
     }
 }
