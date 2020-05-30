@@ -350,6 +350,14 @@ public class EntityAssemblyEditor : Editor
         DrawFirearmDescs();
         DrawPersonnelDescs();
         
+        DrawHeaderLabel("Simulation");
+        _entityAssembly.NumCPUThreads = EditorGUILayout.IntField("NumCPUThreads", _entityAssembly.NumCPUThreads);
+        _entityAssembly.RngSeedFromTimer = EditorGUILayout.Toggle("RngSeedFromTimer", _entityAssembly.RngSeedFromTimer);
+        _entityAssembly.RngSeed = (uint) EditorGUILayout.IntField("RngSeed", (int)_entityAssembly.RngSeed);
+        _entityAssembly.RngMaxUniform = (uint) EditorGUILayout.IntField("RngMaxUniform", (int)_entityAssembly.RngMaxUniform);
+        _entityAssembly.RngCount = (uint) EditorGUILayout.IntField("RngCount", (int)_entityAssembly.RngCount);
+        _entityAssembly.RngStateLength = (uint) EditorGUILayout.IntField("RngStateLength", (int)_entityAssembly.RngStateLength);
+
         EditorUtility.SetDirty( _entityAssembly );
     }
 
