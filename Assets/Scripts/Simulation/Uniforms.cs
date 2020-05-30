@@ -71,11 +71,18 @@ public partial class ComputeShaderEmulator
     public static Movement[] _movementBuffer = new Movement[0];
     public static Firepower[] _firepowerBuffer = new Firepower[0];
     
+    // MAP HELPERS
+    
+    public static float GetMapAltitude(double2 coordinate)
+    {
+        return 0.0f;
+    }
+    
     // COMPONENT MASKS
     
-    public const uint MOVABLE_MASK = TRANSFORM | MOVEMENT;
-    public const uint MOVABLE_PERSONNEL_MASK = TRANSFORM | MOVEMENT | PERSONNEL;
-    public const uint HIERARCHY_PERSONNEL_MASK = HIERARCHY | PERSONNEL; 
+    public const uint TRANSFORM_MOVEMENT = TRANSFORM | MOVEMENT;
+    public const uint TRANSFORM_PERSONNEL_MOVEMENT = TRANSFORM | PERSONNEL | MOVEMENT;
+    public const uint HIERARCHY_PERSONNEL = HIERARCHY | PERSONNEL;
     
     public static bool HasComponents(uint entityId, uint mask)
     {
@@ -93,7 +100,7 @@ public partial class ComputeShaderEmulator
             Debug.Assert(entityId > 0 && entityId < _entityCount);
         #endif
         #if ASSERTIVE_COMPONENT_ACCESS
-            Debug.Assert((_descBuffer[entityId] & MOVABLE_MASK) == MOVABLE_MASK);
+            Debug.Assert((_descBuffer[entityId] & TRANSFORM_MOVEMENT) == TRANSFORM_MOVEMENT);
         #endif
         return abs(_movementBuffer[entityId].targetVelocityByDistance.y) > FLOAT_EPSILON ||
                abs(_movementBuffer[entityId].targetVelocityByDistance.w) > FLOAT_EPSILON;
@@ -105,7 +112,7 @@ public partial class ComputeShaderEmulator
             Debug.Assert(entityId > 0 && entityId < _entityCount);
         #endif
         #if ASSERTIVE_COMPONENT_ACCESS
-            Debug.Assert((_descBuffer[entityId] & MOVABLE_MASK) == MOVABLE_MASK);
+            Debug.Assert((_descBuffer[entityId] & TRANSFORM_MOVEMENT) == TRANSFORM_MOVEMENT);
         #endif
         float3 delta = _transformBuffer[entityId].position - _movementBuffer[entityId].targetPosition;
         return dot(delta, delta) < distanceThreshold * distanceThreshold;
@@ -117,7 +124,7 @@ public partial class ComputeShaderEmulator
             Debug.Assert(entityId > 0 && entityId < _entityCount);
         #endif
         #if ASSERTIVE_COMPONENT_ACCESS
-            Debug.Assert((_descBuffer[entityId] & MOVABLE_MASK) == MOVABLE_MASK);
+            Debug.Assert((_descBuffer[entityId] & TRANSFORM_MOVEMENT) == TRANSFORM_MOVEMENT);
         #endif
         float3 delta = _transformBuffer[entityId].position - _movementBuffer[entityId].targetPosition;
         return dot(delta, delta) < dot(_transformBuffer[entityId].scale, _transformBuffer[entityId].scale);
@@ -129,7 +136,7 @@ public partial class ComputeShaderEmulator
             Debug.Assert(entityId > 0 && entityId < _entityCount);
         #endif
         #if ASSERTIVE_COMPONENT_ACCESS
-            Debug.Assert((_descBuffer[entityId] & MOVABLE_MASK) == MOVABLE_MASK);
+            Debug.Assert((_descBuffer[entityId] & TRANSFORM_MOVEMENT) == TRANSFORM_MOVEMENT);
         #endif
         _movementBuffer[entityId].targetPosition = targetPosition;
         _movementBuffer[entityId].targetRotation = targetRotation;
@@ -142,7 +149,7 @@ public partial class ComputeShaderEmulator
             Debug.Assert(entityId > 0 && entityId < _entityCount);
         #endif
         #if ASSERTIVE_COMPONENT_ACCESS
-            Debug.Assert((_descBuffer[entityId] & MOVABLE_MASK) == MOVABLE_MASK);
+            Debug.Assert((_descBuffer[entityId] & TRANSFORM_MOVEMENT) == TRANSFORM_MOVEMENT);
         #endif
 
         double3 targetPositionError = _movementBuffer[entityId].targetPosition - targetPosition;
@@ -158,7 +165,7 @@ public partial class ComputeShaderEmulator
             Debug.Assert(entityId > 0 && entityId < _entityCount);
         #endif
         #if ASSERTIVE_COMPONENT_ACCESS
-            Debug.Assert((_descBuffer[entityId] & MOVABLE_MASK) == MOVABLE_MASK);
+            Debug.Assert((_descBuffer[entityId] & TRANSFORM_MOVEMENT) == TRANSFORM_MOVEMENT);
         #endif
         _movementBuffer[entityId].targetPosition = _transformBuffer[entityId].position;
         _movementBuffer[entityId].targetRotation = _transformBuffer[entityId].rotation;
@@ -176,6 +183,42 @@ public partial class ComputeShaderEmulator
             Debug.Assert((_descBuffer[entityId] & PERSONNEL) == PERSONNEL);
         #endif
         return (_personnelBuffer[entityId].status & PERSONNEL_POSE_BITMASK) >> (int)PERSONNEL_POSE_SHIFT;
+    }
+    
+    public static void SetPersonnelPose(uint entityId, uint pose)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & TRANSFORM_PERSONNEL_MOVEMENT) == TRANSFORM_PERSONNEL_MOVEMENT);
+        #endif
+
+        pose = pose < PERSONNEL_POSE_HIDING ? PERSONNEL_POSE_HIDING : pose;
+        pose = pose > PERSONNEL_POSE_STANDING ? PERSONNEL_POSE_STANDING : pose;
+
+        uint prevPose = GetPersonnelPose(entityId);
+        if (prevPose != pose)
+        {
+            uint status = _personnelBuffer[entityId].status;
+            status &= ~PERSONNEL_POSE_BITMASK;
+            status |= pose << (int)PERSONNEL_POSE_SHIFT;
+
+            _personnelBuffer[entityId].status = status;
+
+            if (pose == PERSONNEL_POSE_STANDING)
+            {
+                _transformBuffer[entityId].scale.y = 1.8f;
+            }
+            else if (pose == PERSONNEL_POSE_CROUCHING)
+            {
+                _transformBuffer[entityId].scale.y = 1.2f;
+            }
+            else
+            {
+                _transformBuffer[entityId].scale.y = 0.4f;
+            }
+        }
     }
 
     public static uint GetPersonnelSuppression(uint entityId)
@@ -217,7 +260,7 @@ public partial class ComputeShaderEmulator
             Debug.Assert(entityId > 0 && entityId < _entityCount);
         #endif
         #if ASSERTIVE_COMPONENT_ACCESS
-            Debug.Assert((_descBuffer[entityId] & MOVABLE_MASK) == MOVABLE_MASK);
+            Debug.Assert((_descBuffer[entityId] & TRANSFORM_MOVEMENT) == TRANSFORM_MOVEMENT);
         #endif
         #if ASSERTIVE_FUNCTION_CALLS
             Debug.Assert(IsMoving(entityId));
@@ -274,7 +317,7 @@ public partial class ComputeShaderEmulator
             Debug.Assert(entityId > 0 && entityId < _entityCount);
         #endif
         #if ASSERTIVE_COMPONENT_ACCESS
-            Debug.Assert((_descBuffer[entityId] & MOVABLE_MASK) == MOVABLE_MASK);
+            Debug.Assert((_descBuffer[entityId] & TRANSFORM_MOVEMENT) == TRANSFORM_MOVEMENT);
         #endif
         
         uint personnelPose = GetPersonnelPose(entityId);
@@ -353,7 +396,7 @@ public partial class ComputeShaderEmulator
             Debug.Assert(entityId > 0 && entityId < _entityCount);
         #endif
         #if ASSERTIVE_COMPONENT_ACCESS
-            Debug.Assert((_descBuffer[entityId] & MOVABLE_MASK) == MOVABLE_MASK);
+            Debug.Assert((_descBuffer[entityId] & TRANSFORM_MOVEMENT) == TRANSFORM_MOVEMENT);
         #endif
         
         uint personnelDescId = _personnelBuffer[entityId].descId;

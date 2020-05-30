@@ -94,7 +94,7 @@ public class Advance : BehaviourTreeNode
         {
             uint entityChildCount = GetEntityFilteredChildCount(entityId, (childEntityId) =>
             {
-                if (!ComputeShaderEmulator.HasComponents(childEntityId, ComputeShaderEmulator.MOVABLE_PERSONNEL_MASK))
+                if (!ComputeShaderEmulator.HasComponents(childEntityId, ComputeShaderEmulator.TRANSFORM_PERSONNEL_MOVEMENT))
                 {
                     return false;
                 }
@@ -130,10 +130,10 @@ public class Advance : BehaviourTreeNode
                 uint firstChildEntityId = hierarchyBuffer[entityId].firstChildEntityId;
                 if (firstChildEntityId > 0)
                 {
-                    if( ComputeShaderEmulator.HasComponents(firstChildEntityId, ComputeShaderEmulator.MOVABLE_PERSONNEL_MASK) )
+                    if( ComputeShaderEmulator.HasComponents(firstChildEntityId, ComputeShaderEmulator.TRANSFORM_PERSONNEL_MOVEMENT) )
                     {
                         bool allChildrenArrived = true;
-                        float4 targetVelocityByDistance = new float4( AdvanceDistance + 1.0f, 0.5f, AdvanceDistance + 10.0f, 1.0f );
+                        float4 targetVelocityByDistance = new float4( AdvanceDistance + 5.0f, 0.5f, AdvanceDistance + 10.0f, 1.0f );
                         
                         uint suppression = ComputeShaderEmulator.GetPersonnelSuppression(firstChildEntityId);
                         if (suppression < ComputeShaderEmulator.SUPPRESSION_PINNED)
@@ -153,7 +153,7 @@ public class Advance : BehaviourTreeNode
                             {
                                 nextSiblingEntityId = hierarchyBuffer[nextSiblingEntityId].nextSiblingEntityId;
                                 
-                                if( ComputeShaderEmulator.HasComponents(nextSiblingEntityId, ComputeShaderEmulator.MOVABLE_PERSONNEL_MASK) )
+                                if( ComputeShaderEmulator.HasComponents(nextSiblingEntityId, ComputeShaderEmulator.TRANSFORM_PERSONNEL_MOVEMENT) )
                                 {
                                     suppression = ComputeShaderEmulator.GetPersonnelSuppression(nextSiblingEntityId);
                                     if (suppression < ComputeShaderEmulator.SUPPRESSION_PINNED)

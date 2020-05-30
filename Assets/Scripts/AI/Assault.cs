@@ -81,7 +81,7 @@ public class Assault : BehaviourTreeNode
     #region BehaviourTreeNode
     private static void Halt(uint entityId)
     {
-        if (ComputeShaderEmulator.HasComponents(entityId,ComputeShaderEmulator.MOVABLE_MASK))
+        if (ComputeShaderEmulator.HasComponents(entityId,ComputeShaderEmulator.TRANSFORM_MOVEMENT))
         {
             ComputeShaderEmulator.StopMovement(entityId);
         }
@@ -97,7 +97,7 @@ public class Assault : BehaviourTreeNode
     {
         uint entityChildCount = GetEntityFilteredChildCount(entityId, (childEntityId) =>
         {
-            if (!ComputeShaderEmulator.HasComponents(childEntityId, ComputeShaderEmulator.MOVABLE_PERSONNEL_MASK))
+            if (!ComputeShaderEmulator.HasComponents(childEntityId, ComputeShaderEmulator.TRANSFORM_PERSONNEL_MOVEMENT))
             {
                 return false;
             }
@@ -118,7 +118,7 @@ public class Assault : BehaviourTreeNode
         double3 targetPositionOffset = this.transform.right * FrontlineWidth / Mathf.Max(entityChildCount-1, 1);
         ForEveryChildEntity(entityId, (childEntityId) =>
         {
-            if( ComputeShaderEmulator.HasComponents(childEntityId, ComputeShaderEmulator.MOVABLE_PERSONNEL_MASK) )
+            if( ComputeShaderEmulator.HasComponents(childEntityId, ComputeShaderEmulator.TRANSFORM_PERSONNEL_MOVEMENT) )
             {
                 uint suppression = ComputeShaderEmulator.GetPersonnelSuppression(childEntityId);
                 if (suppression < ComputeShaderEmulator.SUPPRESSION_PINNED)
@@ -165,7 +165,7 @@ public class Assault : BehaviourTreeNode
         bool result = true;
         ForEveryChildEntity(entityId, (childEntityId) =>
         {
-            if (ComputeShaderEmulator.HasComponents(childEntityId, ComputeShaderEmulator.MOVABLE_PERSONNEL_MASK))
+            if (ComputeShaderEmulator.HasComponents(childEntityId, ComputeShaderEmulator.TRANSFORM_PERSONNEL_MOVEMENT))
             {
                 uint suppression = ComputeShaderEmulator.GetPersonnelSuppression(childEntityId);
                 if (suppression < ComputeShaderEmulator.SUPPRESSION_PINNED)

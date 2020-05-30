@@ -33,7 +33,7 @@ public partial class ComputeShaderEmulator
             return;
         }
         
-        if ( !HasComponents( entityId, MOVABLE_PERSONNEL_MASK ) )
+        if ( !HasComponents( entityId, TRANSFORM_PERSONNEL_MOVEMENT ) )
         {
             return;
         }
@@ -104,11 +104,21 @@ public partial class ComputeShaderEmulator
             _transformBuffer[entityId].position += new double3( targetDir.x, 0, targetDir.y ) * deltaDist;
             float4 deltaRotation = quaternionFromAsixAngle(deltaAngle, new float3(0, 1, 0));
             _transformBuffer[entityId].rotation = transformQuaternion(deltaRotation, _transformBuffer[entityId].rotation);
-            
+
             if( stop )
             {
                 _movementBuffer[entityId].targetPosition = _transformBuffer[entityId].position;
                 _movementBuffer[entityId].targetVelocityByDistance = new float4(0,0,0,0);
+            }
+            
+            // adjust altitude
+            
+            float mapAltitude = GetMapAltitude(_transformBuffer[entityId].position.xz);
+            float bottomAltitude = (float) _transformBuffer[entityId].position.y - _transformBuffer[entityId].scale.y / 2.0f;
+            float deltaAltitude = mapAltitude - bottomAltitude;
+            if (abs(deltaAltitude) > FLOAT_EPSILON)
+            {
+                _transformBuffer[entityId].position.y += deltaAltitude;
             }
         }
         else
@@ -153,7 +163,7 @@ public partial class ComputeShaderEmulator
             return;
         }
 
-        if ( !HasComponents( entityId, MOVABLE_PERSONNEL_MASK ) )
+        if ( !HasComponents( entityId, TRANSFORM_PERSONNEL_MOVEMENT ) )
         {
             return;
         }
@@ -186,6 +196,26 @@ public partial class ComputeShaderEmulator
         // MORALE DYNAMICS
         
         _personnelBuffer[entityId].morale = clamp(morale - moraleLoss + moraleGain, PERSONNEL_MORALE_MIN, PERSONNEL_MORALE_MAX);
+        
+        // POSE DYNAMICS
+
+        uint suppression = GetPersonnelSuppression(entityId);
+        if (suppression >= SUPPRESSION_PANIC)
+        {
+            SetPersonnelPose(entityId, PERSONNEL_POSE_HIDING);
+        }
+        else if (suppression >= SUPPRESSION_PINNED)
+        {
+            SetPersonnelPose(entityId, PERSONNEL_POSE_LAYING);
+        }
+        else if (suppression >= SUPPRESSION_SHAKEN)
+        {
+            SetPersonnelPose(entityId, PERSONNEL_POSE_CROUCHING);
+        }
+        else
+        {
+            SetPersonnelPose(entityId, PERSONNEL_POSE_STANDING);
+        }
         
         // FITNESS
 
