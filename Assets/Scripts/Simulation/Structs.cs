@@ -44,6 +44,7 @@ namespace Structs
         public uint parentEntityId;
         public uint firstChildEntityId;
         public uint nextSiblingEntityId;
+        public uint joinEntityId;
     };
 
     public struct Personnel

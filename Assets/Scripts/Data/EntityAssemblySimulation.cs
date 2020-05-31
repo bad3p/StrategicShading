@@ -85,9 +85,13 @@ public partial class EntityAssembly : MonoBehaviour
             return;
         }
 
+        const uint ThreadGroupSizeX = 256;
+        uint threadGroupsX = ComputeShaderEmulator._entityCount / ThreadGroupSizeX + 1; 
+
         ComputeShaderEmulator._dT = Time.deltaTime;
-        ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateMovement, (uint)_movementBuffer.Count / 256 + 1, 1, 1 );
-        ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdatePersonnel, (uint)_movementBuffer.Count / 256 + 1, 1, 1 );
+        ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateMovement, threadGroupsX, 1, 1 );
+        ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdatePersonnel, threadGroupsX, 1, 1 );
+        ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateJoinRequests, threadGroupsX, 1, 1 );
 
         SyncBuffers(ref ComputeShaderEmulator._descBuffer, _descBuffer);
         SyncBuffers(ref ComputeShaderEmulator._transformBuffer, _transformBuffer);

@@ -92,6 +92,106 @@ public partial class ComputeShaderEmulator
         return ((_descBuffer[entityId] & mask) == mask);
     }
     
+    // HIERARCHY HELPERS
+
+    public static bool IsChildHierarchy(uint entityId, uint childEntityId)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+            Debug.Assert(childEntityId > 0 && childEntityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & HIERARCHY) == HIERARCHY);
+            Debug.Assert((_descBuffer[childEntityId] & HIERARCHY) == HIERARCHY);
+        #endif
+
+        if (_hierarchyBuffer[entityId].firstChildEntityId == childEntityId)
+        {
+            return true;
+        }
+        else
+        {
+            uint nextSiblingEntityId = _hierarchyBuffer[entityId].firstChildEntityId;
+            while (_hierarchyBuffer[nextSiblingEntityId].nextSiblingEntityId > 0 && _hierarchyBuffer[nextSiblingEntityId].nextSiblingEntityId != childEntityId)
+            {
+                nextSiblingEntityId = _hierarchyBuffer[nextSiblingEntityId].nextSiblingEntityId;
+            }
+            return _hierarchyBuffer[nextSiblingEntityId].nextSiblingEntityId == childEntityId;
+        }
+    }
+    
+    public static void ConnectChildHierarchy(uint entityId, uint childEntityId)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+            Debug.Assert(childEntityId > 0 && childEntityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & HIERARCHY) == HIERARCHY);
+            Debug.Assert((_descBuffer[childEntityId] & HIERARCHY) == HIERARCHY);
+        #endif
+        #if ASSERTIVE_FUNCTION_CALLS
+            Debug.Assert(_hierarchyBuffer[childEntityId].parentEntityId == 0);
+            Debug.Assert(!IsChildHierarchy(entityId,childEntityId));
+        #endif
+        
+        if (_hierarchyBuffer[entityId].firstChildEntityId == 0)
+        {
+            _hierarchyBuffer[entityId].firstChildEntityId = childEntityId;
+            _hierarchyBuffer[childEntityId].parentEntityId = entityId;
+        }
+        else
+        {
+            uint lastSiblingEntityId = _hierarchyBuffer[entityId].firstChildEntityId;
+            while (_hierarchyBuffer[lastSiblingEntityId].nextSiblingEntityId > 0 )
+            {
+                lastSiblingEntityId = _hierarchyBuffer[lastSiblingEntityId].nextSiblingEntityId;
+            }
+            _hierarchyBuffer[lastSiblingEntityId].nextSiblingEntityId = childEntityId;
+            _hierarchyBuffer[childEntityId].parentEntityId = entityId;
+        }
+    }
+
+    public static void DisconnectChildHierarchy(uint entityId, uint childEntityId)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+            Debug.Assert(childEntityId > 0 && childEntityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & HIERARCHY) == HIERARCHY);
+            Debug.Assert((_descBuffer[childEntityId] & HIERARCHY) == HIERARCHY);
+        #endif
+        #if ASSERTIVE_FUNCTION_CALLS
+            Debug.Assert(_hierarchyBuffer[childEntityId].parentEntityId == entityId);
+            Debug.Assert(IsChildHierarchy(entityId,childEntityId));
+        #endif
+        
+        if (_hierarchyBuffer[entityId].firstChildEntityId == childEntityId)
+        {
+            _hierarchyBuffer[entityId].firstChildEntityId = _hierarchyBuffer[childEntityId].nextSiblingEntityId;
+            _hierarchyBuffer[childEntityId].parentEntityId = 0;
+            _hierarchyBuffer[childEntityId].nextSiblingEntityId = 0;
+        }
+        else
+        {
+            uint prevSiblingEntityId = _hierarchyBuffer[entityId].firstChildEntityId;
+            while (_hierarchyBuffer[prevSiblingEntityId].nextSiblingEntityId > 0 && _hierarchyBuffer[prevSiblingEntityId].nextSiblingEntityId != childEntityId)
+            {
+                prevSiblingEntityId = _hierarchyBuffer[prevSiblingEntityId].nextSiblingEntityId;
+            }
+            #if ASSERTIVE_FUNCTION_CALLS
+                Debug.Assert( _hierarchyBuffer[prevSiblingEntityId].nextSiblingEntityId == childEntityId );
+            #endif           
+            if (_hierarchyBuffer[prevSiblingEntityId].nextSiblingEntityId == childEntityId)
+            {
+                _hierarchyBuffer[prevSiblingEntityId].nextSiblingEntityId = _hierarchyBuffer[childEntityId].nextSiblingEntityId;
+                _hierarchyBuffer[childEntityId].parentEntityId = 0;
+                _hierarchyBuffer[childEntityId].nextSiblingEntityId = 0;
+            }
+        }
+    }
+    
     // MOVEMENT HELPERS
 
     public static bool IsMoving(uint entityId)

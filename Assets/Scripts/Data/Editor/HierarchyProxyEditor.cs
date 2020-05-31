@@ -31,6 +31,10 @@ public class HierarchyProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("nextSiblingEntityId");
             EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("joinEntityId");
+            EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();
         
@@ -46,6 +50,10 @@ public class HierarchyProxyEditor : Editor
             
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField( hierarchyProxy.nextSiblingEntityId.ToString() );
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField( hierarchyProxy.joinEntityId.ToString() );
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();

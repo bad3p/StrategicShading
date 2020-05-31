@@ -272,4 +272,15 @@ public class HierarchyProxy : ComponentProxy
             _component = temp;
         }
     }
+    
+    public uint joinEntityId
+    {
+        get { return _component.joinEntityId; }
+        set
+        {
+            var temp = _component;
+            temp.joinEntityId = value;
+            _component = temp;
+        }
+    }
 }

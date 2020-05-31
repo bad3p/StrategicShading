@@ -177,7 +177,7 @@ public partial class ComputeShaderEmulator
             400.0f,
             1.0f / 3300.0f,
             600.0f,
-            1.0f / 330.0f
+            1.0f / 110.0f
         );
 
         float diceThreshold = lerpargs(moraleLossProbabilityByMorale, morale);
@@ -217,6 +217,26 @@ public partial class ComputeShaderEmulator
             SetPersonnelPose(entityId, PERSONNEL_POSE_STANDING);
         }
         
+        // JOIN & LEAVE HIERARCHY REQUESTS
+        
+        if (suppression >= SUPPRESSION_PINNED )
+        {
+            uint parentEntityId = _hierarchyBuffer[entityId].parentEntityId;
+            if (parentEntityId > 0)
+            {
+                _hierarchyBuffer[parentEntityId].joinEntityId = entityId;
+            }
+        }
+        else if (suppression < SUPPRESSION_PINNED )
+        {
+            uint parentEntityId = _hierarchyBuffer[entityId].parentEntityId;
+            uint joinEntityId = _hierarchyBuffer[entityId].joinEntityId;
+            if (parentEntityId == 0 && joinEntityId > 0)
+            {
+                _hierarchyBuffer[joinEntityId].joinEntityId = entityId;
+            }
+        }
+        
         // FITNESS
 
         float fitnessConsumptionRate = GetPersonnelFitnessConsumptionRate(entityId);
@@ -225,6 +245,39 @@ public partial class ComputeShaderEmulator
         {
             float fitness = _personnelBuffer[entityId].fitness;
             _personnelBuffer[entityId].fitness = clamp(fitness - fitnessConsumptionRate * _dT, PERSONNEL_FITNESS_MIN, PERSONNEL_FITNESS_MAX);
+        }
+    }
+
+    [NumThreads(256, 1, 1)]
+    static public void UpdateJoinRequests(uint3 id)
+    {
+        uint entityId = id.x;
+        if (entityId == 0 || entityId >= _entityCount)
+        {
+            return;
+        }
+        
+        // process only entities representing groups of sub-units
+
+        if ( (_descBuffer[entityId] & ~TEAM_BITMASK ) == HIERARCHY )
+        {
+            uint childEntityId = _hierarchyBuffer[entityId].joinEntityId; 
+            if ( childEntityId > 0 )
+            {
+                // request resolution : entity want to leave hierarchy
+                if (_hierarchyBuffer[childEntityId].parentEntityId == entityId)
+                {
+                    DisconnectChildHierarchy(entityId, childEntityId);
+                    _hierarchyBuffer[childEntityId].joinEntityId = entityId;
+                }
+                // request resolution : entity want to join hierarchy
+                else if (_hierarchyBuffer[childEntityId].parentEntityId == 0)
+                {
+                    ConnectChildHierarchy(entityId,childEntityId);
+                    _hierarchyBuffer[childEntityId].joinEntityId = 0;
+                }
+                _hierarchyBuffer[entityId].joinEntityId = 0;
+            }
         }
     }
 }
