@@ -35,9 +35,9 @@ public partial class EntityAssembly : MonoBehaviour
     private Dictionary<uint, MovementProxy> _movementProxyById = new Dictionary<uint, MovementProxy>();
     private Dictionary<MovementProxy, uint> _idByMovementProxy = new Dictionary<MovementProxy,uint>();
     
-    private List<Structs.Firepower> _firepowerBuffer = new List<Structs.Firepower>() { new Structs.Firepower() };
-    private Dictionary<uint, FirepowerProxy> _firepowerProxyById = new Dictionary<uint, FirepowerProxy>();
-    private Dictionary<FirepowerProxy, uint> _idByFirepowerProxy = new Dictionary<FirepowerProxy,uint>();
+    private List<Structs.Targeting> _targetingBuffer = new List<Structs.Targeting>() { new Structs.Targeting() };
+    private Dictionary<uint, TargetingProxy> _targetingProxyById = new Dictionary<uint, TargetingProxy>();
+    private Dictionary<TargetingProxy, uint> _idByTargetingProxy = new Dictionary<TargetingProxy,uint>();
     
     #region Generics
     uint GetComponentBitMask<P>(P proxy) where P : ComponentProxy
@@ -62,9 +62,9 @@ public partial class EntityAssembly : MonoBehaviour
         {
             return ComputeShaderEmulator.MOVEMENT;
         }
-        else if (proxy is FirepowerProxy)
+        else if (proxy is TargetingProxy)
         {
-            return ComputeShaderEmulator.FIREPOWER;
+            return ComputeShaderEmulator.TARGETING;
         }
         else
         {
@@ -226,7 +226,7 @@ public partial class EntityAssembly : MonoBehaviour
             _personnelBuffer.Add( new Structs.Personnel() );
             _firearmsBuffer.Add( new Structs.Firearm() );
             _movementBuffer.Add( new Structs.Movement() );
-            _firepowerBuffer.Add( new Structs.Firepower() );
+            _targetingBuffer.Add( new Structs.Targeting() );
         }
         return entityId;
     }
@@ -422,35 +422,35 @@ public partial class EntityAssembly : MonoBehaviour
     }
     #endregion
     
-    #region Firepower
-    public uint GetEntityId(FirepowerProxy firepowerProxy)
+    #region Targeting
+    public uint GetEntityId(TargetingProxy targetingProxy)
     {
-        return GetComponentEntityId( firepowerProxy, _idByFirepowerProxy );
+        return GetComponentEntityId( targetingProxy, _idByTargetingProxy );
     }
     
-    public FirepowerProxy GetFirepowerProxy(uint entityId)
+    public TargetingProxy GetTargetingProxy(uint entityId)
     {
-        return GetComponentProxy( entityId, _firepowerProxyById );
+        return GetComponentProxy( entityId, _targetingProxyById );
     }
     
-    public void RegisterFirepowerProxy(uint entityId, FirepowerProxy firepowerProxy)
+    public void RegisterTargetingProxy(uint entityId, TargetingProxy targetingProxy)
     {
-        RegisterComponentProxy( entityId, firepowerProxy, _idByFirepowerProxy, _firepowerProxyById );
+        RegisterComponentProxy( entityId, targetingProxy, _idByTargetingProxy, _targetingProxyById );
     }
     
-    public void UnregisterFirepowerProxy(uint entityId, FirepowerProxy firepowerProxy)
+    public void UnregisterTargetingProxy(uint entityId, TargetingProxy targetingProxy)
     {
-        UnregisterComponentProxy( entityId, firepowerProxy, _idByFirepowerProxy, _firepowerProxyById );
+        UnregisterComponentProxy( entityId, targetingProxy, _idByTargetingProxy, _targetingProxyById );
     }
     
-    public Structs.Firepower GetFirepower(uint entityId)
+    public Structs.Targeting GetTargeting(uint entityId)
     {
-        return GetComponent<FirepowerProxy,Structs.Firepower>(entityId, _firepowerBuffer);
+        return GetComponent<TargetingProxy,Structs.Targeting>(entityId, _targetingBuffer);
     }
     
-    public void SetFirepower(uint entityId, Structs.Firepower f)
+    public void SetTargeting(uint entityId, Structs.Targeting f)
     {
-        SetComponent<FirepowerProxy,Structs.Firepower>(entityId, f, _firepowerBuffer);
+        SetComponent<TargetingProxy,Structs.Targeting>(entityId, f, _targetingBuffer);
     }
     #endregion
 }

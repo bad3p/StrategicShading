@@ -70,7 +70,7 @@ public partial class EntityAssembly : MonoBehaviour
         InitBuffer(_personnelBuffer, ref ComputeShaderEmulator._personnelBuffer);
         InitBuffer(_firearmsBuffer, ref ComputeShaderEmulator.FirearmBuffer);
         InitBuffer(_movementBuffer, ref ComputeShaderEmulator._movementBuffer);
-        InitBuffer(_firepowerBuffer, ref ComputeShaderEmulator._firepowerBuffer);
+        InitBuffer(_targetingBuffer, ref ComputeShaderEmulator.TargetingBuffer);
         InitBuffer(FirearmDescBuffer, ref ComputeShaderEmulator._firearmDescBuffer);
         InitBuffer(PersonnelDescBuffer, ref ComputeShaderEmulator._personnelDescBuffer);
         ComputeShaderEmulator._entityCount = (uint)_descBuffer.Count;
@@ -99,7 +99,7 @@ public partial class EntityAssembly : MonoBehaviour
         SyncBuffers(ref ComputeShaderEmulator._personnelBuffer, _personnelBuffer);
         SyncBuffers(ref ComputeShaderEmulator.FirearmBuffer, _firearmsBuffer);
         SyncBuffers(ref ComputeShaderEmulator._movementBuffer, _movementBuffer);
-        SyncBuffers(ref ComputeShaderEmulator._firepowerBuffer, _firepowerBuffer);
+        SyncBuffers(ref ComputeShaderEmulator.TargetingBuffer, _targetingBuffer);
     }
 #endif    
 }

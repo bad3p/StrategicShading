@@ -73,10 +73,10 @@
      <Compile Include="Assets\Scripts\Data\EntityAssemblySimulation.cs" />
      <Compile Include="Assets\Scripts\Data\EntityProxy.cs" />
      <Compile Include="Assets\Scripts\Data\FirearmProxy.cs" />
-     <Compile Include="Assets\Scripts\Data\FirepowerProxy.cs" />
      <Compile Include="Assets\Scripts\Data\HierarchyProxy.cs" />
      <Compile Include="Assets\Scripts\Data\MovementProxy.cs" />
      <Compile Include="Assets\Scripts\Data\PersonnelProxy.cs" />
+     <Compile Include="Assets\Scripts\Data\TargetingProxy.cs" />
      <Compile Include="Assets\Scripts\Data\TransformProxy.cs" />
      <Compile Include="Assets\Scripts\DemoUI.cs" />
      <Compile Include="Assets\Scripts\Geometry\ConcaveHull.cs" />

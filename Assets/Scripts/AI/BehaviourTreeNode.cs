@@ -29,7 +29,7 @@ public abstract class BehaviourTreeNode : MonoBehaviour
     protected static Structs.Personnel[] personnelBuffer { get => ComputeShaderEmulator._personnelBuffer; }
     protected static Structs.Firearm[] FirearmBuffer { get => ComputeShaderEmulator.FirearmBuffer; }
     protected static Structs.Movement[] movementBuffer { get => ComputeShaderEmulator._movementBuffer; }
-    protected static Structs.Firepower[] firepowerBuffer { get => ComputeShaderEmulator._firepowerBuffer; }
+    protected static Structs.Targeting[] TargetingBuffer { get => ComputeShaderEmulator.TargetingBuffer; }
     
     protected static void ForEveryChildEntity(uint entityId, Action<uint> callback)
     {

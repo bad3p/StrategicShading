@@ -8,7 +8,7 @@ using UnityEditor;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(EntityProxy))]
-public class FirepowerProxy : ComponentProxy
+public class TargetingProxy : ComponentProxy
 {
     public uint TargetEntityID = 0;
     public uint AmmunitionBudget = 0;
@@ -24,7 +24,7 @@ public class FirepowerProxy : ComponentProxy
         {
             if (_entityAssembly.GetEntityId(this) == 0)
             {
-                _entityAssembly.RegisterFirepowerProxy(_entityProxy.entityId, this);
+                _entityAssembly.RegisterTargetingProxy(_entityProxy.entityId, this);
                 targetEntityId = TargetEntityID;
                 ammunitionBudget = AmmunitionBudget;
             }
@@ -41,7 +41,7 @@ public class FirepowerProxy : ComponentProxy
 #endif        
         if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
         {
-            _entityAssembly.UnregisterFirepowerProxy( _entityAssembly.GetEntityId(this), this );
+            _entityAssembly.UnregisterTargetingProxy( _entityAssembly.GetEntityId(this), this );
         }
     }
 
@@ -56,9 +56,9 @@ public class FirepowerProxy : ComponentProxy
         }
     }
     
-    private static Structs.Firepower _dummy = new Structs.Firepower();
+    private static Structs.Targeting _dummy = new Structs.Targeting();
 
-    private Structs.Firepower _component
+    private Structs.Targeting _component
     {
         get
         {
@@ -67,7 +67,7 @@ public class FirepowerProxy : ComponentProxy
                 uint entityId = _entityAssembly.GetEntityId(this);
                 if (entityId != 0)
                 {
-                    return _entityAssembly.GetFirepower(entityId);
+                    return _entityAssembly.GetTargeting(entityId);
                 }
             }
             return _dummy;
@@ -79,7 +79,7 @@ public class FirepowerProxy : ComponentProxy
                 uint entityId = _entityAssembly.GetEntityId(this);
                 if (entityId != 0)
                 {
-                    _entityAssembly.SetFirepower(entityId, value);
+                    _entityAssembly.SetTargeting(entityId, value);
                 }
             }
         }

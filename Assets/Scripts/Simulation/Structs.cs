@@ -71,7 +71,7 @@ namespace Structs
         public float3 deltaPosition;
     };
     
-    public struct Firepower
+    public struct Targeting
     {
         public uint targetEntityId;
         public uint ammunitionBudget;

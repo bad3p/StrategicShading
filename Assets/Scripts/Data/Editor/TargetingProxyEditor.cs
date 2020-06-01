@@ -4,16 +4,16 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 
-[CustomEditor(typeof(FirepowerProxy))]
-public class FirepowerProxyEditor : Editor
+[CustomEditor(typeof(TargetingProxy))]
+public class TargetingProxyEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        FirepowerProxy firepowerProxy = target as FirepowerProxy;
+        TargetingProxy targetingProxy = target as TargetingProxy;
         
         EntityAssembly entityAssembly = GameObject.FindObjectOfType<EntityAssembly>();
 
-        if (entityAssembly && entityAssembly.GetEntityId(firepowerProxy) == 0)
+        if (entityAssembly && entityAssembly.GetEntityId(targetingProxy) == 0)
         {
             return;
         }
@@ -37,15 +37,15 @@ public class FirepowerProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
-                firepowerProxy.TargetEntityID = firepowerProxy.targetEntityId;
-                EditorGUILayout.LabelField(firepowerProxy.TargetEntityID.ToString());
+                targetingProxy.TargetEntityID = targetingProxy.targetEntityId;
+                EditorGUILayout.LabelField(targetingProxy.TargetEntityID.ToString());
             }
             else
             {
-                firepowerProxy.TargetEntityID = (uint) EditorGUILayout.IntField((int) firepowerProxy.TargetEntityID);
-                if (firepowerProxy.targetEntityId != firepowerProxy.TargetEntityID)
+                targetingProxy.TargetEntityID = (uint) EditorGUILayout.IntField((int) targetingProxy.TargetEntityID);
+                if (targetingProxy.targetEntityId != targetingProxy.TargetEntityID)
                 {
-                    firepowerProxy.targetEntityId = firepowerProxy.TargetEntityID;
+                    targetingProxy.targetEntityId = targetingProxy.TargetEntityID;
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -53,15 +53,15 @@ public class FirepowerProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
-                firepowerProxy.AmmunitionBudget = firepowerProxy.ammunitionBudget;
-                EditorGUILayout.LabelField(firepowerProxy.AmmunitionBudget.ToString());
+                targetingProxy.AmmunitionBudget = targetingProxy.ammunitionBudget;
+                EditorGUILayout.LabelField(targetingProxy.AmmunitionBudget.ToString());
             }
             else
             {
-                firepowerProxy.AmmunitionBudget = (uint) EditorGUILayout.IntField((int) firepowerProxy.AmmunitionBudget);
-                if (firepowerProxy.ammunitionBudget != firepowerProxy.AmmunitionBudget)
+                targetingProxy.AmmunitionBudget = (uint) EditorGUILayout.IntField((int) targetingProxy.AmmunitionBudget);
+                if (targetingProxy.ammunitionBudget != targetingProxy.AmmunitionBudget)
                 {
-                    firepowerProxy.ammunitionBudget = firepowerProxy.AmmunitionBudget;
+                    targetingProxy.ammunitionBudget = targetingProxy.AmmunitionBudget;
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -72,8 +72,8 @@ public class FirepowerProxyEditor : Editor
         
         if (GUI.changed)
         {
-            EditorUtility.SetDirty(firepowerProxy);
-            EditorSceneManager.MarkSceneDirty(firepowerProxy.gameObject.scene);
+            EditorUtility.SetDirty(targetingProxy);
+            EditorSceneManager.MarkSceneDirty(targetingProxy.gameObject.scene);
         }
     }
 }

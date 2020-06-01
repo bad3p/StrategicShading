@@ -15,7 +15,7 @@ public partial class ComputeShaderEmulator
     public const uint PERSONNEL = 0x00000004;
     public const uint FIREARMS = 0x00000008;
     public const uint MOVEMENT = 0x00000010;
-    public const uint FIREPOWER = 0x00000020;
+    public const uint TARGETING = 0x00000020;
     public const uint TEAM_BITMASK = 0xC0000000;
     public const uint TEAM_SHIFT = 30;
     
@@ -69,7 +69,7 @@ public partial class ComputeShaderEmulator
     public static Personnel[] _personnelBuffer = new Personnel[0];
     public static Firearm[] FirearmBuffer = new Firearm[0];
     public static Movement[] _movementBuffer = new Movement[0];
-    public static Firepower[] _firepowerBuffer = new Firepower[0];
+    public static Targeting[] TargetingBuffer = new Targeting[0];
     
     // MAP HELPERS
     
