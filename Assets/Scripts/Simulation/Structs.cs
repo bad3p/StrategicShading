@@ -61,6 +61,7 @@ namespace Structs
         public uint ammo;
         public uint stateId;
         public float stateTimeout;
+        public uint targetEntityId;
     };
     
     public struct Movement
@@ -73,7 +74,8 @@ namespace Structs
     
     public struct Targeting
     {
-        public uint targetEntityId;
-        public uint ammunitionBudget;
+        public float3 front;
+        public float3 direction;
+        public float arc;
     };
 }

@@ -23,11 +23,15 @@ public class TargetingProxyEditor : Editor
         EditorGUILayout.BeginVertical();
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("targetEntityId");
+            EditorGUILayout.LabelField("front");
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("ammunitionBudget");
+            EditorGUILayout.LabelField("direction");
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("arc");
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();
@@ -37,15 +41,25 @@ public class TargetingProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
-                targetingProxy.TargetEntityID = targetingProxy.targetEntityId;
-                EditorGUILayout.LabelField(targetingProxy.TargetEntityID.ToString());
+                EditorGUILayout.LabelField(targetingProxy.front.x.ToString("F2") + ", " + targetingProxy.front.y.ToString("F2") + ", " + targetingProxy.front.y.ToString("F2"));
             }
             else
             {
-                targetingProxy.TargetEntityID = (uint) EditorGUILayout.IntField((int) targetingProxy.TargetEntityID);
-                if (targetingProxy.targetEntityId != targetingProxy.TargetEntityID)
+                EditorGUILayout.LabelField(targetingProxy.front.x.ToString("F2") + ", " + targetingProxy.front.y.ToString("F2") + ", " + targetingProxy.front.y.ToString("F2"));
+            }
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            if (EditorApplication.isPlaying)
+            {
+                EditorGUILayout.LabelField(targetingProxy.direction.x.ToString("F2") + ", " + targetingProxy.direction.y.ToString("F2") + ", " + targetingProxy.direction.y.ToString("F2"));
+            }
+            else
+            {
+                targetingProxy.Direction = EditorGUILayout.Vector3Field("", targetingProxy.Direction.ToVector3());
+                if (ComputeShaderEmulator.distance(targetingProxy.Direction, targetingProxy.direction) > ComputeShaderEmulator.FLOAT_EPSILON)
                 {
-                    targetingProxy.targetEntityId = targetingProxy.TargetEntityID;
+                    targetingProxy.direction = targetingProxy.Direction;
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -53,15 +67,14 @@ public class TargetingProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
-                targetingProxy.AmmunitionBudget = targetingProxy.ammunitionBudget;
-                EditorGUILayout.LabelField(targetingProxy.AmmunitionBudget.ToString());
+                EditorGUILayout.LabelField(targetingProxy.arc.ToString("F2"));
             }
             else
             {
-                targetingProxy.AmmunitionBudget = (uint) EditorGUILayout.IntField((int) targetingProxy.AmmunitionBudget);
-                if (targetingProxy.ammunitionBudget != targetingProxy.AmmunitionBudget)
+                targetingProxy.Arc = EditorGUILayout.FloatField("", targetingProxy.Arc);
+                if (Mathf.Abs(targetingProxy.Arc - targetingProxy.arc) > Mathf.Epsilon)
                 {
-                    targetingProxy.ammunitionBudget = targetingProxy.AmmunitionBudget;
+                    targetingProxy.arc = targetingProxy.Arc;
                 }
             }
             EditorGUILayout.EndHorizontal();

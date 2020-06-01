@@ -36,6 +36,10 @@ public partial class ComputeShaderEmulator
     public const uint SUPPRESSION_PINNED = 2;
     public const uint SUPPRESSION_PANIC = 3;
     public const uint SUPPRESSION_BROKEN = 4;
+    public const uint TARGETING_IDLE = 0;
+    public const uint TARGETING_SUPPRESSIVE = 2;
+    public const uint TARGETING_COVERING = 3;
+    public const uint TARGETING_EFFECTIVE = 4;
     
     public const float PERSONNEL_MORALE_MAX = 600.0f;
     public const float PERSONNEL_MORALE_MIN = 1.0f;

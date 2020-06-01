@@ -10,8 +10,8 @@ using UnityEditor;
 [RequireComponent(typeof(EntityProxy))]
 public class TargetingProxy : ComponentProxy
 {
-    public uint TargetEntityID = 0;
-    public uint AmmunitionBudget = 0;
+    public float3 Direction = new float3(0,0,0);
+    public float Arc = 0.0f;
     
     private EntityAssembly _entityAssembly;
     private EntityProxy _entityProxy;
@@ -25,8 +25,8 @@ public class TargetingProxy : ComponentProxy
             if (_entityAssembly.GetEntityId(this) == 0)
             {
                 _entityAssembly.RegisterTargetingProxy(_entityProxy.entityId, this);
-                targetEntityId = TargetEntityID;
-                ammunitionBudget = AmmunitionBudget;
+                direction = Direction;
+                arc = Arc;
             }
         }    
     }
@@ -85,24 +85,35 @@ public class TargetingProxy : ComponentProxy
         }
     }
 
-    public uint targetEntityId
+    public float3 front
     {
-        get { return _component.targetEntityId; }
+        get { return _component.front; }
         set
         {
             var temp = _component;
-            temp.targetEntityId = value;
+            temp.front = value;
             _component = temp;
         }
     }
     
-    public uint ammunitionBudget
+    public float3 direction
     {
-        get { return _component.ammunitionBudget; }
+        get { return _component.direction; }
         set
         {
             var temp = _component;
-            temp.ammunitionBudget = value;
+            temp.direction = value;
+            _component = temp;
+        }
+    }
+    
+    public float arc
+    {
+        get { return _component.arc; }
+        set
+        {
+            var temp = _component;
+            temp.arc = value;
             _component = temp;
         }
     }

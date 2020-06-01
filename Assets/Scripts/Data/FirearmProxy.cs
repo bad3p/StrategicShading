@@ -14,6 +14,7 @@ public class FirearmProxy : ComponentProxy
     public uint Ammo = 30;
     public uint StateID = 0;
     public float StateTimeout = 0.0f;
+    public uint TargetEntityId = 0;
     
     private EntityAssembly _entityAssembly;
     private EntityProxy _entityProxy;
@@ -31,6 +32,7 @@ public class FirearmProxy : ComponentProxy
                 ammo = Ammo;
                 stateId = StateID;
                 stateTimeout = StateTimeout;
+                targetEntityId = TargetEntityId;
             }
         }    
     }
@@ -137,6 +139,17 @@ public class FirearmProxy : ComponentProxy
         {
             var temp = _component;
             temp.stateTimeout = value;
+            _component = temp;
+        }
+    }
+    
+    public uint targetEntityId
+    {
+        get { return _component.targetEntityId; }
+        set
+        {
+            var temp = _component;
+            temp.targetEntityId = value;
             _component = temp;
         }
     }

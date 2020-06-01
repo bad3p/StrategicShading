@@ -36,6 +36,10 @@ public class FirearmProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("stateTimeout");
             EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("targetEntityId");
+            EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();
         
@@ -44,16 +48,15 @@ public class FirearmProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
-                firearmProxy.DescID = firearmProxy.descId;
                 if (entityAssembly)
                 {
-                    if (firearmProxy.DescID < entityAssembly.FirearmNameBuffer.Count)
+                    if (firearmProxy.descId < entityAssembly.FirearmNameBuffer.Count)
                     {
-                        EditorGUILayout.LabelField(entityAssembly.FirearmNameBuffer[(int)firearmProxy.DescID]);
+                        EditorGUILayout.LabelField(entityAssembly.FirearmNameBuffer[(int)firearmProxy.descId]);
                     }
                     else
                     {
-                        EditorGUILayout.LabelField(firearmProxy.DescID.ToString());
+                        EditorGUILayout.LabelField(firearmProxy.descId.ToString());
                     }
                 }
                 else
@@ -89,8 +92,7 @@ public class FirearmProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
-                firearmProxy.Ammo = firearmProxy.ammo;
-                EditorGUILayout.LabelField(firearmProxy.Ammo.ToString());
+                EditorGUILayout.LabelField(firearmProxy.ammo.ToString());
             }
             else
             {
@@ -106,7 +108,7 @@ public class FirearmProxyEditor : Editor
             if (EditorApplication.isPlaying)
             {
                 firearmProxy.StateID = firearmProxy.stateId;
-                EditorGUILayout.LabelField(firearmProxy.StateID.ToString());
+                EditorGUILayout.LabelField(firearmProxy.stateId.ToString());
             }
             else
             {
@@ -121,7 +123,7 @@ public class FirearmProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
-                EditorGUILayout.LabelField(firearmProxy.StateTimeout.ToString("F2"));    
+                EditorGUILayout.LabelField(firearmProxy.stateTimeout.ToString("F2"));    
             }
             else
             {
@@ -130,6 +132,21 @@ public class FirearmProxyEditor : Editor
                 if (Mathf.Abs(firearmProxy.StateTimeout - firearmProxy.stateTimeout) > Mathf.Epsilon)
                 {
                     firearmProxy.stateTimeout = firearmProxy.StateTimeout;
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            if (EditorApplication.isPlaying)
+            {
+                EditorGUILayout.LabelField(firearmProxy.targetEntityId.ToString("F2"));    
+            }
+            else
+            {
+                firearmProxy.TargetEntityId = (uint) EditorGUILayout.FloatField(firearmProxy.targetEntityId);
+                if( firearmProxy.TargetEntityId != firearmProxy.targetEntityId )
+                {
+                    firearmProxy.targetEntityId = firearmProxy.TargetEntityId;
                 }
             }
             EditorGUILayout.EndHorizontal();
