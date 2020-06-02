@@ -3,6 +3,17 @@ using Types;
 
 namespace Structs
 {
+    // GLOBAL
+    
+    public struct Environment
+    {
+        public uint date; // [YEAR][MONTH][DAY] 
+        public uint time; // [MSEC]
+        public float temperature;
+        public float precipitation;
+        public float fog;
+    };
+    
     // FLYWEIGHT
     
     [System.Serializable]
@@ -74,8 +85,9 @@ namespace Structs
     
     public struct Targeting
     {
+        public float4 arc;
         public float3 front;
-        public float3 direction;
-        public float arc;
+        public uint numEnemies;
+        public uint numAllies;
     };
 }

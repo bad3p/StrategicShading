@@ -23,15 +23,19 @@ public class TargetingProxyEditor : Editor
         EditorGUILayout.BeginVertical();
         {
             EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("arc");
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("front");
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("direction");
+            EditorGUILayout.LabelField("numEnemies");
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("arc");
+            EditorGUILayout.LabelField("numAllies");
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();
@@ -41,42 +45,28 @@ public class TargetingProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             if (EditorApplication.isPlaying)
             {
-                EditorGUILayout.LabelField(targetingProxy.front.x.ToString("F2") + ", " + targetingProxy.front.y.ToString("F2") + ", " + targetingProxy.front.y.ToString("F2"));
+                EditorGUILayout.LabelField(targetingProxy.arc.x.ToString("F2") + ", " + targetingProxy.arc.y.ToString("F2") + ", " + targetingProxy.arc.y.ToString("F2"));
             }
             else
             {
-                EditorGUILayout.LabelField(targetingProxy.front.x.ToString("F2") + ", " + targetingProxy.front.y.ToString("F2") + ", " + targetingProxy.front.y.ToString("F2"));
-            }
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            if (EditorApplication.isPlaying)
-            {
-                EditorGUILayout.LabelField(targetingProxy.direction.x.ToString("F2") + ", " + targetingProxy.direction.y.ToString("F2") + ", " + targetingProxy.direction.y.ToString("F2"));
-            }
-            else
-            {
-                targetingProxy.Direction = EditorGUILayout.Vector3Field("", targetingProxy.Direction.ToVector3());
-                if (ComputeShaderEmulator.distance(targetingProxy.Direction, targetingProxy.direction) > ComputeShaderEmulator.FLOAT_EPSILON)
-                {
-                    targetingProxy.direction = targetingProxy.Direction;
-                }
-            }
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            if (EditorApplication.isPlaying)
-            {
-                EditorGUILayout.LabelField(targetingProxy.arc.ToString("F2"));
-            }
-            else
-            {
-                targetingProxy.Arc = EditorGUILayout.FloatField("", targetingProxy.Arc);
-                if (Mathf.Abs(targetingProxy.Arc - targetingProxy.arc) > Mathf.Epsilon)
+                targetingProxy.Arc = EditorGUILayout.Vector4Field("", targetingProxy.Arc.ToVector4());
+                if (ComputeShaderEmulator.distance(targetingProxy.Arc, targetingProxy.arc) > ComputeShaderEmulator.FLOAT_EPSILON)
                 {
                     targetingProxy.arc = targetingProxy.Arc;
                 }
             }
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(targetingProxy.front.x.ToString("F2") + ", " + targetingProxy.front.y.ToString("F2") + ", " + targetingProxy.front.z.ToString("F2"));
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(targetingProxy.numEnemies.ToString());
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(targetingProxy.numAllies.ToString());
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();

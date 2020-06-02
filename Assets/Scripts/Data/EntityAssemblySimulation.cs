@@ -68,9 +68,9 @@ public partial class EntityAssembly : MonoBehaviour
         InitBuffer(_transformBuffer, ref ComputeShaderEmulator._transformBuffer);
         InitBuffer(_hierarchyBuffer, ref ComputeShaderEmulator._hierarchyBuffer);
         InitBuffer(_personnelBuffer, ref ComputeShaderEmulator._personnelBuffer);
-        InitBuffer(_firearmsBuffer, ref ComputeShaderEmulator.FirearmBuffer);
+        InitBuffer(_firearmsBuffer, ref ComputeShaderEmulator._firearmBuffer);
         InitBuffer(_movementBuffer, ref ComputeShaderEmulator._movementBuffer);
-        InitBuffer(_targetingBuffer, ref ComputeShaderEmulator.TargetingBuffer);
+        InitBuffer(_targetingBuffer, ref ComputeShaderEmulator._targetingBuffer);
         InitBuffer(FirearmDescBuffer, ref ComputeShaderEmulator._firearmDescBuffer);
         InitBuffer(PersonnelDescBuffer, ref ComputeShaderEmulator._personnelDescBuffer);
         ComputeShaderEmulator._entityCount = (uint)_descBuffer.Count;
@@ -91,15 +91,16 @@ public partial class EntityAssembly : MonoBehaviour
         ComputeShaderEmulator._dT = Time.deltaTime;
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateMovement, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdatePersonnel, threadGroupsX, 1, 1 );
+        ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateTargeting, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateJoinRequests, threadGroupsX, 1, 1 );
 
         SyncBuffers(ref ComputeShaderEmulator._descBuffer, _descBuffer);
         SyncBuffers(ref ComputeShaderEmulator._transformBuffer, _transformBuffer);
         SyncBuffers(ref ComputeShaderEmulator._hierarchyBuffer, _hierarchyBuffer);
         SyncBuffers(ref ComputeShaderEmulator._personnelBuffer, _personnelBuffer);
-        SyncBuffers(ref ComputeShaderEmulator.FirearmBuffer, _firearmsBuffer);
+        SyncBuffers(ref ComputeShaderEmulator._firearmBuffer, _firearmsBuffer);
         SyncBuffers(ref ComputeShaderEmulator._movementBuffer, _movementBuffer);
-        SyncBuffers(ref ComputeShaderEmulator.TargetingBuffer, _targetingBuffer);
+        SyncBuffers(ref ComputeShaderEmulator._targetingBuffer, _targetingBuffer);
     }
 #endif    
 }

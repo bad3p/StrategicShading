@@ -249,6 +249,69 @@ public partial class ComputeShaderEmulator
     }
 
     [NumThreads(256, 1, 1)]
+    static public void UpdateTargeting(uint3 id)
+    {
+        uint entityId = id.x;
+        if (entityId == 0 || entityId >= _entityCount)
+        {
+            return;
+        }
+
+        if ( !HasComponents( entityId, TRANSFORM_TARGETING ) )
+        {
+            return;
+        }
+
+        uint team = GetTeam(entityId);
+        double3 position = _transformBuffer[entityId].position;
+        
+        uint numEnemies = 0;
+        uint numAllies = 0;
+        float3 front = new float3(0,0,0);
+        
+        for (uint otherEntityId = 1; otherEntityId < _entityCount; otherEntityId++)
+        {
+            if (otherEntityId != entityId)
+            {
+                if (HasComponents(otherEntityId, TRANSFORM))
+                {
+                    float3 dirToOtherEntity = _transformBuffer[otherEntityId].position - position;
+                    float distToOtherEntity = length(dirToOtherEntity);
+                    if (distToOtherEntity > FLOAT_EPSILON)
+                    {
+                        dirToOtherEntity *= 1.0f / distToOtherEntity;
+                    }
+
+                    uint otherTeam = GetTeam(otherEntityId);
+                    
+                    // structure
+                    if (otherTeam == 0)
+                    {
+                                            
+                    }
+                    // enemy
+                    else if (otherTeam != team)
+                    {
+                        numEnemies++;
+                        front += dirToOtherEntity;
+                    }
+                    // ally
+                    else
+                    {
+                        numAllies++;
+                    }
+                }
+            }
+        }
+
+        front = normalize(front);
+
+        _targetingBuffer[entityId].numEnemies = numEnemies;
+        _targetingBuffer[entityId].numAllies = numAllies + 1; // consider itself
+        _targetingBuffer[entityId].front = front;
+    }
+
+    [NumThreads(256, 1, 1)]
     static public void UpdateJoinRequests(uint3 id)
     {
         uint entityId = id.x;

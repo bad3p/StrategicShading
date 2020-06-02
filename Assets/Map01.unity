@@ -214,8 +214,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  AmmunitionBudget: 0
+  Direction:
+    x: 0
+    y: 0
+    z: 0
+  Arc: 0
 --- !u!114 &50486967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,6 +261,7 @@ MonoBehaviour:
   Ammo: 20
   StateID: 0
   StateTimeout: 0
+  TargetEntityId: 0
 --- !u!114 &50486969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365,6 +369,7 @@ MonoBehaviour:
   Ammo: 15
   StateID: 0
   StateTimeout: 0
+  TargetEntityId: 0
 --- !u!114 &50754643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,7 +439,7 @@ MonoBehaviour:
   TargetPosition:
     x: 6
     y: 0
-    z: -20
+    z: 0
   TargetRotation:
     x: 0
     y: 0
@@ -457,8 +462,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  AmmunitionBudget: 0
+  Direction:
+    x: 0
+    y: 0
+    z: 0
+  Arc: 0
 --- !u!1 &88985222
 GameObject:
   m_ObjectHideFlags: 0
@@ -704,6 +712,7 @@ MonoBehaviour:
   Ammo: 30
   StateID: 0
   StateTimeout: 0
+  TargetEntityId: 0
 --- !u!114 &115422640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -742,8 +751,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  AmmunitionBudget: 0
+  Direction:
+    x: 0
+    y: 0
+    z: 0
+  Arc: 0
 --- !u!1 &117113804
 GameObject:
   m_ObjectHideFlags: 0
@@ -2424,8 +2436,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  AmmunitionBudget: 0
+  Direction:
+    x: 0
+    y: 0
+    z: 0
+  Arc: 0
 --- !u!114 &832503764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2441,7 +2456,7 @@ MonoBehaviour:
   TargetPosition:
     x: 0
     y: 0
-    z: -20
+    z: 0
   TargetRotation:
     x: 0
     y: 0
@@ -2468,6 +2483,7 @@ MonoBehaviour:
   Ammo: 20
   StateID: 0
   StateTimeout: 0
+  TargetEntityId: 0
 --- !u!114 &832503766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2767,6 +2783,7 @@ MonoBehaviour:
   Ammo: 30
   StateID: 0
   StateTimeout: 0
+  TargetEntityId: 0
 --- !u!114 &854208702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2805,8 +2822,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  AmmunitionBudget: 0
+  Direction:
+    x: 0
+    y: 0
+    z: 0
+  Arc: 0
 --- !u!1 &909305568
 GameObject:
   m_ObjectHideFlags: 0
@@ -2860,6 +2880,7 @@ MonoBehaviour:
   Ammo: 15
   StateID: 0
   StateTimeout: 0
+  TargetEntityId: 0
 --- !u!114 &909305571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2952,8 +2973,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  AmmunitionBudget: 0
+  Direction:
+    x: 0
+    y: 0
+    z: 0
+  Arc: 0
 --- !u!1 &925101042
 GameObject:
   m_ObjectHideFlags: 0
@@ -3340,6 +3364,7 @@ MonoBehaviour:
   Ammo: 30
   StateID: 0
   StateTimeout: 0
+  TargetEntityId: 0
 --- !u!114 &1025601189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3378,8 +3403,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  AmmunitionBudget: 0
+  Direction:
+    x: 0
+    y: 0
+    z: 0
+  Arc: 0
 --- !u!1 &1095388833
 GameObject:
   m_ObjectHideFlags: 0
@@ -3751,8 +3779,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  AmmunitionBudget: 0
+  Direction:
+    x: 0
+    y: 0
+    z: 0
+  Arc: 0
 --- !u!114 &1212768685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3795,6 +3826,7 @@ MonoBehaviour:
   Ammo: 30
   StateID: 0
   StateTimeout: 0
+  TargetEntityId: 0
 --- !u!114 &1212768687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3898,8 +3930,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  AmmunitionBudget: 0
+  Direction:
+    x: 0
+    y: 0
+    z: 0
+  Arc: 0
 --- !u!114 &1219724292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3942,6 +3977,7 @@ MonoBehaviour:
   Ammo: 30
   StateID: 0
   StateTimeout: 0
+  TargetEntityId: 0
 --- !u!114 &1219724294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5676,6 +5712,7 @@ MonoBehaviour:
   Ammo: 30
   StateID: 0
   StateTimeout: 0
+  TargetEntityId: 0
 --- !u!114 &1895606209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5714,8 +5751,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  AmmunitionBudget: 0
+  Direction:
+    x: 0
+    y: 0
+    z: 0
+  Arc: 0
 --- !u!1 &1897142788
 GameObject:
   m_ObjectHideFlags: 0
@@ -5823,6 +5863,7 @@ MonoBehaviour:
   Ammo: 30
   StateID: 0
   StateTimeout: 0
+  TargetEntityId: 0
 --- !u!114 &1897142795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5861,8 +5902,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  AmmunitionBudget: 0
+  Direction:
+    x: 0
+    y: 0
+    z: 0
+  Arc: 0
 --- !u!1 &1898030549
 GameObject:
   m_ObjectHideFlags: 0
@@ -6853,6 +6897,7 @@ MonoBehaviour:
   Ammo: 30
   StateID: 0
   StateTimeout: 0
+  TargetEntityId: 0
 --- !u!114 &2100194442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6891,5 +6936,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEntityID: 0
-  AmmunitionBudget: 0
+  Direction:
+    x: 0
+    y: 0
+    z: 0
+  Arc: 0

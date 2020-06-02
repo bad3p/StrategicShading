@@ -65,7 +65,25 @@ public class MovementProxy : ComponentProxy
                 TransformProxy transformProxy = _entityAssembly.GetTransformProxy(_entityProxy.entityId);
                 if (transformProxy)
                 {
-                    Gizmos.DrawLine( transformProxy.position.ToVector3(), targetPosition.ToVector3() );
+                    Vector3 p0 = targetPosition.ToVector3();
+                    Vector3 p1 = transformProxy.position.ToVector3();
+
+                    float distance = Vector3.Distance(p0, p1);
+                    Vector3 dir = (p1 - p0).normalized;
+                    while (distance > 0)
+                    {
+                        const float DashLength = 1.0f;
+                        const float GapLength = 1.0f;
+                        
+                        p1 = p0 + dir * Mathf.Min(DashLength, distance);
+                        Gizmos.DrawLine(p0, p1);
+                        p0 = p1;
+                        distance -= Mathf.Min(DashLength, distance);
+                        
+                        p1 = p0 + dir * Mathf.Min(GapLength, distance);
+                        p0 = p1;
+                        distance -= Mathf.Min(DashLength, distance);
+                    }
                 }
             }
         }

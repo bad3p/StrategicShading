@@ -71,9 +71,9 @@ public partial class ComputeShaderEmulator
     public static Transform[] _transformBuffer = new Transform[0];
     public static Hierarchy[] _hierarchyBuffer = new Hierarchy[0];
     public static Personnel[] _personnelBuffer = new Personnel[0];
-    public static Firearm[] FirearmBuffer = new Firearm[0];
+    public static Firearm[] _firearmBuffer = new Firearm[0];
     public static Movement[] _movementBuffer = new Movement[0];
-    public static Targeting[] TargetingBuffer = new Targeting[0];
+    public static Targeting[] _targetingBuffer = new Targeting[0];
     
     // MAP HELPERS
     
@@ -87,6 +87,7 @@ public partial class ComputeShaderEmulator
     public const uint TRANSFORM_MOVEMENT = TRANSFORM | MOVEMENT;
     public const uint TRANSFORM_PERSONNEL_MOVEMENT = TRANSFORM | PERSONNEL | MOVEMENT;
     public const uint HIERARCHY_PERSONNEL = HIERARCHY | PERSONNEL;
+    public const uint TRANSFORM_TARGETING = TRANSFORM | TARGETING;
     
     public static bool HasComponents(uint entityId, uint mask)
     {
@@ -94,6 +95,14 @@ public partial class ComputeShaderEmulator
             Debug.Assert(entityId > 0 && entityId < _entityCount);
         #endif
         return ((_descBuffer[entityId] & mask) == mask);
+    }
+
+    public static uint GetTeam(uint entityId)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+        #endif
+        return _descBuffer[entityId] >> (int)TEAM_SHIFT;
     }
     
     // HIERARCHY HELPERS
