@@ -127,12 +127,31 @@ public class HierarchyProxy : ComponentProxy
             }
             else
             {
+                if (firstChildEntityId > _entityAssembly.GetEntityId(childHierarchyProxy))
+                {
+                    childHierarchyProxy.nextSiblingEntityId = firstChildEntityId;
+                    firstChildEntityId = _entityAssembly.GetEntityId(childHierarchyProxy);
+                }
+                else
+                {
+                    HierarchyProxy siblingHierarchyProxy = _entityAssembly.GetHierarchyProxy(firstChildEntityId);
+                    while (siblingHierarchyProxy.nextSiblingEntityId > 0 && 
+                           siblingHierarchyProxy.nextSiblingEntityId < _entityAssembly.GetEntityId(childHierarchyProxy))
+                    {
+                        siblingHierarchyProxy = _entityAssembly.GetHierarchyProxy(siblingHierarchyProxy.nextSiblingEntityId);    
+                    }
+
+                    childHierarchyProxy.nextSiblingEntityId = siblingHierarchyProxy.nextSiblingEntityId; 
+                    siblingHierarchyProxy.nextSiblingEntityId = _entityAssembly.GetEntityId(childHierarchyProxy);
+                }
+                /*
                 HierarchyProxy siblingHierarchyProxy = _entityAssembly.GetHierarchyProxy(firstChildEntityId);
                 while (siblingHierarchyProxy.nextSiblingEntityId > 0)
                 {
                     siblingHierarchyProxy = _entityAssembly.GetHierarchyProxy(siblingHierarchyProxy.nextSiblingEntityId);
                 }
                 siblingHierarchyProxy.nextSiblingEntityId = _entityAssembly.GetEntityId(childHierarchyProxy);
+                */
             }
         }
     }

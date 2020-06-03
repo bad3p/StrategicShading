@@ -155,13 +155,35 @@ public partial class ComputeShaderEmulator
         }
         else
         {
-            uint lastSiblingEntityId = _hierarchyBuffer[entityId].firstChildEntityId;
-            while (_hierarchyBuffer[lastSiblingEntityId].nextSiblingEntityId > 0 )
+            if (_hierarchyBuffer[entityId].firstChildEntityId > childEntityId)
             {
-                lastSiblingEntityId = _hierarchyBuffer[lastSiblingEntityId].nextSiblingEntityId;
+                _hierarchyBuffer[childEntityId].parentEntityId = entityId;
+                _hierarchyBuffer[childEntityId].nextSiblingEntityId = _hierarchyBuffer[entityId].firstChildEntityId;
+                _hierarchyBuffer[entityId].firstChildEntityId = childEntityId;
             }
-            _hierarchyBuffer[lastSiblingEntityId].nextSiblingEntityId = childEntityId;
-            _hierarchyBuffer[childEntityId].parentEntityId = entityId;
+            else
+            {
+                uint lastSiblingEntityId = _hierarchyBuffer[entityId].firstChildEntityId;
+                while (_hierarchyBuffer[lastSiblingEntityId].nextSiblingEntityId > 0 && 
+                       _hierarchyBuffer[lastSiblingEntityId].nextSiblingEntityId < childEntityId)
+                {
+                    lastSiblingEntityId = _hierarchyBuffer[lastSiblingEntityId].nextSiblingEntityId;
+                }
+                
+                _hierarchyBuffer[childEntityId].parentEntityId = entityId;
+                _hierarchyBuffer[childEntityId].nextSiblingEntityId = _hierarchyBuffer[lastSiblingEntityId].nextSiblingEntityId;
+                _hierarchyBuffer[lastSiblingEntityId].nextSiblingEntityId = childEntityId; 
+
+                /*
+                uint lastSiblingEntityId = _hierarchyBuffer[entityId].firstChildEntityId;
+                while (_hierarchyBuffer[lastSiblingEntityId].nextSiblingEntityId > 0 )
+                {
+                    lastSiblingEntityId = _hierarchyBuffer[lastSiblingEntityId].nextSiblingEntityId;
+                }
+                _hierarchyBuffer[lastSiblingEntityId].nextSiblingEntityId = childEntityId;
+                _hierarchyBuffer[childEntityId].parentEntityId = entityId;
+                */
+            }
         }
     }
 
