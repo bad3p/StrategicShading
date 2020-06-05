@@ -5,12 +5,12 @@ using System.Collections.Generic;
 [ExecuteInEditMode]
 public partial class EntityAssembly : MonoBehaviour
 {
-    public List<string> FirearmNameBuffer = new List<string>(){ "NULL" };
-    public List<Structs.FirearmDesc> FirearmDescBuffer = new List<Structs.FirearmDesc>(){ new Structs.FirearmDesc() };
+    public string[] FirearmNameBuffer = new string[]{ "NULL" };
+    public Structs.FirearmDesc[] FirearmDescBuffer = new Structs.FirearmDesc[]{ new Structs.FirearmDesc() };
     
-    public List<string> PersonnelNameBuffer = new List<string>(){ "NULL" };
-    public List<Structs.PersonnelDesc> PersonnelDescBuffer = new List<Structs.PersonnelDesc>(){ new Structs.PersonnelDesc() };
-    
+    public string[] PersonnelNameBuffer = new string[]{ "NULL" };
+    public Structs.PersonnelDesc[] PersonnelDescBuffer = new Structs.PersonnelDesc[] { new Structs.PersonnelDesc() };
+
     private List<uint> _descBuffer = new List<uint>() { 0 };
     private Dictionary<uint, EntityProxy> _entityProxyById = new Dictionary<uint,EntityProxy>();
     private Dictionary<EntityProxy, uint> _idByEntityProxy = new Dictionary<EntityProxy,uint>();

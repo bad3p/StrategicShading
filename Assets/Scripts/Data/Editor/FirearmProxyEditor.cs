@@ -50,7 +50,7 @@ public class FirearmProxyEditor : Editor
             {
                 if (entityAssembly)
                 {
-                    if (firearmProxy.descId < entityAssembly.FirearmNameBuffer.Count)
+                    if (firearmProxy.descId < entityAssembly.FirearmNameBuffer.Length)
                     {
                         EditorGUILayout.LabelField(entityAssembly.FirearmNameBuffer[(int)firearmProxy.descId]);
                     }
@@ -68,7 +68,7 @@ public class FirearmProxyEditor : Editor
             {
                 if (entityAssembly)
                 {
-                    firearmProxy.DescID = (uint)EditorGUILayout.Popup((int)firearmProxy.DescID, entityAssembly.FirearmNameBuffer.ToArray());
+                    firearmProxy.DescID = (uint)EditorGUILayout.Popup((int)firearmProxy.DescID, entityAssembly.FirearmNameBuffer);
                     if (firearmProxy.descId != firearmProxy.DescID)
                     {
                         firearmProxy.descId = firearmProxy.DescID;

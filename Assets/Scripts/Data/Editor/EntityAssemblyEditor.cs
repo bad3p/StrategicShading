@@ -17,6 +17,66 @@ public class EntityAssemblyEditor : Editor
     private static bool _showFirearmDescs = false;
     private static bool _showPersonnelDescs = false;
     
+    private static void RemoveAt<T>(ref T[] arr, int index) where T : new()
+    {
+	    if (index >= 0 && index < arr.Length)
+	    {
+		    for (int i = index + 1; i < arr.Length; i++)
+		    {
+			    arr[i - 1] = arr[i];
+		    }
+		    System.Array.Resize<T>(ref arr, arr.Length - 1);
+	    }
+    }
+    
+    private static void RemoveAt(ref string[] arr, int index)
+    {
+	    if (index >= 0 && index < arr.Length)
+	    {
+		    for (int i = index + 1; i < arr.Length; i++)
+		    {
+			    arr[i - 1] = arr[i];
+		    }
+		    System.Array.Resize<string>(ref arr, arr.Length - 1);
+	    }
+    }
+	
+    private static void InsertAt<T>(ref T[] arr, int index) where T : new()
+    {
+	    if (index >= 0 && index < arr.Length)
+	    {
+		    System.Array.Resize<T>(ref arr, arr.Length + 1);
+		    for (int i = arr.Length-1; i > index; i--)
+		    {
+			    arr[i] = arr[i-1];
+		    }			
+	    }
+    }
+    
+    private static void InsertAt(ref string[] arr, int index)
+    {
+	    if (index >= 0 && index < arr.Length)
+	    {
+		    System.Array.Resize<string>(ref arr, arr.Length + 1);
+		    for (int i = arr.Length-1; i > index; i--)
+		    {
+			    arr[i] = arr[i-1];
+		    }			
+	    }
+    }
+
+    private static void Add<T>(ref T[] arr) where T : new()
+    {
+	    System.Array.Resize<T>(ref arr, arr.Length + 1);
+	    arr[arr.Length-1] = new T(); 
+    }
+    
+    private static void Add(ref string[] arr)
+    {
+	    System.Array.Resize<string>(ref arr, arr.Length + 1);
+	    arr[arr.Length-1] = "New Item"; 
+    }
+    
     private static void SupportCustomStyles()
 	{
 		_headerLabel = null;
@@ -140,7 +200,7 @@ public class EntityAssemblyEditor : Editor
 	    return flag;
     }
     
-    private void DrawItems<T>(string header, ref bool flag, List<string> itemNames, List<T> items, System.Func<T,bool> drawFunc) where T : new()
+    private void DrawItems<T>(string header, ref bool flag, ref string[] itemNames, ref T[] items, Func<T,KeyValuePair<T,bool>> drawFunc) where T : new()
     {
 	    flag = DrawDropDownToggle( header, flag );
 	    if (flag)
@@ -148,10 +208,13 @@ public class EntityAssemblyEditor : Editor
 		    int removedItemID = -1;
 			
 		    EditorGUI.indentLevel++;
-		    for (int i = 0; i < items.Count; i++)
+		    for (int i = 0; i < items.Length; i++)
 		    {
 			    itemNames[i] = GUILayout.TextField( itemNames[i] );
-			    if (drawFunc(items[i]))
+
+			    KeyValuePair<T, bool> drawResult = drawFunc(items[i]);
+			    items[i] = drawResult.Key;
+			    if (drawResult.Value)
 			    {
 				    removedItemID = i;
 			    }
@@ -163,31 +226,34 @@ public class EntityAssemblyEditor : Editor
 		    {
 			    if (GUILayout.Button("Add"))
 			    {
-				    items.Add(new T());
+				    Add<T>(ref items);
+				    Add(ref itemNames);
 			    }
 		    }
 		    EditorGUILayout.EndHorizontal();
 
 		    if (removedItemID >= 0)
 		    {
-			    items.RemoveAt( removedItemID );
+			    RemoveAt<T>( ref items, removedItemID );
+			    RemoveAt( ref itemNames, removedItemID );
 		    }
 	    }
     }
     
     private void DrawFirearmDescs()
     {
-	    Func<Structs.FirearmDesc,bool> DrawItem = (firearmDesc) =>
+	    Func<Structs.FirearmDesc,KeyValuePair<Structs.FirearmDesc,bool>> DrawItem = (firearmDesc) =>
 	    {
-		    bool result = false;
+		    Structs.FirearmDesc modifiedItem = new Structs.FirearmDesc();
 
-		    firearmDesc.maxAmmo = (uint)EditorGUILayout.IntField("maxAmmo", (int)firearmDesc.maxAmmo); 
-		    firearmDesc.distance = EditorGUILayout.Vector4Field("distance", firearmDesc.distance.ToVector4());
-		    firearmDesc.firepower = EditorGUILayout.Vector4Field("firepower",firearmDesc.firepower.ToVector4());
-		    firearmDesc.setupTime = EditorGUILayout.FloatField("setupTime", firearmDesc.setupTime);
-		    firearmDesc.aimingTime = EditorGUILayout.FloatField("aimingTime", firearmDesc.aimingTime);
-		    firearmDesc.reloadingTime = EditorGUILayout.FloatField("reloadingTime", firearmDesc.reloadingTime);
+		    modifiedItem.maxAmmo = (uint)EditorGUILayout.IntField("maxAmmo", (int)firearmDesc.maxAmmo); 
+		    modifiedItem.distance = EditorGUILayout.Vector4Field("distance", firearmDesc.distance.ToVector4());
+		    modifiedItem.firepower = EditorGUILayout.Vector4Field("firepower",firearmDesc.firepower.ToVector4());
+		    modifiedItem.setupTime = EditorGUILayout.FloatField("setupTime", firearmDesc.setupTime);
+		    modifiedItem.aimingTime = EditorGUILayout.FloatField("aimingTime", firearmDesc.aimingTime);
+		    modifiedItem.reloadingTime = EditorGUILayout.FloatField("reloadingTime", firearmDesc.reloadingTime);
 
+		    bool deleteItem = false;
 		    EditorGUILayout.BeginHorizontal();
 		    {
 			    for (int i = 0; i < 4; i++)
@@ -199,36 +265,38 @@ public class EntityAssemblyEditor : Editor
 			    {
 				    if (GUILayout.Button("Remove"))
 				    {
-					    result = true;
+					    deleteItem = true;
 				    }
 			    }
 			    EditorGUILayout.EndVertical();
 		    }
 		    EditorGUILayout.EndHorizontal();
 		    EditorGUILayout.Space();
-		    return result;
+
+		    return new KeyValuePair<Structs.FirearmDesc, bool>(modifiedItem, deleteItem);
 	    };
 		
-	    DrawItems( "Firearm", ref _showFirearmDescs, _entityAssembly.FirearmNameBuffer, _entityAssembly.FirearmDescBuffer, DrawItem );
+	    DrawItems( "Firearm", ref _showFirearmDescs, ref _entityAssembly.FirearmNameBuffer, ref _entityAssembly.FirearmDescBuffer, DrawItem );
     }
     
     private void DrawPersonnelDescs()
     {
-	    Func<Structs.PersonnelDesc,bool> DrawItem = (presonnelDesc) =>
+	    Func<Structs.PersonnelDesc,KeyValuePair<Structs.PersonnelDesc,bool>> DrawItem = (presonnelDesc) =>
 	    {
-		    bool result = false;
+		    Structs.PersonnelDesc modifiedItem = new Structs.PersonnelDesc();
 
-		    presonnelDesc.maxPersonnel = (uint)EditorGUILayout.IntField("maxPersonnel", (int)presonnelDesc.maxPersonnel);
-		    presonnelDesc.linearVelocitySlow = EditorGUILayout.Vector3Field("linearVelocitySlow", presonnelDesc.linearVelocitySlow.ToVector3());
-		    presonnelDesc.linearVelocityFast = EditorGUILayout.Vector3Field("linearVelocityFast", presonnelDesc.linearVelocityFast.ToVector3());
-		    presonnelDesc.angularVelocity = EditorGUILayout.FloatField("angularVelocity", presonnelDesc.angularVelocity);
-		    presonnelDesc.fitnessConsumptionRateSlow = EditorGUILayout.Vector3Field("fitnessConsumptionRateSlow", presonnelDesc.fitnessConsumptionRateSlow.ToVector3());
-		    presonnelDesc.fitnessConsumptionRateFast = EditorGUILayout.Vector3Field("fitnessConsumptionRateFast", presonnelDesc.fitnessConsumptionRateFast.ToVector3());
-		    presonnelDesc.fitnessThreshold = EditorGUILayout.Vector3Field("fitnessThreshold", presonnelDesc.fitnessThreshold.ToVector3());
-		    presonnelDesc.fitnessRecoveryRate = EditorGUILayout.Vector3Field("fitnessRecoveryRate", presonnelDesc.fitnessRecoveryRate.ToVector3());
-		    presonnelDesc.moraleThreshold = EditorGUILayout.Vector4Field("moraleThreshold", presonnelDesc.moraleThreshold.ToVector4());
-		    presonnelDesc.moraleRecoveryRate = EditorGUILayout.Vector4Field("moraleRecoveryRate", presonnelDesc.moraleRecoveryRate.ToVector4());
+		    modifiedItem.maxPersonnel = (uint)EditorGUILayout.IntField("maxPersonnel", (int)presonnelDesc.maxPersonnel);
+		    modifiedItem.linearVelocitySlow = EditorGUILayout.Vector3Field("linearVelocitySlow", presonnelDesc.linearVelocitySlow.ToVector3());
+		    modifiedItem.linearVelocityFast = EditorGUILayout.Vector3Field("linearVelocityFast", presonnelDesc.linearVelocityFast.ToVector3());
+		    modifiedItem.angularVelocity = EditorGUILayout.FloatField("angularVelocity", presonnelDesc.angularVelocity);
+		    modifiedItem.fitnessConsumptionRateSlow = EditorGUILayout.Vector3Field("fitnessConsumptionRateSlow", presonnelDesc.fitnessConsumptionRateSlow.ToVector3());
+		    modifiedItem.fitnessConsumptionRateFast = EditorGUILayout.Vector3Field("fitnessConsumptionRateFast", presonnelDesc.fitnessConsumptionRateFast.ToVector3());
+		    modifiedItem.fitnessThreshold = EditorGUILayout.Vector3Field("fitnessThreshold", presonnelDesc.fitnessThreshold.ToVector3());
+		    modifiedItem.fitnessRecoveryRate = EditorGUILayout.Vector3Field("fitnessRecoveryRate", presonnelDesc.fitnessRecoveryRate.ToVector3());
+		    modifiedItem.moraleThreshold = EditorGUILayout.Vector4Field("moraleThreshold", presonnelDesc.moraleThreshold.ToVector4());
+		    modifiedItem.moraleRecoveryRate = EditorGUILayout.Vector4Field("moraleRecoveryRate", presonnelDesc.moraleRecoveryRate.ToVector4());
 
+		    bool deleteItem = false;
 		    EditorGUILayout.BeginHorizontal();
 		    {
 			    for (int i = 0; i < 4; i++)
@@ -240,17 +308,18 @@ public class EntityAssemblyEditor : Editor
 			    {
 				    if (GUILayout.Button("Remove"))
 				    {
-					    result = true;
+					    deleteItem = true;
 				    }
 			    }
 			    EditorGUILayout.EndVertical();
 		    }
 		    EditorGUILayout.EndHorizontal();
 		    EditorGUILayout.Space();
-		    return result;
+		    
+		    return new KeyValuePair<Structs.PersonnelDesc, bool>(modifiedItem, deleteItem);
 	    };
 		
-	    DrawItems( "Personnel", ref _showPersonnelDescs, _entityAssembly.PersonnelNameBuffer, _entityAssembly.PersonnelDescBuffer, DrawItem );
+	    DrawItems( "Personnel", ref _showPersonnelDescs, ref _entityAssembly.PersonnelNameBuffer, ref _entityAssembly.PersonnelDescBuffer, DrawItem );
     }
     
     // expanded list items
@@ -333,8 +402,8 @@ public class EntityAssemblyEditor : Editor
         EditorGUILayout.EndHorizontal();
 
         bool drawDefaultInspector =
-            (_entityAssembly.FirearmDescBuffer.Count != _entityAssembly.FirearmNameBuffer.Count) ||
-            (_entityAssembly.PersonnelDescBuffer.Count != _entityAssembly.PersonnelNameBuffer.Count);
+            (_entityAssembly.FirearmDescBuffer.Length != _entityAssembly.FirearmNameBuffer.Length) ||
+            (_entityAssembly.PersonnelDescBuffer.Length != _entityAssembly.PersonnelNameBuffer.Length);
 
         // user have to manually resolve conflicts
         

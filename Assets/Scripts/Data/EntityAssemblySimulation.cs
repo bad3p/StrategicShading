@@ -20,6 +20,12 @@ public partial class EntityAssembly : MonoBehaviour
     public uint RngStateLength = 55;
     
 #if UNITY_EDITOR
+    static void InitBuffer<T>(T[] srcBuffer, ref T[] dstBuffer)
+    {
+        dstBuffer = new T[srcBuffer.Length];
+        srcBuffer.CopyTo(dstBuffer, 0);
+    }
+    
     static void InitBuffer<T>(List<T> srcBuffer, ref T[] dstBuffer)
     {
         dstBuffer = new T[srcBuffer.Count];
@@ -86,8 +92,8 @@ public partial class EntityAssembly : MonoBehaviour
         InitBuffer(_targetingBuffer, ref ComputeShaderEmulator._targetingBuffer);
         InitBuffer(FirearmDescBuffer, ref ComputeShaderEmulator._firearmDescBuffer);
         InitBuffer(PersonnelDescBuffer, ref ComputeShaderEmulator._personnelDescBuffer);
-        ComputeShaderEmulator._firearmDescCount = (uint) FirearmDescBuffer.Count;
-        ComputeShaderEmulator._personnelDescCount = (uint) PersonnelDescBuffer.Count;
+        ComputeShaderEmulator._firearmDescCount = (uint) FirearmDescBuffer.Length;
+        ComputeShaderEmulator._personnelDescCount = (uint) PersonnelDescBuffer.Length;
         ComputeShaderEmulator._entityCount = (uint)_descBuffer.Count;
         ComputeShaderEmulator._selectedEntityId = SelectedEntityId();
     }

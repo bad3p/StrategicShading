@@ -4473,6 +4473,7 @@ MonoBehaviour:
   - Semi-Automatic Pistol
   - Bolt-Action Rifle
   - Light Machinegun
+  - Heavy Machinegun
   FirearmDescBuffer:
   - maxAmmo: 0
     distance:
@@ -4485,6 +4486,7 @@ MonoBehaviour:
       y: 0
       z: 0
       w: 0
+    setupTime: 0
     aimingTime: 0
     reloadingTime: 0
   - maxAmmo: 15
@@ -4498,6 +4500,7 @@ MonoBehaviour:
       y: 33
       z: 11
       w: 5
+    setupTime: 0
     aimingTime: 1
     reloadingTime: 5
   - maxAmmo: 30
@@ -4511,6 +4514,7 @@ MonoBehaviour:
       y: 66
       z: 33
       w: 11
+    setupTime: 0
     aimingTime: 1
     reloadingTime: 5
   - maxAmmo: 20
@@ -4524,7 +4528,22 @@ MonoBehaviour:
       y: 99
       z: 66
       w: 33
+    setupTime: 3
     aimingTime: 2
+    reloadingTime: 10
+  - maxAmmo: 40
+    distance:
+      x: 50
+      y: 100
+      z: 250
+      w: 500
+    firepower:
+      x: 166
+      y: 133
+      z: 99
+      w: 66
+    setupTime: 9
+    aimingTime: 3
     reloadingTime: 10
   PersonnelNameBuffer:
   - NULL

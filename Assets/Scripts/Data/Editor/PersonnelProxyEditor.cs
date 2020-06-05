@@ -55,7 +55,7 @@ public class PersonnelProxyEditor : Editor
                 personnelProxy.DescID = personnelProxy.descId;
                 if (entityAssembly)
                 {
-                    if (personnelProxy.DescID < entityAssembly.PersonnelNameBuffer.Count)
+                    if (personnelProxy.DescID < entityAssembly.PersonnelNameBuffer.Length)
                     {
                         EditorGUILayout.LabelField(entityAssembly.PersonnelNameBuffer[(int)personnelProxy.DescID]);        
                     }
@@ -73,7 +73,7 @@ public class PersonnelProxyEditor : Editor
             {
                 if (entityAssembly)
                 {
-                    personnelProxy.DescID = (uint)EditorGUILayout.Popup((int)personnelProxy.DescID, entityAssembly.PersonnelNameBuffer.ToArray());
+                    personnelProxy.DescID = (uint)EditorGUILayout.Popup((int)personnelProxy.DescID, entityAssembly.PersonnelNameBuffer);
                     if (personnelProxy.descId != personnelProxy.DescID)
                     {
                         personnelProxy.descId = personnelProxy.DescID;

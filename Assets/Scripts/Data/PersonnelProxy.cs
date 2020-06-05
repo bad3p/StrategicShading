@@ -123,7 +123,7 @@ public class PersonnelProxy : ComponentProxy
             
         uint maxPersonnel = 0;
         uint descId = _component.descId;
-        if (descId > 0 && descId < _entityAssembly.PersonnelDescBuffer.Count)
+        if (descId > 0 && descId < _entityAssembly.PersonnelDescBuffer.Length)
         {
             maxPersonnel = _entityAssembly.PersonnelDescBuffer[(int)descId].maxPersonnel;
         }
@@ -261,7 +261,7 @@ public class PersonnelProxy : ComponentProxy
             
             uint maxPersonnel = 0;
             uint descId = _component.descId;
-            if (descId > 0 && descId < _entityAssembly.PersonnelDescBuffer.Count)
+            if (descId > 0 && descId < _entityAssembly.PersonnelDescBuffer.Length)
             {
                 maxPersonnel = _entityAssembly.PersonnelDescBuffer[(int)descId].maxPersonnel;
             }
@@ -293,7 +293,7 @@ public class PersonnelProxy : ComponentProxy
             
             uint maxPersonnel = 0;
             uint descId = _component.descId;
-            if (descId > 0 && descId < _entityAssembly.PersonnelDescBuffer.Count)
+            if (descId > 0 && descId < _entityAssembly.PersonnelDescBuffer.Length)
             {
                 maxPersonnel = _entityAssembly.PersonnelDescBuffer[(int)descId].maxPersonnel;
             }

@@ -91,7 +91,7 @@ public class FirearmProxy : ComponentProxy
             return;
         }
 
-        if (descId < _entityAssembly.FirearmDescBuffer.Count)
+        if (descId < _entityAssembly.FirearmDescBuffer.Length)
         {
             var firearmDesc = _entityAssembly.FirearmDescBuffer[(int) descId];
             Ammo = firearmDesc.maxAmmo;
