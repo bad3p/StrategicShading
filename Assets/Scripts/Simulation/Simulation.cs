@@ -268,7 +268,6 @@ public partial class ComputeShaderEmulator
         uint numEnemies = 0;
         uint numAllies = 0;
         float3 front = new float3(0,0,0);
-        
         uint4 firearmTargetIds = new uint4(0,0,0,0);
         float4 firearmTargetWeights = new float4(0.0f,0.0f,0.0f,0.0f); 
         

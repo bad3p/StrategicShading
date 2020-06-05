@@ -31,6 +31,19 @@ public partial class EntityAssembly : MonoBehaviour
         dstBuffer.Clear();
         dstBuffer.AddRange( srcBuffer );
     }
+
+    static uint SelectedEntityId()
+    {
+        if (Selection.activeGameObject)
+        {
+            EntityProxy selectedEntityProxy = Selection.activeGameObject.GetComponent<EntityProxy>();
+            if (selectedEntityProxy)
+            {
+                return selectedEntityProxy.entityId;
+            }
+        }
+        return 0;
+    }
     
     void Start()
     {
@@ -73,9 +86,10 @@ public partial class EntityAssembly : MonoBehaviour
         InitBuffer(_targetingBuffer, ref ComputeShaderEmulator._targetingBuffer);
         InitBuffer(FirearmDescBuffer, ref ComputeShaderEmulator._firearmDescBuffer);
         InitBuffer(PersonnelDescBuffer, ref ComputeShaderEmulator._personnelDescBuffer);
-        ComputeShaderEmulator._entityCount = (uint)_descBuffer.Count;
         ComputeShaderEmulator._firearmDescCount = (uint) FirearmDescBuffer.Count;
         ComputeShaderEmulator._personnelDescCount = (uint) PersonnelDescBuffer.Count;
+        ComputeShaderEmulator._entityCount = (uint)_descBuffer.Count;
+        ComputeShaderEmulator._selectedEntityId = SelectedEntityId();
     }
     
     void Update()
@@ -89,6 +103,8 @@ public partial class EntityAssembly : MonoBehaviour
         uint threadGroupsX = ComputeShaderEmulator._entityCount / ThreadGroupSizeX + 1; 
 
         ComputeShaderEmulator._dT = Time.deltaTime;
+        ComputeShaderEmulator._entityCount = (uint)_descBuffer.Count;
+        ComputeShaderEmulator._selectedEntityId = SelectedEntityId();
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateMovement, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdatePersonnel, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateTargeting, threadGroupsX, 1, 1 );

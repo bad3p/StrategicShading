@@ -22,6 +22,7 @@ namespace Structs
         public uint maxAmmo;
         public float4 distance;
         public float4 firepower;
+        public float setupTime;
         public float aimingTime;
         public float reloadingTime;
     };

@@ -184,6 +184,7 @@ public class EntityAssemblyEditor : Editor
 		    firearmDesc.maxAmmo = (uint)EditorGUILayout.IntField("maxAmmo", (int)firearmDesc.maxAmmo); 
 		    firearmDesc.distance = EditorGUILayout.Vector4Field("distance", firearmDesc.distance.ToVector4());
 		    firearmDesc.firepower = EditorGUILayout.Vector4Field("firepower",firearmDesc.firepower.ToVector4());
+		    firearmDesc.setupTime = EditorGUILayout.FloatField("setupTime", firearmDesc.setupTime);
 		    firearmDesc.aimingTime = EditorGUILayout.FloatField("aimingTime", firearmDesc.aimingTime);
 		    firearmDesc.reloadingTime = EditorGUILayout.FloatField("reloadingTime", firearmDesc.reloadingTime);
 

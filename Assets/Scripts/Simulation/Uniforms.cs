@@ -1,6 +1,7 @@
 ﻿#define ASSERTIVE_ENTITY_ACCESS
 #define ASSERTIVE_COMPONENT_ACCESS
 #define ASSERTIVE_FUNCTION_CALLS
+#define DRAW_LINE_OF_SIGHT
 
 using Types;
 using Structs;
@@ -67,6 +68,7 @@ public partial class ComputeShaderEmulator
     public static uint _personnelDescCount = 0;
     public static PersonnelDesc[] _personnelDescBuffer = new PersonnelDesc[0];
     public static uint _entityCount = 0;
+    public static uint _selectedEntityId = 0;
     public static uint[] _descBuffer = new uint[0];
     public static Transform[] _transformBuffer = new Transform[0];
     public static Hierarchy[] _hierarchyBuffer = new Hierarchy[0];
@@ -630,11 +632,11 @@ public partial class ComputeShaderEmulator
                     float4 obstacleBoxRotation = _transformBuffer[obstacleEntityId].rotation;
                     float3 obstacleBoxScale = _transformBuffer[obstacleEntityId].scale;
                     
-                    float4 invObstacleBoxRotation = ComputeShaderEmulator.quaternionInverse(obstacleBoxRotation);
+                    float4 invObstacleBoxRotation = quaternionInverse(obstacleBoxRotation);
                     
                     float3 localRayStart = rayStart - obstacleBoxPosition;
-                    localRayStart = ComputeShaderEmulator.rotate(localRayStart, invObstacleBoxRotation);
-                    float3 localRayDir = ComputeShaderEmulator.rotate(rayDir, invObstacleBoxRotation);
+                    localRayStart = rotate(localRayStart, invObstacleBoxRotation);
+                    float3 localRayDir = rotate(rayDir, invObstacleBoxRotation);
 
                     float3 obstacleBoxSup = obstacleBoxScale * 0.5f;
                     float3 obstacleBoxInf = -obstacleBoxSup;
@@ -648,7 +650,12 @@ public partial class ComputeShaderEmulator
                             localHit = rotate(localHit, obstacleBoxRotation);
                             hit = localHit;
                             hit += obstacleBoxPosition;
-                            Debug.DrawLine(rayStart.ToVector3(), hit.ToVector3(), Color.red);
+                            #if DRAW_LINE_OF_SIGHT
+                                if (entityId == _selectedEntityId)
+                                {
+                                    Debug.DrawLine(rayStart.ToVector3(), hit.ToVector3(), Color.red);
+                                }
+                            #endif
                             return false;
                         }
                     }
@@ -656,7 +663,12 @@ public partial class ComputeShaderEmulator
             }
         }
         
-        Debug.DrawLine(rayStart.ToVector3(), rayEnd.ToVector3(), Color.green);
+        #if DRAW_LINE_OF_SIGHT
+            if (entityId == _selectedEntityId)
+            {
+                Debug.DrawLine(rayStart.ToVector3(), rayEnd.ToVector3(), Color.green);
+            }
+        #endif
         return true;
     }
 
@@ -694,8 +706,6 @@ public partial class ComputeShaderEmulator
         // TODO: temporary expose when moving (?)
         
         // TODO: temporary expose when open fire
-        
-        // TODO: reduce exposure when entering buildings
         
         // TODO: reduce exposure when using terrain features like bushes or forests  
 
