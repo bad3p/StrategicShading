@@ -181,6 +181,13 @@ public partial class ComputeShaderEmulator
             a.x*b.y-a.y*b.x
         );
     }
+    
+    public static float4 quaternionInverse(float4 q)
+    {
+        float dotqq = q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w;
+        float rcpdotqq = 1.0f / dotqq;
+        return new float4( -q.x * rcpdotqq, -q.y * rcpdotqq, -q.z * rcpdotqq, q.w * rcpdotqq );
+    }
 
     public static float4 quaternionFromBasis(float3 x, float3 y, float3 z)
     {
@@ -214,9 +221,9 @@ public partial class ComputeShaderEmulator
     {
         float4x4 sm = new float4x4
         (
-            new float4( 1.0f/s.x, 0, 0, 0 ),
-            new float4( 0, 1.0f/s.y, 0, 0 ),
-            new float4( 0, 0, 1.0f/s.z, 0 ),
+            new float4( s.x, 0, 0, 0 ),
+            new float4( 0, s.y, 0, 0 ),
+            new float4( 0, 0, s.z, 0 ),
             new float4( 0, 0, 0, 1 )
         );
 
@@ -281,7 +288,44 @@ public partial class ComputeShaderEmulator
     
     public static float4x4 inverse(float4x4 m)
     {
-        return m.ToMatrix4x4().inverse;
+        //return m.ToMatrix4x4().inverse;
+        
+        float n11 = m._m00, n12 = m._m10, n13 = m._m20, n14 = m._m30;
+        float n21 = m._m01, n22 = m._m11, n23 = m._m21, n24 = m._m31;
+        float n31 = m._m02, n32 = m._m12, n33 = m._m22, n34 = m._m32;
+        float n41 = m._m03, n42 = m._m13, n43 = m._m23, n44 = m._m33;
+
+        float t11 = n23 * n34 * n42 - n24 * n33 * n42 + n24 * n32 * n43 - n22 * n34 * n43 - n23 * n32 * n44 + n22 * n33 * n44;
+        float t12 = n14 * n33 * n42 - n13 * n34 * n42 - n14 * n32 * n43 + n12 * n34 * n43 + n13 * n32 * n44 - n12 * n33 * n44;
+        float t13 = n13 * n24 * n42 - n14 * n23 * n42 + n14 * n22 * n43 - n12 * n24 * n43 - n13 * n22 * n44 + n12 * n23 * n44;
+        float t14 = n14 * n23 * n32 - n13 * n24 * n32 - n14 * n22 * n33 + n12 * n24 * n33 + n13 * n22 * n34 - n12 * n23 * n34;
+
+        float det = n11 * t11 + n21 * t12 + n31 * t13 + n41 * t14;
+        float idet = 1.0f / det;
+
+        float4x4 ret;
+
+        ret._m00 = t11 * idet;
+        ret._m01 = (n24 * n33 * n41 - n23 * n34 * n41 - n24 * n31 * n43 + n21 * n34 * n43 + n23 * n31 * n44 - n21 * n33 * n44) * idet;
+        ret._m02 = (n22 * n34 * n41 - n24 * n32 * n41 + n24 * n31 * n42 - n21 * n34 * n42 - n22 * n31 * n44 + n21 * n32 * n44) * idet;
+        ret._m03 = (n23 * n32 * n41 - n22 * n33 * n41 - n23 * n31 * n42 + n21 * n33 * n42 + n22 * n31 * n43 - n21 * n32 * n43) * idet;
+
+        ret._m10 = t12 * idet;
+        ret._m11 = (n13 * n34 * n41 - n14 * n33 * n41 + n14 * n31 * n43 - n11 * n34 * n43 - n13 * n31 * n44 + n11 * n33 * n44) * idet;
+        ret._m12 = (n14 * n32 * n41 - n12 * n34 * n41 - n14 * n31 * n42 + n11 * n34 * n42 + n12 * n31 * n44 - n11 * n32 * n44) * idet;
+        ret._m13 = (n12 * n33 * n41 - n13 * n32 * n41 + n13 * n31 * n42 - n11 * n33 * n42 - n12 * n31 * n43 + n11 * n32 * n43) * idet;
+
+        ret._m20 = t13 * idet;
+        ret._m21 = (n14 * n23 * n41 - n13 * n24 * n41 - n14 * n21 * n43 + n11 * n24 * n43 + n13 * n21 * n44 - n11 * n23 * n44) * idet;
+        ret._m22 = (n12 * n24 * n41 - n14 * n22 * n41 + n14 * n21 * n42 - n11 * n24 * n42 - n12 * n21 * n44 + n11 * n22 * n44) * idet;
+        ret._m23 = (n13 * n22 * n41 - n12 * n23 * n41 - n13 * n21 * n42 + n11 * n23 * n42 + n12 * n21 * n43 - n11 * n22 * n43) * idet;
+
+        ret._m30 = t14 * idet;
+        ret._m31 = (n13 * n24 * n31 - n14 * n23 * n31 + n14 * n21 * n33 - n11 * n24 * n33 - n13 * n21 * n34 + n11 * n23 * n34) * idet;
+        ret._m32 = (n14 * n22 * n31 - n12 * n24 * n31 - n14 * n21 * n32 + n11 * n24 * n32 + n12 * n21 * n34 - n11 * n22 * n34) * idet;
+        ret._m33 = (n12 * n23 * n31 - n13 * n22 * n31 + n13 * n21 * n32 - n11 * n23 * n32 - n12 * n21 * n33 + n11 * n22 * n33) * idet;
+
+        return ret;  
     }
     
     public static float4 mul(float4 vec, float4x4 mat)

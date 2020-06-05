@@ -214,11 +214,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Direction:
+  Arc:
     x: 0
     y: 0
     z: 0
-  Arc: 0
+    w: 0
 --- !u!114 &50486967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -462,11 +462,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Direction:
+  Arc:
     x: 0
     y: 0
     z: 0
-  Arc: 0
+    w: 0
 --- !u!1 &88985222
 GameObject:
   m_ObjectHideFlags: 0
@@ -751,11 +751,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Direction:
+  Arc:
     x: 0
     y: 0
     z: 0
-  Arc: 0
+    w: 0
 --- !u!1 &117113804
 GameObject:
   m_ObjectHideFlags: 0
@@ -2436,11 +2436,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Direction:
+  Arc:
     x: 0
     y: 0
     z: 0
-  Arc: 0
+    w: 0
 --- !u!114 &832503764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2822,11 +2822,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Direction:
+  Arc:
     x: 0
     y: 0
     z: 0
-  Arc: 0
+    w: 0
 --- !u!1 &909305568
 GameObject:
   m_ObjectHideFlags: 0
@@ -2973,11 +2973,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Direction:
+  Arc:
     x: 0
     y: 0
     z: 0
-  Arc: 0
+    w: 0
 --- !u!1 &925101042
 GameObject:
   m_ObjectHideFlags: 0
@@ -3403,11 +3403,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Direction:
+  Arc:
     x: 0
     y: 0
     z: 0
-  Arc: 0
+    w: 0
 --- !u!1 &1095388833
 GameObject:
   m_ObjectHideFlags: 0
@@ -3779,11 +3779,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Direction:
+  Arc:
     x: 0
     y: 0
     z: 0
-  Arc: 0
+    w: 0
 --- !u!114 &1212768685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3930,11 +3930,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Direction:
+  Arc:
     x: 0
     y: 0
     z: 0
-  Arc: 0
+    w: 0
 --- !u!114 &1219724292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5695,7 +5695,7 @@ MonoBehaviour:
   Morale: 601
   Fitness: 14400
   Pose: 3
-  Count: 2
+  Count: 3
 --- !u!114 &1895606208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5751,11 +5751,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Direction:
+  Arc:
     x: 0
     y: 0
     z: 0
-  Arc: 0
+    w: 0
 --- !u!1 &1897142788
 GameObject:
   m_ObjectHideFlags: 0
@@ -5902,11 +5902,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Direction:
+  Arc:
     x: 0
     y: 0
     z: 0
-  Arc: 0
+    w: 0
 --- !u!1 &1898030549
 GameObject:
   m_ObjectHideFlags: 0
@@ -6936,8 +6936,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724c110c96d48248bf92472310ae10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Direction:
+  Arc:
     x: 0
     y: 0
     z: 0
-  Arc: 0
+    w: 0

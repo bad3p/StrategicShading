@@ -109,4 +109,13 @@ public class TargetingProxy : ComponentProxy
         get { return _component.numAllies; }
     }
 
+    public uint4 firearmTargetIds
+    {
+        get { return _component.firearmTargetIds; }
+    }
+    
+    public float4 firearmTargetWeights
+    {
+        get { return _component.firearmTargetWeights; }
+    }
 }

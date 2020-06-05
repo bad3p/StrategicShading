@@ -177,7 +177,7 @@ public partial class ComputeShaderEmulator
             400.0f,
             1.0f / 3300.0f,
             600.0f,
-            1.0f / 110.0f
+            1.0f / 220.0f
         );
 
         float diceThreshold = lerpargs(moraleLossProbabilityByMorale, morale);
@@ -269,6 +269,9 @@ public partial class ComputeShaderEmulator
         uint numAllies = 0;
         float3 front = new float3(0,0,0);
         
+        uint4 firearmTargetIds = new uint4(0,0,0,0);
+        float4 firearmTargetWeights = new float4(0.0f,0.0f,0.0f,0.0f); 
+        
         for (uint otherEntityId = 1; otherEntityId < _entityCount; otherEntityId++)
         {
             if (otherEntityId != entityId)
@@ -287,13 +290,19 @@ public partial class ComputeShaderEmulator
                     // structure
                     if (otherTeam == 0)
                     {
-                                            
                     }
                     // enemy
                     else if (otherTeam != team)
                     {
-                        numEnemies++;
-                        front += dirToOtherEntity;
+                        if (GetLineOfSight(entityId, otherEntityId))
+                        {
+                            // TODO: consider enemy firepower
+                            float exposure = GetExposure(otherEntityId);
+                            float weight = distToOtherEntity / exposure;
+                            InsertTarget(ref firearmTargetIds, ref firearmTargetWeights, otherEntityId, weight);
+                            numEnemies++;
+                            front += dirToOtherEntity;
+                        }
                     }
                     // ally
                     else
@@ -307,8 +316,10 @@ public partial class ComputeShaderEmulator
         front = normalize(front);
 
         _targetingBuffer[entityId].numEnemies = numEnemies;
-        _targetingBuffer[entityId].numAllies = numAllies + 1; // consider itself
+        _targetingBuffer[entityId].numAllies = numAllies + 1;
         _targetingBuffer[entityId].front = front;
+        _targetingBuffer[entityId].firearmTargetIds = firearmTargetIds;
+        _targetingBuffer[entityId].firearmTargetWeights = firearmTargetWeights;
     }
 
     [NumThreads(256, 1, 1)]

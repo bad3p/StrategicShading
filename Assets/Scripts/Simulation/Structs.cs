@@ -89,5 +89,7 @@ namespace Structs
         public float3 front;
         public uint numEnemies;
         public uint numAllies;
+        public uint4 firearmTargetIds;
+        public float4 firearmTargetWeights;
     };
 }

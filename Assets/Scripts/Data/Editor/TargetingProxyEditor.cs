@@ -37,6 +37,14 @@ public class TargetingProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("numAllies");
             EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("firearmTargetIds");
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("firearmTargetWeights");
+            EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();
         
@@ -67,6 +75,14 @@ public class TargetingProxyEditor : Editor
             
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(targetingProxy.numAllies.ToString());
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(targetingProxy.firearmTargetIds.x.ToString() + ", " + targetingProxy.firearmTargetIds.y.ToString() + ", " + targetingProxy.firearmTargetIds.z.ToString() + ", " + targetingProxy.firearmTargetIds.w.ToString() );
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(targetingProxy.firearmTargetWeights.x.ToString("F2") + ", " + targetingProxy.firearmTargetWeights.y.ToString("F2") + ", " + targetingProxy.firearmTargetWeights.z.ToString("F2") + ", " + targetingProxy.firearmTargetWeights.w.ToString("F2") );
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();

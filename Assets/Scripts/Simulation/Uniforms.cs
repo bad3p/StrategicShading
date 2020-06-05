@@ -563,4 +563,142 @@ public partial class ComputeShaderEmulator
             return moraleRecoveryRate.w;
         }
     }
+    
+    // TARGETING HELPERS
+
+    public static void InsertTarget(ref uint4 ids, ref float4 weights, uint id, float weight)
+    {
+        if (ids.x == 0 || ids.x > 0 && weights.x > weight)
+        {
+            ids.yzw = ids.xyz;
+            weights.yzw = weights.xyz;
+            ids.x = id;
+            weights.x = weight;
+        }
+        else if( ids.y == 0 || ids.y > 0 && weights.y > weight )
+        {
+            ids.zw = ids.yz;
+            weights.zw = weights.yz;
+            ids.y = id;
+            weights.y = weight;
+        }
+        else if( ids.z == 0 || ids.z > 0 && weights.z > weight )
+        {
+            ids.w = ids.z;
+            weights.w = weights.z;
+            ids.z = id;
+            weights.z = weight;
+        }
+        else if (ids.w == 0 || ids.w > 0 && weights.w > weight)
+        {
+            ids.w = id;
+            weights.w = weight;
+        }
+    }
+
+    public static bool GetLineOfSight(uint entityId, uint otherEntityId)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & TRANSFORM) == TRANSFORM);
+            Debug.Assert((_descBuffer[otherEntityId] & TRANSFORM) == TRANSFORM);
+        #endif
+        
+        double3 rayStart = _transformBuffer[entityId].position;
+        double3 rayEnd = _transformBuffer[otherEntityId].position;
+        float3 rayDir = rayEnd - rayStart;
+        float rayLength = length(rayDir);
+        if (rayLength > FLOAT_EPSILON)
+        {
+            rayDir = rayDir * 1.0f / rayLength;
+        }
+        float rayLengthSquared = rayLength * rayLength; 
+
+        float3 localHit = new float3(0,0,0);
+        double3 hit = new double3(0,0,0);
+
+        for (uint obstacleEntityId = 1; obstacleEntityId < _entityCount; obstacleEntityId++)
+        {
+            uint team = GetTeam(obstacleEntityId);
+            if (team == 0)
+            {
+                if (HasComponents(obstacleEntityId, TRANSFORM))
+                {
+                    double3 obstacleBoxPosition = _transformBuffer[obstacleEntityId].position;
+                    float4 obstacleBoxRotation = _transformBuffer[obstacleEntityId].rotation;
+                    float3 obstacleBoxScale = _transformBuffer[obstacleEntityId].scale;
+                    
+                    float4 invObstacleBoxRotation = ComputeShaderEmulator.quaternionInverse(obstacleBoxRotation);
+                    
+                    float3 localRayStart = rayStart - obstacleBoxPosition;
+                    localRayStart = ComputeShaderEmulator.rotate(localRayStart, invObstacleBoxRotation);
+                    float3 localRayDir = ComputeShaderEmulator.rotate(rayDir, invObstacleBoxRotation);
+
+                    float3 obstacleBoxSup = obstacleBoxScale * 0.5f;
+                    float3 obstacleBoxInf = -obstacleBoxSup;
+                    
+                    if (CollideRayAABB(localRayStart, localRayDir, obstacleBoxInf, obstacleBoxSup, out localHit))
+                    {
+                        float3 dirToHit = localHit - localRayStart;
+                        float distToHitSquared = dot(dirToHit, dirToHit);
+                        if (distToHitSquared < rayLengthSquared)
+                        {
+                            localHit = rotate(localHit, obstacleBoxRotation);
+                            hit = localHit;
+                            hit += obstacleBoxPosition;
+                            Debug.DrawLine(rayStart.ToVector3(), hit.ToVector3(), Color.red);
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        
+        Debug.DrawLine(rayStart.ToVector3(), rayEnd.ToVector3(), Color.green);
+        return true;
+    }
+
+    public static float GetExposure(uint entityId)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & TRANSFORM_PERSONNEL_MOVEMENT) == TRANSFORM_PERSONNEL_MOVEMENT);
+        #endif
+
+        // normalized exposure [0.0...1.0]
+        float exposure = 0.0f;
+        
+        // exposure by pose
+        uint pose = GetPersonnelPose(entityId);
+        if (pose == PERSONNEL_POSE_HIDING )
+        {
+            exposure = 0.0f;
+        }
+        else if (pose == PERSONNEL_POSE_LAYING)
+        {
+            exposure = 0.1f;
+        }
+        else if (pose == PERSONNEL_POSE_CROUCHING)
+        {
+            exposure = 0.5f;
+        }
+        else
+        {
+            exposure = 1.0f;
+        }
+        
+        // TODO: temporary expose when moving (?)
+        
+        // TODO: temporary expose when open fire
+        
+        // TODO: reduce exposure when entering buildings
+        
+        // TODO: reduce exposure when using terrain features like bushes or forests  
+
+        return exposure;
+    }
 }

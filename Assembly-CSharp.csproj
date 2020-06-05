@@ -84,6 +84,8 @@
      <Compile Include="Assets\Scripts\Geometry\Geometry.cs" />
      <Compile Include="Assets\Scripts\Geometry\HullHierarchy.cs" />
      <Compile Include="Assets\Scripts\Simulation\AtomicIntrinsics.cs" />
+     <Compile Include="Assets\Scripts\Simulation\Collision.cs" />
+     <Compile Include="Assets\Scripts\Simulation\CollisionTest.cs" />
      <Compile Include="Assets\Scripts\Simulation\ComputeShaderEmulator.cs" />
      <Compile Include="Assets\Scripts\Simulation\FloatIntrinsics.cs" />
      <Compile Include="Assets\Scripts\Simulation\Random.cs" />

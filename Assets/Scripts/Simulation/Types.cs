@@ -1997,6 +1997,15 @@ namespace Types
         public float _m31;
         public float _m32;
         public float _m33;
+
+        public float4x4(float xx, float xy, float xz, float xw, float yx, float yy, float yz, float yw, float zx,
+            float zy, float zz, float zw, float wx, float wy, float wz, float ww)
+        {
+            _m00 = xx; _m01 = yx; _m02 = zx; _m03 = wx;
+            _m10 = xy; _m11 = yy; _m12 = zy; _m13 = wy;
+            _m20 = xz; _m21 = yz; _m22 = zz; _m23 = wz;
+            _m30 = xw; _m31 = yw; _m32 = zw; _m33 = ww;
+        }
         
         public float4x4(float4 x, float4 y, float4 z, float4 w)
         {
