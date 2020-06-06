@@ -68,6 +68,7 @@
      <Compile Include="Assets\Scripts\AI\Sequence.cs" />
      <Compile Include="Assets\Scripts\AI\WaitForChance.cs" />
      <Compile Include="Assets\Scripts\ComputeShaderEngine.cs" />
+     <Compile Include="Assets\Scripts\Data\BuildingProxy.cs" />
      <Compile Include="Assets\Scripts\Data\ComponentProxy.cs" />
      <Compile Include="Assets\Scripts\Data\EntityAssembly.cs" />
      <Compile Include="Assets\Scripts\Data\EntityAssemblySimulation.cs" />

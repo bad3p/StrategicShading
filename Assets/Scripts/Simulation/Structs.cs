@@ -62,7 +62,6 @@ namespace Structs
     
     public struct Hierarchy
     {
-        public uint typeId;
         public uint parentEntityId;
         public uint firstChildEntityId;
         public uint nextSiblingEntityId;

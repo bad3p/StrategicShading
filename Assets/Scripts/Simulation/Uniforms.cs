@@ -18,6 +18,7 @@ public partial class ComputeShaderEmulator
     public const uint FIREARMS = 0x00000008;
     public const uint MOVEMENT = 0x00000010;
     public const uint TARGETING = 0x00000020;
+    public const uint BUILDING = 0x00000040;
     public const uint TEAM_BITMASK = 0xC0000000;
     public const uint TEAM_SHIFT = 30;
     

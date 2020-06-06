@@ -21,10 +21,6 @@ public class HierarchyProxyEditor : Editor
         EditorGUILayout.BeginVertical();
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("typeId");
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("parentEntityId");
             EditorGUILayout.EndHorizontal();
             
@@ -44,22 +40,6 @@ public class HierarchyProxyEditor : Editor
         
         EditorGUILayout.BeginVertical();
         {
-            EditorGUILayout.BeginHorizontal();
-            if (EditorApplication.isPlaying)
-            {
-                hierarchyProxy.TypeID = hierarchyProxy.typeId;
-                EditorGUILayout.LabelField(hierarchyProxy.TypeID.ToString());
-            }
-            else
-            {
-                hierarchyProxy.TypeID = (uint)EditorGUILayout.IntField("", (int)hierarchyProxy.TypeID);
-                if (hierarchyProxy.typeId != hierarchyProxy.TypeID)
-                {
-                    hierarchyProxy.typeId = hierarchyProxy.TypeID;
-                }
-            }
-            EditorGUILayout.EndHorizontal();
-            
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField( hierarchyProxy.parentEntityId.ToString() );
             EditorGUILayout.EndHorizontal();

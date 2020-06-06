@@ -10,6 +10,9 @@ public partial class EntityAssembly : MonoBehaviour
     
     public string[] PersonnelNameBuffer = new string[]{ "NULL" };
     public Structs.PersonnelDesc[] PersonnelDescBuffer = new Structs.PersonnelDesc[] { new Structs.PersonnelDesc() };
+    
+    public string[] BuildingNameBuffer = new string[]{ "NULL" };
+    public Structs.BuildingDesc[] BuildingDescBuffer = new Structs.BuildingDesc[]{ new Structs.BuildingDesc() };
 
     private List<uint> _descBuffer = new List<uint>() { 0 };
     private Dictionary<uint, EntityProxy> _entityProxyById = new Dictionary<uint,EntityProxy>();
@@ -39,6 +42,10 @@ public partial class EntityAssembly : MonoBehaviour
     private Dictionary<uint, TargetingProxy> _targetingProxyById = new Dictionary<uint, TargetingProxy>();
     private Dictionary<TargetingProxy, uint> _idByTargetingProxy = new Dictionary<TargetingProxy,uint>();
     
+    private List<Structs.Building> _buildingBuffer = new List<Structs.Building>() { new Structs.Building() };
+    private Dictionary<uint, BuildingProxy> _buildingProxyById = new Dictionary<uint, BuildingProxy>();
+    private Dictionary<BuildingProxy, uint> _idByBuildingProxy = new Dictionary<BuildingProxy,uint>();
+    
     #region Generics
     uint GetComponentBitMask<P>(P proxy) where P : ComponentProxy
     {
@@ -65,6 +72,10 @@ public partial class EntityAssembly : MonoBehaviour
         else if (proxy is TargetingProxy)
         {
             return ComputeShaderEmulator.TARGETING;
+        }
+        else if (proxy is BuildingProxy)
+        {
+            return ComputeShaderEmulator.BUILDING;
         }
         else
         {
@@ -227,6 +238,7 @@ public partial class EntityAssembly : MonoBehaviour
             _firearmsBuffer.Add( new Structs.Firearm() );
             _movementBuffer.Add( new Structs.Movement() );
             _targetingBuffer.Add( new Structs.Targeting() );
+            _buildingBuffer.Add( new Structs.Building() );
         }
         return entityId;
     }
@@ -451,6 +463,38 @@ public partial class EntityAssembly : MonoBehaviour
     public void SetTargeting(uint entityId, Structs.Targeting f)
     {
         SetComponent<TargetingProxy,Structs.Targeting>(entityId, f, _targetingBuffer);
+    }
+    #endregion
+    
+    #region Building
+    public uint GetEntityId(BuildingProxy buildingProxy)
+    {
+        return GetComponentEntityId( buildingProxy, _idByBuildingProxy );
+    }
+    
+    public BuildingProxy GetBuildingProxy(uint entityId)
+    {
+        return GetComponentProxy( entityId, _buildingProxyById );
+    }
+    
+    public void RegisterBuildingProxy(uint entityId, BuildingProxy buildingProxy)
+    {
+        RegisterComponentProxy( entityId, buildingProxy, _idByBuildingProxy, _buildingProxyById );
+    }
+    
+    public void UnregisterBuildingProxy(uint entityId, BuildingProxy buildingProxy)
+    {
+        UnregisterComponentProxy( entityId, buildingProxy, _idByBuildingProxy, _buildingProxyById );
+    }
+    
+    public Structs.Building GetBuilding(uint entityId)
+    {
+        return GetComponent<BuildingProxy,Structs.Building>(entityId, _buildingBuffer);
+    }
+    
+    public void SetBuilding(uint entityId, Structs.Building b)
+    {
+        SetComponent<BuildingProxy,Structs.Building>(entityId, b, _buildingBuffer);
     }
     #endregion
 }

@@ -10,12 +10,19 @@ public class EntityAssemblyEditor : Editor
     // GUI helpers
     
     private static GUIStyle _headerLabel = null;
+    private static GUIStyle _headerTextField = null;
     private static GUIStyle _headerButton = null;
     private static GUIStyle _headerButtonArea = null;
+    private static GUIStyle _headerIndentArea = null;
     private static GUIStyle _itemArea = null;
     
     private static bool _showFirearmDescs = false;
     private static bool _showPersonnelDescs = false;
+    private static bool _showBuildingDescs = false;
+    
+    private HashSet<int> _expandedFirearmDescIds = new HashSet<int>();
+    private HashSet<int> _expandedPersonnelDescIds = new HashSet<int>();
+    private HashSet<int> _expandedBuildingDescIds = new HashSet<int>(); 
     
     private static void RemoveAt<T>(ref T[] arr, int index) where T : new()
     {
@@ -80,8 +87,10 @@ public class EntityAssemblyEditor : Editor
     private static void SupportCustomStyles()
 	{
 		_headerLabel = null;
+		_headerTextField = null;
 		_headerButton = null;
 		_headerButtonArea = null;
+		_headerIndentArea = null;
 		_itemArea = null;
 		
 		if( _headerLabel == null )
@@ -91,10 +100,21 @@ public class EntityAssemblyEditor : Editor
 			_headerLabel.fontStyle = FontStyle.Bold;
 			_headerLabel.stretchHeight = false;
 			_headerLabel.stretchWidth = true;
-			_headerLabel.normal.textColor = Color.Lerp(Color.white, Color.gray, 0.75f);
+			_headerLabel.normal.textColor = Color.Lerp(Color.white, Color.black, 0.75f);
 			_headerLabel.fixedHeight = 24;
 		}
 		
+		if( _headerTextField == null )
+		{
+			_headerTextField = new GUIStyle(GUI.skin.box);
+			_headerTextField.alignment = TextAnchor.MiddleLeft;
+			_headerTextField.fontStyle = FontStyle.Bold;
+			_headerTextField.stretchHeight = false;
+			_headerTextField.stretchWidth = true;
+			_headerTextField.normal.textColor = Color.Lerp(Color.white, Color.black, 0.75f);
+			_headerTextField.fixedHeight = 24;
+		}
+
 		if( _headerButton == null )
 		{
 			_headerButton = new GUIStyle(GUI.skin.button);
@@ -102,7 +122,7 @@ public class EntityAssemblyEditor : Editor
 			_headerButton.fontStyle = FontStyle.Bold;
 			_headerButton.stretchHeight = false;
 			_headerButton.stretchWidth = false;
-			_headerButton.normal.textColor = Color.Lerp(Color.white, Color.gray, 0.75f);
+			_headerButton.normal.textColor = Color.Lerp(Color.white, Color.black, 0.75f);
 			_headerButton.fixedWidth = 16;
 			_headerButton.fixedWidth = 16;
 		}
@@ -114,9 +134,21 @@ public class EntityAssemblyEditor : Editor
 			_headerButtonArea.fontStyle = FontStyle.Bold;
 			_headerButtonArea.stretchHeight = false;
 			_headerButtonArea.stretchWidth = false;
-			_headerButtonArea.normal.textColor = Color.Lerp(Color.white, Color.gray, 0.75f);
+			_headerButtonArea.normal.textColor = Color.Lerp(Color.white, Color.black, 0.75f);
 			_headerButtonArea.fixedHeight = 24;
 			_headerButtonArea.fixedWidth = 24;
+		}
+		
+		if(_headerIndentArea == null)
+		{
+			_headerIndentArea = new GUIStyle(GUI.skin.scrollView);
+			_headerIndentArea.alignment = TextAnchor.MiddleCenter;
+			_headerIndentArea.fontStyle = FontStyle.Bold;
+			_headerIndentArea.stretchHeight = false;
+			_headerIndentArea.stretchWidth = false;
+			_headerIndentArea.normal.textColor = Color.Lerp(Color.white, Color.black, 0.75f);
+			_headerIndentArea.fixedHeight = 24;
+			_headerIndentArea.fixedWidth = 48;
 		}
 
 		if(_itemArea == null)
@@ -126,7 +158,7 @@ public class EntityAssemblyEditor : Editor
 			_itemArea.fontStyle = FontStyle.Bold;
 			_itemArea.stretchHeight = false;
 			_itemArea.stretchWidth = true;
-			_itemArea.normal.textColor = Color.Lerp(Color.white, Color.gray, 0.75f);
+			_itemArea.normal.textColor = Color.Lerp(Color.white, Color.black, 0.75f);
 		}
 	}
     
@@ -200,26 +232,65 @@ public class EntityAssemblyEditor : Editor
 	    return flag;
     }
     
-    private void DrawItems<T>(string header, ref bool flag, ref string[] itemNames, ref T[] items, Func<T,KeyValuePair<T,bool>> drawFunc) where T : new()
+    private bool DrawDropDownTextField(string text, bool flag, out string modifiedText)
+    {
+	    EditorGUILayout.BeginHorizontal();
+	    {
+		    EditorGUILayout.BeginVertical(_headerIndentArea);
+		    EditorGUILayout.EndVertical();
+		    
+		    EditorGUILayout.BeginVertical(_headerButtonArea);
+		    if (GUILayout.Button(flag ? "+" : "-", _headerButton))
+		    {
+			    flag = !flag;
+		    }
+		    EditorGUILayout.EndVertical();
+			
+		    EditorGUILayout.BeginVertical();			
+		    modifiedText = EditorGUILayout.TextField(text, _headerTextField);
+		    EditorGUILayout.EndVertical();
+	    }
+	    EditorGUILayout.EndHorizontal();
+	    return flag;
+    }
+    
+    private void DrawItems<T>(string header, ref bool flag, ref string[] itemNames, ref T[] items, Func<T,KeyValuePair<T,bool>> drawFunc, Func<int,bool> isExpandedFunc, Action<int,bool> setExpandedFunc) where T : new()
     {
 	    flag = DrawDropDownToggle( header, flag );
 	    if (flag)
 	    {
 		    int removedItemID = -1;
 			
-		    EditorGUI.indentLevel++;
-		    for (int i = 0; i < items.Length; i++)
+		    //EditorGUI.indentLevel++;
+		    for (int i = 1; i < items.Length; i++)
 		    {
-			    itemNames[i] = GUILayout.TextField( itemNames[i] );
+			    //itemNames[i] = GUILayout.TextField( itemNames[i] );
 
-			    KeyValuePair<T, bool> drawResult = drawFunc(items[i]);
-			    items[i] = drawResult.Key;
-			    if (drawResult.Value)
+			    bool prevIsExpanded = isExpandedFunc(i);
+			    string modifiedText = itemNames[i];
+			    bool newIsExpanded = DrawDropDownTextField(itemNames[i], prevIsExpanded, out modifiedText);
+			    if (itemNames[i] != modifiedText)
 			    {
-				    removedItemID = i;
+				    itemNames[i] = modifiedText;
+			    }
+			    if (prevIsExpanded != newIsExpanded)
+			    {
+				    setExpandedFunc(i, newIsExpanded);
+			    }
+
+			    if (newIsExpanded)
+			    {
+				    EditorGUI.indentLevel++;
+				    EditorGUILayout.Space();
+				    KeyValuePair<T, bool> drawResult = drawFunc(items[i]);
+				    items[i] = drawResult.Key;
+				    if (drawResult.Value)
+				    {
+					    removedItemID = i;
+				    }
+				    EditorGUI.indentLevel--;
 			    }
 		    }
-		    EditorGUI.indentLevel--;
 		    EditorGUILayout.Space();
 
 		    EditorGUILayout.BeginHorizontal();
@@ -275,8 +346,11 @@ public class EntityAssemblyEditor : Editor
 
 		    return new KeyValuePair<Structs.FirearmDesc, bool>(modifiedItem, deleteItem);
 	    };
+
+	    Func<int, bool> IsExpanded = (firearmDescId) => IsFirearmDescExpanded(firearmDescId);
+	    Action<int, bool> SetExpanded = (firearmDescId, flag) => SetFirearmDescExpanded(firearmDescId, flag);
 		
-	    DrawItems( "Firearm", ref _showFirearmDescs, ref _entityAssembly.FirearmNameBuffer, ref _entityAssembly.FirearmDescBuffer, DrawItem );
+	    DrawItems( "Firearm", ref _showFirearmDescs, ref _entityAssembly.FirearmNameBuffer, ref _entityAssembly.FirearmDescBuffer, DrawItem, IsExpanded, SetExpanded );
     }
     
     private void DrawPersonnelDescs()
@@ -318,14 +392,51 @@ public class EntityAssemblyEditor : Editor
 		    
 		    return new KeyValuePair<Structs.PersonnelDesc, bool>(modifiedItem, deleteItem);
 	    };
+	    
+	    Func<int, bool> IsExpanded = (personnelDescId) => IsPersonnelDescExpanded(personnelDescId);
+	    Action<int, bool> SetExpanded = (personnelDescId, flag) => SetPersonnelDescExpanded(personnelDescId, flag);
 		
-	    DrawItems( "Personnel", ref _showPersonnelDescs, ref _entityAssembly.PersonnelNameBuffer, ref _entityAssembly.PersonnelDescBuffer, DrawItem );
+	    DrawItems( "Personnel", ref _showPersonnelDescs, ref _entityAssembly.PersonnelNameBuffer, ref _entityAssembly.PersonnelDescBuffer, DrawItem, IsExpanded, SetExpanded );
     }
     
-    // expanded list items
-    
-    private HashSet<int> _expandedFirearmDescIds = new HashSet<int>();
-    private HashSet<int> _expandedPersonnelDescIds = new HashSet<int>();
+    private void DrawBuildingDescs()
+    {
+	    Func<Structs.BuildingDesc,KeyValuePair<Structs.BuildingDesc,bool>> DrawItem = (buildingDesc) =>
+	    {
+		    Structs.BuildingDesc modifiedItem = new Structs.BuildingDesc();
+
+		    modifiedItem.maxIntegrity = (uint)EditorGUILayout.FloatField("maxIntegrity", (int)buildingDesc.maxIntegrity);
+		    modifiedItem.armor = EditorGUILayout.FloatField("armor", buildingDesc.armor);
+		    modifiedItem.material = (uint)EditorGUILayout.IntField("material", (int)buildingDesc.material);
+
+		    bool deleteItem = false;
+		    EditorGUILayout.BeginHorizontal();
+		    {
+			    for (int i = 0; i < 4; i++)
+			    {
+				    EditorGUILayout.BeginVertical();
+				    EditorGUILayout.EndVertical();					
+			    }
+			    EditorGUILayout.BeginVertical();
+			    {
+				    if (GUILayout.Button("Remove"))
+				    {
+					    deleteItem = true;
+				    }
+			    }
+			    EditorGUILayout.EndVertical();
+		    }
+		    EditorGUILayout.EndHorizontal();
+		    EditorGUILayout.Space();
+		    
+		    return new KeyValuePair<Structs.BuildingDesc, bool>(modifiedItem, deleteItem);
+	    };
+	    
+	    Func<int, bool> IsExpanded = (buildingDescId) => IsBuildingDescExpanded(buildingDescId);
+	    Action<int, bool> SetExpanded = (buildingDescId, flag) => SetBuildingDescExpanded(buildingDescId, flag);
+		
+	    DrawItems( "Buildings", ref _showBuildingDescs, ref _entityAssembly.BuildingNameBuffer, ref _entityAssembly.BuildingDescBuffer, DrawItem, IsExpanded, SetExpanded );
+    }
     
     private bool IsFirearmDescExpanded(int firearmDescId)
     {
@@ -367,6 +478,27 @@ public class EntityAssemblyEditor : Editor
                 _expandedPersonnelDescIds.Remove(personnelDescId);
             }
         }
+    }
+    
+    private bool IsBuildingDescExpanded(int buildingDescId)
+    {
+	    return _expandedBuildingDescIds.Contains(buildingDescId);
+    }
+
+    private void SetBuildingDescExpanded(int buildingDescId, bool isExpanded)
+    {
+	    bool isCurrentlyExpanded = IsBuildingDescExpanded(buildingDescId);
+	    if (isExpanded != isCurrentlyExpanded)
+	    {
+		    if (isExpanded)
+		    {
+			    _expandedBuildingDescIds.Add(buildingDescId);
+		    }
+		    else
+		    {
+			    _expandedBuildingDescIds.Remove(buildingDescId);
+		    }
+	    }
     }
     
     // Editor
@@ -419,6 +551,7 @@ public class EntityAssemblyEditor : Editor
         DrawHeaderLabel("Flyweights");
         DrawFirearmDescs();
         DrawPersonnelDescs();
+        DrawBuildingDescs();
         
         DrawHeaderLabel("Simulation");
         _entityAssembly.NumCPUThreads = EditorGUILayout.IntField("NumCPUThreads", _entityAssembly.NumCPUThreads);

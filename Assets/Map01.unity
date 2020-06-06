@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e94391d1c55572f44b268a7d7b79b62f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EntityID: 5
+  EntityID: 2
 --- !u!4 &2631572
 Transform:
   m_ObjectHideFlags: 0
@@ -291,7 +291,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &50486971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,7 +399,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &50754645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -656,7 +654,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &115422636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -957,8 +954,9 @@ GameObject:
   - component: {fileID: 148872709}
   - component: {fileID: 148872708}
   - component: {fileID: 148872707}
+  - component: {fileID: 148872710}
   m_Layer: 0
-  m_Name: SmallHouse (10)
+  m_Name: SmallRuralHouse (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1002,7 +1000,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &148872709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1016,6 +1013,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TeamId: 0
+--- !u!114 &148872710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 148872705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46d477a526aec4449bd738a49f4d9ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DescID: 1
+  Integrity: 100
 --- !u!1 &175275715
 GameObject:
   m_ObjectHideFlags: 0
@@ -1604,7 +1615,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &402623723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1821,7 +1831,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e94391d1c55572f44b268a7d7b79b62f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EntityID: 7
+  EntityID: 4
 --- !u!1 &559942083
 GameObject:
   m_ObjectHideFlags: 0
@@ -2008,7 +2018,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &586629529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2060,8 +2069,9 @@ GameObject:
   - component: {fileID: 628953448}
   - component: {fileID: 628953447}
   - component: {fileID: 628953446}
+  - component: {fileID: 628953449}
   m_Layer: 0
-  m_Name: SmallHouse (8)
+  m_Name: LargeRuralHouse (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2076,7 +2086,7 @@ Transform:
   m_GameObject: {fileID: 628953444}
   m_LocalRotation: {x: -0, y: 0.039788444, z: -0, w: 0.9992081}
   m_LocalPosition: {x: -45, y: 1.5, z: 25}
-  m_LocalScale: {x: 11, y: 3, z: 12}
+  m_LocalScale: {x: 12, y: 3, z: 13}
   m_Children: []
   m_Father: {fileID: 586629530}
   m_RootOrder: 7
@@ -2105,7 +2115,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &628953448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2119,6 +2128,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TeamId: 0
+--- !u!114 &628953449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 628953444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46d477a526aec4449bd738a49f4d9ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DescID: 2
+  Integrity: 200
 --- !u!1 &653036681
 GameObject:
   m_ObjectHideFlags: 0
@@ -2268,8 +2291,9 @@ GameObject:
   - component: {fileID: 726560654}
   - component: {fileID: 726560653}
   - component: {fileID: 726560652}
+  - component: {fileID: 726560655}
   m_Layer: 0
-  m_Name: SmallHouse (6)
+  m_Name: SmallRuralHouse (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2313,7 +2337,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &726560654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2327,6 +2350,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TeamId: 0
+--- !u!114 &726560655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 726560650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46d477a526aec4449bd738a49f4d9ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DescID: 1
+  Integrity: 100
 --- !u!1 &773605602
 GameObject:
   m_ObjectHideFlags: 0
@@ -2339,8 +2376,9 @@ GameObject:
   - component: {fileID: 773605606}
   - component: {fileID: 773605605}
   - component: {fileID: 773605604}
+  - component: {fileID: 773605607}
   m_Layer: 0
-  m_Name: SmallHouse (9)
+  m_Name: SmallRuralHouse (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2384,7 +2422,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &773605606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2398,6 +2435,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TeamId: 0
+--- !u!114 &773605607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 773605602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46d477a526aec4449bd738a49f4d9ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DescID: 1
+  Integrity: 100
 --- !u!1 &832503761
 GameObject:
   m_ObjectHideFlags: 0
@@ -2524,7 +2575,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &832503768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2737,7 +2787,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &854208698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2923,7 +2972,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &909305573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3190,8 +3238,9 @@ GameObject:
   - component: {fileID: 998480513}
   - component: {fileID: 998480512}
   - component: {fileID: 998480511}
+  - component: {fileID: 998480514}
   m_Layer: 0
-  m_Name: SmallHouse (12)
+  m_Name: LargeRuralHouse (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3206,7 +3255,7 @@ Transform:
   m_GameObject: {fileID: 998480509}
   m_LocalRotation: {x: -0, y: 0.1574607, z: -0, w: 0.9875253}
   m_LocalPosition: {x: -14.2, y: 1.5, z: 49.9}
-  m_LocalScale: {x: 11, y: 3, z: 12}
+  m_LocalScale: {x: 11, y: 3, z: 14}
   m_Children: []
   m_Father: {fileID: 586629530}
   m_RootOrder: 11
@@ -3235,7 +3284,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &998480513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3249,6 +3297,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TeamId: 0
+--- !u!114 &998480514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998480509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46d477a526aec4449bd738a49f4d9ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DescID: 2
+  Integrity: 200
 --- !u!1 &1025429450
 GameObject:
   m_ObjectHideFlags: 0
@@ -3416,7 +3478,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &1025601187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3942,7 +4003,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &1212768689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4094,7 +4154,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &1219724296
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4455,8 +4514,9 @@ GameObject:
   - component: {fileID: 1469262110}
   - component: {fileID: 1469262109}
   - component: {fileID: 1469262108}
+  - component: {fileID: 1469262111}
   m_Layer: 0
-  m_Name: SmallHouse (7)
+  m_Name: SmallRuralHouse (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4500,7 +4560,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &1469262110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4514,6 +4573,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TeamId: 0
+--- !u!114 &1469262111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1469262106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46d477a526aec4449bd738a49f4d9ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DescID: 1
+  Integrity: 100
 --- !u!1 &1581406513
 GameObject:
   m_ObjectHideFlags: 0
@@ -4784,6 +4857,20 @@ MonoBehaviour:
       y: 2
       z: 3
       w: 4
+  BuildingNameBuffer:
+  - NULL
+  - Small Rural House
+  - Large Rural House
+  BuildingDescBuffer:
+  - maxIntegrity: 0
+    armor: 0
+    material: 0
+  - maxIntegrity: 100
+    armor: 10
+    material: 1
+  - maxIntegrity: 200
+    armor: 15
+    material: 1
   NumCPUThreads: 1
   RngSeedFromTimer: 1
   RngSeed: 0
@@ -5192,7 +5279,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &1676357861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5656,8 +5742,9 @@ GameObject:
   - component: {fileID: 1762912288}
   - component: {fileID: 1762912287}
   - component: {fileID: 1762912286}
+  - component: {fileID: 1762912289}
   m_Layer: 0
-  m_Name: SmallHouse (11)
+  m_Name: LargeRuralHouse (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5672,7 +5759,7 @@ Transform:
   m_GameObject: {fileID: 1762912284}
   m_LocalRotation: {x: -0, y: 0.25768352, z: -0, w: 0.9662294}
   m_LocalPosition: {x: -2.7, y: 1.5, z: -50.8}
-  m_LocalScale: {x: 11, y: 3, z: 8}
+  m_LocalScale: {x: 13, y: 3, z: 12}
   m_Children: []
   m_Father: {fileID: 586629530}
   m_RootOrder: 10
@@ -5701,7 +5788,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &1762912288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5715,6 +5801,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TeamId: 0
+--- !u!114 &1762912289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762912284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46d477a526aec4449bd738a49f4d9ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DescID: 2
+  Integrity: 200
 --- !u!1 &1857843227
 GameObject:
   m_ObjectHideFlags: 0
@@ -5727,8 +5827,9 @@ GameObject:
   - component: {fileID: 1857843231}
   - component: {fileID: 1857843230}
   - component: {fileID: 1857843229}
+  - component: {fileID: 1857843232}
   m_Layer: 0
-  m_Name: SmallHouse (5)
+  m_Name: SmallRuralHouse (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5772,7 +5873,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &1857843231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5786,6 +5886,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TeamId: 0
+--- !u!114 &1857843232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1857843227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46d477a526aec4449bd738a49f4d9ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DescID: 1
+  Integrity: 100
 --- !u!1 &1895606202
 GameObject:
   m_ObjectHideFlags: 0
@@ -5860,7 +5974,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &1895606207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5987,7 +6100,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &1897142791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6195,8 +6307,9 @@ GameObject:
   - component: {fileID: 1898093208}
   - component: {fileID: 1898093207}
   - component: {fileID: 1898093206}
+  - component: {fileID: 1898093209}
   m_Layer: 0
-  m_Name: SmallHouse (3)
+  m_Name: SmallRuralHouse (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6240,7 +6353,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &1898093208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6254,6 +6366,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TeamId: 0
+--- !u!114 &1898093209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898093204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46d477a526aec4449bd738a49f4d9ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DescID: 1
+  Integrity: 100
 --- !u!1 &1906583987
 GameObject:
   m_ObjectHideFlags: 0
@@ -6266,8 +6392,9 @@ GameObject:
   - component: {fileID: 1906583991}
   - component: {fileID: 1906583990}
   - component: {fileID: 1906583989}
+  - component: {fileID: 1906583992}
   m_Layer: 0
-  m_Name: SmallHouse (4)
+  m_Name: SmallRuralHouse (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6311,7 +6438,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &1906583991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6325,6 +6451,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TeamId: 0
+--- !u!114 &1906583992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1906583987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46d477a526aec4449bd738a49f4d9ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DescID: 1
+  Integrity: 100
 --- !u!1 &1929846180
 GameObject:
   m_ObjectHideFlags: 0
@@ -6661,8 +6801,9 @@ GameObject:
   - component: {fileID: 2020421858}
   - component: {fileID: 2020421857}
   - component: {fileID: 2020421856}
+  - component: {fileID: 2020421859}
   m_Layer: 0
-  m_Name: SmallHouse (1)
+  m_Name: SmallRuralHouse (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6706,7 +6847,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &2020421858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6720,6 +6860,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TeamId: 0
+--- !u!114 &2020421859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2020421854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46d477a526aec4449bd738a49f4d9ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DescID: 1
+  Integrity: 100
 --- !u!1 &2021878955
 GameObject:
   m_ObjectHideFlags: 0
@@ -6825,8 +6979,9 @@ GameObject:
   - component: {fileID: 2038716407}
   - component: {fileID: 2038716406}
   - component: {fileID: 2038716405}
+  - component: {fileID: 2038716408}
   m_Layer: 0
-  m_Name: SmallHouse (2)
+  m_Name: SmallRuralHouse (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6870,7 +7025,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &2038716407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6884,6 +7038,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TeamId: 0
+--- !u!114 &2038716408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2038716403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46d477a526aec4449bd738a49f4d9ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DescID: 1
+  Integrity: 100
 --- !u!1 &2096923918
 GameObject:
   m_ObjectHideFlags: 0
@@ -7026,7 +7194,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bc93c91920af3540b87c2e465fc2a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeID: 0
 --- !u!114 &2100194438
 MonoBehaviour:
   m_ObjectHideFlags: 0
