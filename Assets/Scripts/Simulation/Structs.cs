@@ -42,6 +42,14 @@ namespace Structs
         public float4 moraleRecoveryRate;
     };
     
+    [System.Serializable]
+    public struct BuildingDesc
+    {
+        public float maxIntegrity;
+        public float armor;
+        public uint material;
+    };
+    
     // COMPONENTS
     
     public struct Transform
@@ -49,10 +57,12 @@ namespace Structs
         public double3 position;
         public float4 rotation;
         public float3 scale;
+        public uint indoorEntityId;
     };
     
     public struct Hierarchy
     {
+        public uint typeId;
         public uint parentEntityId;
         public uint firstChildEntityId;
         public uint nextSiblingEntityId;
@@ -92,5 +102,11 @@ namespace Structs
         public uint numAllies;
         public uint4 firearmTargetIds;
         public float4 firearmTargetWeights;
+    };
+    
+    public struct Building
+    {
+        public uint descId;
+        public float integrity;
     };
 }

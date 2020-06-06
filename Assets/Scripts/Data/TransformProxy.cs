@@ -157,4 +157,9 @@ public class TransformProxy : ComponentProxy
             _component = temp;
         }
     }
+    
+    public uint indoorEntityId
+    {
+        get { return _component.indoorEntityId; }
+    }
 }

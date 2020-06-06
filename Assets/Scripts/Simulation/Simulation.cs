@@ -120,6 +120,10 @@ public partial class ComputeShaderEmulator
             {
                 _transformBuffer[entityId].position.y += deltaAltitude;
             }
+            
+            // find indoor
+
+            _transformBuffer[entityId].indoorEntityId = GetIndoorEntityId(entityId);
         }
         else
         {
@@ -175,9 +179,9 @@ public partial class ComputeShaderEmulator
         float4 moraleLossProbabilityByMorale = new float4
         (
             400.0f,
-            1.0f / 3300.0f,
+            1.0f / 3333.0f,
             600.0f,
-            1.0f / 220.0f
+            1.0f / 333.0f
         );
 
         float diceThreshold = lerpargs(moraleLossProbabilityByMorale, morale);

@@ -2,6 +2,7 @@
 #define ASSERTIVE_COMPONENT_ACCESS
 #define ASSERTIVE_FUNCTION_CALLS
 #define DRAW_LINE_OF_SIGHT
+#define DRAW_INDOOR_ENTITIES
 
 using Types;
 using Structs;
@@ -37,10 +38,7 @@ public partial class ComputeShaderEmulator
     public const uint SUPPRESSION_PINNED = 2;
     public const uint SUPPRESSION_PANIC = 3;
     public const uint SUPPRESSION_BROKEN = 4;
-    public const uint TARGETING_IDLE = 0;
-    public const uint TARGETING_SUPPRESSIVE = 2;
-    public const uint TARGETING_COVERING = 3;
-    public const uint TARGETING_EFFECTIVE = 4;
+    
     
     public const float PERSONNEL_MORALE_MAX = 600.0f;
     public const float PERSONNEL_MORALE_MIN = 1.0f;
@@ -597,6 +595,85 @@ public partial class ComputeShaderEmulator
             weights.w = weight;
         }
     }
+    
+    public static uint GetIndoorEntityId(uint entityId)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & TRANSFORM) == TRANSFORM);
+        #endif
+        
+        double3 point = _transformBuffer[entityId].position;
+
+        for (uint structureEntityId = 1; structureEntityId < _entityCount; structureEntityId++)
+        {
+            uint team = GetTeam(structureEntityId);
+            if (team == 0)
+            {
+                if (HasComponents(structureEntityId, TRANSFORM))
+                {
+                    double3 structureBoxPosition = _transformBuffer[structureEntityId].position;
+                    float4 structureBoxRotation = _transformBuffer[structureEntityId].rotation;
+                    float3 structureBoxScale = _transformBuffer[structureEntityId].scale;
+                    
+                    float4 invStructureBoxRotation = quaternionInverse(structureBoxRotation);
+                    
+                    float3 localPoint = point - structureBoxPosition;
+                    localPoint = rotate(localPoint, invStructureBoxRotation);
+
+                    float3 structureBoxSup = structureBoxScale * 0.5f;
+                    float3 structureBoxInf = -structureBoxSup;
+
+                    if (PointInsideAABB(localPoint, structureBoxInf, structureBoxSup))
+                    {
+                        #if DRAW_INDOOR_ENTITIES
+                        if (entityId == _selectedEntityId)
+                        {
+                            uint entityTeam = GetTeam(entityId);
+                            Color entityColor = (entityTeam == 1) ? (Color.red) : (entityTeam == 2 ? Color.blue : Color.green);
+                            Vector3 c = structureBoxPosition.ToVector3();
+                            structureBoxSup += new float3(0.1f, 0.1f, 0.1f);
+                            structureBoxInf -= new float3(0.1f, 0.1f, 0.1f);
+                            Vector3 v0 = new Vector3(structureBoxInf.x, structureBoxInf.y, structureBoxInf.z);
+                            Vector3 v1 = new Vector3(structureBoxInf.x, structureBoxInf.y, structureBoxSup.z);
+                            Vector3 v2 = new Vector3(structureBoxSup.x, structureBoxInf.y, structureBoxSup.z);
+                            Vector3 v3 = new Vector3(structureBoxSup.x, structureBoxInf.y, structureBoxInf.z);
+                            Vector3 v4 = new Vector3(structureBoxInf.x, structureBoxSup.y, structureBoxInf.z);
+                            Vector3 v5 = new Vector3(structureBoxInf.x, structureBoxSup.y, structureBoxSup.z);
+                            Vector3 v6 = new Vector3(structureBoxSup.x, structureBoxSup.y, structureBoxSup.z);
+                            Vector3 v7 = new Vector3(structureBoxSup.x, structureBoxSup.y, structureBoxInf.z);
+                            v0 = c + rotate(v0, structureBoxRotation).ToVector3();
+                            v1 = c + rotate(v1, structureBoxRotation).ToVector3();
+                            v2 = c + rotate(v2, structureBoxRotation).ToVector3();
+                            v3 = c + rotate(v3, structureBoxRotation).ToVector3();
+                            v4 = c + rotate(v4, structureBoxRotation).ToVector3();
+                            v5 = c + rotate(v5, structureBoxRotation).ToVector3();
+                            v6 = c + rotate(v6, structureBoxRotation).ToVector3();
+                            v7 = c + rotate(v7, structureBoxRotation).ToVector3();
+                            Debug.DrawLine( v0, v1, entityColor );
+                            Debug.DrawLine( v1, v2, entityColor );
+                            Debug.DrawLine( v2, v3, entityColor );
+                            Debug.DrawLine( v3, v0, entityColor );
+                            Debug.DrawLine( v4, v5, entityColor );
+                            Debug.DrawLine( v5, v6, entityColor );
+                            Debug.DrawLine( v6, v7, entityColor );
+                            Debug.DrawLine( v7, v4, entityColor );
+                            Debug.DrawLine( v0, v4, entityColor );
+                            Debug.DrawLine( v1, v5, entityColor );
+                            Debug.DrawLine( v2, v6, entityColor );
+                            Debug.DrawLine( v3, v7, entityColor );
+                        }
+                        #endif
+                        return structureEntityId;
+                    }
+                }
+            }
+        }
+
+        return 0;
+    }
 
     public static bool GetLineOfSight(uint entityId, uint otherEntityId)
     {
@@ -607,6 +684,9 @@ public partial class ComputeShaderEmulator
             Debug.Assert((_descBuffer[entityId] & TRANSFORM) == TRANSFORM);
             Debug.Assert((_descBuffer[otherEntityId] & TRANSFORM) == TRANSFORM);
         #endif
+
+        uint indoorEntityId = _transformBuffer[entityId].indoorEntityId;
+        uint otherIndoorEntityId = _transformBuffer[otherEntityId].indoorEntityId;
         
         double3 rayStart = _transformBuffer[entityId].position;
         double3 rayEnd = _transformBuffer[otherEntityId].position;
@@ -623,40 +703,43 @@ public partial class ComputeShaderEmulator
 
         for (uint obstacleEntityId = 1; obstacleEntityId < _entityCount; obstacleEntityId++)
         {
-            uint team = GetTeam(obstacleEntityId);
-            if (team == 0)
+            if (obstacleEntityId != indoorEntityId && obstacleEntityId != otherIndoorEntityId)
             {
-                if (HasComponents(obstacleEntityId, TRANSFORM))
+                uint team = GetTeam(obstacleEntityId);
+                if (team == 0)
                 {
-                    double3 obstacleBoxPosition = _transformBuffer[obstacleEntityId].position;
-                    float4 obstacleBoxRotation = _transformBuffer[obstacleEntityId].rotation;
-                    float3 obstacleBoxScale = _transformBuffer[obstacleEntityId].scale;
-                    
-                    float4 invObstacleBoxRotation = quaternionInverse(obstacleBoxRotation);
-                    
-                    float3 localRayStart = rayStart - obstacleBoxPosition;
-                    localRayStart = rotate(localRayStart, invObstacleBoxRotation);
-                    float3 localRayDir = rotate(rayDir, invObstacleBoxRotation);
-
-                    float3 obstacleBoxSup = obstacleBoxScale * 0.5f;
-                    float3 obstacleBoxInf = -obstacleBoxSup;
-                    
-                    if (CollideRayAABB(localRayStart, localRayDir, obstacleBoxInf, obstacleBoxSup, out localHit))
+                    if (HasComponents(obstacleEntityId, TRANSFORM))
                     {
-                        float3 dirToHit = localHit - localRayStart;
-                        float distToHitSquared = dot(dirToHit, dirToHit);
-                        if (distToHitSquared < rayLengthSquared)
+                        double3 obstacleBoxPosition = _transformBuffer[obstacleEntityId].position;
+                        float4 obstacleBoxRotation = _transformBuffer[obstacleEntityId].rotation;
+                        float3 obstacleBoxScale = _transformBuffer[obstacleEntityId].scale;
+
+                        float4 invObstacleBoxRotation = quaternionInverse(obstacleBoxRotation);
+
+                        float3 localRayStart = rayStart - obstacleBoxPosition;
+                        localRayStart = rotate(localRayStart, invObstacleBoxRotation);
+                        float3 localRayDir = rotate(rayDir, invObstacleBoxRotation);
+
+                        float3 obstacleBoxSup = obstacleBoxScale * 0.5f;
+                        float3 obstacleBoxInf = -obstacleBoxSup;
+
+                        if (CollideRayAABB(localRayStart, localRayDir, obstacleBoxInf, obstacleBoxSup, out localHit))
                         {
-                            localHit = rotate(localHit, obstacleBoxRotation);
-                            hit = localHit;
-                            hit += obstacleBoxPosition;
-                            #if DRAW_LINE_OF_SIGHT
-                                if (entityId == _selectedEntityId)
-                                {
-                                    Debug.DrawLine(rayStart.ToVector3(), hit.ToVector3(), Color.red);
-                                }
-                            #endif
-                            return false;
+                            float3 dirToHit = localHit - localRayStart;
+                            float distToHitSquared = dot(dirToHit, dirToHit);
+                            if (distToHitSquared < rayLengthSquared)
+                            {
+                                localHit = rotate(localHit, obstacleBoxRotation);
+                                hit = localHit;
+                                hit += obstacleBoxPosition;
+                                #if DRAW_LINE_OF_SIGHT
+                                    if (entityId == _selectedEntityId)
+                                    {
+                                        Debug.DrawLine(rayStart.ToVector3(), hit.ToVector3(), Color.red);
+                                    }
+                                #endif
+                                return false;
+                            }
                         }
                     }
                 }

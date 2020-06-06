@@ -1,10 +1,18 @@
 ﻿using Types;
+using UnityEngine;
 
 public partial class ComputeShaderEmulator
 {
     private const int RIGHT = 0;
     private const int LEFT = 1;
     private const int MIDDLE = 2;
+
+    public static bool PointInsideAABB(float3 point, float3 minB, float3 maxB)
+    {
+        return point.x >= minB.x && point.x <= maxB.x &&
+               point.y >= minB.y && point.y <= maxB.y &&
+               point.z >= minB.z && point.z <= maxB.z;
+    }
 
     public static bool CollideRayAABB(float3 origin, float3 dir, float3 minB, float3 maxB, out float3 hit)
     {

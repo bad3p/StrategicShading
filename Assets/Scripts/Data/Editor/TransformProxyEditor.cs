@@ -44,6 +44,10 @@ public class TransformProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("scale");
             EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("indoorEntityId");
+            EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();
         
@@ -59,6 +63,10 @@ public class TransformProxyEditor : Editor
             
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField( transformProxy.scale.ToVector3().ToString() );
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField( transformProxy.indoorEntityId.ToString() );
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();

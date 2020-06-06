@@ -10,6 +10,8 @@ using UnityEditor;
 [RequireComponent(typeof(EntityProxy))]
 public class HierarchyProxy : ComponentProxy
 {
+    public uint TypeID = 0;
+    
     private EntityAssembly _entityAssembly;
     private EntityProxy _entityProxy;
     
@@ -24,6 +26,7 @@ public class HierarchyProxy : ComponentProxy
             if (_entityAssembly.GetEntityId(this) == 0)
             {
                 _entityAssembly.RegisterHierarchyProxy(thisEntityId, this);
+                typeId = TypeID;
                 firstChildEntityId = 0;
                 nextSiblingEntityId = 0;
                 if (transform.parent)
@@ -256,6 +259,17 @@ public class HierarchyProxy : ComponentProxy
             {
                 return 0;
             }
+        }
+    }
+    
+    public uint typeId
+    {
+        get { return _component.typeId; }
+        set
+        {
+            var temp = _component;
+            temp.typeId = value;
+            _component = temp;
         }
     }
 
