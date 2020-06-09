@@ -20,6 +20,11 @@ public partial class EntityAssembly : MonoBehaviour
     public uint RngStateLength = 55;
     
 #if UNITY_EDITOR
+    static void InitBuffer<T>(ref T[] dstBuffer, uint length)
+    {
+        dstBuffer = new T[length];
+    }
+    
     static void InitBuffer<T>(T[] srcBuffer, ref T[] dstBuffer)
     {
         dstBuffer = new T[srcBuffer.Length];
@@ -36,6 +41,14 @@ public partial class EntityAssembly : MonoBehaviour
     {
         dstBuffer.Clear();
         dstBuffer.AddRange( srcBuffer );
+    }
+    
+    static void ClearBuffer<T>(ref T[] dstBuffer, T value)
+    {
+        for (uint i = 0; i < dstBuffer.Length; i++)
+        {
+            dstBuffer[i] = value;
+        }
     }
 
     static uint SelectedEntityId()
@@ -92,6 +105,8 @@ public partial class EntityAssembly : MonoBehaviour
         InitBuffer(_targetingBuffer, ref ComputeShaderEmulator._targetingBuffer);
         InitBuffer(FirearmDescBuffer, ref ComputeShaderEmulator._firearmDescBuffer);
         InitBuffer(PersonnelDescBuffer, ref ComputeShaderEmulator._personnelDescBuffer);
+        InitBuffer(ref ComputeShaderEmulator._eventCountBuffer, ComputeShaderEmulator.EVENT_LAST + 1);
+        InitBuffer(ref ComputeShaderEmulator._firearmDamageEventBuffer, (uint)_descBuffer.Count); 
         ComputeShaderEmulator._firearmDescCount = (uint) FirearmDescBuffer.Length;
         ComputeShaderEmulator._personnelDescCount = (uint) PersonnelDescBuffer.Length;
         ComputeShaderEmulator._entityCount = (uint)_descBuffer.Count;
@@ -111,10 +126,14 @@ public partial class EntityAssembly : MonoBehaviour
         ComputeShaderEmulator._dT = Time.deltaTime;
         ComputeShaderEmulator._entityCount = (uint)_descBuffer.Count;
         ComputeShaderEmulator._selectedEntityId = SelectedEntityId();
+
+        ClearBuffer(ref ComputeShaderEmulator._eventCountBuffer, 0);
+        
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateMovement, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdatePersonnel, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateTargeting, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateJoinRequests, threadGroupsX, 1, 1 );
+        ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateFirearms, threadGroupsX, 1, 1 );
 
         SyncBuffers(ref ComputeShaderEmulator._descBuffer, _descBuffer);
         SyncBuffers(ref ComputeShaderEmulator._transformBuffer, _transformBuffer);

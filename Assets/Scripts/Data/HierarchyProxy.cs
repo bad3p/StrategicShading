@@ -302,4 +302,15 @@ public class HierarchyProxy : ComponentProxy
             _component = temp;
         }
     }
+    
+    public uint indoorEntityId
+    {
+        get { return _component.indoorEntityId; }
+        set
+        {
+            var temp = _component;
+            temp.indoorEntityId = value;
+            _component = temp;
+        }
+    }
 }

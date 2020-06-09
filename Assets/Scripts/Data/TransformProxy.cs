@@ -13,7 +13,7 @@ public class TransformProxy : ComponentProxy
     private EntityAssembly _entityAssembly;
     private EntityProxy _entityProxy;
     
-    private static AnimationCurve _solidAlpha = new AnimationCurve
+    private AnimationCurve _solidAlpha = new AnimationCurve
     (
         new Keyframe[]
         {
@@ -24,7 +24,7 @@ public class TransformProxy : ComponentProxy
         }
     );
             
-    private static AnimationCurve _wireAlpha = new AnimationCurve
+    private AnimationCurve _wireAlpha = new AnimationCurve
     (
         new Keyframe[]
         {
@@ -69,13 +69,29 @@ public class TransformProxy : ComponentProxy
         {
             Awake();
         }
+
         if (_entityAssembly && _entityAssembly.GetEntityId(this) != 0)
         {
             Color teamColor = _entityProxy.GetTeamColor();
             Color solidColor = teamColor;
             Color wireColor = teamColor;
-            
+
             float distance = Vector3.Distance(position.ToVector3(), Camera.current.transform.position);
+
+            float size = ComputeShaderEmulator.length(scale);
+
+            _solidAlpha.keys = new Keyframe[]
+            {
+                new Keyframe(size * 15.0f, 0.0f),
+                new Keyframe(size * 25.0f, 1.0f),
+                new Keyframe(size * 35.0f, 1.0f),
+                new Keyframe(size * 50.0f, 0.0f)
+            };
+            _wireAlpha.keys = new Keyframe[]
+            {
+                new Keyframe(size * 15.0f, 1.0f),
+                new Keyframe(size * 25.0f, 0.0f)
+            };
 
             solidColor.a = _solidAlpha.Evaluate(distance);
             wireColor.a = _wireAlpha.Evaluate(distance);
@@ -156,10 +172,5 @@ public class TransformProxy : ComponentProxy
             temp.scale = value;
             _component = temp;
         }
-    }
-    
-    public uint indoorEntityId
-    {
-        get { return _component.indoorEntityId; }
     }
 }

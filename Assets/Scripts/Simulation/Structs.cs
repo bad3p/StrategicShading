@@ -50,6 +50,15 @@ namespace Structs
         public uint material;
     };
     
+    // EVENTS
+
+    public struct FirearmDamageEvent
+    {
+        public uint entityId;
+        public float firepower;
+        public int nextEventId;
+    };
+
     // COMPONENTS
     
     public struct Transform
@@ -57,7 +66,6 @@ namespace Structs
         public double3 position;
         public float4 rotation;
         public float3 scale;
-        public uint indoorEntityId;
     };
     
     public struct Hierarchy
@@ -66,6 +74,7 @@ namespace Structs
         public uint firstChildEntityId;
         public uint nextSiblingEntityId;
         public uint joinEntityId;
+        public uint indoorEntityId;
     };
 
     public struct Personnel
@@ -101,6 +110,12 @@ namespace Structs
         public uint numAllies;
         public uint4 firearmTargetIds;
         public float4 firearmTargetWeights;
+    };
+    
+    public struct EventAggregator
+    {
+        public int eventCount;
+        public int firearmDamageEventId;
     };
     
     public struct Building

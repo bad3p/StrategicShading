@@ -73,6 +73,7 @@
      <Compile Include="Assets\Scripts\Data\EntityAssembly.cs" />
      <Compile Include="Assets\Scripts\Data\EntityAssemblySimulation.cs" />
      <Compile Include="Assets\Scripts\Data\EntityProxy.cs" />
+     <Compile Include="Assets\Scripts\Data\EventAggregatorProxy.cs" />
      <Compile Include="Assets\Scripts\Data\FirearmProxy.cs" />
      <Compile Include="Assets\Scripts\Data\HierarchyProxy.cs" />
      <Compile Include="Assets\Scripts\Data\MovementProxy.cs" />

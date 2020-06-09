@@ -33,7 +33,7 @@ public partial class ComputeShaderEmulator
             return;
         }
         
-        if ( !HasComponents( entityId, TRANSFORM_PERSONNEL_MOVEMENT ) )
+        if ( !HasComponents( entityId, HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT ) )
         {
             return;
         }
@@ -121,9 +121,9 @@ public partial class ComputeShaderEmulator
                 _transformBuffer[entityId].position.y += deltaAltitude;
             }
             
-            // find indoor
+            // enter indoor
 
-            _transformBuffer[entityId].indoorEntityId = GetIndoorEntityId(entityId);
+            _hierarchyBuffer[entityId].indoorEntityId = GetIndoorEntityId(entityId);
         }
         else
         {
@@ -167,7 +167,7 @@ public partial class ComputeShaderEmulator
             return;
         }
 
-        if ( !HasComponents( entityId, TRANSFORM_PERSONNEL_MOVEMENT ) )
+        if ( !HasComponents( entityId, HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT ) )
         {
             return;
         }
@@ -324,6 +324,20 @@ public partial class ComputeShaderEmulator
         _targetingBuffer[entityId].firearmTargetIds = firearmTargetIds;
         _targetingBuffer[entityId].firearmTargetWeights = firearmTargetWeights;
     }
+    
+    [NumThreads(256, 1, 1)]
+    static public void UpdateFirearms(uint3 id)
+    {
+        uint entityId = id.x;
+        if (entityId == 0 || entityId >= _entityCount)
+        {
+            return;
+        }
+
+        if ( HasComponents( entityId, FIREARMS ) )
+        {
+        }
+    }    
 
     [NumThreads(256, 1, 1)]
     static public void UpdateJoinRequests(uint3 id)

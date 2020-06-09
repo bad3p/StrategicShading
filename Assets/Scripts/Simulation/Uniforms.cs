@@ -19,6 +19,7 @@ public partial class ComputeShaderEmulator
     public const uint MOVEMENT = 0x00000010;
     public const uint TARGETING = 0x00000020;
     public const uint BUILDING = 0x00000040;
+    public const uint EVENT_AGGREGATOR = 0x00000080;
     public const uint TEAM_BITMASK = 0xC0000000;
     public const uint TEAM_SHIFT = 30;
     
@@ -39,13 +40,15 @@ public partial class ComputeShaderEmulator
     public const uint SUPPRESSION_PINNED = 2;
     public const uint SUPPRESSION_PANIC = 3;
     public const uint SUPPRESSION_BROKEN = 4;
-    
-    
+
     public const float PERSONNEL_MORALE_MAX = 600.0f;
     public const float PERSONNEL_MORALE_MIN = 1.0f;
     
     public const float PERSONNEL_FITNESS_MAX = 14400.0f;
     public const float PERSONNEL_FITNESS_MIN = 1.0f;
+    
+    public const uint EVENT_FIREARM_DAMAGE = 1;
+    public const uint EVENT_LAST = 1;
     
     public const float FLOAT_EPSILON = 1.19e-07f;
     public const double DOUBLE_EPSILON = .22e-16;
@@ -75,6 +78,8 @@ public partial class ComputeShaderEmulator
     public static Firearm[] _firearmBuffer = new Firearm[0];
     public static Movement[] _movementBuffer = new Movement[0];
     public static Targeting[] _targetingBuffer = new Targeting[0];
+    public static int[] _eventCountBuffer = new int[0];
+    public static FirearmDamageEvent[] _firearmDamageEventBuffer = new FirearmDamageEvent[0];
     
     // MAP HELPERS
     
@@ -86,9 +91,10 @@ public partial class ComputeShaderEmulator
     // COMPONENT MASKS
     
     public const uint TRANSFORM_MOVEMENT = TRANSFORM | MOVEMENT;
-    public const uint TRANSFORM_PERSONNEL_MOVEMENT = TRANSFORM | PERSONNEL | MOVEMENT;
-    public const uint HIERARCHY_PERSONNEL = HIERARCHY | PERSONNEL;
+    public const uint HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT = HIERARCHY | TRANSFORM | PERSONNEL | MOVEMENT;
+    public const uint HIERARCHY_TRANSFORM = HIERARCHY | TRANSFORM;
     public const uint TRANSFORM_TARGETING = TRANSFORM | TARGETING;
+    public const uint TRANSFORM_BUILDING = TRANSFORM | BUILDING;
     
     public static bool HasComponents(uint entityId, uint mask)
     {
@@ -327,7 +333,7 @@ public partial class ComputeShaderEmulator
             Debug.Assert(entityId > 0 && entityId < _entityCount);
         #endif
         #if ASSERTIVE_COMPONENT_ACCESS
-            Debug.Assert((_descBuffer[entityId] & TRANSFORM_PERSONNEL_MOVEMENT) == TRANSFORM_PERSONNEL_MOVEMENT);
+            Debug.Assert((_descBuffer[entityId] & HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT) == HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT);
         #endif
 
         pose = pose < PERSONNEL_POSE_HIDING ? PERSONNEL_POSE_HIDING : pose;
@@ -613,7 +619,7 @@ public partial class ComputeShaderEmulator
             uint team = GetTeam(structureEntityId);
             if (team == 0)
             {
-                if (HasComponents(structureEntityId, TRANSFORM))
+                if (HasComponents(structureEntityId, TRANSFORM_BUILDING))
                 {
                     double3 structureBoxPosition = _transformBuffer[structureEntityId].position;
                     float4 structureBoxRotation = _transformBuffer[structureEntityId].rotation;
@@ -682,12 +688,12 @@ public partial class ComputeShaderEmulator
             Debug.Assert(entityId > 0 && entityId < _entityCount);
         #endif
         #if ASSERTIVE_COMPONENT_ACCESS
-            Debug.Assert((_descBuffer[entityId] & TRANSFORM) == TRANSFORM);
-            Debug.Assert((_descBuffer[otherEntityId] & TRANSFORM) == TRANSFORM);
+            Debug.Assert((_descBuffer[entityId] & HIERARCHY_TRANSFORM) == HIERARCHY_TRANSFORM);
+            Debug.Assert((_descBuffer[otherEntityId] & HIERARCHY_TRANSFORM) == HIERARCHY_TRANSFORM);
         #endif
 
-        uint indoorEntityId = _transformBuffer[entityId].indoorEntityId;
-        uint otherIndoorEntityId = _transformBuffer[otherEntityId].indoorEntityId;
+        uint indoorEntityId = _hierarchyBuffer[entityId].indoorEntityId;
+        uint otherIndoorEntityId = _hierarchyBuffer[otherEntityId].indoorEntityId;
         
         double3 rayStart = _transformBuffer[entityId].position;
         double3 rayEnd = _transformBuffer[otherEntityId].position;
@@ -709,7 +715,7 @@ public partial class ComputeShaderEmulator
                 uint team = GetTeam(obstacleEntityId);
                 if (team == 0)
                 {
-                    if (HasComponents(obstacleEntityId, TRANSFORM))
+                    if (HasComponents(obstacleEntityId, TRANSFORM_BUILDING))
                     {
                         double3 obstacleBoxPosition = _transformBuffer[obstacleEntityId].position;
                         float4 obstacleBoxRotation = _transformBuffer[obstacleEntityId].rotation;
@@ -736,7 +742,9 @@ public partial class ComputeShaderEmulator
                                 #if DRAW_LINE_OF_SIGHT
                                     if (entityId == _selectedEntityId)
                                     {
-                                        Debug.DrawLine(rayStart.ToVector3(), hit.ToVector3(), Color.red);
+                                        Color blockedSightColor = Color.red;
+                                        blockedSightColor.a = 0.5f;
+                                        Debug.DrawLine(rayStart.ToVector3(), hit.ToVector3(), blockedSightColor);
                                     }
                                 #endif
                                 return false;
@@ -750,7 +758,9 @@ public partial class ComputeShaderEmulator
         #if DRAW_LINE_OF_SIGHT
             if (entityId == _selectedEntityId)
             {
-                Debug.DrawLine(rayStart.ToVector3(), rayEnd.ToVector3(), Color.green);
+                Color clearSightColor = Color.green;
+                clearSightColor.a = 0.5f;
+                Debug.DrawLine(rayStart.ToVector3(), rayEnd.ToVector3(), clearSightColor);
             }
         #endif
         return true;
@@ -762,7 +772,7 @@ public partial class ComputeShaderEmulator
             Debug.Assert(entityId > 0 && entityId < _entityCount);
         #endif
         #if ASSERTIVE_COMPONENT_ACCESS
-            Debug.Assert((_descBuffer[entityId] & TRANSFORM_PERSONNEL_MOVEMENT) == TRANSFORM_PERSONNEL_MOVEMENT);
+            Debug.Assert((_descBuffer[entityId] & HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT) == HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT);
         #endif
 
         // normalized exposure [0.0...1.0]

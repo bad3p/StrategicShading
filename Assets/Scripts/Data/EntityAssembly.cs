@@ -1,6 +1,7 @@
 ﻿
 using UnityEngine;
 using System.Collections.Generic;
+using Structs;
 
 [ExecuteInEditMode]
 public partial class EntityAssembly : MonoBehaviour
@@ -46,6 +47,10 @@ public partial class EntityAssembly : MonoBehaviour
     private Dictionary<uint, BuildingProxy> _buildingProxyById = new Dictionary<uint, BuildingProxy>();
     private Dictionary<BuildingProxy, uint> _idByBuildingProxy = new Dictionary<BuildingProxy,uint>();
     
+    private List<Structs.EventAggregator> _eventAggregatorBuffer = new List<Structs.EventAggregator>() { new Structs.EventAggregator() };
+    private Dictionary<uint, EventAggregatorProxy> _eventAggregatorProxyById = new Dictionary<uint, EventAggregatorProxy>();
+    private Dictionary<EventAggregatorProxy, uint> _idByEventAggregatorProxy = new Dictionary<EventAggregatorProxy,uint>();
+    
     #region Generics
     uint GetComponentBitMask<P>(P proxy) where P : ComponentProxy
     {
@@ -76,6 +81,10 @@ public partial class EntityAssembly : MonoBehaviour
         else if (proxy is BuildingProxy)
         {
             return ComputeShaderEmulator.BUILDING;
+        }
+        else if (proxy is EventAggregatorProxy)
+        {
+            return ComputeShaderEmulator.EVENT_AGGREGATOR;
         }
         else
         {
@@ -239,6 +248,7 @@ public partial class EntityAssembly : MonoBehaviour
             _movementBuffer.Add( new Structs.Movement() );
             _targetingBuffer.Add( new Structs.Targeting() );
             _buildingBuffer.Add( new Structs.Building() );
+            _eventAggregatorBuffer.Add( new Structs.EventAggregator() );
         }
         return entityId;
     }
@@ -495,6 +505,38 @@ public partial class EntityAssembly : MonoBehaviour
     public void SetBuilding(uint entityId, Structs.Building b)
     {
         SetComponent<BuildingProxy,Structs.Building>(entityId, b, _buildingBuffer);
+    }
+    #endregion
+    
+    #region EventAggregator
+    public uint GetEntityId(EventAggregatorProxy eventAggregatorProxy)
+    {
+        return GetComponentEntityId( eventAggregatorProxy, _idByEventAggregatorProxy );
+    }
+    
+    public EventAggregatorProxy GetEventAggregatorProxy(uint entityId)
+    {
+        return GetComponentProxy( entityId, _eventAggregatorProxyById );
+    }
+    
+    public void RegisterEventAggregatorProxy(uint entityId, EventAggregatorProxy eventAggregatorProxy)
+    {
+        RegisterComponentProxy( entityId, eventAggregatorProxy, _idByEventAggregatorProxy, _eventAggregatorProxyById );
+    }
+    
+    public void UnregisterEventAggregatorProxy(uint entityId, EventAggregatorProxy eventAggregatorProxy)
+    {
+        UnregisterComponentProxy( entityId, eventAggregatorProxy, _idByEventAggregatorProxy, _eventAggregatorProxyById );
+    }
+    
+    public Structs.EventAggregator GetEventAggregator(uint entityId)
+    {
+        return GetComponent<EventAggregatorProxy,Structs.EventAggregator>(entityId, _eventAggregatorBuffer);
+    }
+    
+    public void SetEventAggregator(uint entityId, Structs.EventAggregator ea)
+    {
+        SetComponent<EventAggregatorProxy,Structs.EventAggregator>(entityId, ea, _eventAggregatorBuffer);
     }
     #endregion
 }
