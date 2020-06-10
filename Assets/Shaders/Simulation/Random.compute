@@ -4,24 +4,24 @@
 
 #include "Assets/Shaders/Simulation/Uniforms.compute"
 
-uint rngIndex(uint threadIndex)
+int rngIndex(uint threadIndex)
 {
-    return threadIndex % _rngCount;
+    return int(threadIndex) % _rngCount;
 }
 
-uint rngMod(uint n) 
+int rngMod(int n) 
 {
     return ((n % _rngMax) + _rngMax) % _rngMax;
 }
 
-uint rng(uint rngIndex)
+int rng(int rngIndex)
 {
-    uint result = 0;
-    uint prevPos = 1;
-    uint nextPos = 0;
-    uint exchangedPos = 0;
+    int result = 0;
+    int prevPos = 1;
+    int nextPos = 0;
+    int exchangedPos = 0;
     
-    uint rngOffset = rngIndex*(_rngStateLength+1);
+    int rngOffset = rngIndex*(_rngStateLength+1);
 
     [allow_uav_condition]
     while( prevPos != exchangedPos )
@@ -33,9 +33,9 @@ uint rng(uint rngIndex)
 
         if (exchangedPos == prevPos)
         {
-            uint p0 = rngOffset + 1; 
-            uint p1 = (prevPos + 1) % _rngStateLength;
-            uint p2 = (prevPos + _rngStateLength / 2 + _rngStateLength / 11) % _rngStateLength;
+            int p0 = rngOffset + 1; 
+            int p1 = (prevPos + 1) % _rngStateLength;
+            int p2 = (prevPos + _rngStateLength / 2 + _rngStateLength / 11) % _rngStateLength;
             result = rngMod( _rngState[p0+p1] - _rngState[p0+p2] );
             _rngState[p0 + prevPos] = result;
         }
@@ -43,12 +43,12 @@ uint rng(uint rngIndex)
     return result; 
 }
 
-float rngRange(float min, float max, uint rngIndex)
+float rngRange(float min, float max, int rngIndex)
 {
     return min + (max - min) * ((float)( rng( rngIndex ) )) / _rngMax; 
 }
 
-float rngNormal(uint rngIndex)
+float rngNormal(int rngIndex)
 {
     return rngRange(0.0f, 1.0f, rngIndex) * rngRange( -1.0f, 1.0f, rngIndex );
 }

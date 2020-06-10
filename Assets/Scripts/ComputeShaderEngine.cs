@@ -13,10 +13,10 @@ public class ComputeShaderEngine : MonoBehaviour
 
     [Header("Random numbers")] 
     public bool RngSeedFromTimer = false;
-    public uint RngSeed = 0;
-    public uint RngMaxUniform = 1000000;
-    public uint RngCount = 256;
-    public uint RngStateLength = 55;
+    public int RngSeed = 0;
+    public int RngMaxUniform = 1000000;
+    public int RngCount = 256;
+    public int RngStateLength = 55;
     
     private ComputeBuffer _rngState = null;
     
@@ -32,13 +32,13 @@ public class ComputeShaderEngine : MonoBehaviour
             Random.InitState( (int)RngSeed );
         }
         
-        uint[] rngStateData = new uint[RngCount*(RngStateLength+1)];
+        int[] rngStateData = new int[RngCount*(RngStateLength+1)];
         for (int i = 0; i < RngCount; i++)
         {
             rngStateData[i * (RngStateLength + 1)] = 0;
             for (int j = 0; j < RngStateLength; j++)
             {
-                rngStateData[i * (RngStateLength + 1) + j + 1] = (uint)Random.Range( 0, (int)RngMaxUniform );
+                rngStateData[i * (RngStateLength + 1) + j + 1] = (int)Random.Range( 0, (int)RngMaxUniform );
             }
         }
         _rngState = new ComputeBuffer( (int)(RngCount*(RngStateLength+1)), sizeof(int) );
@@ -51,7 +51,7 @@ public class ComputeShaderEngine : MonoBehaviour
         ComputeShaderEmulator._rngMax = RngMaxUniform;
         ComputeShaderEmulator._rngCount = RngCount;
         ComputeShaderEmulator._rngStateLength = RngStateLength;
-        ComputeShaderEmulator._rngState = new uint[rngStateData.Length];
+        ComputeShaderEmulator._rngState = new int[rngStateData.Length];
         rngStateData.CopyTo(ComputeShaderEmulator._rngState, 0);
     }
 

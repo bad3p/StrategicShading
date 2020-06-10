@@ -556,10 +556,10 @@ public class EntityAssemblyEditor : Editor
         DrawHeaderLabel("Simulation");
         _entityAssembly.NumCPUThreads = EditorGUILayout.IntField("NumCPUThreads", _entityAssembly.NumCPUThreads);
         _entityAssembly.RngSeedFromTimer = EditorGUILayout.Toggle("RngSeedFromTimer", _entityAssembly.RngSeedFromTimer);
-        _entityAssembly.RngSeed = (uint) EditorGUILayout.IntField("RngSeed", (int)_entityAssembly.RngSeed);
-        _entityAssembly.RngMaxUniform = (uint) EditorGUILayout.IntField("RngMaxUniform", (int)_entityAssembly.RngMaxUniform);
-        _entityAssembly.RngCount = (uint) EditorGUILayout.IntField("RngCount", (int)_entityAssembly.RngCount);
-        _entityAssembly.RngStateLength = (uint) EditorGUILayout.IntField("RngStateLength", (int)_entityAssembly.RngStateLength);
+        _entityAssembly.RngSeed = EditorGUILayout.IntField("RngSeed", _entityAssembly.RngSeed);
+        _entityAssembly.RngMaxUniform = EditorGUILayout.IntField("RngMaxUniform", _entityAssembly.RngMaxUniform);
+        _entityAssembly.RngCount = EditorGUILayout.IntField("RngCount", _entityAssembly.RngCount);
+        _entityAssembly.RngStateLength = EditorGUILayout.IntField("RngStateLength", _entityAssembly.RngStateLength);
 
         EditorUtility.SetDirty( _entityAssembly );
     }

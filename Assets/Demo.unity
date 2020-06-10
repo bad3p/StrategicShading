@@ -559,9 +559,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35fc43110c4acf84588c2ebd65831511, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NumCPUThreads: 1
   ComputeShader: {fileID: 7200000, guid: e954c0cb90889d7429ce4086108dde36, type: 3}
   RngSeedFromTimer: 0
   RngSeed: 0
   RngMaxUniform: 1000000
-  RngCount: 256
+  RngCount: 128
   RngStateLength: 55

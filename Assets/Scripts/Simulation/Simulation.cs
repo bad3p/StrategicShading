@@ -356,7 +356,7 @@ public partial class ComputeShaderEmulator
             {
                 if (HasComponents(targetEntityId, EVENT_AGGREGATOR))
                 {
-                    AddFirearmEvent(entityId, targetEntityId, 99.9f);
+                    AddFirearmEvent(entityId, targetEntityId, rngRange(10.0f, 100.0f, rngIndex(id.x)));
                 }
             }
         }
