@@ -26,7 +26,7 @@ public class EventAggregatorProxyEditor : Editor
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("firearmDamageEventId");
+            EditorGUILayout.LabelField("firearmEventIndex");
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();
@@ -38,7 +38,7 @@ public class EventAggregatorProxyEditor : Editor
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(eventAggregatorProxy.firearmDamageEventId.ToString());
+            EditorGUILayout.LabelField(eventAggregatorProxy.firearmEventIndex.ToString());
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();

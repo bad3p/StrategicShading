@@ -20,6 +20,16 @@ public partial class EntityAssembly : MonoBehaviour
     public uint RngStateLength = 55;
     
 #if UNITY_EDITOR
+    static void InitArrayHeaderBuffer(ref ArrayHeader[] arrayHeaderBuffer, uint length, int capacity)
+    {
+        arrayHeaderBuffer = new ArrayHeader[length];
+        for (uint i = 0; i < length; i++)
+        {
+            arrayHeaderBuffer[i].capacity = (i == 0) ? 0 : capacity;
+            arrayHeaderBuffer[i].count = 0;    
+        }
+    }
+    
     static void InitBuffer<T>(ref T[] dstBuffer, uint length)
     {
         dstBuffer = new T[length];
@@ -43,13 +53,13 @@ public partial class EntityAssembly : MonoBehaviour
         dstBuffer.AddRange( srcBuffer );
     }
     
-    static void ClearBuffer<T>(ref T[] dstBuffer, T value)
+    static void ClearArrayHeaderBuffer(ref ArrayHeader[] arrayHeaderBuffer)
     {
-        for (uint i = 0; i < dstBuffer.Length; i++)
+        for (uint i = 0; i < arrayHeaderBuffer.Length; i++)
         {
-            dstBuffer[i] = value;
+            arrayHeaderBuffer[i].count = 1; // 0 is also reserved    
         }
-    }
+    }    
 
     static uint SelectedEntityId()
     {
@@ -89,6 +99,8 @@ public partial class EntityAssembly : MonoBehaviour
                 rngStateData[i * (RngStateLength + 1) + j + 1] = (uint)Random.Range( 0, (int)RngMaxUniform );
             }
         }
+
+        ComputeShaderEmulator.NumCPUThreads = NumCPUThreads;
         
         ComputeShaderEmulator._rngMax = RngMaxUniform;
         ComputeShaderEmulator._rngCount = RngCount;
@@ -103,10 +115,11 @@ public partial class EntityAssembly : MonoBehaviour
         InitBuffer(_firearmsBuffer, ref ComputeShaderEmulator._firearmBuffer);
         InitBuffer(_movementBuffer, ref ComputeShaderEmulator._movementBuffer);
         InitBuffer(_targetingBuffer, ref ComputeShaderEmulator._targetingBuffer);
+        InitBuffer(_eventAggregatorBuffer, ref ComputeShaderEmulator._eventAggregatorBuffer);
         InitBuffer(FirearmDescBuffer, ref ComputeShaderEmulator._firearmDescBuffer);
         InitBuffer(PersonnelDescBuffer, ref ComputeShaderEmulator._personnelDescBuffer);
-        InitBuffer(ref ComputeShaderEmulator._eventCountBuffer, ComputeShaderEmulator.EVENT_LAST + 1);
-        InitBuffer(ref ComputeShaderEmulator._firearmDamageEventBuffer, (uint)_descBuffer.Count); 
+        InitArrayHeaderBuffer(ref ComputeShaderEmulator._arrayHeaderBuffer, ComputeShaderEmulator.EVENT_LAST + 1, (int)(_descBuffer.Count * _descBuffer.Count));
+        InitBuffer(ref ComputeShaderEmulator._firearmEventBuffer, (uint)(_descBuffer.Count * _descBuffer.Count)); 
         ComputeShaderEmulator._firearmDescCount = (uint) FirearmDescBuffer.Length;
         ComputeShaderEmulator._personnelDescCount = (uint) PersonnelDescBuffer.Length;
         ComputeShaderEmulator._entityCount = (uint)_descBuffer.Count;
@@ -127,13 +140,14 @@ public partial class EntityAssembly : MonoBehaviour
         ComputeShaderEmulator._entityCount = (uint)_descBuffer.Count;
         ComputeShaderEmulator._selectedEntityId = SelectedEntityId();
 
-        ClearBuffer(ref ComputeShaderEmulator._eventCountBuffer, 0);
+        ClearArrayHeaderBuffer(ref ComputeShaderEmulator._arrayHeaderBuffer);
         
+        ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.Cleanup, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateMovement, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdatePersonnel, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateTargeting, threadGroupsX, 1, 1 );
-        ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateJoinRequests, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateFirearms, threadGroupsX, 1, 1 );
+        ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateJoinRequests, threadGroupsX, 1, 1 );
 
         SyncBuffers(ref ComputeShaderEmulator._descBuffer, _descBuffer);
         SyncBuffers(ref ComputeShaderEmulator._transformBuffer, _transformBuffer);
@@ -142,6 +156,7 @@ public partial class EntityAssembly : MonoBehaviour
         SyncBuffers(ref ComputeShaderEmulator._firearmBuffer, _firearmsBuffer);
         SyncBuffers(ref ComputeShaderEmulator._movementBuffer, _movementBuffer);
         SyncBuffers(ref ComputeShaderEmulator._targetingBuffer, _targetingBuffer);
+        SyncBuffers(ref ComputeShaderEmulator._eventAggregatorBuffer, _eventAggregatorBuffer);
     }
 #endif    
 }

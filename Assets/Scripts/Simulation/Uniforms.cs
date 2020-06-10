@@ -47,7 +47,7 @@ public partial class ComputeShaderEmulator
     public const float PERSONNEL_FITNESS_MAX = 14400.0f;
     public const float PERSONNEL_FITNESS_MIN = 1.0f;
     
-    public const uint EVENT_FIREARM_DAMAGE = 1;
+    public const uint EVENT_FIREARM = 1;
     public const uint EVENT_LAST = 1;
     
     public const float FLOAT_EPSILON = 1.19e-07f;
@@ -78,8 +78,9 @@ public partial class ComputeShaderEmulator
     public static Firearm[] _firearmBuffer = new Firearm[0];
     public static Movement[] _movementBuffer = new Movement[0];
     public static Targeting[] _targetingBuffer = new Targeting[0];
-    public static int[] _eventCountBuffer = new int[0];
-    public static FirearmDamageEvent[] _firearmDamageEventBuffer = new FirearmDamageEvent[0];
+    public static EventAggregator[] _eventAggregatorBuffer = new EventAggregator[0];
+    public static ArrayHeader[] _arrayHeaderBuffer = new ArrayHeader[0];
+    public static FirearmEvent[] _firearmEventBuffer = new FirearmEvent[0];
     
     // MAP HELPERS
     
@@ -636,7 +637,7 @@ public partial class ComputeShaderEmulator
                     if (PointInsideAABB(localPoint, structureBoxInf, structureBoxSup))
                     {
                         #if DRAW_INDOOR_ENTITIES
-                        if (entityId == _selectedEntityId)
+                        if (entityId == _selectedEntityId && NumCPUThreads == 1)
                         {
                             uint entityTeam = GetTeam(entityId);
                             Color entityColor = (entityTeam == 1) ? (Color.red) : (entityTeam == 2 ? Color.blue : Color.green);
@@ -740,7 +741,7 @@ public partial class ComputeShaderEmulator
                                 hit = localHit;
                                 hit += obstacleBoxPosition;
                                 #if DRAW_LINE_OF_SIGHT
-                                    if (entityId == _selectedEntityId)
+                                    if (entityId == _selectedEntityId && NumCPUThreads == 1)
                                     {
                                         Color blockedSightColor = Color.red;
                                         blockedSightColor.a = 0.5f;
@@ -756,7 +757,7 @@ public partial class ComputeShaderEmulator
         }
         
         #if DRAW_LINE_OF_SIGHT
-            if (entityId == _selectedEntityId)
+            if (entityId == _selectedEntityId && NumCPUThreads == 1)
             {
                 Color clearSightColor = Color.green;
                 clearSightColor.a = 0.5f;
@@ -804,5 +805,62 @@ public partial class ComputeShaderEmulator
         // TODO: reduce exposure when using terrain features like bushes or forests  
 
         return exposure;
+    }
+    
+    // EVENT AGGREGATOR HELPERS
+    
+    public static void AddFirearmEvent(uint entityId, uint targetEntityId, float firepower)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+            Debug.Assert(targetEntityId > 0 && targetEntityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[targetEntityId] & EVENT_AGGREGATOR) == EVENT_AGGREGATOR);
+        #endif
+
+        if (_arrayHeaderBuffer[EVENT_FIREARM].count < _arrayHeaderBuffer[EVENT_FIREARM].capacity)
+        {
+            int eventIndex = -1;
+            InterlockedAdd(ref _arrayHeaderBuffer[EVENT_FIREARM].count, 1, out eventIndex);
+            _firearmEventBuffer[eventIndex].entityId = entityId;
+            _firearmEventBuffer[eventIndex].firepower = firepower;
+
+            // try to put event to the head of the list
+            int lastEventIndex = _eventAggregatorBuffer[targetEntityId].firearmEventIndex;
+            int originalLastEventIndex = lastEventIndex;
+            if (lastEventIndex == 0)
+            {
+                InterlockedCompareExchange(ref _eventAggregatorBuffer[targetEntityId].firearmEventIndex, lastEventIndex, eventIndex, out originalLastEventIndex);
+            }
+
+            if (lastEventIndex != originalLastEventIndex)
+            {
+                Debug.Log("AddFirearmEvent(" + entityId + ", " + targetEntityId + ") failed to add even to the head of the list.");
+            }
+            
+            // put event to the tail of the list
+            while (lastEventIndex != originalLastEventIndex)
+            {
+                // search for the tail
+                lastEventIndex = originalLastEventIndex;
+                while (_firearmEventBuffer[lastEventIndex].nextIndex != 0)
+                {
+                    lastEventIndex = _firearmEventBuffer[lastEventIndex].nextIndex;
+                }
+                    
+                // try to put event to the tail of the list
+                originalLastEventIndex = lastEventIndex;
+                InterlockedCompareExchange(ref _firearmEventBuffer[lastEventIndex].nextIndex, lastEventIndex, eventIndex, out originalLastEventIndex);
+                
+                if (lastEventIndex != originalLastEventIndex)
+                {
+                    Debug.Log("AddFirearmEvent(" + entityId + ", " + targetEntityId + ") failed to add even to the tail of the list.");
+                }
+            }
+
+            int currentEventCount = 0;
+            InterlockedAdd(ref _eventAggregatorBuffer[targetEntityId].eventCount, 1, out currentEventCount);
+        }
     }
 }

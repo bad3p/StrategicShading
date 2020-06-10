@@ -25,6 +25,22 @@ public partial class ComputeShaderEmulator
     }
     
     [NumThreads(256,1,1)]
+    static public void Cleanup(uint3 id)
+    {
+        uint entityId = id.x;
+        if (entityId == 0 || entityId >= _entityCount)
+        {
+            return;
+        }
+        
+        if ( HasComponents( entityId, EVENT_AGGREGATOR ) )
+        {
+            _eventAggregatorBuffer[entityId].eventCount = 0;
+            _eventAggregatorBuffer[entityId].firearmEventIndex = 0;
+        }
+    }
+    
+    [NumThreads(256,1,1)]
     static public void UpdateMovement(uint3 id)
     {
         uint entityId = id.x;
@@ -336,6 +352,13 @@ public partial class ComputeShaderEmulator
 
         if ( HasComponents( entityId, FIREARMS ) )
         {
+            for (uint targetEntityId = 1; targetEntityId < _entityCount; targetEntityId++)
+            {
+                if (HasComponents(targetEntityId, EVENT_AGGREGATOR))
+                {
+                    AddFirearmEvent(entityId, targetEntityId, 99.9f);
+                }
+            }
         }
     }    
 
