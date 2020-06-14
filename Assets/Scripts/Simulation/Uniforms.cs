@@ -4,6 +4,7 @@
 #define DRAW_LINE_OF_SIGHT
 #define DRAW_INDOOR_ENTITIES
 
+using System.IO;
 using Types;
 using Structs;
 using UnityEngine;
@@ -825,38 +826,37 @@ public partial class ComputeShaderEmulator
             InterlockedAdd(ref _arrayHeaderBuffer[EVENT_FIREARM].count, 1, out eventIndex);
             _firearmEventBuffer[eventIndex].entityId = entityId;
             _firearmEventBuffer[eventIndex].firepower = firepower;
+            _firearmEventBuffer[eventIndex].nextIndex = 0;
 
             // try to put event to the head of the list
-            int lastEventIndex = _eventAggregatorBuffer[targetEntityId].firearmEventIndex;
-            int originalLastEventIndex = lastEventIndex;
-            if (lastEventIndex == 0)
-            {
-                InterlockedCompareExchange(ref _eventAggregatorBuffer[targetEntityId].firearmEventIndex, lastEventIndex, eventIndex, out originalLastEventIndex);
-            }
 
-            if (lastEventIndex != originalLastEventIndex)
+            bool success = false; 
+            if (_eventAggregatorBuffer[targetEntityId].firearmEventIndex == 0)
             {
-                Debug.Log("AddFirearmEvent(" + entityId + ", " + targetEntityId + ") failed to add even to the head of the list.");
+                int expectedNextEventIndex = _eventAggregatorBuffer[targetEntityId].firearmEventIndex;
+                int observedNextEventIndex = -1;                
+                InterlockedCompareExchange(ref _eventAggregatorBuffer[targetEntityId].firearmEventIndex, expectedNextEventIndex, eventIndex, out observedNextEventIndex);
+                
+                success = (expectedNextEventIndex == observedNextEventIndex);
             }
             
             // put event to the tail of the list
-            while (lastEventIndex != originalLastEventIndex)
+            int tailEventIndex = _eventAggregatorBuffer[targetEntityId].firearmEventIndex;
+            while (!success)
             {
                 // search for the tail
-                lastEventIndex = originalLastEventIndex;
-                while (_firearmEventBuffer[lastEventIndex].nextIndex != 0)
+                while (_firearmEventBuffer[tailEventIndex].nextIndex != 0)
                 {
-                    lastEventIndex = _firearmEventBuffer[lastEventIndex].nextIndex;
+                    tailEventIndex = _firearmEventBuffer[tailEventIndex].nextIndex;
                 }
                     
                 // try to put event to the tail of the list
-                originalLastEventIndex = lastEventIndex;
-                InterlockedCompareExchange(ref _firearmEventBuffer[lastEventIndex].nextIndex, lastEventIndex, eventIndex, out originalLastEventIndex);
                 
-                if (lastEventIndex != originalLastEventIndex)
-                {
-                    Debug.Log("AddFirearmEvent(" + entityId + ", " + targetEntityId + ") failed to add even to the tail of the list.");
-                }
+                int expectedNextEventIndex = _firearmEventBuffer[tailEventIndex].nextIndex;
+                int observedNextEventIndex = -1;                
+                InterlockedCompareExchange(ref _firearmEventBuffer[tailEventIndex].nextIndex, expectedNextEventIndex, eventIndex, out observedNextEventIndex);
+                
+                success = (expectedNextEventIndex == observedNextEventIndex);
             }
 
             int currentEventCount = 0;
