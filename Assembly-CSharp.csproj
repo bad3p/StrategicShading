@@ -92,6 +92,7 @@
     <Compile Include="Assets\Scripts\Simulation\CollisionTest.cs" />
     <Compile Include="Assets\Scripts\Simulation\ComputeShaderEmulator.cs" />
     <Compile Include="Assets\Scripts\Simulation\FloatIntrinsics.cs" />
+    <Compile Include="Assets\Scripts\Simulation\IntIntrinsics.cs" />
     <Compile Include="Assets\Scripts\Simulation\Random.cs" />
     <Compile Include="Assets\Scripts\Simulation\Simulation.cs" />
     <Compile Include="Assets\Scripts\Simulation\Structs.cs" />

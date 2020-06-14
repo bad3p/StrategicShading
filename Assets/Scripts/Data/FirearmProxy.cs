@@ -11,10 +11,6 @@ using UnityEditor;
 public class FirearmProxy : ComponentProxy
 {
     public uint DescID = 0;
-    public uint Ammo = 30;
-    public uint StateID = 0;
-    public float StateTimeout = 0.0f;
-    public uint TargetEntityId = 0;
     
     private EntityAssembly _entityAssembly;
     private EntityProxy _entityProxy;
@@ -29,10 +25,12 @@ public class FirearmProxy : ComponentProxy
             {
                 _entityAssembly.RegisterFirearmsProxy(_entityProxy.entityId, this);
                 descId = DescID;
-                ammo = Ammo;
-                stateId = StateID;
-                stateTimeout = StateTimeout;
-                targetEntityId = TargetEntityId;
+                
+                if( descId > 0 && descId < _entityAssembly.FirearmDescBuffer.Length )
+                {                
+                    ammo = _entityAssembly.FirearmDescBuffer[descId].maxAmmo;
+                    clipAmmo = _entityAssembly.FirearmDescBuffer[descId].maxClipAmmo;
+                }
             }
         }    
     }
@@ -79,25 +77,6 @@ public class FirearmProxy : ComponentProxy
             }
         }
     }
-
-    public void ValidateDataConsistency()
-    {
-        if (!_entityAssembly)
-        {
-            Awake();
-        }
-        if (!_entityAssembly)
-        {
-            return;
-        }
-
-        if (descId < _entityAssembly.FirearmDescBuffer.Length)
-        {
-            var firearmDesc = _entityAssembly.FirearmDescBuffer[(int) descId];
-            Ammo = firearmDesc.maxAmmo;
-            ammo = Ammo;
-        }
-    }
     
     public uint descId
     {
@@ -121,36 +100,24 @@ public class FirearmProxy : ComponentProxy
         }
     }
     
-    public uint stateId
+    public uint clipAmmo
     {
-        get { return _component.stateId; }
+        get { return _component.clipAmmo; }
         set
         {
             var temp = _component;
-            temp.stateId = value;
+            temp.clipAmmo = value;
             _component = temp;
         }
     }
     
-    public float stateTimeout
+    public uint status
     {
-        get { return _component.stateTimeout; }
-        set
-        {
-            var temp = _component;
-            temp.stateTimeout = value;
-            _component = temp;
-        }
+        get { return _component.status; }
     }
     
-    public uint targetEntityId
+    public float timeout
     {
-        get { return _component.targetEntityId; }
-        set
-        {
-            var temp = _component;
-            temp.targetEntityId = value;
-            _component = temp;
-        }
+        get { return _component.timeout; }
     }
 }

@@ -350,8 +350,129 @@ public partial class ComputeShaderEmulator
             return;
         }
 
-        if ( HasComponents( entityId, FIREARMS ) )
+        if ( HasComponents( entityId, TRANSFORM_PERSONNEL_FIREARMS_TARGETING ) )
         {
+            uint targetEntityId = _targetingBuffer[entityId].firearmTargetIds.x;
+            float firepower = 0.0f;
+
+            if (targetEntityId > 0)
+            {
+                float3 dirToTarget = _transformBuffer[targetEntityId].position - _transformBuffer[entityId].position;
+                float distToTarget = length(dirToTarget);
+                firepower = GetFirearmFirepower(entityId, distToTarget);
+                if (_firearmDescBuffer[_firearmBuffer[entityId].descId].crew <= 1)
+                {
+                    firepower *= GetPersonnelCount(entityId);
+                }
+                if (_firearmDescBuffer[_firearmBuffer[entityId].descId].maxBurstAmmo > 1)
+                {
+                    firepower *= _firearmDescBuffer[_firearmBuffer[entityId].descId].maxBurstAmmo;
+                }
+            }
+
+            // TODO: provide in Targeting component
+            const float FirepowerThreshold = 50.0f;
+                        
+            uint firearmState = GetFirearmState(entityId);
+            if (targetEntityId > 0 && firepower >= FirepowerThreshold)
+            {
+                // ready firearm
+                if (!IsFirearmReady(entityId))
+                {
+                    if (firearmState != FIREARM_STATE_MOUNTING)
+                    {
+                        float mountingTime = _firearmDescBuffer[_firearmBuffer[entityId].descId].mountingTime;
+                        SetFirearmState(entityId, FIREARM_STATE_MOUNTING, mountingTime);
+                    }
+                    else
+                    {
+                        _firearmBuffer[entityId].timeout -= _dT;
+                        if (_firearmBuffer[entityId].timeout <= 0.0f)
+                        {
+                            SetFirearmReady(entityId, true);
+                            SetFirearmState(entityId, FIREARM_STATE_IDLE);
+                        }
+                    }
+                }
+                else
+                {
+                    // unjam firearm
+                    if (IsFirearmJammed(entityId))
+                    {
+                        if (firearmState != FIREARM_STATE_UNJAMMING)
+                        {
+                            float unjammingTime = _firearmDescBuffer[_firearmBuffer[entityId].descId].unjammingTime;
+                            SetFirearmState(entityId, FIREARM_STATE_UNJAMMING, unjammingTime);
+                        }
+                        else
+                        {
+                            _firearmBuffer[entityId].timeout -= _dT;
+                            if (_firearmBuffer[entityId].timeout <= 0.0f)
+                            {
+                                SetFirearmJammed(entityId, false);
+                                SetFirearmState(entityId, FIREARM_STATE_IDLE);
+                            }    
+                        }
+                    }
+                    else
+                    {
+                        // aim firearm
+                        if (firearmState == FIREARM_STATE_IDLE)
+                        {
+                            float aimingTime = _firearmDescBuffer[_firearmBuffer[entityId].descId].aimingTime;
+                            SetFirearmState(entityId, FIREARM_STATE_AIMING, aimingTime);
+                        }
+                        else if (firearmState == FIREARM_STATE_AIMING)
+                        {
+                            _firearmBuffer[entityId].timeout -= _dT;
+                            if (_firearmBuffer[entityId].timeout <= 0.0f)
+                            {
+                                // spent ammo
+                                
+                                uint burstAmmo = 1;
+                                uint maxBurstAmmo = _firearmDescBuffer[_firearmBuffer[entityId].descId].maxBurstAmmo;
+                                if (maxBurstAmmo > 1)
+                                {
+                                    burstAmmo = (uint)rngRange(1, (int) maxBurstAmmo, rngIndex(id.x));
+                                }
+                                burstAmmo = min( _firearmBuffer[entityId].clipAmmo, burstAmmo );
+                                _firearmBuffer[entityId].clipAmmo -= burstAmmo; 
+                                
+                                // TODO: generate firearm event
+                                // TODO: randomly jam firearm
+
+                                if (_firearmBuffer[entityId].clipAmmo == 0)
+                                {
+                                    float reloadingTime = _firearmDescBuffer[_firearmBuffer[entityId].descId].reloadingTime;
+                                    SetFirearmState(entityId, FIREARM_STATE_RELOADING, reloadingTime);
+                                }
+                                else
+                                {
+                                    SetFirearmState(entityId, FIREARM_STATE_IDLE);
+                                }
+                            }
+                        }
+                        else if (firearmState == FIREARM_STATE_RELOADING)
+                        {
+                            _firearmBuffer[entityId].timeout -= _dT;
+                            if (_firearmBuffer[entityId].timeout <= 0.0f)
+                            {
+                                uint maxClipAmmo = _firearmDescBuffer[_firearmBuffer[entityId].descId].maxAmmo;
+                                _firearmBuffer[entityId].clipAmmo = min( _firearmBuffer[entityId].ammo, maxClipAmmo );
+                                _firearmBuffer[entityId].ammo -= _firearmBuffer[entityId].clipAmmo;
+                                SetFirearmState(entityId, FIREARM_STATE_IDLE);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                
+            }
+
+
+            /*
             for (uint targetEntityId = 1; targetEntityId < _entityCount; targetEntityId++)
             {
                 if (HasComponents(targetEntityId, EVENT_AGGREGATOR))
@@ -361,7 +482,7 @@ public partial class ComputeShaderEmulator
                         AddFirearmEvent(entityId, targetEntityId, rngRange(10.0f, 100.0f, rngIndex(id.x)));
                     }
                 }
-            }
+            }*/
         }
     }    
 

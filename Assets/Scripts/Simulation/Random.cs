@@ -52,6 +52,11 @@ public partial class ComputeShaderEmulator
     {
         return min + (max - min) * ((float)( rng( rngIndex ) )) / _rngMax; 
     }
+    
+    public static int rngRange(int min, int max, int rngIndex)
+    {
+        return min + rng(rngIndex) % (max - min + 1);
+    }
 
     public static float rngNormal(int rngIndex)
     {

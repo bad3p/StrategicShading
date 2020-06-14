@@ -309,9 +309,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 3
   Ammo: 20
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &50486969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -430,9 +427,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 1
   Ammo: 15
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &50754643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -739,9 +733,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 3
   Ammo: 20
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &91025948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -996,9 +987,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &115422640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1255,9 +1243,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 3
   Ammo: 20
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &124967536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1598,9 +1583,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &150848794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1762,9 +1744,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 1
   Ammo: 15
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &155046355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2020,9 +1999,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &184403116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2278,9 +2254,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &228176497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2675,9 +2648,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 1
   Ammo: 15
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &280444632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2884,9 +2854,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &323594037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3187,9 +3154,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &348892562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3445,9 +3409,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &394426862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3672,9 +3633,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &418962427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3882,9 +3840,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &449951514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4140,9 +4095,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 3
   Ammo: 20
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &498143473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4932,9 +4884,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 1
   Ammo: 15
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &632558121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5498,9 +5447,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &733324212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5662,9 +5608,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &742081697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5955,9 +5898,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &825710923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6199,9 +6139,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 3
   Ammo: 20
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &832503766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6603,9 +6540,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &854208702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6768,9 +6702,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &861177048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7022,9 +6953,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &901484737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7131,9 +7059,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 1
   Ammo: 15
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &909305571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7488,9 +7413,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &933769200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7805,9 +7727,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &977645721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8331,9 +8250,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1025601189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8604,9 +8520,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1066574207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8768,9 +8681,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1067732929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9162,9 +9072,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1115440012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9389,9 +9296,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1180478818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9680,9 +9584,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1212768687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9844,9 +9745,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1219724294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10083,9 +9981,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 1
   Ammo: 15
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1227162785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10247,9 +10142,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1228673441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10411,9 +10303,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 3
   Ammo: 20
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1252775083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10620,9 +10509,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1283911823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11026,9 +10912,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1363302812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11423,9 +11306,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1398946392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11920,9 +11800,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1471051381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12375,9 +12252,10 @@ MonoBehaviour:
       y: 0
       z: 0
       w: 0
-    setupTime: 0
+    mountingTime: 0
     aimingTime: 0
     reloadingTime: 0
+    unjammingTime: 0
   - maxAmmo: 15
     distance:
       x: 25
@@ -12389,9 +12267,10 @@ MonoBehaviour:
       y: 33
       z: 11
       w: 5
-    setupTime: 0
+    mountingTime: 0
     aimingTime: 1
     reloadingTime: 5
+    unjammingTime: 0
   - maxAmmo: 30
     distance:
       x: 50
@@ -12403,9 +12282,10 @@ MonoBehaviour:
       y: 66
       z: 33
       w: 11
-    setupTime: 0
+    mountingTime: 0
     aimingTime: 1
     reloadingTime: 5
+    unjammingTime: 0
   - maxAmmo: 20
     distance:
       x: 50
@@ -12417,9 +12297,10 @@ MonoBehaviour:
       y: 99
       z: 66
       w: 33
-    setupTime: 3
+    mountingTime: 0
     aimingTime: 2
     reloadingTime: 10
+    unjammingTime: 0
   - maxAmmo: 40
     distance:
       x: 50
@@ -12431,9 +12312,10 @@ MonoBehaviour:
       y: 133
       z: 99
       w: 66
-    setupTime: 9
+    mountingTime: 0
     aimingTime: 3
     reloadingTime: 10
+    unjammingTime: 0
   PersonnelNameBuffer:
   - NULL
   - Squad HQ
@@ -12598,7 +12480,7 @@ MonoBehaviour:
   - maxIntegrity: 200
     armor: 15
     material: 1
-  NumCPUThreads: 2
+  NumCPUThreads: 1
   RngSeedFromTimer: 1
   RngSeed: 0
   RngMaxUniform: 1000000
@@ -13176,9 +13058,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 1
   Ammo: 15
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1648239642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13544,9 +13423,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 1
   Ammo: 15
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1721134854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14305,9 +14181,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1795206727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14469,9 +14342,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 3
   Ammo: 20
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1810172204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14633,9 +14503,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 3
   Ammo: 20
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1814857653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14933,9 +14800,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 1
   Ammo: 15
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1852075641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15142,9 +15006,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1853407893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15437,9 +15298,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1882896217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15600,9 +15458,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1895606209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15764,9 +15619,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1897142795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16108,9 +15960,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1899798928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16541,9 +16390,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1958120041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16799,9 +16645,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1979859744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17008,9 +16851,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 3
   Ammo: 20
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &1994700776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17172,9 +17012,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &2001791169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17694,9 +17531,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 3
   Ammo: 20
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &2096258111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17996,9 +17830,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &2100194442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18161,9 +17992,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 1
   Ammo: 15
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &2116575101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18436,9 +18264,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DescID: 2
   Ammo: 30
-  StateID: 0
-  StateTimeout: 0
-  TargetEntityId: 0
 --- !u!114 &2141137221
 MonoBehaviour:
   m_ObjectHideFlags: 0

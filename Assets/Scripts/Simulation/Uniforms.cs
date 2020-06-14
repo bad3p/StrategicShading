@@ -9,6 +9,7 @@ using Types;
 using Structs;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Assertions.Must;
 using Transform = Structs.Transform;
 
 public partial class ComputeShaderEmulator
@@ -41,6 +42,15 @@ public partial class ComputeShaderEmulator
     public const uint SUPPRESSION_PINNED = 2;
     public const uint SUPPRESSION_PANIC = 3;
     public const uint SUPPRESSION_BROKEN = 4;
+    public const uint FIREARM_READY_BIT = 0x80000000;
+    public const uint FIREARM_JAMMED_BIT = 0x40000000;
+    public const uint FIREARM_FLAGS_BITMASK = 0xC0000000;
+    public const uint FIREARM_STATE_IDLE = 0x0;
+    public const uint FIREARM_STATE_MOUNTING = 0x1;
+    public const uint FIREARM_STATE_UNMOUNTING = 0x2;
+    public const uint FIREARM_STATE_AIMING = 0x3;
+    public const uint FIREARM_STATE_RELOADING = 0x4;
+    public const uint FIREARM_STATE_UNJAMMING = 0x5;
 
     public const float PERSONNEL_MORALE_MAX = 600.0f;
     public const float PERSONNEL_MORALE_MIN = 1.0f;
@@ -97,6 +107,7 @@ public partial class ComputeShaderEmulator
     public const uint HIERARCHY_TRANSFORM = HIERARCHY | TRANSFORM;
     public const uint TRANSFORM_TARGETING = TRANSFORM | TARGETING;
     public const uint TRANSFORM_BUILDING = TRANSFORM | BUILDING;
+    public const uint TRANSFORM_PERSONNEL_FIREARMS_TARGETING = FIREARMS | TARGETING | TRANSFORM | PERSONNEL;
     
     public static bool HasComponents(uint entityId, uint mask)
     {
@@ -317,6 +328,38 @@ public partial class ComputeShaderEmulator
     }
     
     // PERSONNEL HELPERS
+    
+    public static uint GetPersonnelCount(uint entityId)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & PERSONNEL) == PERSONNEL);
+        #endif
+        
+        uint maxPersonnel = 0;
+        uint descId = _personnelBuffer[entityId].descId;
+        if (descId > 0 && descId < _personnelDescCount)
+        {
+            maxPersonnel = _personnelDescBuffer[descId].maxPersonnel;
+        }
+
+        maxPersonnel = maxPersonnel < MAX_PERSONNEL ? maxPersonnel : MAX_PERSONNEL; 
+            
+        uint result = 0;
+        uint status = _personnelBuffer[entityId].status;
+        for (uint i = 0; i < maxPersonnel; i++)
+        {
+            uint personnelStatus = (status >> (int)(i * 2)) & PERSONNEL_STATUS_BITMASK;
+            if( personnelStatus == PERSONNEL_STATUS_HEALTHY )
+            {
+                result++;
+            }
+        }
+
+        return result;
+    }
 
     public static uint GetPersonnelPose(uint entityId)
     {
@@ -806,6 +849,145 @@ public partial class ComputeShaderEmulator
         // TODO: reduce exposure when using terrain features like bushes or forests  
 
         return exposure;
+    }
+    
+    // FIREARM HELPERS
+
+    public static bool IsFirearmReady(uint entityId)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & FIREARMS) == FIREARMS);
+        #endif
+
+        return (_firearmBuffer[entityId].status & FIREARM_READY_BIT) == FIREARM_READY_BIT;
+    }
+    
+    public static void SetFirearmReady(uint entityId, bool flag)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & FIREARMS) == FIREARMS);
+        #endif
+
+        if (flag)
+        {
+            _firearmBuffer[entityId].status = _firearmBuffer[entityId].status | FIREARM_READY_BIT;
+        }
+        else
+        {
+            _firearmBuffer[entityId].status = _firearmBuffer[entityId].status & ~FIREARM_READY_BIT;
+        }
+    }
+    
+    public static bool IsFirearmJammed(uint entityId)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & FIREARMS) == FIREARMS);
+        #endif
+
+        return (_firearmBuffer[entityId].status & FIREARM_JAMMED_BIT) == FIREARM_JAMMED_BIT;
+    }
+    
+    public static void SetFirearmJammed(uint entityId, bool flag)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & FIREARMS) == FIREARMS);
+        #endif
+
+        if (flag)
+        {
+            _firearmBuffer[entityId].status = _firearmBuffer[entityId].status | FIREARM_JAMMED_BIT;
+        }
+        else
+        {
+            _firearmBuffer[entityId].status = _firearmBuffer[entityId].status & ~FIREARM_JAMMED_BIT;
+        }
+    }
+
+    public static float GetFirearmFirepower(uint entityId, float distanceToTarget)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & FIREARMS) == FIREARMS);
+        #endif
+
+        uint descId = _firearmBuffer[entityId].descId;
+        float4 distanceColumn = _firearmDescBuffer[descId].distance;
+        float4 firepowerColumn = _firearmDescBuffer[descId].firepower;
+
+        if (distanceToTarget <= distanceColumn.x)
+        {
+            return firepowerColumn.x;
+        }
+        else if (distanceToTarget <= distanceColumn.y)
+        {
+            float t = (distanceToTarget - distanceColumn.x) / (distanceColumn.y - distanceColumn.x);
+            return lerp(firepowerColumn.x, firepowerColumn.y, t); 
+        }
+        else if(distanceToTarget <= distanceColumn.z)
+        {
+            float t = (distanceToTarget - distanceColumn.y) / (distanceColumn.z - distanceColumn.y);
+            return lerp(firepowerColumn.y, firepowerColumn.z, t); 
+        }
+        else if(distanceToTarget <= distanceColumn.w)
+        {
+            float t = (distanceToTarget - distanceColumn.z) / (distanceColumn.w - distanceColumn.z);
+            return lerp(firepowerColumn.z, firepowerColumn.w, t); 
+        }
+        else
+        {
+            return firepowerColumn.w;
+        }
+    }
+    
+    public static uint GetFirearmState(uint entityId)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & FIREARMS) == FIREARMS);
+        #endif
+
+        return (_firearmBuffer[entityId].status & ~FIREARM_FLAGS_BITMASK);
+    }
+    
+    public static void SetFirearmState(uint entityId, uint state)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & FIREARMS) == FIREARMS);
+        #endif
+
+        _firearmBuffer[entityId].status = (_firearmBuffer[entityId].status & FIREARM_FLAGS_BITMASK) | state;
+    }
+    
+    public static void SetFirearmState(uint entityId, uint state, float timeout)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & FIREARMS) == FIREARMS);
+        #endif
+
+        _firearmBuffer[entityId].status = (_firearmBuffer[entityId].status & FIREARM_FLAGS_BITMASK) | state;
+        _firearmBuffer[entityId].timeout = timeout;
     }
     
     // EVENT AGGREGATOR HELPERS

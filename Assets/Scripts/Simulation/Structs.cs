@@ -9,6 +9,7 @@ namespace Structs
     {
         public uint date; // [YEAR][MONTH][DAY] 
         public uint time; // [MSEC]
+        public float2 wind;
         public float temperature;
         public float precipitation;
         public float fog;
@@ -19,12 +20,16 @@ namespace Structs
     [System.Serializable]
     public struct FirearmDesc
     {
+        public uint crew;
         public uint maxAmmo;
+        public uint maxClipAmmo;
+        public uint maxBurstAmmo;
         public float4 distance;
         public float4 firepower;
-        public float setupTime;
+        public float mountingTime;
         public float aimingTime;
         public float reloadingTime;
+        public float unjammingTime;
     };
     
     [System.Serializable]
@@ -95,9 +100,9 @@ namespace Structs
     {
         public uint descId;
         public uint ammo;
-        public uint stateId;
-        public float stateTimeout;
-        public uint targetEntityId;
+        public uint clipAmmo;
+        public uint status; // [READY_BIT][JAMMED_BIT][STATE_BITS]
+        public float timeout;
     };
     
     public struct Movement

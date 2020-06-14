@@ -317,12 +317,16 @@ public class EntityAssemblyEditor : Editor
 	    {
 		    Structs.FirearmDesc modifiedItem = new Structs.FirearmDesc();
 
-		    modifiedItem.maxAmmo = (uint)EditorGUILayout.IntField("maxAmmo", (int)firearmDesc.maxAmmo); 
+		    modifiedItem.crew = (uint)EditorGUILayout.IntField("crew", (int)firearmDesc.crew);
+		    modifiedItem.maxAmmo = (uint)EditorGUILayout.IntField("maxAmmo", (int)firearmDesc.maxAmmo);
+		    modifiedItem.maxClipAmmo = (uint)EditorGUILayout.IntField("maxClipAmmo", (int)firearmDesc.maxClipAmmo);
+		    modifiedItem.maxBurstAmmo = (uint)EditorGUILayout.IntField("maxBurstAmmo", (int)firearmDesc.maxBurstAmmo);
 		    modifiedItem.distance = EditorGUILayout.Vector4Field("distance", firearmDesc.distance.ToVector4());
 		    modifiedItem.firepower = EditorGUILayout.Vector4Field("firepower",firearmDesc.firepower.ToVector4());
-		    modifiedItem.setupTime = EditorGUILayout.FloatField("setupTime", firearmDesc.setupTime);
+		    modifiedItem.mountingTime = EditorGUILayout.FloatField("mountingTime", firearmDesc.mountingTime);
 		    modifiedItem.aimingTime = EditorGUILayout.FloatField("aimingTime", firearmDesc.aimingTime);
 		    modifiedItem.reloadingTime = EditorGUILayout.FloatField("reloadingTime", firearmDesc.reloadingTime);
+		    modifiedItem.unjammingTime = EditorGUILayout.FloatField("unjammingTime", firearmDesc.unjammingTime);
 
 		    bool deleteItem = false;
 		    EditorGUILayout.BeginHorizontal();
@@ -561,7 +565,7 @@ public class EntityAssemblyEditor : Editor
         _entityAssembly.RngCount = EditorGUILayout.IntField("RngCount", _entityAssembly.RngCount);
         _entityAssembly.RngStateLength = EditorGUILayout.IntField("RngStateLength", _entityAssembly.RngStateLength);
 
-        EditorUtility.SetDirty( _entityAssembly );
+        EditorUtility.SetDirty( _entityAssembly );	    
     }
 
 }
