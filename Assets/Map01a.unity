@@ -96,7 +96,6 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
-    m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -308,7 +307,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 3
-  Ammo: 20
 --- !u!114 &50486969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -426,7 +424,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 1
-  Ammo: 15
 --- !u!114 &50754643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -732,7 +729,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 3
-  Ammo: 20
 --- !u!114 &91025948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -830,7 +826,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -848,7 +844,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -986,7 +981,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &115422640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1085,7 +1079,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -1103,7 +1097,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1242,7 +1235,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 3
-  Ammo: 20
 --- !u!114 &124967536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1340,7 +1332,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -1358,7 +1350,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1582,7 +1573,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &150848794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1743,7 +1733,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 1
-  Ammo: 15
 --- !u!114 &155046355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1841,7 +1830,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -1859,7 +1848,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1998,7 +1986,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &184403116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2096,7 +2083,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -2114,7 +2101,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2253,7 +2239,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &228176497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2445,7 +2430,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -2463,7 +2448,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2647,7 +2631,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 1
-  Ammo: 15
 --- !u!114 &280444632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2853,7 +2836,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &323594037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2996,7 +2978,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -3014,7 +2996,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3153,7 +3134,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &348892562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3251,7 +3231,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -3269,7 +3249,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3408,7 +3387,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &394426862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3632,7 +3610,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &418962427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3839,7 +3816,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &449951514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3937,7 +3913,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -3955,7 +3931,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4094,7 +4069,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 3
-  Ammo: 20
 --- !u!114 &498143473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4479,7 +4453,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -4497,7 +4471,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4883,7 +4856,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 1
-  Ammo: 15
 --- !u!114 &632558121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5027,7 +4999,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -5045,7 +5017,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5446,7 +5417,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &733324212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5607,7 +5577,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &742081697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5897,7 +5866,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &825710923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6138,7 +6106,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 3
-  Ammo: 20
 --- !u!114 &832503766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6383,7 +6350,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -6401,7 +6368,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6539,7 +6505,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &854208702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6701,7 +6666,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &861177048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6952,7 +6916,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &901484737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7058,7 +7021,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 1
-  Ammo: 15
 --- !u!114 &909305571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7241,7 +7203,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -7259,7 +7221,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -7412,7 +7373,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &933769200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7726,7 +7686,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &977645721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7824,7 +7783,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -7842,7 +7801,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -8093,7 +8051,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -8111,7 +8069,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -8249,7 +8206,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1025601189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8519,7 +8475,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1066574207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8680,7 +8635,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1067732929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8868,7 +8822,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -8886,7 +8840,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -9071,7 +9024,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1115440012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9295,7 +9247,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1180478818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9393,7 +9344,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -9411,7 +9362,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -9583,7 +9533,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1212768687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9744,7 +9693,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1219724294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9980,7 +9928,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 1
-  Ammo: 15
 --- !u!114 &1227162785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10141,7 +10088,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1228673441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10302,7 +10248,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 3
-  Ammo: 20
 --- !u!114 &1252775083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10508,7 +10453,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1283911823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10911,7 +10855,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1363302812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11054,7 +10997,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -11072,7 +11015,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -11148,7 +11090,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -11166,7 +11108,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -11305,7 +11246,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1398946392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11403,7 +11343,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -11421,7 +11361,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -11799,7 +11738,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1471051381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12241,7 +12179,10 @@ MonoBehaviour:
   - Light Machinegun
   - Heavy Machinegun
   FirearmDescBuffer:
-  - maxAmmo: 0
+  - crew: 0
+    maxAmmo: 0
+    maxClipAmmo: 0
+    maxBurstAmmo: 0
     distance:
       x: 0
       y: 0
@@ -12256,22 +12197,28 @@ MonoBehaviour:
     aimingTime: 0
     reloadingTime: 0
     unjammingTime: 0
-  - maxAmmo: 15
+  - crew: 1
+    maxAmmo: 27
+    maxClipAmmo: 9
+    maxBurstAmmo: 1
     distance:
       x: 25
       y: 50
       z: 100
       w: 200
     firepower:
-      x: 66
-      y: 33
-      z: 11
-      w: 5
+      x: 77
+      y: 23
+      z: 5
+      w: 1
     mountingTime: 0
     aimingTime: 1
     reloadingTime: 5
     unjammingTime: 0
-  - maxAmmo: 30
+  - crew: 1
+    maxAmmo: 30
+    maxClipAmmo: 5
+    maxBurstAmmo: 1
     distance:
       x: 50
       y: 100
@@ -12286,32 +12233,38 @@ MonoBehaviour:
     aimingTime: 1
     reloadingTime: 5
     unjammingTime: 0
-  - maxAmmo: 20
+  - crew: 2
+    maxAmmo: 90
+    maxClipAmmo: 30
+    maxBurstAmmo: 5
     distance:
       x: 50
       y: 100
       z: 250
       w: 500
     firepower:
-      x: 166
-      y: 99
-      z: 66
-      w: 33
+      x: 81
+      y: 43
+      z: 19
+      w: 7
     mountingTime: 0
     aimingTime: 2
     reloadingTime: 10
     unjammingTime: 0
-  - maxAmmo: 40
+  - crew: 3
+    maxAmmo: 126
+    maxClipAmmo: 42
+    maxBurstAmmo: 7
     distance:
       x: 50
       y: 100
       z: 250
       w: 500
     firepower:
-      x: 166
-      y: 133
-      z: 99
-      w: 66
+      x: 86
+      y: 47
+      z: 21
+      w: 8
     mountingTime: 0
     aimingTime: 3
     reloadingTime: 10
@@ -12529,7 +12482,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -12547,7 +12500,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -12667,7 +12619,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -12685,7 +12637,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -12806,7 +12757,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -12824,7 +12775,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -12900,7 +12850,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -12918,7 +12868,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -13057,7 +13006,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 1
-  Ammo: 15
 --- !u!114 &1648239642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13422,7 +13370,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 1
-  Ammo: 15
 --- !u!114 &1721134854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13502,9 +13449,8 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1731904580}
   m_Enabled: 1
-  serializedVersion: 10
+  serializedVersion: 9
   m_Type: 1
-  m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
@@ -13612,7 +13558,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -13630,7 +13576,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -13706,7 +13651,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -13724,7 +13669,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -13848,7 +13792,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -13866,7 +13810,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -14180,7 +14123,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1795206727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14341,7 +14283,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 3
-  Ammo: 20
 --- !u!114 &1810172204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14502,7 +14443,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 3
-  Ammo: 20
 --- !u!114 &1814857653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14799,7 +14739,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 1
-  Ammo: 15
 --- !u!114 &1852075641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15005,7 +14944,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1853407893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15297,7 +15235,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1882896217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15457,7 +15394,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1895606209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15618,7 +15554,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1897142795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15717,7 +15652,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -15735,7 +15670,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -15959,7 +15893,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1899798928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16187,7 +16120,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -16205,7 +16138,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -16389,7 +16321,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1958120041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16487,7 +16418,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -16505,7 +16436,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -16644,7 +16574,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &1979859744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16850,7 +16779,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 3
-  Ammo: 20
 --- !u!114 &1994700776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17011,7 +16939,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &2001791169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17109,7 +17036,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -17127,7 +17054,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -17288,7 +17214,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -17306,7 +17232,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -17530,7 +17455,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 3
-  Ammo: 20
 --- !u!114 &2096258111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17628,7 +17552,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -17646,7 +17570,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -17829,7 +17752,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &2100194442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17991,7 +17913,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 1
-  Ammo: 15
 --- !u!114 &2116575101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18263,7 +18184,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DescID: 2
-  Ammo: 30
 --- !u!114 &2141137221
 MonoBehaviour:
   m_ObjectHideFlags: 0

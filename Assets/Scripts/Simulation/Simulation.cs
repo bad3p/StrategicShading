@@ -360,18 +360,10 @@ public partial class ComputeShaderEmulator
                 float3 dirToTarget = _transformBuffer[targetEntityId].position - _transformBuffer[entityId].position;
                 float distToTarget = length(dirToTarget);
                 firepower = GetFirearmFirepower(entityId, distToTarget);
-                if (_firearmDescBuffer[_firearmBuffer[entityId].descId].crew <= 1)
-                {
-                    firepower *= GetPersonnelCount(entityId);
-                }
-                if (_firearmDescBuffer[_firearmBuffer[entityId].descId].maxBurstAmmo > 1)
-                {
-                    firepower *= _firearmDescBuffer[_firearmBuffer[entityId].descId].maxBurstAmmo;
-                }
             }
 
-            // TODO: provide in Targeting component
-            const float FirepowerThreshold = 50.0f;
+            // TODO: provide in Targeting component?
+            const float FirepowerThreshold = 75.0f;
                         
             uint firearmState = GetFirearmState(entityId);
             if (targetEntityId > 0 && firepower >= FirepowerThreshold)
@@ -416,8 +408,23 @@ public partial class ComputeShaderEmulator
                     }
                     else
                     {
+                        // reverse unmounting
+                        if (firearmState == FIREARM_STATE_UNMOUNTING)
+                        {
+                            float mountingTime = _firearmDescBuffer[_firearmBuffer[entityId].descId].mountingTime - _firearmBuffer[entityId].timeout;
+                            SetFirearmState(entityId, FIREARM_STATE_MOUNTING, mountingTime);
+                        }
+                        // complete mounting
+                        else if (firearmState == FIREARM_STATE_MOUNTING)
+                        {
+                            _firearmBuffer[entityId].timeout -= _dT;
+                            if (_firearmBuffer[entityId].timeout <= 0.0f)
+                            {
+                                SetFirearmState(entityId, FIREARM_STATE_IDLE);
+                            }
+                        }
                         // aim firearm
-                        if (firearmState == FIREARM_STATE_IDLE)
+                        else if (firearmState == FIREARM_STATE_IDLE)
                         {
                             float aimingTime = _firearmDescBuffer[_firearmBuffer[entityId].descId].aimingTime;
                             SetFirearmState(entityId, FIREARM_STATE_AIMING, aimingTime);
@@ -457,7 +464,7 @@ public partial class ComputeShaderEmulator
                             _firearmBuffer[entityId].timeout -= _dT;
                             if (_firearmBuffer[entityId].timeout <= 0.0f)
                             {
-                                uint maxClipAmmo = _firearmDescBuffer[_firearmBuffer[entityId].descId].maxAmmo;
+                                uint maxClipAmmo = _firearmDescBuffer[_firearmBuffer[entityId].descId].maxClipAmmo;
                                 _firearmBuffer[entityId].clipAmmo = min( _firearmBuffer[entityId].ammo, maxClipAmmo );
                                 _firearmBuffer[entityId].ammo -= _firearmBuffer[entityId].clipAmmo;
                                 SetFirearmState(entityId, FIREARM_STATE_IDLE);
@@ -466,9 +473,80 @@ public partial class ComputeShaderEmulator
                     }
                 }
             }
+            else if (IsFirearmReady(entityId))
+            {
+                if (IsFirearmJammed(entityId))
+                {
+                    if (firearmState != FIREARM_STATE_UNJAMMING)
+                    {
+                        float unjammingTime = _firearmDescBuffer[_firearmBuffer[entityId].descId].unjammingTime;
+                        SetFirearmState(entityId, FIREARM_STATE_UNJAMMING, unjammingTime);
+                    }
+                    else
+                    {
+                        _firearmBuffer[entityId].timeout -= _dT;
+                        if (_firearmBuffer[entityId].timeout <= 0.0f)
+                        {
+                            SetFirearmJammed(entityId, false);
+                            SetFirearmState(entityId, FIREARM_STATE_IDLE);
+                        }    
+                    }
+                }
+                else 
+                {
+                    // abort aiming immediately
+                    if (firearmState == FIREARM_STATE_AIMING)
+                    {
+                        SetFirearmState(entityId, FIREARM_STATE_IDLE);
+                    }
+                    // complete reloading
+                    else if (firearmState == FIREARM_STATE_RELOADING)
+                    {
+                        _firearmBuffer[entityId].timeout -= _dT;
+                        if (_firearmBuffer[entityId].timeout <= 0.0f)
+                        {
+                            uint maxClipAmmo = _firearmDescBuffer[_firearmBuffer[entityId].descId].maxClipAmmo;
+                            _firearmBuffer[entityId].clipAmmo = min( _firearmBuffer[entityId].ammo, maxClipAmmo );
+                            _firearmBuffer[entityId].ammo -= _firearmBuffer[entityId].clipAmmo;
+                            SetFirearmState(entityId, FIREARM_STATE_IDLE);
+                        }
+                    }
+                    // unmount
+                    else 
+                    {
+                        if (firearmState != FIREARM_STATE_UNMOUNTING)
+                        {
+                            float mountingTime = _firearmDescBuffer[_firearmBuffer[entityId].descId].mountingTime;
+                            SetFirearmState(entityId, FIREARM_STATE_UNMOUNTING, mountingTime);
+                        }
+                        else
+                        {
+                            _firearmBuffer[entityId].timeout -= _dT;
+                            if (_firearmBuffer[entityId].timeout <= 0.0f)
+                            {
+                                SetFirearmReady(entityId, false);
+                                SetFirearmState(entityId, FIREARM_STATE_IDLE);
+                            }
+                        }    
+                    }
+                }
+            }
             else
             {
-                
+                if (firearmState == FIREARM_STATE_MOUNTING)
+                {
+                    float mountingTime = _firearmDescBuffer[_firearmBuffer[entityId].descId].mountingTime - _firearmBuffer[entityId].timeout;
+                    SetFirearmState(entityId, FIREARM_STATE_UNMOUNTING, mountingTime);
+                }
+                else if(firearmState == FIREARM_STATE_UNMOUNTING)
+                {
+                    _firearmBuffer[entityId].timeout -= _dT;
+                    if (_firearmBuffer[entityId].timeout <= 0.0f)
+                    {
+                        SetFirearmReady(entityId, false);
+                        SetFirearmState(entityId, FIREARM_STATE_IDLE);
+                    }
+                }
             }
 
 

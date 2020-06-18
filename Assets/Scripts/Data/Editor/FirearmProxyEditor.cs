@@ -40,6 +40,10 @@ public class FirearmProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("timeout");
             EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("firepower");
+            EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();
         
@@ -152,6 +156,30 @@ public class FirearmProxyEditor : Editor
             
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(firearmProxy.timeout.ToString("F2"));    
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            if (EditorApplication.isPlaying)
+            {
+                uint entityId = entityAssembly.GetEntityId(firearmProxy);
+                uint targetEntityId = ComputeShaderEmulator._targetingBuffer[entityId].firearmTargetIds.x;
+                if (targetEntityId > 0)
+                {
+                    var entityPosition = ComputeShaderEmulator._transformBuffer[entityId].position;
+                    var targetEntityPosition = ComputeShaderEmulator._transformBuffer[targetEntityId].position;
+                    float distanceToTarget = ComputeShaderEmulator.distance( entityPosition, targetEntityPosition );
+                    float firepower = ComputeShaderEmulator.GetFirearmFirepower(entityId, distanceToTarget);
+                    EditorGUILayout.LabelField(firepower.ToString("F2"));
+                }
+                else
+                {
+                    EditorGUILayout.LabelField("-");
+                }
+            }
+            else
+            {
+                EditorGUILayout.LabelField("-");
+            }
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();

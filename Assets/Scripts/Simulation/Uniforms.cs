@@ -928,29 +928,39 @@ public partial class ComputeShaderEmulator
         float4 distanceColumn = _firearmDescBuffer[descId].distance;
         float4 firepowerColumn = _firearmDescBuffer[descId].firepower;
 
+        float firepower = 0.0f;
+
         if (distanceToTarget <= distanceColumn.x)
         {
-            return firepowerColumn.x;
+            firepower = firepowerColumn.x;
         }
         else if (distanceToTarget <= distanceColumn.y)
         {
             float t = (distanceToTarget - distanceColumn.x) / (distanceColumn.y - distanceColumn.x);
-            return lerp(firepowerColumn.x, firepowerColumn.y, t); 
+            firepower = lerp(firepowerColumn.x, firepowerColumn.y, t); 
         }
         else if(distanceToTarget <= distanceColumn.z)
         {
             float t = (distanceToTarget - distanceColumn.y) / (distanceColumn.z - distanceColumn.y);
-            return lerp(firepowerColumn.y, firepowerColumn.z, t); 
+            firepower = lerp(firepowerColumn.y, firepowerColumn.z, t); 
         }
         else if(distanceToTarget <= distanceColumn.w)
         {
             float t = (distanceToTarget - distanceColumn.z) / (distanceColumn.w - distanceColumn.z);
-            return lerp(firepowerColumn.z, firepowerColumn.w, t); 
+            firepower = lerp(firepowerColumn.z, firepowerColumn.w, t); 
         }
         else
         {
-            return firepowerColumn.w;
+            firepower = firepowerColumn.w;
         }
+
+        if (_firearmDescBuffer[descId].crew <= 1)
+        {
+            firepower *= GetPersonnelCount(entityId);
+        }
+        firepower *= _firearmDescBuffer[descId].maxBurstAmmo;
+
+        return firepower;
     }
     
     public static uint GetFirearmState(uint entityId)
