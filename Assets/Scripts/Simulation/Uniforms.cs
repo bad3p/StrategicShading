@@ -1,5 +1,6 @@
 ﻿#define ASSERTIVE_ENTITY_ACCESS
 #define ASSERTIVE_COMPONENT_ACCESS
+#define ASSERTIVE_FLYWEIGHT_ACCESS
 #define ASSERTIVE_FUNCTION_CALLS
 #define DRAW_LINE_OF_SIGHT
 #define DRAW_INDOOR_ENTITIES
@@ -10,6 +11,7 @@ using Structs;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Assertions.Must;
+using Event = Structs.Event;
 using Transform = Structs.Transform;
 
 public partial class ComputeShaderEmulator
@@ -51,6 +53,10 @@ public partial class ComputeShaderEmulator
     public const uint FIREARM_STATE_AIMING = 0x3;
     public const uint FIREARM_STATE_RELOADING = 0x4;
     public const uint FIREARM_STATE_UNJAMMING = 0x5;
+    
+    public const uint EVENT_JOIN_REQUEST = 0x1;   // [entityId]
+    public const uint EVENT_FIREARM_DAMAGE = 0x2; // [entityId][direction: arg.xyz, firepower: arg.w]
+    public const uint EVENT_EXPLOSION_DAMAGE = 0x3; // [entityId][direction: arg.xyz, expower: arg.w]
 
     public const float PERSONNEL_MORALE_MAX = 600.0f;
     public const float PERSONNEL_MORALE_MIN = 1.0f;
@@ -91,7 +97,7 @@ public partial class ComputeShaderEmulator
     public static Targeting[] _targetingBuffer = new Targeting[0];
     public static EventAggregator[] _eventAggregatorBuffer = new EventAggregator[0];
     public static ArrayHeader[] _arrayHeaderBuffer = new ArrayHeader[0];
-    public static FirearmEvent[] _firearmEventBuffer = new FirearmEvent[0];
+    public static Event[] _eventBuffer = new Event[0];
     
     // MAP HELPERS
     
@@ -340,12 +346,13 @@ public partial class ComputeShaderEmulator
         
         uint maxPersonnel = 0;
         uint descId = _personnelBuffer[entityId].descId;
-        if (descId > 0 && descId < _personnelDescCount)
-        {
-            maxPersonnel = _personnelDescBuffer[descId].maxPersonnel;
-        }
-
-        maxPersonnel = maxPersonnel < MAX_PERSONNEL ? maxPersonnel : MAX_PERSONNEL; 
+        
+        #if ASSERTIVE_FLYWEIGHT_ACCESS
+            Debug.Assert(descId > 0 && descId < _personnelDescCount);
+        #endif
+        
+        maxPersonnel = _personnelDescBuffer[descId].maxPersonnel;
+        maxPersonnel = maxPersonnel > MAX_PERSONNEL ? MAX_PERSONNEL : maxPersonnel; 
             
         uint result = 0;
         uint status = _personnelBuffer[entityId].status;
@@ -416,8 +423,13 @@ public partial class ComputeShaderEmulator
         #if ASSERTIVE_COMPONENT_ACCESS
             Debug.Assert((_descBuffer[entityId] & PERSONNEL) == PERSONNEL);
         #endif
-        uint descId = _personnelBuffer[entityId].descId;
-        float4 moraleThreshold = _personnelDescBuffer[descId].moraleThreshold;
+        
+        uint descId = _personnelBuffer[entityId].descId;        
+        #if ASSERTIVE_FLYWEIGHT_ACCESS
+            Debug.Assert(descId > 0 && descId < _personnelDescCount);
+        #endif
+        
+        float4 moraleThreshold = _personnelDescBuffer[descId].moraleThreshold;        
         float morale = _personnelBuffer[entityId].morale;
         if (morale > moraleThreshold.x)
         {
@@ -464,6 +476,11 @@ public partial class ComputeShaderEmulator
             float distanceToTarget = length(directionToTarget);
         
             uint descId = _personnelBuffer[entityId].descId;
+            
+            #if ASSERTIVE_FLYWEIGHT_ACCESS
+                Debug.Assert(descId > 0 && descId < _personnelDescCount);
+            #endif
+            
             float3 linearVelocitySlow = _personnelDescBuffer[descId].linearVelocitySlow;
             float3 linearVelocityFast = _personnelDescBuffer[descId].linearVelocityFast;
 
@@ -515,6 +532,10 @@ public partial class ComputeShaderEmulator
         else
         {
             uint descId = _personnelBuffer[entityId].descId;
+            #if ASSERTIVE_FLYWEIGHT_ACCESS
+                Debug.Assert(descId > 0 && descId < _personnelDescCount);
+            #endif
+            
             float3 fitnessConsumptionRateSlow = _personnelDescBuffer[descId].fitnessConsumptionRateSlow;
             float3 fitnessConsumptionRateFast = _personnelDescBuffer[descId].fitnessConsumptionRateFast;
             float3 linearVelocitySlow = _personnelDescBuffer[descId].linearVelocitySlow;
@@ -586,9 +607,13 @@ public partial class ComputeShaderEmulator
             Debug.Assert((_descBuffer[entityId] & TRANSFORM_MOVEMENT) == TRANSFORM_MOVEMENT);
         #endif
         
-        uint personnelDescId = _personnelBuffer[entityId].descId;
-        float4 moraleRecoveryRate = _personnelDescBuffer[personnelDescId].moraleRecoveryRate;
-        float4 moraleThreshold = _personnelDescBuffer[personnelDescId].moraleThreshold;
+        uint descId = _personnelBuffer[entityId].descId;
+        #if ASSERTIVE_FLYWEIGHT_ACCESS
+            Debug.Assert(descId > 0 && descId < _personnelDescCount);
+        #endif
+        
+        float4 moraleRecoveryRate = _personnelDescBuffer[descId].moraleRecoveryRate;
+        float4 moraleThreshold = _personnelDescBuffer[descId].moraleThreshold;
         float morale = _personnelBuffer[entityId].morale;
 
         if (morale > moraleThreshold.x)
@@ -925,6 +950,11 @@ public partial class ComputeShaderEmulator
         #endif
 
         uint descId = _firearmBuffer[entityId].descId;
+        
+        #if ASSERTIVE_FLYWEIGHT_ACCESS
+            Debug.Assert(descId > 0 && descId < _firearmDescCount);
+        #endif
+        
         float4 distanceColumn = _firearmDescBuffer[descId].distance;
         float4 firepowerColumn = _firearmDescBuffer[descId].firepower;
 
@@ -1002,57 +1032,55 @@ public partial class ComputeShaderEmulator
     
     // EVENT AGGREGATOR HELPERS
     
-    public static void AddFirearmEvent(uint entityId, uint targetEntityId, float firepower)
+    public static void AddEvent(uint dstEntityId, uint srcEntityId, uint id, float4 param)
     {
         #if ASSERTIVE_ENTITY_ACCESS
-            Debug.Assert(entityId > 0 && entityId < _entityCount);
-            Debug.Assert(targetEntityId > 0 && targetEntityId < _entityCount);
+            Debug.Assert(srcEntityId > 0 && srcEntityId < _entityCount);
+            Debug.Assert(dstEntityId > 0 && dstEntityId < _entityCount);
         #endif
         #if ASSERTIVE_COMPONENT_ACCESS
-            Debug.Assert((_descBuffer[targetEntityId] & EVENT_AGGREGATOR) == EVENT_AGGREGATOR);
+            Debug.Assert((_descBuffer[dstEntityId] & EVENT_AGGREGATOR) == EVENT_AGGREGATOR);
         #endif
 
         if (_arrayHeaderBuffer[EVENT_FIREARM].count < _arrayHeaderBuffer[EVENT_FIREARM].capacity)
         {
             int eventIndex = -1;
             InterlockedAdd(ref _arrayHeaderBuffer[EVENT_FIREARM].count, 1, out eventIndex);
-            _firearmEventBuffer[eventIndex].entityId = entityId;
-            _firearmEventBuffer[eventIndex].firepower = firepower;
-            _firearmEventBuffer[eventIndex].nextIndex = 0;
+            _eventBuffer[eventIndex].id = id;
+            _eventBuffer[eventIndex].entityId = srcEntityId;
+            _eventBuffer[eventIndex].param = param;
+            _eventBuffer[eventIndex].nextEventId = 0;
 
             // try to put event to the head of the list
-
             bool success = false; 
-            if (_eventAggregatorBuffer[targetEntityId].firearmEventIndex == 0)
+            if (_eventAggregatorBuffer[dstEntityId].firstEventId == 0)
             {
-                int expectedNextEventIndex = _eventAggregatorBuffer[targetEntityId].firearmEventIndex;
+                int expectedNextEventIndex = _eventAggregatorBuffer[dstEntityId].firstEventId;
                 int observedNextEventIndex = -1;                
-                InterlockedCompareExchange(ref _eventAggregatorBuffer[targetEntityId].firearmEventIndex, expectedNextEventIndex, eventIndex, out observedNextEventIndex);
+                InterlockedCompareExchange(ref _eventAggregatorBuffer[dstEntityId].firstEventId, expectedNextEventIndex, eventIndex, out observedNextEventIndex);
                 
                 success = (expectedNextEventIndex == observedNextEventIndex);
             }
             
             // put event to the tail of the list
-            int tailEventIndex = _eventAggregatorBuffer[targetEntityId].firearmEventIndex;
+            int tailEventIndex = _eventAggregatorBuffer[dstEntityId].firstEventId;
             while (!success)
             {
                 // search for the tail
-                while (_firearmEventBuffer[tailEventIndex].nextIndex != 0)
+                while (_eventBuffer[tailEventIndex].nextEventId != 0)
                 {
-                    tailEventIndex = _firearmEventBuffer[tailEventIndex].nextIndex;
+                    tailEventIndex = _eventBuffer[tailEventIndex].nextEventId;
                 }
                     
-                // try to put event to the tail of the list
-                
-                int expectedNextEventIndex = _firearmEventBuffer[tailEventIndex].nextIndex;
+                // try to put event to the tail of the list                
+                int expectedNextEventIndex = _eventBuffer[tailEventIndex].nextEventId;
                 int observedNextEventIndex = -1;                
-                InterlockedCompareExchange(ref _firearmEventBuffer[tailEventIndex].nextIndex, expectedNextEventIndex, eventIndex, out observedNextEventIndex);
-                
+                InterlockedCompareExchange(ref _eventBuffer[tailEventIndex].nextEventId, expectedNextEventIndex, eventIndex, out observedNextEventIndex);                
                 success = (expectedNextEventIndex == observedNextEventIndex);
             }
 
             int currentEventCount = 0;
-            InterlockedAdd(ref _eventAggregatorBuffer[targetEntityId].eventCount, 1, out currentEventCount);
+            InterlockedAdd(ref _eventAggregatorBuffer[dstEntityId].eventCount, 1, out currentEventCount);
         }
     }
 }

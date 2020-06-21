@@ -74,8 +74,8 @@ public class EventAggregatorProxy : ComponentProxy
         get { return _component.eventCount; }
     }
     
-    public int firearmEventIndex
+    public int firstEventId
     {
-        get { return _component.firearmEventIndex; }
+        get { return _component.firstEventId; }
     }
 }

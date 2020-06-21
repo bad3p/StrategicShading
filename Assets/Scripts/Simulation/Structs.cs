@@ -63,11 +63,12 @@ namespace Structs
         public int count;
     };
 
-    public struct FirearmEvent
+    public struct Event
     {
+        public uint id;
         public uint entityId;
-        public float firepower;
-        public int nextIndex;
+        public float4 param;
+        public int nextEventId;
     };
 
     // COMPONENTS
@@ -126,7 +127,7 @@ namespace Structs
     public struct EventAggregator
     {
         public int eventCount;
-        public int firearmEventIndex;
+        public int firstEventId;
     };
     
     public struct Building

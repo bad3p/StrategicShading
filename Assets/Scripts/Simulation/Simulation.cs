@@ -36,7 +36,7 @@ public partial class ComputeShaderEmulator
         if ( HasComponents( entityId, EVENT_AGGREGATOR ) )
         {
             _eventAggregatorBuffer[entityId].eventCount = 0;
-            _eventAggregatorBuffer[entityId].firearmEventIndex = 0;
+            _eventAggregatorBuffer[entityId].firstEventId = 0;
         }
     }
     
@@ -548,19 +548,25 @@ public partial class ComputeShaderEmulator
                     }
                 }
             }
-
-
-            /*
-            for (uint targetEntityId = 1; targetEntityId < _entityCount; targetEntityId++)
+            
+            for (uint otherEntityId = 1; otherEntityId < _entityCount; otherEntityId++)
             {
-                if (HasComponents(targetEntityId, EVENT_AGGREGATOR))
+                if (HasComponents(otherEntityId, EVENT_AGGREGATOR))
                 {
-                    if(rngRange(0.0f,1.0f,rngIndex(id.x)) < 0.9 )
+                    if(rngRange(0.0f,1.0f,rngIndex(id.x)) < 0.5 )
                     {
-                        AddFirearmEvent(entityId, targetEntityId, rngRange(10.0f, 100.0f, rngIndex(id.x)));
+                        float3 dir = (_transformBuffer[otherEntityId].position - _transformBuffer[entityId].position);
+                        float dist = length(dir);
+                        if (dist > 0.0f)
+                        {
+                            dir *= 1.0f / dist;
+                        }
+                        float power = GetFirearmFirepower(entityId, dist);
+                        float4 eventParam = new float4(dir.x, dir.y, dir.z, power);
+                        AddEvent(otherEntityId, entityId, EVENT_FIREARM_DAMAGE, eventParam);
                     }
                 }
-            }*/
+            }
         }
     }    
 

@@ -26,7 +26,7 @@ public class EventAggregatorProxyEditor : Editor
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("firearmEventIndex");
+                EditorGUILayout.LabelField("firstEventId");
                 EditorGUILayout.EndHorizontal();
             }
             EditorGUILayout.EndVertical();
@@ -38,7 +38,7 @@ public class EventAggregatorProxyEditor : Editor
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(eventAggregatorProxy.firearmEventIndex.ToString());
+                EditorGUILayout.LabelField(eventAggregatorProxy.firstEventId.ToString());
                 EditorGUILayout.EndHorizontal();
             }
             EditorGUILayout.EndVertical();
@@ -47,8 +47,8 @@ public class EventAggregatorProxyEditor : Editor
 
         if (EditorApplication.isPlaying)
         {
-            int eventIndex = eventAggregatorProxy.firearmEventIndex;
-            if (eventIndex > 0)
+            int eventId = eventAggregatorProxy.firstEventId;
+            if (eventId > 0)
             {
                 EditorGUILayout.BeginHorizontal();
                 {
@@ -57,17 +57,17 @@ public class EventAggregatorProxyEditor : Editor
                     EditorGUILayout.LabelField("entityId");
                     EditorGUILayout.EndVertical();
                     EditorGUILayout.BeginVertical();
-                    EditorGUILayout.LabelField("firepower");
+                    EditorGUILayout.LabelField("param");
                     EditorGUILayout.EndVertical();
                     EditorGUILayout.EndHorizontal();
                 }
                 EditorGUILayout.EndHorizontal();
 
-                while (eventIndex > 0)
+                while (eventId > 0)
                 {
-                    uint entityId = ComputeShaderEmulator._firearmEventBuffer[eventIndex].entityId;
-                    float firepower = ComputeShaderEmulator._firearmEventBuffer[eventIndex].firepower;
-                    eventIndex = ComputeShaderEmulator._firearmEventBuffer[eventIndex].nextIndex;
+                    uint entityId = ComputeShaderEmulator._eventBuffer[eventId].entityId;
+                    var param = ComputeShaderEmulator._eventBuffer[eventId].param;
+                    eventId = ComputeShaderEmulator._eventBuffer[eventId].nextEventId;
                     EditorGUILayout.BeginHorizontal();
                     {
                         EditorGUILayout.BeginHorizontal();
@@ -75,7 +75,7 @@ public class EventAggregatorProxyEditor : Editor
                         EditorGUILayout.LabelField(entityId.ToString());
                         EditorGUILayout.EndVertical();
                         EditorGUILayout.BeginVertical();
-                        EditorGUILayout.LabelField(firepower.ToString("F2"));
+                        EditorGUILayout.LabelField(param.x.ToString("F2") + ", " + param.y.ToString("F2") + ", " + param.z.ToString("F2") + ", " + param.w.ToString("F2"));
                         EditorGUILayout.EndVertical();
                         EditorGUILayout.EndHorizontal();
                     }

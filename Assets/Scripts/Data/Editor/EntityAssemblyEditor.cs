@@ -221,6 +221,7 @@ public class EntityAssemblyEditor : Editor
 		    if (GUILayout.Button(flag ? "+" : "-", _headerButton))
 		    {
 			    flag = !flag;
+			    GUI.FocusControl(null);
 		    }
 		    EditorGUILayout.EndVertical();
 			
@@ -276,6 +277,7 @@ public class EntityAssemblyEditor : Editor
 			    if (prevIsExpanded != newIsExpanded)
 			    {
 				    setExpandedFunc(i, newIsExpanded);
+				    GUI.FocusControl(null);
 			    }
 
 			    if (newIsExpanded)
