@@ -114,6 +114,7 @@ public partial class ComputeShaderEmulator
     public const uint TRANSFORM_TARGETING = TRANSFORM | TARGETING;
     public const uint TRANSFORM_BUILDING = TRANSFORM | BUILDING;
     public const uint TRANSFORM_PERSONNEL_FIREARMS_TARGETING = FIREARMS | TARGETING | TRANSFORM | PERSONNEL;
+    public const uint PERSONNEL_EVENT_AGGREGATOR = PERSONNEL | EVENT_AGGREGATOR;
     
     public static bool HasComponents(uint entityId, uint mask)
     {
@@ -366,6 +367,96 @@ public partial class ComputeShaderEmulator
         }
 
         return result;
+    }
+    
+    public static uint GetPersonnelStatus(uint entityId, uint personnelId)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & PERSONNEL) == PERSONNEL);
+        #endif
+        
+        uint maxPersonnel = 0;
+        uint descId = _personnelBuffer[entityId].descId;
+        
+        #if ASSERTIVE_FLYWEIGHT_ACCESS
+            Debug.Assert(descId > 0 && descId < _personnelDescCount);
+        #endif
+        
+        maxPersonnel = _personnelDescBuffer[descId].maxPersonnel;
+        maxPersonnel = maxPersonnel > MAX_PERSONNEL ? MAX_PERSONNEL : maxPersonnel;
+
+        if (personnelId >= maxPersonnel)
+        {
+            return PERSONNEL_STATUS_ABSENT;
+        }
+        else
+        {            
+            uint status = _personnelBuffer[entityId].status;        
+            uint personnelStatus = (status >> (int)(personnelId * 2)) & PERSONNEL_STATUS_BITMASK;        
+            return personnelStatus;
+        }
+    }
+    
+    public static void SetPersonnelStatus(uint entityId, uint personnelId, uint personnelStatus)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & PERSONNEL) == PERSONNEL);
+        #endif
+        
+        uint maxPersonnel = 0;
+        uint descId = _personnelBuffer[entityId].descId;
+        
+        #if ASSERTIVE_FLYWEIGHT_ACCESS
+            Debug.Assert(descId > 0 && descId < _personnelDescCount);
+        #endif
+        
+        maxPersonnel = _personnelDescBuffer[descId].maxPersonnel;
+        maxPersonnel = maxPersonnel > MAX_PERSONNEL ? MAX_PERSONNEL : maxPersonnel;
+
+        if (personnelId < maxPersonnel)
+        {
+            uint status = _personnelBuffer[entityId].status;
+            status = status & ~(PERSONNEL_STATUS_BITMASK << (int)(personnelId * 2));
+            status = status | (personnelStatus << (int) (personnelId * 2));
+            _personnelBuffer[entityId].status = status;
+        }
+    }
+    
+    public static bool SwitchPersonnelStatus(uint entityId, uint fromStatus, uint toStatus)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & PERSONNEL) == PERSONNEL);
+        #endif
+        
+        uint maxPersonnel = 0;
+        uint descId = _personnelBuffer[entityId].descId;
+        
+        #if ASSERTIVE_FLYWEIGHT_ACCESS
+            Debug.Assert(descId > 0 && descId < _personnelDescCount);
+        #endif
+        
+        maxPersonnel = _personnelDescBuffer[descId].maxPersonnel;
+        maxPersonnel = maxPersonnel > MAX_PERSONNEL ? MAX_PERSONNEL : maxPersonnel;
+
+        for (uint personnelId = 0; personnelId < maxPersonnel; personnelId++)
+        {
+            uint personnelStatus = GetPersonnelStatus(entityId, personnelId);
+            if (personnelStatus == fromStatus)
+            {
+                SetPersonnelStatus( entityId, personnelId, toStatus);
+                return true;
+            }
+        }
+        return false;
     }
 
     public static uint GetPersonnelPose(uint entityId)

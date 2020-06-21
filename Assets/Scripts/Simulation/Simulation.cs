@@ -1,4 +1,7 @@
-﻿using Types;
+﻿//#define PAUSE_ON_PERSONNEL_KILLED
+//#define PAUSE_ON_PERSONNEL_WOUNDED
+
+using Types;
 using Structs;
 using UnityEngine;
 using Transform = Structs.Transform;
@@ -188,9 +191,10 @@ public partial class ComputeShaderEmulator
             return;
         }
         
+        float morale = _personnelBuffer[entityId].morale;
+        
         // TEST MORALE LOSS
-
-        float morale = _personnelBuffer[entityId].morale; 
+        /*         
 
         float4 moraleLossProbabilityByMorale = new float4
         (
@@ -207,6 +211,8 @@ public partial class ComputeShaderEmulator
         {
             moraleLoss = rngRange(25.0f, 50.0f, rngIndex(entityId));     
         }
+        */
+        float moraleLoss = 0.0f;
         
         // MORALE RECOVERY
 
@@ -353,16 +359,23 @@ public partial class ComputeShaderEmulator
         if ( HasComponents( entityId, TRANSFORM_PERSONNEL_FIREARMS_TARGETING ) )
         {
             uint targetEntityId = _targetingBuffer[entityId].firearmTargetIds.x;
+            
+            float3 dirToTarget = new float3(0,0,0);
+            float distToTarget = 0;
             float firepower = 0.0f;
 
             if (targetEntityId > 0)
             {
-                float3 dirToTarget = _transformBuffer[targetEntityId].position - _transformBuffer[entityId].position;
-                float distToTarget = length(dirToTarget);
+                dirToTarget = _transformBuffer[targetEntityId].position - _transformBuffer[entityId].position;
+                distToTarget = length(dirToTarget);
+                if (distToTarget > 0.0f)
+                {
+                    dirToTarget *= 1.0f / distToTarget;
+                }
                 firepower = GetFirearmFirepower(entityId, distToTarget);
             }
 
-            // TODO: provide in Targeting component?
+            // TODO: provide throshold in Targeting component?
             const float FirepowerThreshold = 75.0f;
                         
             uint firearmState = GetFirearmState(entityId);
@@ -445,7 +458,11 @@ public partial class ComputeShaderEmulator
                                 burstAmmo = min( _firearmBuffer[entityId].clipAmmo, burstAmmo );
                                 _firearmBuffer[entityId].clipAmmo -= burstAmmo; 
                                 
-                                // TODO: generate firearm event
+                                // generate firearm event
+                                
+                                float4 eventParam = new float4(dirToTarget.x, dirToTarget.y, dirToTarget.z, firepower);
+                                AddEvent(targetEntityId, entityId, EVENT_FIREARM_DAMAGE, eventParam);
+                                
                                 // TODO: randomly jam firearm
 
                                 if (_firearmBuffer[entityId].clipAmmo == 0)
@@ -549,7 +566,7 @@ public partial class ComputeShaderEmulator
                 }
             }
             
-            for (uint otherEntityId = 1; otherEntityId < _entityCount; otherEntityId++)
+            /*for (uint otherEntityId = 1; otherEntityId < _entityCount; otherEntityId++)
             {
                 if (HasComponents(otherEntityId, EVENT_AGGREGATOR))
                 {
@@ -566,9 +583,150 @@ public partial class ComputeShaderEmulator
                         AddEvent(otherEntityId, entityId, EVENT_FIREARM_DAMAGE, eventParam);
                     }
                 }
+            }*/
+        }
+    }
+    
+    [NumThreads(256, 1, 1)]
+    static public void ProcessEvents(uint3 id)
+    {
+        uint entityId = id.x;
+        if (entityId == 0 || entityId >= _entityCount)
+        {
+            return;
+        }
+
+        if ( HasComponents(entityId, PERSONNEL_EVENT_AGGREGATOR) )
+        {
+            int eventId = _eventAggregatorBuffer[entityId].firstEventId;
+            while (eventId > 0)
+            {
+                if (_eventBuffer[eventId].id == EVENT_FIREARM_DAMAGE)
+                {                    
+                    float firepower = _eventBuffer[eventId].param.w;
+                    
+                    // TODO: configure probabilities (?)
+                    float4 firepowerColumn = new float4( 59.0f, 88.0f, 133.0f, 199.0f );
+                    float4 killProbabilityColumn = new float4( 12.0f, 24.0f, 49.0f, 99.0f );
+                    float4 woundProbabilityColumn = new float4( 29.0f, 44.0f, 66.0f, 99.0f );
+                    float4 moraleDamageColumn = new float4( 54.0f, 73.0f, 99.0f, 133.0f );
+                    const float KillMoraleDamage = 233.0f;
+                    const float WoundMoraleDamage = 166.0f;
+
+                    float killProbability = 0.0f;
+                    float woundProbability = 0.0f;
+                    float moraleDamage = 0.0f;
+
+                    if (firepower < firepowerColumn.x)
+                    {
+                        killProbability = killProbabilityColumn.x;
+                        woundProbability = woundProbabilityColumn.x;
+                        moraleDamage = moraleDamageColumn.x;
+                    }
+                    else if (firepower < firepowerColumn.y)
+                    {
+                        float t = (firepower - firepowerColumn.x) / (firepowerColumn.y - firepowerColumn.x);
+                        killProbability = lerp(killProbabilityColumn.x, killProbabilityColumn.y, t);
+                        woundProbability = lerp(woundProbabilityColumn.x, woundProbabilityColumn.y, t);
+                        moraleDamage = lerp(moraleDamageColumn.x, moraleDamageColumn.y, t);
+                    }
+                    else if (firepower < firepowerColumn.z)
+                    {
+                        float t = (firepower - firepowerColumn.y) / (firepowerColumn.z - firepowerColumn.y);
+                        killProbability = lerp(killProbabilityColumn.y, killProbabilityColumn.z, t);
+                        woundProbability = lerp(woundProbabilityColumn.y, woundProbabilityColumn.z, t);
+                        moraleDamage = lerp(moraleDamageColumn.y, moraleDamageColumn.z, t);
+                    }
+                    else if (firepower < firepowerColumn.w)
+                    {
+                        float t = (firepower - firepowerColumn.z) / (firepowerColumn.w - firepowerColumn.z);
+                        killProbability = lerp(killProbabilityColumn.z, killProbabilityColumn.w, t);
+                        woundProbability = lerp(woundProbabilityColumn.z, woundProbabilityColumn.w, t);
+                        moraleDamage = lerp(moraleDamageColumn.z, moraleDamageColumn.w, t);
+                    }
+                    else
+                    {
+                        killProbability = killProbabilityColumn.w;
+                        woundProbability = woundProbabilityColumn.w;
+                        moraleDamage = moraleDamageColumn.w;
+                    }
+
+                    float killDice = rngRange( 0.0f, 100.0f, rngIndex(id.x) );
+                    if (killDice <= killProbability)
+                    {
+                        uint status0 = _personnelBuffer[entityId].status; 
+                        bool killWounded = SwitchPersonnelStatus(entityId, PERSONNEL_STATUS_WOUNDED, PERSONNEL_STATUS_KILLED);
+                        if( killWounded )
+                        {
+                            #if PAUSE_ON_PERSONNEL_KILLED
+                            #if UNITY_EDITOR
+                                uint status1 = _personnelBuffer[entityId].status;
+                                Debug.Log( "Wounded personnel killed in " + entityId + " s0 = " + status0.ToString("X8") + " s1 = " + status1.ToString("X8") );
+                                UnityEditor.EditorApplication.isPaused = true;
+                            #endif
+                            #endif
+                            moraleDamage = KillMoraleDamage;
+                        }
+                        else
+                        {
+                            bool kiilHealthy = SwitchPersonnelStatus(entityId, PERSONNEL_STATUS_HEALTHY, PERSONNEL_STATUS_KILLED);
+                            if (kiilHealthy)
+                            {
+                                #if PAUSE_ON_PERSONNEL_KILLED
+                                #if UNITY_EDITOR
+                                    uint status1 = _personnelBuffer[entityId].status;
+                                    Debug.Log( "Healthy personnel killed in " + entityId + " s0 = " + status0.ToString("X8") + " s1 = " + status1.ToString("X8") );
+                                    UnityEditor.EditorApplication.isPaused = true;
+                                #endif
+                                #endif
+                                moraleDamage = KillMoraleDamage;
+                            }                            
+                        }
+                    }
+                    else
+                    {
+                        float woundDice = rngRange( 0.0f, 100.0f, rngIndex(id.x) );
+                        if (woundDice <= woundProbability)
+                        {
+                            uint status0 = _personnelBuffer[entityId].status;
+                            bool woundHealthy = SwitchPersonnelStatus(entityId, PERSONNEL_STATUS_HEALTHY, PERSONNEL_STATUS_WOUNDED);
+                            if (woundHealthy)
+                            {
+                                #if PAUSE_ON_PERSONNEL_WOUNDED
+                                #if UNITY_EDITOR
+                                    uint status1 = _personnelBuffer[entityId].status;
+                                    Debug.Log("Healthy personnel wounded in " + entityId + " s0 = " + status0.ToString("X8") + " s1 = " + status1.ToString("X8"));
+                                    UnityEditor.EditorApplication.isPaused = true;
+                                #endif
+                                #endif
+                                moraleDamage = WoundMoraleDamage;
+                            }
+                            else
+                            {
+                                bool killWounded = SwitchPersonnelStatus(entityId, PERSONNEL_STATUS_WOUNDED, PERSONNEL_STATUS_KILLED);
+                                if( killWounded )
+                                {
+                                    #if PAUSE_ON_PERSONNEL_KILLED
+                                    #if UNITY_EDITOR
+                                        uint status1 = _personnelBuffer[entityId].status;
+                                        Debug.Log( "Wounded personnel wounded again and killed in " + entityId + " s0 = " + status0.ToString("X8") + " s1 = " + status1.ToString("X8") );
+                                        UnityEditor.EditorApplication.isPaused = true;
+                                    #endif
+                                    #endif
+                                    moraleDamage = KillMoraleDamage;
+                                }
+                            }
+                        }
+                    }
+                    
+                    float morale = _personnelBuffer[entityId].morale;
+                    morale = clamp( morale - moraleDamage, PERSONNEL_MORALE_MIN, PERSONNEL_MORALE_MAX );
+                    _personnelBuffer[entityId].morale = morale;
+                }                
+                eventId = _eventBuffer[eventId].nextEventId;
             }
         }
-    }    
+    }
 
     [NumThreads(256, 1, 1)]
     static public void UpdateJoinRequests(uint3 id)

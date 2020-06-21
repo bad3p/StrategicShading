@@ -134,7 +134,7 @@ public partial class EntityAssembly : MonoBehaviour
         }
 
         const uint ThreadGroupSizeX = 256;
-        uint threadGroupsX = ComputeShaderEmulator._entityCount / ThreadGroupSizeX + 1; 
+        uint threadGroupsX = ComputeShaderEmulator._entityCount / ThreadGroupSizeX + 1;
 
         ComputeShaderEmulator._dT = Time.deltaTime;
         ComputeShaderEmulator._entityCount = (uint)_descBuffer.Count;
@@ -147,6 +147,7 @@ public partial class EntityAssembly : MonoBehaviour
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdatePersonnel, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateTargeting, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateFirearms, threadGroupsX, 1, 1 );
+        ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.ProcessEvents, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateJoinRequests, threadGroupsX, 1, 1 );
 
         SyncBuffers(ref ComputeShaderEmulator._descBuffer, _descBuffer);

@@ -77,7 +77,7 @@ public class PersonnelProxy : ComponentProxy
                 float3 scale = transformProxy.scale;
                 
                 int rowSize = Mathf.Min( (int)count, Mathf.CeilToInt( Mathf.Sqrt(count) * scale.x / scale.z ));
-                int colSize = Mathf.CeilToInt(count / rowSize);
+                int colSize = Mathf.CeilToInt(count / (rowSize <= 1 ? 1 : rowSize));
                 if (rowSize * colSize < count)
                 {
                     colSize++;
