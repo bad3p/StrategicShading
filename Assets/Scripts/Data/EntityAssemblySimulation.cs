@@ -148,7 +148,6 @@ public partial class EntityAssembly : MonoBehaviour
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateTargeting, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateFirearms, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.ProcessEvents, threadGroupsX, 1, 1 );
-        ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateJoinRequests, threadGroupsX, 1, 1 );
 
         SyncBuffers(ref ComputeShaderEmulator._descBuffer, _descBuffer);
         SyncBuffers(ref ComputeShaderEmulator._transformBuffer, _transformBuffer);

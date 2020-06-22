@@ -1,9 +1,14 @@
-﻿#define ASSERTIVE_ENTITY_ACCESS
+﻿
+#define ASSERTIVE_ENTITY_ACCESS
 #define ASSERTIVE_COMPONENT_ACCESS
 #define ASSERTIVE_FLYWEIGHT_ACCESS
 #define ASSERTIVE_FUNCTION_CALLS
+
 #define DRAW_LINE_OF_SIGHT
 #define DRAW_INDOOR_ENTITIES
+
+//#define PAUSE_ON_PERSONNEL_KILLED
+//#define PAUSE_ON_PERSONNEL_WOUNDED
 
 using System.IO;
 using Types;
@@ -1172,6 +1177,169 @@ public partial class ComputeShaderEmulator
 
             int currentEventCount = 0;
             InterlockedAdd(ref _eventAggregatorBuffer[dstEntityId].eventCount, 1, out currentEventCount);
+        }
+    }
+
+    public static void OnFirearmDamage(uint entityId, int eventId)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & PERSONNEL) == PERSONNEL);
+        #endif
+        
+        float firepower = _eventBuffer[eventId].param.w;
+                    
+        // TODO: configure probabilities (?)
+        float4 firepowerColumn = new float4( 59.0f, 88.0f, 133.0f, 199.0f );
+        float4 killProbabilityColumn = new float4( 12.0f, 24.0f, 49.0f, 99.0f );
+        float4 woundProbabilityColumn = new float4( 29.0f, 44.0f, 66.0f, 99.0f );
+        float4 moraleDamageColumn = new float4( 54.0f, 73.0f, 99.0f, 133.0f );
+        const float KillMoraleDamage = 233.0f;
+        const float WoundMoraleDamage = 166.0f;
+
+        float killProbability = 0.0f;
+        float woundProbability = 0.0f;
+        float moraleDamage = 0.0f;
+
+        if (firepower < firepowerColumn.x)
+        {
+            killProbability = killProbabilityColumn.x;
+            woundProbability = woundProbabilityColumn.x;
+            moraleDamage = moraleDamageColumn.x;
+        }
+        else if (firepower < firepowerColumn.y)
+        {
+            float t = (firepower - firepowerColumn.x) / (firepowerColumn.y - firepowerColumn.x);
+            killProbability = lerp(killProbabilityColumn.x, killProbabilityColumn.y, t);
+            woundProbability = lerp(woundProbabilityColumn.x, woundProbabilityColumn.y, t);
+            moraleDamage = lerp(moraleDamageColumn.x, moraleDamageColumn.y, t);
+        }
+        else if (firepower < firepowerColumn.z)
+        {
+            float t = (firepower - firepowerColumn.y) / (firepowerColumn.z - firepowerColumn.y);
+            killProbability = lerp(killProbabilityColumn.y, killProbabilityColumn.z, t);
+            woundProbability = lerp(woundProbabilityColumn.y, woundProbabilityColumn.z, t);
+            moraleDamage = lerp(moraleDamageColumn.y, moraleDamageColumn.z, t);
+        }
+        else if (firepower < firepowerColumn.w)
+        {
+            float t = (firepower - firepowerColumn.z) / (firepowerColumn.w - firepowerColumn.z);
+            killProbability = lerp(killProbabilityColumn.z, killProbabilityColumn.w, t);
+            woundProbability = lerp(woundProbabilityColumn.z, woundProbabilityColumn.w, t);
+            moraleDamage = lerp(moraleDamageColumn.z, moraleDamageColumn.w, t);
+        }
+        else
+        {
+            killProbability = killProbabilityColumn.w;
+            woundProbability = woundProbabilityColumn.w;
+            moraleDamage = moraleDamageColumn.w;
+        }
+
+        float killDice = rngRange( 0.0f, 100.0f, rngIndex(entityId) );
+        if (killDice <= killProbability)
+        {
+            uint status0 = _personnelBuffer[entityId].status; 
+            bool killWounded = SwitchPersonnelStatus(entityId, PERSONNEL_STATUS_WOUNDED, PERSONNEL_STATUS_KILLED);
+            if( killWounded )
+            {
+                #if PAUSE_ON_PERSONNEL_KILLED
+                #if UNITY_EDITOR
+                    uint status1 = _personnelBuffer[entityId].status;
+                    Debug.Log( "Wounded personnel killed in " + entityId + " s0 = " + status0.ToString("X8") + " s1 = " + status1.ToString("X8") );
+                    UnityEditor.EditorApplication.isPaused = true;
+                #endif
+                #endif
+                moraleDamage = KillMoraleDamage;
+            }
+            else
+            {
+                bool kiilHealthy = SwitchPersonnelStatus(entityId, PERSONNEL_STATUS_HEALTHY, PERSONNEL_STATUS_KILLED);
+                if (kiilHealthy)
+                {
+                    #if PAUSE_ON_PERSONNEL_KILLED
+                    #if UNITY_EDITOR
+                        uint status1 = _personnelBuffer[entityId].status;
+                        Debug.Log( "Healthy personnel killed in " + entityId + " s0 = " + status0.ToString("X8") + " s1 = " + status1.ToString("X8") );
+                        UnityEditor.EditorApplication.isPaused = true;
+                    #endif
+                    #endif
+                    moraleDamage = KillMoraleDamage;
+                }                            
+            }
+        }
+        else
+        {
+            float woundDice = rngRange( 0.0f, 100.0f, rngIndex(entityId) );
+            if (woundDice <= woundProbability)
+            {
+                uint status0 = _personnelBuffer[entityId].status;
+                bool woundHealthy = SwitchPersonnelStatus(entityId, PERSONNEL_STATUS_HEALTHY, PERSONNEL_STATUS_WOUNDED);
+                if (woundHealthy)
+                {
+                    #if PAUSE_ON_PERSONNEL_WOUNDED
+                    #if UNITY_EDITOR
+                        uint status1 = _personnelBuffer[entityId].status;
+                        Debug.Log("Healthy personnel wounded in " + entityId + " s0 = " + status0.ToString("X8") + " s1 = " + status1.ToString("X8"));
+                        UnityEditor.EditorApplication.isPaused = true;
+                    #endif
+                    #endif
+                    moraleDamage = WoundMoraleDamage;
+                }
+                else
+                {
+                    bool killWounded = SwitchPersonnelStatus(entityId, PERSONNEL_STATUS_WOUNDED, PERSONNEL_STATUS_KILLED);
+                    if( killWounded )
+                    {
+                        #if PAUSE_ON_PERSONNEL_KILLED
+                        #if UNITY_EDITOR
+                            uint status1 = _personnelBuffer[entityId].status;
+                            Debug.Log( "Wounded personnel wounded again and killed in " + entityId + " s0 = " + status0.ToString("X8") + " s1 = " + status1.ToString("X8") );
+                            UnityEditor.EditorApplication.isPaused = true;
+                        #endif
+                        #endif
+                        moraleDamage = KillMoraleDamage;
+                    }
+                }
+            }
+        }
+        
+        float morale = _personnelBuffer[entityId].morale;
+        morale = clamp( morale - moraleDamage, PERSONNEL_MORALE_MIN, PERSONNEL_MORALE_MAX );
+        _personnelBuffer[entityId].morale = morale;
+    }
+
+    public static void OnJoinRequest(uint entityId, int eventId)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId > 0 && entityId < _entityCount);
+        #endif
+        #if ASSERTIVE_COMPONENT_ACCESS
+            Debug.Assert((_descBuffer[entityId] & HIERARCHY) == HIERARCHY);
+        #endif
+        
+        uint childEntityId = _eventBuffer[eventId].entityId; 
+        if ( childEntityId > 0 )
+        {
+            // request resolution : entity want to leave hierarchy
+            if (_hierarchyBuffer[childEntityId].parentEntityId == entityId)
+            {
+                DisconnectChildHierarchy(entityId, childEntityId);
+                _hierarchyBuffer[childEntityId].joinEntityId = entityId;
+            }
+            // request resolution : entity want to join hierarchy
+            else if (_hierarchyBuffer[childEntityId].parentEntityId == 0)
+            {
+                ConnectChildHierarchy(entityId,childEntityId);
+                _hierarchyBuffer[childEntityId].joinEntityId = 0;
+            }
+            #if ASSERTIVE_FUNCTION_CALLS
+            else
+            {
+                Debug.Assert( _hierarchyBuffer[childEntityId].parentEntityId == entityId || _hierarchyBuffer[childEntityId].parentEntityId == 0 );
+            }
+            #endif
         }
     }
 }
