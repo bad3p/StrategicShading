@@ -53,6 +53,12 @@ public partial class ComputeShaderEmulator
         {
             return;
         }
+        
+        uint personnelCount = GetPersonnelCount(entityId);
+        if (personnelCount == 0)
+        {
+            return;
+        }
 
         if (IsMoving(entityId))
         {
@@ -190,27 +196,6 @@ public partial class ComputeShaderEmulator
         
         float morale = _personnelBuffer[entityId].morale;
         
-        // TEST MORALE LOSS
-        /*         
-
-        float4 moraleLossProbabilityByMorale = new float4
-        (
-            400.0f,
-            1.0f / 3333.0f,
-            600.0f,
-            1.0f / 333.0f
-        );
-
-        float diceThreshold = lerpargs(moraleLossProbabilityByMorale, morale);
-        float dice = rngRange(0.0f, 1.0f, rngIndex(entityId));
-        float moraleLoss = 0.0f;
-        if (dice < diceThreshold)
-        {
-            moraleLoss = rngRange(25.0f, 50.0f, rngIndex(entityId));     
-        }
-        */
-        float moraleLoss = 0.0f;
-        
         // MORALE RECOVERY
 
         float moraleRecoveryRate = GetPersonnelMoraleRecoveryRate(entityId);
@@ -218,7 +203,7 @@ public partial class ComputeShaderEmulator
 
         // MORALE DYNAMICS
         
-        _personnelBuffer[entityId].morale = clamp(morale - moraleLoss + moraleGain, PERSONNEL_MORALE_MIN, PERSONNEL_MORALE_MAX);
+        _personnelBuffer[entityId].morale = clamp(morale + moraleGain, PERSONNEL_MORALE_MIN, PERSONNEL_MORALE_MAX);
         
         // POSE DYNAMICS
 
@@ -241,25 +226,41 @@ public partial class ComputeShaderEmulator
         }
         
         // JOIN & LEAVE HIERARCHY REQUESTS
-        
-        if (suppression >= SUPPRESSION_PINNED )
+
+        uint personnelCount = GetPersonnelCount(entityId);
+        if (personnelCount > 0)
+        {
+            if (suppression >= SUPPRESSION_PINNED)
+            {
+                uint parentEntityId = _hierarchyBuffer[entityId].parentEntityId;
+                if (parentEntityId > 0)
+                {
+                    _hierarchyBuffer[entityId].joinEntityId = parentEntityId;
+                    AddEvent(parentEntityId, entityId, EVENT_JOIN_REQUEST, new float4(0, 0, 0, 0));
+                }
+            }
+            else if (suppression < SUPPRESSION_PINNED)
+            {
+                // TODO : move toward location of parent entity
+                
+                uint parentEntityId = _hierarchyBuffer[entityId].parentEntityId;
+                uint joinEntityId = _hierarchyBuffer[entityId].joinEntityId;
+                if (parentEntityId == 0 && joinEntityId > 0)
+                {
+                    AddEvent(joinEntityId, entityId, EVENT_JOIN_REQUEST, new float4(0, 0, 0, 0));
+                }
+            }
+        }
+        else
         {
             uint parentEntityId = _hierarchyBuffer[entityId].parentEntityId;
             if (parentEntityId > 0)
             {
-                AddEvent( parentEntityId, entityId, EVENT_JOIN_REQUEST, new float4(0,0,0,0));
+                _hierarchyBuffer[entityId].joinEntityId = 0;
+                AddEvent(parentEntityId, entityId, EVENT_JOIN_REQUEST, new float4(0, 0, 0, 0));
             }
         }
-        else if (suppression < SUPPRESSION_PINNED )
-        {
-            uint parentEntityId = _hierarchyBuffer[entityId].parentEntityId;
-            uint joinEntityId = _hierarchyBuffer[entityId].joinEntityId;
-            if (parentEntityId == 0 && joinEntityId > 0)
-            {
-                AddEvent( joinEntityId, entityId, EVENT_JOIN_REQUEST, new float4(0,0,0,0));
-            }
-        }
-        
+
         // FITNESS
 
         float fitnessConsumptionRate = GetPersonnelFitnessConsumptionRate(entityId);
@@ -281,6 +282,12 @@ public partial class ComputeShaderEmulator
         }
 
         if ( !HasComponents( entityId, TRANSFORM_TARGETING ) )
+        {
+            return;
+        }
+
+        uint personnelCount = GetPersonnelCount(entityId);
+        if (personnelCount == 0)
         {
             return;
         }
@@ -318,9 +325,16 @@ public partial class ComputeShaderEmulator
                     {
                         if (GetLineOfSight(entityId, otherEntityId))
                         {
-                            // TODO: consider enemy firepower
+                            // exposure
                             float exposure = GetExposure(otherEntityId);
                             float weight = distToOtherEntity / exposure;
+
+                            // personnel count
+                            uint enemyPersonnelCount = GetPersonnelCount(otherEntityId);
+                            weight = weight / (enemyPersonnelCount + 1);
+                         
+                            // TODO: consider enemy firepower
+                            
                             InsertTarget(ref firearmTargetIds, ref firearmTargetWeights, otherEntityId, weight);
                             numEnemies++;
                             front += dirToOtherEntity;
@@ -355,6 +369,12 @@ public partial class ComputeShaderEmulator
 
         if ( HasComponents( entityId, TRANSFORM_PERSONNEL_FIREARMS_TARGETING ) )
         {
+            uint personnelCount = GetPersonnelCount(entityId);
+            if (personnelCount == 0)
+            {
+                return;
+            }
+            
             uint targetEntityId = _targetingBuffer[entityId].firearmTargetIds.x;
             
             float3 dirToTarget = new float3(0,0,0);
@@ -372,7 +392,7 @@ public partial class ComputeShaderEmulator
                 firepower = GetFirearmFirepower(entityId, distToTarget);
             }
 
-            // TODO: provide throshold in Targeting component?
+            // TODO: provide threshold in Targeting component?
             const float FirepowerThreshold = 75.0f;
                         
             uint firearmState = GetFirearmState(entityId);
@@ -384,6 +404,7 @@ public partial class ComputeShaderEmulator
                     if (firearmState != FIREARM_STATE_MOUNTING)
                     {
                         float mountingTime = _firearmDescBuffer[_firearmBuffer[entityId].descId].mountingTime;
+                        mountingTime += GetFirearmTimePenalty(entityId);
                         SetFirearmState(entityId, FIREARM_STATE_MOUNTING, mountingTime);
                     }
                     else
@@ -404,6 +425,7 @@ public partial class ComputeShaderEmulator
                         if (firearmState != FIREARM_STATE_UNJAMMING)
                         {
                             float unjammingTime = _firearmDescBuffer[_firearmBuffer[entityId].descId].unjammingTime;
+                            unjammingTime += GetFirearmTimePenalty(entityId);
                             SetFirearmState(entityId, FIREARM_STATE_UNJAMMING, unjammingTime);
                         }
                         else
@@ -437,6 +459,7 @@ public partial class ComputeShaderEmulator
                         else if (firearmState == FIREARM_STATE_IDLE)
                         {
                             float aimingTime = _firearmDescBuffer[_firearmBuffer[entityId].descId].aimingTime;
+                            aimingTime += GetFirearmTimePenalty(entityId);
                             SetFirearmState(entityId, FIREARM_STATE_AIMING, aimingTime);
                         }
                         else if (firearmState == FIREARM_STATE_AIMING)
@@ -461,10 +484,12 @@ public partial class ComputeShaderEmulator
                                 AddEvent(targetEntityId, entityId, EVENT_FIREARM_DAMAGE, eventParam);
                                 
                                 // TODO: randomly jam firearm
+                                // ...
 
                                 if (_firearmBuffer[entityId].clipAmmo == 0)
                                 {
                                     float reloadingTime = _firearmDescBuffer[_firearmBuffer[entityId].descId].reloadingTime;
+                                    reloadingTime += GetFirearmTimePenalty(entityId);
                                     SetFirearmState(entityId, FIREARM_STATE_RELOADING, reloadingTime);
                                 }
                                 else
@@ -494,6 +519,7 @@ public partial class ComputeShaderEmulator
                     if (firearmState != FIREARM_STATE_UNJAMMING)
                     {
                         float unjammingTime = _firearmDescBuffer[_firearmBuffer[entityId].descId].unjammingTime;
+                        unjammingTime += GetFirearmTimePenalty(entityId);
                         SetFirearmState(entityId, FIREARM_STATE_UNJAMMING, unjammingTime);
                     }
                     else
@@ -531,6 +557,7 @@ public partial class ComputeShaderEmulator
                         if (firearmState != FIREARM_STATE_UNMOUNTING)
                         {
                             float mountingTime = _firearmDescBuffer[_firearmBuffer[entityId].descId].mountingTime;
+                            mountingTime += GetFirearmTimePenalty(entityId);
                             SetFirearmState(entityId, FIREARM_STATE_UNMOUNTING, mountingTime);
                         }
                         else
@@ -562,25 +589,6 @@ public partial class ComputeShaderEmulator
                     }
                 }
             }
-            
-            /*for (uint otherEntityId = 1; otherEntityId < _entityCount; otherEntityId++)
-            {
-                if (HasComponents(otherEntityId, EVENT_AGGREGATOR))
-                {
-                    if(rngRange(0.0f,1.0f,rngIndex(id.x)) < 0.5 )
-                    {
-                        float3 dir = (_transformBuffer[otherEntityId].position - _transformBuffer[entityId].position);
-                        float dist = length(dir);
-                        if (dist > 0.0f)
-                        {
-                            dir *= 1.0f / dist;
-                        }
-                        float power = GetFirearmFirepower(entityId, dist);
-                        float4 eventParam = new float4(dir.x, dir.y, dir.z, power);
-                        AddEvent(otherEntityId, entityId, EVENT_FIREARM_DAMAGE, eventParam);
-                    }
-                }
-            }*/
         }
     }
     

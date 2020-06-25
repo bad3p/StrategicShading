@@ -944,15 +944,16 @@ public partial class ComputeShaderEmulator
         // normalized exposure [0.0...1.0]
         float exposure = 0.0f;
         
+        // TODO: configure pose exposure constants?
         // exposure by pose
         uint pose = GetPersonnelPose(entityId);
         if (pose == PERSONNEL_POSE_HIDING )
         {
-            exposure = 0.0f;
+            exposure = 0.015625f;
         }
         else if (pose == PERSONNEL_POSE_LAYING)
         {
-            exposure = 0.1f;
+            exposure = 0.125f;
         }
         else if (pose == PERSONNEL_POSE_CROUCHING)
         {
@@ -1125,6 +1126,32 @@ public partial class ComputeShaderEmulator
         _firearmBuffer[entityId].status = (_firearmBuffer[entityId].status & FIREARM_FLAGS_BITMASK) | state;
         _firearmBuffer[entityId].timeout = timeout;
     }
+
+    public static float GetFirearmTimePenalty(uint entityId)
+    {
+        // TODO: configure penalty values
+        uint suppression = GetPersonnelSuppression(entityId);
+        if (suppression == SUPPRESSION_OKAY)
+        {
+            return 0.0f;
+        }
+        if (suppression == SUPPRESSION_SHAKEN)
+        {
+            return 1.0f;
+        }
+        else if (suppression == SUPPRESSION_PINNED)
+        {
+            return 2.0f;
+        }
+        else if (suppression == SUPPRESSION_PANIC)
+        {
+            return 4.0f;
+        }
+        else // if (suppression == SUPPRESSION_BROKEN)
+        {
+            return 8.0f;
+        }
+    }
     
     // EVENT AGGREGATOR HELPERS
     
@@ -1236,6 +1263,34 @@ public partial class ComputeShaderEmulator
             woundProbability = woundProbabilityColumn.w;
             moraleDamage = moraleDamageColumn.w;
         }
+        
+        // TODO: configure multipliers
+        // pose affect probabilities
+
+        uint pose = GetPersonnelPose(entityId);
+        if (pose == PERSONNEL_POSE_CROUCHING)
+        {
+            killProbability *= 0.5f;
+            woundProbability *= 0.5f;
+            moraleDamage *= 0.5f;
+        }
+        else if (pose == PERSONNEL_POSE_LAYING)
+        {
+            killProbability *= 0.25f;
+            woundProbability *= 0.25f;
+            moraleDamage *= 0.25f;
+        }
+        else if (pose == PERSONNEL_POSE_HIDING)
+        {
+            killProbability *= 0.125f;
+            woundProbability *= 0.125f;
+            moraleDamage *= 0.125f;
+        }
+        
+        // TODO: interior affects probabilities
+        // ...
+        
+        // throw dice
 
         float killDice = rngRange( 0.0f, 100.0f, rngIndex(entityId) );
         if (killDice <= killProbability)
@@ -1326,13 +1381,11 @@ public partial class ComputeShaderEmulator
             if (_hierarchyBuffer[childEntityId].parentEntityId == entityId)
             {
                 DisconnectChildHierarchy(entityId, childEntityId);
-                _hierarchyBuffer[childEntityId].joinEntityId = entityId;
             }
             // request resolution : entity want to join hierarchy
             else if (_hierarchyBuffer[childEntityId].parentEntityId == 0)
             {
                 ConnectChildHierarchy(entityId,childEntityId);
-                _hierarchyBuffer[childEntityId].joinEntityId = 0;
             }
             #if ASSERTIVE_FUNCTION_CALLS
             else
