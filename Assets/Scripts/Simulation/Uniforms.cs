@@ -62,6 +62,7 @@ public partial class ComputeShaderEmulator
     public const uint EVENT_JOIN_REQUEST = 0x1;   // [entityId]
     public const uint EVENT_FIREARM_DAMAGE = 0x2; // [entityId][direction: arg.xyz, firepower: arg.w]
     public const uint EVENT_EXPLOSION_DAMAGE = 0x3; // [entityId][direction: arg.xyz, expower: arg.w]
+    public const uint EVENT_TEST_SHOOTING = 0xFFFFFFFF; // [entityId][direction: arg.xyz, firepower: arg.w]
 
     public const float PERSONNEL_MORALE_MAX = 600.0f;
     public const float PERSONNEL_MORALE_MIN = 1.0f;

@@ -142,12 +142,12 @@ public partial class EntityAssembly : MonoBehaviour
 
         ClearArrayHeaderBuffer(ref ComputeShaderEmulator._arrayHeaderBuffer);
         
+        ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.ProcessEvents, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.Cleanup, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateMovement, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdatePersonnel, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateTargeting, threadGroupsX, 1, 1 );
         ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.UpdateFirearms, threadGroupsX, 1, 1 );
-        ComputeShaderEmulator.Dispatch( ComputeShaderEmulator.ProcessEvents, threadGroupsX, 1, 1 );
 
         SyncBuffers(ref ComputeShaderEmulator._descBuffer, _descBuffer);
         SyncBuffers(ref ComputeShaderEmulator._transformBuffer, _transformBuffer);

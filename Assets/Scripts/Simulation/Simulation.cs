@@ -33,6 +33,8 @@ public partial class ComputeShaderEmulator
             return;
         }
         
+        // TODO: combine ProcessEvents & Cleanup
+        
         if ( HasComponents( entityId, EVENT_AGGREGATOR ) )
         {
             _eventAggregatorBuffer[entityId].eventCount = 0;
@@ -329,15 +331,18 @@ public partial class ComputeShaderEmulator
                             float exposure = GetExposure(otherEntityId);
                             float weight = distToOtherEntity / exposure;
 
-                            // personnel count
+                            // consider personnel count
                             uint enemyPersonnelCount = GetPersonnelCount(otherEntityId);
-                            weight = weight / (enemyPersonnelCount + 1);
-                         
-                            // TODO: consider enemy firepower
-                            
-                            InsertTarget(ref firearmTargetIds, ref firearmTargetWeights, otherEntityId, weight);
-                            numEnemies++;
-                            front += dirToOtherEntity;
+                            if (enemyPersonnelCount > 0)
+                            {
+                                weight = weight / (enemyPersonnelCount + 1);
+
+                                // TODO: consider enemy firepower
+
+                                InsertTarget(ref firearmTargetIds, ref firearmTargetWeights, otherEntityId, weight);
+                                numEnemies++;
+                                front += dirToOtherEntity;
+                            }
                         }
                     }
                     // ally
@@ -482,6 +487,10 @@ public partial class ComputeShaderEmulator
                                 
                                 float4 eventParam = new float4(dirToTarget.x, dirToTarget.y, dirToTarget.z, firepower);
                                 AddEvent(targetEntityId, entityId, EVENT_FIREARM_DAMAGE, eventParam);
+                                
+                                // generate test event
+                                
+                                AddEvent(entityId, targetEntityId, EVENT_TEST_SHOOTING, eventParam);
                                 
                                 // TODO: randomly jam firearm
                                 // ...
