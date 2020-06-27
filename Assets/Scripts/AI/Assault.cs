@@ -97,7 +97,7 @@ public class Assault : BehaviourTreeNode
     {
         uint entityChildCount = GetEntityFilteredChildCount(entityId, (childEntityId) =>
         {
-            if (!ComputeShaderEmulator.HasComponents(childEntityId, ComputeShaderEmulator.HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT))
+            if (!ComputeShaderEmulator.HasComponents(childEntityId, ComputeShaderEmulator.HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT_TARGETING))
             {
                 return false;
             }
@@ -118,7 +118,7 @@ public class Assault : BehaviourTreeNode
         double3 targetPositionOffset = this.transform.right * FrontlineWidth / Mathf.Max(entityChildCount-1, 1);
         ForEveryChildEntity(entityId, (childEntityId) =>
         {
-            if( ComputeShaderEmulator.HasComponents(childEntityId, ComputeShaderEmulator.HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT) )
+            if( ComputeShaderEmulator.HasComponents(childEntityId, ComputeShaderEmulator.HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT_TARGETING) )
             {
                 uint suppression = ComputeShaderEmulator.GetPersonnelSuppression(childEntityId);
                 if (suppression < ComputeShaderEmulator.SUPPRESSION_PINNED)
@@ -165,7 +165,7 @@ public class Assault : BehaviourTreeNode
         bool result = true;
         ForEveryChildEntity(entityId, (childEntityId) =>
         {
-            if (ComputeShaderEmulator.HasComponents(childEntityId, ComputeShaderEmulator.HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT))
+            if (ComputeShaderEmulator.HasComponents(childEntityId, ComputeShaderEmulator.HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT_TARGETING))
             {
                 uint suppression = ComputeShaderEmulator.GetPersonnelSuppression(childEntityId);
                 if (suppression < ComputeShaderEmulator.SUPPRESSION_PINNED)

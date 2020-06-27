@@ -118,7 +118,7 @@ public class MoveTo : BehaviourTreeNode
                 uint firstChildEntityId = hierarchyBuffer[entityId].firstChildEntityId;
                 if (firstChildEntityId > 0)
                 {
-                    if ( ComputeShaderEmulator.HasComponents(firstChildEntityId, ComputeShaderEmulator.HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT) )
+                    if ( ComputeShaderEmulator.HasComponents(firstChildEntityId, ComputeShaderEmulator.HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT_TARGETING) )
                     {
                         bool allChildrenArrived = true;
                         float4 targetVelocityByDistance = new float4( 5.0f, 0.5f, 25.0f, 1.0f );
@@ -146,7 +146,7 @@ public class MoveTo : BehaviourTreeNode
                             while (hierarchyBuffer[nextSiblingEntityId].nextSiblingEntityId > 0)
                             {
                                 nextSiblingEntityId = hierarchyBuffer[nextSiblingEntityId].nextSiblingEntityId;
-                                if( ComputeShaderEmulator.HasComponents(nextSiblingEntityId, ComputeShaderEmulator.HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT) )
+                                if( ComputeShaderEmulator.HasComponents(nextSiblingEntityId, ComputeShaderEmulator.HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT_TARGETING) )
                                 {
                                     suppression = ComputeShaderEmulator.GetPersonnelSuppression(nextSiblingEntityId);
                                     if (suppression < ComputeShaderEmulator.SUPPRESSION_PINNED)

@@ -115,10 +115,10 @@ public class EventAggregatorProxy : ComponentProxy
                 {
                     float t = Mathf.Clamp01( 1.0f - _shootingTracers[i].remainingTime / _shootingTracers[i].duration);
                     float startT = Mathf.Clamp01(t + 0.1f);
-                    float endT = Mathf.Clamp01(t - 0.1f);
+                    float endT = Mathf.Clamp01(t);
                     Vector3 tracerStartPos = Vector3.Lerp(_shootingTracers[i].startPos, _shootingTracers[i].endPos, startT);
                     Vector3 tracerEndPos = Vector3.Lerp(_shootingTracers[i].startPos, _shootingTracers[i].endPos, endT);
-                    
+
                     Gizmos.color = Color.white;
                     Gizmos.DrawLine( tracerStartPos, tracerEndPos );
                 }

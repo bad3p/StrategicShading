@@ -51,7 +51,7 @@ public partial class ComputeShaderEmulator
             return;
         }
         
-        if ( !HasComponents( entityId, HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT ) )
+        if ( !HasComponents( entityId, HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT_TARGETING ) )
         {
             return;
         }
@@ -76,9 +76,9 @@ public partial class ComputeShaderEmulator
 
             // TODO : improve broken & pinned behaviour
             uint suppression = GetPersonnelSuppression(entityId);
-            if (suppression >= SUPPRESSION_BROKEN)
+            if (suppression >= SUPPRESSION_PANIC)
             {
-                targetDir *= -1;
+                targetDir = -_targetingBuffer[entityId].front.xz;
             }
             else if (suppression >= SUPPRESSION_PINNED)
             {
@@ -191,7 +191,7 @@ public partial class ComputeShaderEmulator
             return;
         }
 
-        if ( !HasComponents( entityId, HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT ) )
+        if ( !HasComponents( entityId, HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT_TARGETING ) )
         {
             return;
         }
@@ -210,9 +210,13 @@ public partial class ComputeShaderEmulator
         // POSE DYNAMICS
 
         uint suppression = GetPersonnelSuppression(entityId);
-        if (suppression >= SUPPRESSION_PANIC)
+        if (suppression >= SUPPRESSION_BROKEN)
         {
-            SetPersonnelPose(entityId, PERSONNEL_POSE_HIDING);
+            SetPersonnelPose(entityId, PERSONNEL_POSE_STANDING);
+        }
+        else if (suppression >= SUPPRESSION_PANIC)
+        {
+            SetPersonnelPose(entityId, PERSONNEL_POSE_LAYING); // PERSONNEL_POSE_HIDING
         }
         else if (suppression >= SUPPRESSION_PINNED)
         {
@@ -484,6 +488,8 @@ public partial class ComputeShaderEmulator
                                 _firearmBuffer[entityId].clipAmmo -= burstAmmo; 
                                 
                                 // generate firearm event
+                                
+                                // TODO: add firepower penalty when moving
                                 
                                 float4 eventParam = new float4(dirToTarget.x, dirToTarget.y, dirToTarget.z, firepower);
                                 AddEvent(targetEntityId, entityId, EVENT_FIREARM_DAMAGE, eventParam);

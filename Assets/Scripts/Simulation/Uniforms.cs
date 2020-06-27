@@ -115,7 +115,7 @@ public partial class ComputeShaderEmulator
     // COMPONENT MASKS
     
     public const uint TRANSFORM_MOVEMENT = TRANSFORM | MOVEMENT;
-    public const uint HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT = HIERARCHY | TRANSFORM | PERSONNEL | MOVEMENT;
+    public const uint HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT_TARGETING = HIERARCHY | TRANSFORM | PERSONNEL | MOVEMENT | TARGETING;
     public const uint HIERARCHY_TRANSFORM = HIERARCHY | TRANSFORM;
     public const uint TRANSFORM_TARGETING = TRANSFORM | TARGETING;
     public const uint TRANSFORM_BUILDING = TRANSFORM | BUILDING;
@@ -482,7 +482,7 @@ public partial class ComputeShaderEmulator
             Debug.Assert(entityId > 0 && entityId < _entityCount);
         #endif
         #if ASSERTIVE_COMPONENT_ACCESS
-            Debug.Assert((_descBuffer[entityId] & HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT) == HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT);
+            Debug.Assert((_descBuffer[entityId] & HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT_TARGETING) == HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT_TARGETING);
         #endif
 
         pose = pose < PERSONNEL_POSE_HIDING ? PERSONNEL_POSE_HIDING : pose;
@@ -939,7 +939,7 @@ public partial class ComputeShaderEmulator
             Debug.Assert(entityId > 0 && entityId < _entityCount);
         #endif
         #if ASSERTIVE_COMPONENT_ACCESS
-            Debug.Assert((_descBuffer[entityId] & HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT) == HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT);
+            Debug.Assert((_descBuffer[entityId] & HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT_TARGETING) == HIERARCHY_TRANSFORM_PERSONNEL_MOVEMENT_TARGETING);
         #endif
 
         // normalized exposure [0.0...1.0]
