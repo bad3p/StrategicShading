@@ -61,8 +61,9 @@ public partial class ComputeShaderEmulator
     
     public const uint EVENT_JOIN_REQUEST = 0x1;   // [entityId]
     public const uint EVENT_FIREARM_DAMAGE = 0x2; // [entityId][direction: arg.xyz, firepower: arg.w]
-    public const uint EVENT_EXPLOSION_DAMAGE = 0x3; // [entityId][direction: arg.xyz, expower: arg.w]
-    public const uint EVENT_TEST_SHOOTING = 0xFFFFFFFF; // [entityId][direction: arg.xyz, firepower: arg.w]
+    
+    public const uint FEEDBACK_EVENT_SHOOTING = 0x1; // [srcEntityId][dstEntityId][direction: arg.xyz, firepower: arg.w]
+    public const uint FEEDBACK_EVENT_FIREARM_DAMAGE = 0x2; // [entityId][entityId][wounded: arg.x, killed: arg.y, morale: arg.z]
 
     public const float PERSONNEL_MORALE_MAX = 600.0f;
     public const float PERSONNEL_MORALE_MIN = 1.0f;
@@ -70,8 +71,9 @@ public partial class ComputeShaderEmulator
     public const float PERSONNEL_FITNESS_MAX = 14400.0f;
     public const float PERSONNEL_FITNESS_MIN = 1.0f;
     
-    public const uint EVENT_FIREARM = 1;
-    public const uint EVENT_LAST = 1;
+    public const uint ARRAY_EVENT = 0;
+    public const uint ARRAY_FEEDBACK_EVENT = 1;
+    public const uint ARRAY_COUNT = 2;
     
     public const float FLOAT_EPSILON = 1.19e-07f;
     public const double DOUBLE_EPSILON = .22e-16;
@@ -104,6 +106,7 @@ public partial class ComputeShaderEmulator
     public static EventAggregator[] _eventAggregatorBuffer = new EventAggregator[0];
     public static ArrayHeader[] _arrayHeaderBuffer = new ArrayHeader[0];
     public static Event[] _eventBuffer = new Event[0];
+    public static FeedbackEvent[] _feedbackEventBuffer = new FeedbackEvent[0];
     
     // MAP HELPERS
     
@@ -1154,6 +1157,35 @@ public partial class ComputeShaderEmulator
         }
     }
     
+    // FEEDBACK EVENT HELPERS
+    
+    public static void AddFeedbackEvent(uint id, uint entityId0, uint entityId1, float4 param)
+    {
+        #if ASSERTIVE_ENTITY_ACCESS
+            Debug.Assert(entityId0 > 0 && entityId0 < _entityCount);
+            Debug.Assert(entityId1 > 0 && entityId1 < _entityCount);
+        #endif
+        #if ASSERTIVE_FUNCTION_CALLS
+            Debug.Assert(_arrayHeaderBuffer[ARRAY_FEEDBACK_EVENT].count < _arrayHeaderBuffer[ARRAY_FEEDBACK_EVENT].capacity);
+        #endif
+
+        if (_arrayHeaderBuffer[ARRAY_FEEDBACK_EVENT].count < _arrayHeaderBuffer[ARRAY_FEEDBACK_EVENT].capacity)
+        {
+            int eventIndex = -1;
+            InterlockedAdd(ref _arrayHeaderBuffer[ARRAY_FEEDBACK_EVENT].count, 1, out eventIndex);
+            #if ASSERTIVE_FUNCTION_CALLS
+                Debug.Assert(eventIndex >= 0 && eventIndex < _arrayHeaderBuffer[ARRAY_FEEDBACK_EVENT].capacity);
+            #endif
+            if (eventIndex >= 0 && eventIndex < _arrayHeaderBuffer[ARRAY_FEEDBACK_EVENT].capacity)
+            {
+                _feedbackEventBuffer[eventIndex].id = id;
+                _feedbackEventBuffer[eventIndex].entityId0 = entityId0;
+                _feedbackEventBuffer[eventIndex].entityId1 = entityId1;
+                _feedbackEventBuffer[eventIndex].param = param;
+            }
+        }
+    }
+    
     // EVENT AGGREGATOR HELPERS
     
     public static void AddEvent(uint dstEntityId, uint srcEntityId, uint id, float4 param)
@@ -1165,11 +1197,22 @@ public partial class ComputeShaderEmulator
         #if ASSERTIVE_COMPONENT_ACCESS
             Debug.Assert((_descBuffer[dstEntityId] & EVENT_AGGREGATOR) == EVENT_AGGREGATOR);
         #endif
+        #if ASSERTIVE_FUNCTION_CALLS
+            Debug.Assert(_arrayHeaderBuffer[ARRAY_EVENT].count < _arrayHeaderBuffer[ARRAY_EVENT].capacity);
+        #endif        
 
-        if (_arrayHeaderBuffer[EVENT_FIREARM].count < _arrayHeaderBuffer[EVENT_FIREARM].capacity)
+        if (_arrayHeaderBuffer[ARRAY_EVENT].count < _arrayHeaderBuffer[ARRAY_EVENT].capacity)
         {
             int eventIndex = -1;
-            InterlockedAdd(ref _arrayHeaderBuffer[EVENT_FIREARM].count, 1, out eventIndex);
+            InterlockedAdd(ref _arrayHeaderBuffer[ARRAY_EVENT].count, 1, out eventIndex);
+            #if ASSERTIVE_FUNCTION_CALLS
+                Debug.Assert(eventIndex >= 0 && eventIndex < _arrayHeaderBuffer[ARRAY_EVENT].capacity);
+            #endif
+            if (eventIndex < 0 || eventIndex >= _arrayHeaderBuffer[ARRAY_EVENT].capacity)
+            {
+                return;
+            }
+            
             _eventBuffer[eventIndex].id = id;
             _eventBuffer[eventIndex].entityId = srcEntityId;
             _eventBuffer[eventIndex].param = param;
@@ -1294,6 +1337,7 @@ public partial class ComputeShaderEmulator
         // throw dice
 
         float killDice = rngRange( 0.0f, 100.0f, rngIndex(entityId) );
+        float4 feedbackEventParam = new float4(0,0,0,0);
         if (killDice <= killProbability)
         {
             uint status0 = _personnelBuffer[entityId].status; 
@@ -1308,6 +1352,7 @@ public partial class ComputeShaderEmulator
                 #endif
                 #endif
                 moraleDamage = KillMoraleDamage;
+                feedbackEventParam.y = 1;
             }
             else
             {
@@ -1322,6 +1367,7 @@ public partial class ComputeShaderEmulator
                     #endif
                     #endif
                     moraleDamage = KillMoraleDamage;
+                    feedbackEventParam.y = 1;
                 }                            
             }
         }
@@ -1342,6 +1388,7 @@ public partial class ComputeShaderEmulator
                     #endif
                     #endif
                     moraleDamage = WoundMoraleDamage;
+                    feedbackEventParam.x = 1;
                 }
                 else
                 {
@@ -1356,10 +1403,15 @@ public partial class ComputeShaderEmulator
                         #endif
                         #endif
                         moraleDamage = KillMoraleDamage;
+                        feedbackEventParam.y = 1;
                     }
                 }
             }
         }
+        
+        // generate feedback event
+        feedbackEventParam.z = moraleDamage;
+        AddFeedbackEvent( FEEDBACK_EVENT_FIREARM_DAMAGE, entityId, entityId, feedbackEventParam );
         
         float morale = _personnelBuffer[entityId].morale;
         morale = clamp( morale - moraleDamage, PERSONNEL_MORALE_MIN, PERSONNEL_MORALE_MAX );

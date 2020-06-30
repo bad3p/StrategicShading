@@ -319,6 +319,8 @@ public partial class ComputeShaderEmulator
                     {
                         dirToOtherEntity *= 1.0f / distToOtherEntity;
                     }
+                    
+                    // TODO: consider maximum visibility distance provided by simulation
 
                     uint otherTeam = GetTeam(otherEntityId);
                     
@@ -331,6 +333,8 @@ public partial class ComputeShaderEmulator
                     {
                         if (GetLineOfSight(entityId, otherEntityId))
                         {
+                            // TODO: infantry pose affects visibility
+                            
                             // exposure
                             float exposure = GetExposure(otherEntityId);
                             float weight = distToOtherEntity / exposure;
@@ -494,9 +498,9 @@ public partial class ComputeShaderEmulator
                                 float4 eventParam = new float4(dirToTarget.x, dirToTarget.y, dirToTarget.z, firepower);
                                 AddEvent(targetEntityId, entityId, EVENT_FIREARM_DAMAGE, eventParam);
                                 
-                                // generate test event
+                                // generate feedback event
                                 
-                                AddEvent(entityId, targetEntityId, EVENT_TEST_SHOOTING, eventParam);
+                                AddFeedbackEvent( FEEDBACK_EVENT_SHOOTING, entityId, targetEntityId, eventParam);
                                 
                                 // TODO: randomly jam firearm
                                 // ...

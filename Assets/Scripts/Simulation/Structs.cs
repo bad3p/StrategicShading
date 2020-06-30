@@ -70,6 +70,14 @@ namespace Structs
         public float4 param;
         public int nextEventId;
     };
+    
+    public struct FeedbackEvent
+    {
+        public uint id;
+        public uint entityId0;
+        public uint entityId1;
+        public float4 param;
+    };
 
     // COMPONENTS
     
