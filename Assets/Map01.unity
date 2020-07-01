@@ -4810,6 +4810,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9e3a77ad767b164ba8488185c9187fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Firepower:
+    x: 59
+    y: 88
+    z: 133
+    w: 199
+  KillProbability:
+    x: 12
+    y: 24
+    z: 49
+    w: 99
+  WoundProbability:
+    x: 29
+    y: 44
+    z: 66
+    w: 99
+  MoraleDamage:
+    x: 54
+    y: 73
+    z: 99
+    w: 133
+  KillMoraleDamage: 233
+  WoundMoraleDamage: 166
   FirearmNameBuffer:
   - NULL
   - Semi-Automatic Pistol

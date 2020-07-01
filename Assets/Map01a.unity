@@ -12276,6 +12276,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9e3a77ad767b164ba8488185c9187fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Firepower:
+    x: 59
+    y: 88
+    z: 133
+    w: 199
+  KillProbability:
+    x: 12
+    y: 24
+    z: 49
+    w: 99
+  WoundProbability:
+    x: 29
+    y: 44
+    z: 66
+    w: 99
+  MoraleDamage:
+    x: 54
+    y: 73
+    z: 99
+    w: 133
+  KillMoraleDamage: 233
+  WoundMoraleDamage: 166
   FirearmNameBuffer:
   - NULL
   - Semi-Automatic Pistol
@@ -12311,16 +12333,16 @@ MonoBehaviour:
       z: 100
       w: 200
     firepower:
-      x: 77
-      y: 23
-      z: 5
-      w: 1
+      x: 66
+      y: 33
+      z: 11
+      w: 5
     mountingTime: 0
     aimingTime: 2
     reloadingTime: 7
     unjammingTime: 3
   - crew: 1
-    maxAmmo: 30
+    maxAmmo: 35
     maxClipAmmo: 5
     maxBurstAmmo: 1
     distance:
@@ -12347,17 +12369,17 @@ MonoBehaviour:
       z: 250
       w: 500
     firepower:
-      x: 81
-      y: 43
-      z: 19
+      x: 88
+      y: 55
+      z: 22
       w: 7
     mountingTime: 5
     aimingTime: 3
     reloadingTime: 15
     unjammingTime: 10
   - crew: 3
-    maxAmmo: 126
-    maxClipAmmo: 42
+    maxAmmo: 147
+    maxClipAmmo: 49
     maxBurstAmmo: 7
     distance:
       x: 50
@@ -12365,10 +12387,10 @@ MonoBehaviour:
       z: 250
       w: 500
     firepower:
-      x: 86
-      y: 47
-      z: 21
-      w: 8
+      x: 93
+      y: 57
+      z: 19
+      w: 9
     mountingTime: 10
     aimingTime: 3
     reloadingTime: 20
@@ -12424,7 +12446,7 @@ MonoBehaviour:
       x: 0.27
       y: 2.61
       z: 6.66
-    angularVelocity: 0.785398
+    angularVelocity: 1.57
     fitnessConsumptionRateSlow:
       x: 2
       y: 4
@@ -12460,7 +12482,7 @@ MonoBehaviour:
       x: 0.27
       y: 2.61
       z: 6.66
-    angularVelocity: 0.785398
+    angularVelocity: 1.57
     fitnessConsumptionRateSlow:
       x: 2
       y: 4
@@ -12496,7 +12518,7 @@ MonoBehaviour:
       x: 0.27
       y: 2.61
       z: 6.66
-    angularVelocity: 0.785398
+    angularVelocity: 1.57
     fitnessConsumptionRateSlow:
       x: 2
       y: 4
@@ -12541,7 +12563,7 @@ MonoBehaviour:
   RngSeedFromTimer: 1
   RngSeed: 0
   RngMaxUniform: 1000000
-  RngCount: 1
+  RngCount: 256
   RngStateLength: 55
 --- !u!1 &1590249389
 GameObject:

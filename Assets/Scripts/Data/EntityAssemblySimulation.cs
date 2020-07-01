@@ -177,6 +177,13 @@ public partial class EntityAssembly : MonoBehaviour
 
         const uint ThreadGroupSizeX = 256;
         uint threadGroupsX = ComputeShaderEmulator._entityCount / ThreadGroupSizeX + 1;
+        
+        ComputeShaderEmulator._firepower = Firepower;
+        ComputeShaderEmulator._killProbability = KillProbability;
+        ComputeShaderEmulator._woundProbability = WoundProbability;
+        ComputeShaderEmulator._moraleDamage = MoraleDamage;
+        ComputeShaderEmulator._killMoraleDamage = KillMoraleDamage;
+        ComputeShaderEmulator._woundMoraleDamage = WoundMoraleDamage;
 
         ComputeShaderEmulator._dT = Time.deltaTime;
         ComputeShaderEmulator._entityCount = (uint)_descBuffer.Count;

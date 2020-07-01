@@ -15,6 +15,8 @@ public class EntityAssemblyEditor : Editor
     private static GUIStyle _headerButtonArea = null;
     private static GUIStyle _headerIndentArea = null;
     private static GUIStyle _itemArea = null;
+
+    private static bool _showFirepower = false;
     
     private static bool _showFirearmDescs = false;
     private static bool _showPersonnelDescs = false;
@@ -513,11 +515,15 @@ public class EntityAssemblyEditor : Editor
     
     public override void OnInspectorGUI()
     {
+	    SupportCustomStyles();
+	    
         _entityAssembly = target as EntityAssembly;
         if (!_entityAssembly)
         {
             return;
         }
+        
+        DrawHeaderLabel("Runtime");
 
         EditorGUILayout.BeginHorizontal();
         
@@ -551,9 +557,23 @@ public class EntityAssemblyEditor : Editor
             return;
         }
         
+        // draw globals
+        
+        DrawHeaderLabel("Globals");
+        
+        _showFirepower = DrawDropDownToggle( "Firepower", _showFirepower );
+        if (_showFirepower)
+        {
+	        _entityAssembly.Firepower = EditorGUILayout.Vector4Field("firepower", _entityAssembly.Firepower.ToVector4());
+	        _entityAssembly.KillProbability = EditorGUILayout.Vector4Field("killProbability", _entityAssembly.KillProbability.ToVector4());
+	        _entityAssembly.WoundProbability = EditorGUILayout.Vector4Field("woundProbability", _entityAssembly.WoundProbability.ToVector4());
+	        _entityAssembly.MoraleDamage = EditorGUILayout.Vector4Field("moraleDamage", _entityAssembly.MoraleDamage.ToVector4());
+	        _entityAssembly.KillMoraleDamage = EditorGUILayout.FloatField("killMoraleDamage", _entityAssembly.KillMoraleDamage);
+	        _entityAssembly.WoundMoraleDamage = EditorGUILayout.FloatField("woundMoraleDamage", _entityAssembly.WoundMoraleDamage); 
+        }
+        
         // draw flyweights
 
-        SupportCustomStyles();
         DrawHeaderLabel("Flyweights");
         DrawFirearmDescs();
         DrawPersonnelDescs();

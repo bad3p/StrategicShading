@@ -430,4 +430,9 @@ public partial class ComputeShaderEmulator
         float t = clamp((xz - args.x) / (args.z - args.x), 0.0f, 1.0f);
         return lerp( args.y, args.w, t );
     }
+
+    public static float liney(float x0, float y0, float x1, float y1, float x)
+    {
+        return 1.0f / (x1 - x0) * ( -(y0 - y1) * x - (x0 * y1 - x1 * y0) );
+    }
 }

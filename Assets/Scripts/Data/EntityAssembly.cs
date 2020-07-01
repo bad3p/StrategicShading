@@ -2,10 +2,18 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Structs;
+using Types;
 
 [ExecuteInEditMode]
 public partial class EntityAssembly : MonoBehaviour
 {
+    public float4 Firepower = new float4(0,0,0,0);
+    public float4 KillProbability = new float4(0,0,0,0);
+    public float4 WoundProbability = new float4(0,0,0,0);
+    public float4 MoraleDamage = new float4(0,0,0,0);
+    public float KillMoraleDamage = 0;
+    public float WoundMoraleDamage = 0;
+    
     public string[] FirearmNameBuffer = new string[]{ "NULL" };
     public Structs.FirearmDesc[] FirearmDescBuffer = new Structs.FirearmDesc[]{ new Structs.FirearmDesc() };
     

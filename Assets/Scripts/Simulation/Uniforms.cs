@@ -91,6 +91,13 @@ public partial class ComputeShaderEmulator
     public static int _rngStateLength;
     public static int[] _rngState = new int[0];
     
+    public static float4 _firepower = new float4(0,0,0,0);
+    public static float4 _killProbability = new float4(0,0,0,0);
+    public static float4 _woundProbability = new float4(0,0,0,0);
+    public static float4 _moraleDamage = new float4(0,0,0,0);
+    public static float _killMoraleDamage = 0;
+    public static float _woundMoraleDamage = 0;
+    
     public static float _dT = 0.0f;
     public static uint _firearmDescCount = 0;
     public static FirearmDesc[] _firearmDescBuffer = new FirearmDesc[0];
@@ -1109,6 +1116,54 @@ public partial class ComputeShaderEmulator
         return firepower;
     }
     
+    public static float GetFirearmFirepower(ref FirearmDesc firearmDesc, ref PersonnelDesc personnelDesc, float distanceToTarget, uint burstAmmo)
+    {
+        float4 distanceColumn = firearmDesc.distance;
+        float4 firepowerColumn = firearmDesc.firepower;
+
+        float firepower = 0.0f;
+
+        if (distanceToTarget <= distanceColumn.x)
+        {
+            firepower = firepowerColumn.x;
+        }
+        else if (distanceToTarget <= distanceColumn.y)
+        {
+            float t = (distanceToTarget - distanceColumn.x) / (distanceColumn.y - distanceColumn.x);
+            firepower = lerp(firepowerColumn.x, firepowerColumn.y, t); 
+        }
+        else if(distanceToTarget <= distanceColumn.z)
+        {
+            float t = (distanceToTarget - distanceColumn.y) / (distanceColumn.z - distanceColumn.y);
+            firepower = lerp(firepowerColumn.y, firepowerColumn.z, t); 
+        }
+        else if(distanceToTarget <= distanceColumn.w)
+        {
+            float t = (distanceToTarget - distanceColumn.z) / (distanceColumn.w - distanceColumn.z);
+            firepower = lerp(firepowerColumn.z, firepowerColumn.w, t); 
+        }
+        else
+        {
+            firepower = firepowerColumn.w;
+        }
+
+        if (firearmDesc.crew <= 1)
+        {
+            firepower *= personnelDesc.maxPersonnel;
+        }
+
+        if (burstAmmo > firearmDesc.maxBurstAmmo)
+        {
+            firepower *= firearmDesc.maxBurstAmmo;
+        }
+        else
+        {
+            firepower *= burstAmmo;
+        }
+
+        return firepower;
+    }
+    
     public static uint GetFirearmState(uint entityId)
     {
         #if ASSERTIVE_ENTITY_ACCESS
@@ -1276,51 +1331,43 @@ public partial class ComputeShaderEmulator
         #endif
         
         float firepower = _eventBuffer[eventId].param.w;
-                    
-        // TODO: configure probabilities (?)
-        float4 firepowerColumn = new float4( 59.0f, 88.0f, 133.0f, 199.0f );
-        float4 killProbabilityColumn = new float4( 12.0f, 24.0f, 49.0f, 99.0f );
-        float4 woundProbabilityColumn = new float4( 29.0f, 44.0f, 66.0f, 99.0f );
-        float4 moraleDamageColumn = new float4( 54.0f, 73.0f, 99.0f, 133.0f );
-        const float KillMoraleDamage = 233.0f;
-        const float WoundMoraleDamage = 166.0f;
 
         float killProbability = 0.0f;
         float woundProbability = 0.0f;
         float moraleDamage = 0.0f;
 
-        if (firepower < firepowerColumn.x)
+        if (firepower < _firepower.x)
         {
-            killProbability = killProbabilityColumn.x;
-            woundProbability = woundProbabilityColumn.x;
-            moraleDamage = moraleDamageColumn.x;
+            killProbability = max( 0.0f, liney( _firepower.x, _killProbability.x, _firepower.y, _killProbability.y, firepower) );
+            woundProbability = max( 0.0f, liney(_firepower.x, _woundProbability.x, _firepower.y, _woundProbability.y, firepower) );
+            moraleDamage = max( 0.0f, liney(_firepower.x, _moraleDamage.x, _firepower.y, _moraleDamage.y, firepower) );
         }
-        else if (firepower < firepowerColumn.y)
+        else if (firepower < _firepower.y)
         {
-            float t = (firepower - firepowerColumn.x) / (firepowerColumn.y - firepowerColumn.x);
-            killProbability = lerp(killProbabilityColumn.x, killProbabilityColumn.y, t);
-            woundProbability = lerp(woundProbabilityColumn.x, woundProbabilityColumn.y, t);
-            moraleDamage = lerp(moraleDamageColumn.x, moraleDamageColumn.y, t);
+            float t = (firepower - _firepower.x) / (_firepower.y - _firepower.x);
+            killProbability = lerp(_killProbability.x, _killProbability.y, t);
+            woundProbability = lerp(_woundProbability.x, _woundProbability.y, t);
+            moraleDamage = lerp(_moraleDamage.x, _moraleDamage.y, t);
         }
-        else if (firepower < firepowerColumn.z)
+        else if (firepower < _firepower.z)
         {
-            float t = (firepower - firepowerColumn.y) / (firepowerColumn.z - firepowerColumn.y);
-            killProbability = lerp(killProbabilityColumn.y, killProbabilityColumn.z, t);
-            woundProbability = lerp(woundProbabilityColumn.y, woundProbabilityColumn.z, t);
-            moraleDamage = lerp(moraleDamageColumn.y, moraleDamageColumn.z, t);
+            float t = (firepower - _firepower.y) / (_firepower.z - _firepower.y);
+            killProbability = lerp(_killProbability.y, _killProbability.z, t);
+            woundProbability = lerp(_woundProbability.y, _woundProbability.z, t);
+            moraleDamage = lerp(_moraleDamage.y, _moraleDamage.z, t);
         }
-        else if (firepower < firepowerColumn.w)
+        else if (firepower < _firepower.w)
         {
-            float t = (firepower - firepowerColumn.z) / (firepowerColumn.w - firepowerColumn.z);
-            killProbability = lerp(killProbabilityColumn.z, killProbabilityColumn.w, t);
-            woundProbability = lerp(woundProbabilityColumn.z, woundProbabilityColumn.w, t);
-            moraleDamage = lerp(moraleDamageColumn.z, moraleDamageColumn.w, t);
+            float t = (firepower - _firepower.z) / (_firepower.w - _firepower.z);
+            killProbability = lerp(_killProbability.z, _killProbability.w, t);
+            woundProbability = lerp(_woundProbability.z, _woundProbability.w, t);
+            moraleDamage = lerp(_moraleDamage.z, _moraleDamage.w, t);
         }
         else
         {
-            killProbability = killProbabilityColumn.w;
-            woundProbability = woundProbabilityColumn.w;
-            moraleDamage = moraleDamageColumn.w;
+            killProbability = min( 100.0f, liney(_firepower.z, _killProbability.z, _firepower.w, _killProbability.w, firepower) );
+            woundProbability = min( 100.0f, liney(_firepower.z, _woundProbability.z, _firepower.w, _woundProbability.w, firepower) ); 
+            moraleDamage = min( PERSONNEL_MORALE_MAX, liney( _firepower.z, _moraleDamage.z, _firepower.w, _moraleDamage.w, firepower ) );
         }
         
         // TODO: configure multipliers
@@ -1366,7 +1413,7 @@ public partial class ComputeShaderEmulator
                     UnityEditor.EditorApplication.isPaused = true;
                 #endif
                 #endif
-                moraleDamage = KillMoraleDamage;
+                moraleDamage = _killMoraleDamage;
                 feedbackEventParam.y = 1;
             }
             else
@@ -1381,7 +1428,7 @@ public partial class ComputeShaderEmulator
                         UnityEditor.EditorApplication.isPaused = true;
                     #endif
                     #endif
-                    moraleDamage = KillMoraleDamage;
+                    moraleDamage = _killMoraleDamage;
                     feedbackEventParam.y = 1;
                 }                            
             }
@@ -1402,7 +1449,7 @@ public partial class ComputeShaderEmulator
                         UnityEditor.EditorApplication.isPaused = true;
                     #endif
                     #endif
-                    moraleDamage = WoundMoraleDamage;
+                    moraleDamage = _woundMoraleDamage;
                     feedbackEventParam.x = 1;
                 }
                 else
@@ -1417,7 +1464,7 @@ public partial class ComputeShaderEmulator
                             UnityEditor.EditorApplication.isPaused = true;
                         #endif
                         #endif
-                        moraleDamage = KillMoraleDamage;
+                        moraleDamage = _killMoraleDamage;
                         feedbackEventParam.y = 1;
                     }
                 }
