@@ -406,7 +406,7 @@ public partial class ComputeShaderEmulator
             }
 
             // TODO: provide threshold in Targeting component?
-            const float FirepowerThreshold = 50.0f;
+            const float FirepowerThreshold = 75.0f;
                         
             uint firearmState = GetFirearmState(entityId);
             if (targetEntityId > 0 && firepower >= FirepowerThreshold)

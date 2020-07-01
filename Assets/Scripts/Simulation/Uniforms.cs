@@ -1096,7 +1096,7 @@ public partial class ComputeShaderEmulator
         }
         else
         {
-            firepower = firepowerColumn.w;
+            firepower = max( 0.0f, liney( distanceColumn.z, firepowerColumn.z, distanceColumn.w, firepowerColumn.w, distanceToTarget) );
         }
 
         if (_firearmDescBuffer[descId].crew <= 1)
@@ -1144,7 +1144,7 @@ public partial class ComputeShaderEmulator
         }
         else
         {
-            firepower = firepowerColumn.w;
+            firepower = max( 0.0f, liney( distanceColumn.z, firepowerColumn.z, distanceColumn.w, firepowerColumn.w, distanceToTarget) );
         }
 
         if (firearmDesc.crew <= 1)
@@ -1365,9 +1365,9 @@ public partial class ComputeShaderEmulator
         }
         else
         {
-            killProbability = min( 100.0f, liney(_firepower.z, _killProbability.z, _firepower.w, _killProbability.w, firepower) );
-            woundProbability = min( 100.0f, liney(_firepower.z, _woundProbability.z, _firepower.w, _woundProbability.w, firepower) ); 
-            moraleDamage = min( PERSONNEL_MORALE_MAX, liney( _firepower.z, _moraleDamage.z, _firepower.w, _moraleDamage.w, firepower ) );
+            killProbability = _killProbability.w;
+            woundProbability = _woundProbability.w; 
+            moraleDamage = _moraleDamage.w;
         }
         
         // TODO: configure multipliers
