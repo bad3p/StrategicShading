@@ -474,6 +474,10 @@ public partial class ComputeShaderEmulator
                             float aimingTime = _firearmDescBuffer[_firearmBuffer[entityId].descId].aimingTime;
                             aimingTime += GetFirearmTimePenalty(entityId);
                             SetFirearmState(entityId, FIREARM_STATE_AIMING, aimingTime);
+                            
+                            // generate feedback event
+                                
+                            AddFeedbackEvent( FEEDBACK_EVENT_AIMING, entityId, entityId, new float4(0,0,0,0));
                         }
                         else if (firearmState == FIREARM_STATE_AIMING)
                         {
@@ -494,12 +498,14 @@ public partial class ComputeShaderEmulator
                                 // generate firearm event
                                 
                                 // TODO: add firepower penalty when moving
-                                
+
+                                firepower = GetFirearmFirepower(entityId, distToTarget, burstAmmo);
                                 float4 eventParam = new float4(dirToTarget.x, dirToTarget.y, dirToTarget.z, firepower);
                                 AddEvent(targetEntityId, entityId, EVENT_FIREARM_DAMAGE, eventParam);
                                 
                                 // generate feedback event
                                 
+                                eventParam = new float4( burstAmmo * GetPersonnelCount(entityId), firepower, 0, 0 );
                                 AddFeedbackEvent( FEEDBACK_EVENT_SHOOTING, entityId, targetEntityId, eventParam);
                                 
                                 // TODO: randomly jam firearm
@@ -510,6 +516,10 @@ public partial class ComputeShaderEmulator
                                     float reloadingTime = _firearmDescBuffer[_firearmBuffer[entityId].descId].reloadingTime;
                                     reloadingTime += GetFirearmTimePenalty(entityId);
                                     SetFirearmState(entityId, FIREARM_STATE_RELOADING, reloadingTime);
+                                    
+                                    // generate feedback event
+                                
+                                    AddFeedbackEvent( FEEDBACK_EVENT_RELOADING, entityId, entityId, new float4(0,0,0,0));
                                 }
                                 else
                                 {

@@ -44,13 +44,15 @@ public partial class EntityAssembly : MonoBehaviour
         public Vector3 endPos;
         public float duration;
         public float remainingTime;
+        public uint numTracers;
         
-        public ShootingTracer(Vector3 startPos, Vector3 endPos, float duration)
+        public ShootingTracer(Vector3 startPos, Vector3 endPos, float duration, uint numTracers)
         {
             this.startPos = startPos;
             this.endPos = endPos;
             this.duration = duration;
             this.remainingTime = this.duration;
+            this.numTracers = numTracers;
         }
     };
     
@@ -213,14 +215,38 @@ public partial class EntityAssembly : MonoBehaviour
             var param = ComputeShaderEmulator._feedbackEventBuffer[eventId].param;
             if (id == ComputeShaderEmulator.FEEDBACK_EVENT_SHOOTING)
             {
-                const float TracerVelocity = 333.0f;
+                const float TracerVelocity = 266.0f;
                 
                 var startPos = ComputeShaderEmulator._transformBuffer[entityId0].position.ToVector3();
                 var endPos = ComputeShaderEmulator._transformBuffer[entityId1].position.ToVector3();
                 float distance = Vector3.Distance(startPos, endPos);
                 float duration = distance / TracerVelocity;
-                var shootingTracer = new ShootingTracer(startPos, endPos, duration);
+                var shootingTracer = new ShootingTracer(startPos, endPos, duration, (uint)param.x);
                 _shootingTracers.Add(shootingTracer);
+            }
+            else if (id == ComputeShaderEmulator.FEEDBACK_EVENT_AIMING || 
+                     id == ComputeShaderEmulator.FEEDBACK_EVENT_RELOADING )
+            {
+                const float TextOffset = 5.0f;
+                const float TextDuration = 1.0f;
+
+                string text = "";
+                switch (id)
+                {
+                case ComputeShaderEmulator.FEEDBACK_EVENT_AIMING: 
+                    text = "Aiming";
+                    break;
+                case ComputeShaderEmulator.FEEDBACK_EVENT_RELOADING: 
+                    text = "Reloading";
+                    break;
+                default:
+                    break;
+                }
+                
+                var startPos = ComputeShaderEmulator._transformBuffer[entityId0].position.ToVector3();
+                var endPos = startPos + Vector3.up * TextOffset;
+                var eventMessage = new EventMessage( startPos, endPos, TextDuration, text );
+                _eventMessages.Add(eventMessage);
             }
             else if (id == ComputeShaderEmulator.FEEDBACK_EVENT_FIREARM_DAMAGE)
             {
@@ -268,13 +294,31 @@ public partial class EntityAssembly : MonoBehaviour
             else
             {
                 float t = Mathf.Clamp01( 1.0f - _shootingTracers[i].remainingTime / _shootingTracers[i].duration);
-                float startT = Mathf.Clamp01(t + 0.1f);
+                float startT = Mathf.Clamp01(t + 0.125f);
                 float endT = Mathf.Clamp01(t);
                 Vector3 tracerStartPos = Vector3.Lerp(_shootingTracers[i].startPos, _shootingTracers[i].endPos, startT);
                 Vector3 tracerEndPos = Vector3.Lerp(_shootingTracers[i].startPos, _shootingTracers[i].endPos, endT);
+                Vector3 tracerDir = tracerEndPos - tracerStartPos;
+                float tracerLength = tracerDir.magnitude;
+                tracerDir = tracerDir.normalized;
 
                 Gizmos.color = Color.white;
-                Gizmos.DrawLine( tracerStartPos, tracerEndPos );
+
+                uint numTracers = (uint)Mathf.Max(_shootingTracers[i].numTracers, 1);
+                float bulletLength = tracerLength / numTracers;
+                float gapLength = bulletLength * 0.333f;
+                bulletLength -= gapLength;
+
+                Vector3 prevPos = tracerStartPos;
+                Vector3 currentPos = tracerStartPos;
+                for (uint j = 0; j < numTracers; j++ )
+                {
+                    currentPos += tracerDir * bulletLength;
+                    Gizmos.DrawLine(prevPos, currentPos);
+
+                    currentPos += tracerDir * gapLength;
+                    prevPos = currentPos;
+                }
             }
         }
 

@@ -63,7 +63,9 @@ public partial class ComputeShaderEmulator
     public const uint EVENT_FIREARM_DAMAGE = 0x2; // [entityId][direction: arg.xyz, firepower: arg.w]
     
     public const uint FEEDBACK_EVENT_SHOOTING = 0x1; // [srcEntityId][dstEntityId][direction: arg.xyz, firepower: arg.w]
-    public const uint FEEDBACK_EVENT_FIREARM_DAMAGE = 0x2; // [entityId][entityId][wounded: arg.x, killed: arg.y, morale: arg.z]
+    public const uint FEEDBACK_EVENT_AIMING = 0x2; // [srcEntityId][dstEntityId][direction: arg.xyz, firepower: arg.w]
+    public const uint FEEDBACK_EVENT_RELOADING = 0x3; // [srcEntityId][dstEntityId][direction: arg.xyz, firepower: arg.w]
+    public const uint FEEDBACK_EVENT_FIREARM_DAMAGE = 0x4; // [entityId][entityId][wounded: arg.x, killed: arg.y, morale: arg.z]
 
     public const float PERSONNEL_MORALE_MAX = 600.0f;
     public const float PERSONNEL_MORALE_MIN = 1.0f;
@@ -1043,6 +1045,11 @@ public partial class ComputeShaderEmulator
 
     public static float GetFirearmFirepower(uint entityId, float distanceToTarget)
     {
+        return GetFirearmFirepower( entityId, distanceToTarget, 0xFFFFFFFF );
+    }
+
+    public static float GetFirearmFirepower(uint entityId, float distanceToTarget, uint burstAmmo)
+    {
         #if ASSERTIVE_ENTITY_ACCESS
             Debug.Assert(entityId > 0 && entityId < _entityCount);
         #endif
@@ -1089,7 +1096,15 @@ public partial class ComputeShaderEmulator
         {
             firepower *= GetPersonnelCount(entityId);
         }
-        firepower *= _firearmDescBuffer[descId].maxBurstAmmo;
+
+        if (burstAmmo > _firearmDescBuffer[descId].maxBurstAmmo)
+        {
+            firepower *= _firearmDescBuffer[descId].maxBurstAmmo;
+        }
+        else
+        {
+            firepower *= burstAmmo;
+        }
 
         return firepower;
     }
