@@ -40,10 +40,13 @@ public class FirearmProxyEditor : Editor
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("timeout");
             EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("firepower");
-            EditorGUILayout.EndHorizontal();
+
+            if (EditorApplication.isPlaying)
+            {
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("firepower");
+                EditorGUILayout.EndHorizontal();
+            }
         }
         EditorGUILayout.EndVertical();
         
@@ -175,10 +178,6 @@ public class FirearmProxyEditor : Editor
                 {
                     EditorGUILayout.LabelField("-");
                 }
-            }
-            else
-            {
-                EditorGUILayout.LabelField("-");
             }
             EditorGUILayout.EndHorizontal();
         }

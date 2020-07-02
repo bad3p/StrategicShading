@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Data\Editor\BuildingProxyEditor.cs" />
+    <Compile Include="Assets\Scripts\Data\Editor\EntityAssemblyAnalyticsWindow.cs" />
     <Compile Include="Assets\Scripts\Data\Editor\EntityAssemblyEditor.cs" />
     <Compile Include="Assets\Scripts\Data\Editor\EntityProxyEditor.cs" />
     <Compile Include="Assets\Scripts\Data\Editor\EventAggregatorProxyEditor.cs" />

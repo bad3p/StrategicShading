@@ -587,7 +587,12 @@ public class EntityAssemblyEditor : Editor
         _entityAssembly.RngCount = EditorGUILayout.IntField("RngCount", _entityAssembly.RngCount);
         _entityAssembly.RngStateLength = EditorGUILayout.IntField("RngStateLength", _entityAssembly.RngStateLength);
 
-        EditorUtility.SetDirty( _entityAssembly );	    
+        EditorUtility.SetDirty( _entityAssembly );
+
+        if (EntityAssemblyAnalyticsWindow.instance)
+        {
+	        EntityAssemblyAnalyticsWindow.instance.Repaint();
+        }
     }
 
 }
