@@ -4811,25 +4811,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Firepower:
-    x: 59
-    y: 88
-    z: 133
-    w: 199
+    x: 66
+    y: 133
+    z: 266
+    w: 533
   KillProbability:
-    x: 12
-    y: 24
+    x: 6
+    y: 22
     z: 49
-    w: 99
+    w: 88
   WoundProbability:
-    x: 29
-    y: 44
-    z: 66
+    x: 11
+    y: 34
+    z: 63
     w: 99
   MoraleDamage:
-    x: 48
-    y: 73
-    z: 99
-    w: 133
+    x: 29
+    y: 84
+    z: 166
+    w: 233
   KillMoraleDamage: 233
   WoundMoraleDamage: 166
   FirearmNameBuffer:
@@ -4858,19 +4858,19 @@ MonoBehaviour:
     reloadingTime: 0
     unjammingTime: 0
   - crew: 1
-    maxAmmo: 27
-    maxClipAmmo: 9
-    maxBurstAmmo: 1
+    maxAmmo: 30
+    maxClipAmmo: 10
+    maxBurstAmmo: 2
     distance:
-      x: 25
-      y: 50
-      z: 100
-      w: 200
+      x: 10
+      y: 25
+      z: 50
+      w: 100
     firepower:
-      x: 66
-      y: 33
-      z: 11
-      w: 5
+      x: 99
+      y: 66
+      z: 33
+      w: 11
     mountingTime: 0
     aimingTime: 2
     reloadingTime: 7
@@ -4880,15 +4880,15 @@ MonoBehaviour:
     maxClipAmmo: 5
     maxBurstAmmo: 1
     distance:
-      x: 50
-      y: 100
-      z: 250
-      w: 500
+      x: 25
+      y: 50
+      z: 100
+      w: 250
     firepower:
-      x: 99
-      y: 66
-      z: 33
-      w: 11
+      x: 133
+      y: 99
+      z: 54
+      w: 21
     mountingTime: 0
     aimingTime: 3
     reloadingTime: 10
