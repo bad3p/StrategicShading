@@ -487,10 +487,12 @@ public partial class ComputeShaderEmulator
                                 // spent ammo
                                 
                                 uint burstAmmo = 1;
-                                uint maxBurstAmmo = _firearmDescBuffer[_firearmBuffer[entityId].descId].maxBurstAmmo;
+                                uint descId = _firearmBuffer[entityId].descId;
+                                uint maxBurstAmmo = _firearmDescBuffer[descId].maxBurstAmmo;
+                                uint minBurstAmmo = _firearmDescBuffer[descId].minBurstAmmo;
                                 if (maxBurstAmmo > 1)
                                 {
-                                    burstAmmo = (uint)rngRange(1, (int) maxBurstAmmo, rngIndex(id.x));
+                                    burstAmmo = (uint)rngRange( (int)minBurstAmmo, (int) maxBurstAmmo, rngIndex(id.x) );
                                 }
                                 burstAmmo = min( _firearmBuffer[entityId].clipAmmo, burstAmmo );
                                 _firearmBuffer[entityId].clipAmmo -= burstAmmo; 

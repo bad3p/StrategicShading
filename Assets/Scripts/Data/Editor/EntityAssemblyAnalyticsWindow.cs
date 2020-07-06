@@ -43,7 +43,7 @@ public class EntityAssemblyAnalyticsWindow : EditorWindow
         return ComputeShaderEmulator.GetFirearmFirepower(
             ref entityAssembly.FirearmDescBuffer[_firearmDescId],
             ref entityAssembly.PersonnelDescBuffer[_personnelDescId], distance,
-            entityAssembly.FirearmDescBuffer[_firearmDescId].maxBurstAmmo
+            entityAssembly.FirearmDescBuffer[_firearmDescId].minBurstAmmo
         );
     }
     

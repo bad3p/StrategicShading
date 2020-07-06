@@ -4842,6 +4842,7 @@ MonoBehaviour:
   - crew: 0
     maxAmmo: 0
     maxClipAmmo: 0
+    minBurstAmmo: 0
     maxBurstAmmo: 0
     distance:
       x: 0
@@ -4860,6 +4861,7 @@ MonoBehaviour:
   - crew: 1
     maxAmmo: 30
     maxClipAmmo: 10
+    minBurstAmmo: 1
     maxBurstAmmo: 2
     distance:
       x: 10
@@ -4878,6 +4880,7 @@ MonoBehaviour:
   - crew: 1
     maxAmmo: 35
     maxClipAmmo: 5
+    minBurstAmmo: 1
     maxBurstAmmo: 1
     distance:
       x: 25
@@ -4896,6 +4899,7 @@ MonoBehaviour:
   - crew: 2
     maxAmmo: 90
     maxClipAmmo: 30
+    minBurstAmmo: 3
     maxBurstAmmo: 5
     distance:
       x: 50
@@ -4914,6 +4918,7 @@ MonoBehaviour:
   - crew: 3
     maxAmmo: 147
     maxClipAmmo: 49
+    minBurstAmmo: 4
     maxBurstAmmo: 7
     distance:
       x: 50

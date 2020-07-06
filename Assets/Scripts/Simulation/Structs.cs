@@ -23,6 +23,7 @@ namespace Structs
         public uint crew;
         public uint maxAmmo;
         public uint maxClipAmmo;
+        public uint minBurstAmmo;
         public uint maxBurstAmmo;
         public float4 distance;
         public float4 firepower;

@@ -324,6 +324,7 @@ public class EntityAssemblyEditor : Editor
 		    modifiedItem.crew = (uint)EditorGUILayout.IntField("crew", (int)firearmDesc.crew);
 		    modifiedItem.maxAmmo = (uint)EditorGUILayout.IntField("maxAmmo", (int)firearmDesc.maxAmmo);
 		    modifiedItem.maxClipAmmo = (uint)EditorGUILayout.IntField("maxClipAmmo", (int)firearmDesc.maxClipAmmo);
+		    modifiedItem.minBurstAmmo = (uint)EditorGUILayout.IntField("minBurstAmmo", (int)firearmDesc.minBurstAmmo);
 		    modifiedItem.maxBurstAmmo = (uint)EditorGUILayout.IntField("maxBurstAmmo", (int)firearmDesc.maxBurstAmmo);
 		    modifiedItem.distance = EditorGUILayout.Vector4Field("distance", firearmDesc.distance.ToVector4());
 		    modifiedItem.firepower = EditorGUILayout.Vector4Field("firepower",firearmDesc.firepower.ToVector4());
